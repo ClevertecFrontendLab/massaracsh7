@@ -8,8 +8,8 @@ import Sidebar from '~/components/Sidebar/Sidebar';
 const Layout = ({ children }: { children: React.ReactNode }) => (
     <Box>
         <Header />
-        <Sidebar />
         <NavigationMenu />
+        <Sidebar />
         <Content>{children}</Content>
     </Box>
 );
