@@ -13,7 +13,7 @@ const Header = () => (
                 <HStack spacing={3} px={6} align='center'>
                     <Avatar name='Екатерина Константинопольская' src='/avatar.png' w='48px' />
                     <Box>
-                        <Text fontSize='18' fontWeight='500' lineHeight='1.6'>
+                        <Text fontSize='18px' fontWeight='500' lineHeight='28px'>
                             Екатерина Константинопольская
                         </Text>
                         <Text fontSize='14' color='gray.400' lineHeight='1.6'>
