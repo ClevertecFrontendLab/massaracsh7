@@ -11,6 +11,14 @@ const theme = extendTheme({
         medium: '8px',
         large: '12px',
     },
+    fontSizes: {
+        sm: '12px',
+        md: '14px',
+        lg: '16px',
+    },
+    lineHeights: {
+        short: '16px',
+    },
     styles: {
         global: {
             body: {
@@ -27,6 +35,7 @@ const theme = extendTheme({
         background: '#fff',
         text: '#000',
         secondaryText: 'rgba(0, 0, 0, 0.64)',
+        lightText: 'rgba(0, 0, 0, 0.24)',
         customLime: {
             50: '#ffffd3',
             100: '#eaffc7',

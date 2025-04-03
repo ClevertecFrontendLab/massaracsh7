@@ -199,7 +199,7 @@ const NavigationMenu = () => (
                 borderRadius: '8px',
             },
         }}
-        height='872px'
+        height='calc(100vh - 80px - 144px)'
         borderRadius='large'
         boxShadow='0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)'
         pt={2.5}
