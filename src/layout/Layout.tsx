@@ -9,7 +9,7 @@ import Sidebar from '~/components/Sidebar/Sidebar';
 const Layout = ({ children }: { children: React.ReactNode }) => (
     <Box display='flex' flexDirection='column' height='100vh'>
         <Header />
-        <Box display='flex' flex='1'>
+        <Box display='flex' flex='1' maxW='1920px' mx='auto'>
             <Box width='256px' shadow='base' pt={6} pb={8}>
                 <NavigationMenu />
                 <Footer />

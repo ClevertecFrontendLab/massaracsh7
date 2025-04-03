@@ -16,7 +16,7 @@ const Header = () => (
                         <Text fontSize='18px' fontWeight='500' lineHeight='28px'>
                             Екатерина Константинопольская
                         </Text>
-                        <Text fontSize='14' color='gray.400' lineHeight='1.6'>
+                        <Text fontSize='14px' color='gray.400' lineHeight='1.6'>
                             @bake_and_pie
                         </Text>
                     </Box>

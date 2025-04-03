@@ -15,7 +15,7 @@ import categories from './categories';
 
 const NavigationMenu = () => (
     <Accordion
-        allowMultiple
+        allowToggle
         overflowY='auto'
         css={{
             '&::-webkit-scrollbar': {
@@ -32,7 +32,7 @@ const NavigationMenu = () => (
         }}
         height='calc(100vh - 80px - 144px)'
         borderRadius='large'
-        boxShadow='0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)'
+        boxShadow='menu'
         pt={2.5}
         pl={2.5}
         pr={4}
