@@ -12,6 +12,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<MainPage />} />
                     <Route path='/vegan' element={<VeganPage />} />
+                    <Route path='/vegan/*' element={<VeganPage />} />
                     <Route path='/juicy' element={<JuicyPage />} />
                 </Routes>
             </Layout>

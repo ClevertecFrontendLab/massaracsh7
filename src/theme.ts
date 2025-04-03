@@ -6,6 +6,11 @@ const theme = extendTheme({
         body: `'Inter', sans-serif`,
         secondary: `'Roboto', sans-serif`,
     },
+    radii: {
+        small: '6px',
+        medium: '8px',
+        large: '12px',
+    },
     styles: {
         global: {
             body: {
@@ -24,11 +29,16 @@ const theme = extendTheme({
         secondaryText: 'rgba(0, 0, 0, 0.64)',
         customLime: {
             50: '#ffffd3',
+            100: '#eaffc7',
             150: '#d7ff94',
             300: '#c4ff61',
             400: '#b1ff2e',
             800: '#134b00',
         },
+    },
+    shadows: {
+        base: '0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12)',
+        menu: '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)',
     },
 });
 
