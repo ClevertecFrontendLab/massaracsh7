@@ -1,3 +1,4 @@
+import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
 import {
     Avatar,
     Badge,
@@ -8,9 +9,15 @@ import {
     CardHeader,
     Heading,
     HStack,
+    IconButton,
     Image,
+    Input,
+    InputGroup,
+    InputRightElement,
     Link,
+    Select,
     SimpleGrid,
+    Switch,
     Text,
     VStack,
 } from '@chakra-ui/react';
@@ -126,10 +133,49 @@ const TryDishCard = ({ icon, title }: TryDish) => (
     </Card>
 );
 
+const SearchBar = () => (
+    <Box width='518px'>
+        <HStack spacing={4} w='100%' mb={6}>
+            <IconButton
+                aria-label='Настройки поиска'
+                icon={<HamburgerIcon />}
+                variant='outline'
+                colorScheme='gray'
+            />
+            <InputGroup>
+                <Input
+                    placeholder='Название или ингредиент...'
+                    variant='outline'
+                    bg='white'
+                    borderRadius='md'
+                    pr='3rem'
+                />
+                <InputRightElement>
+                    <IconButton
+                        aria-label='Поиск'
+                        icon={<SearchIcon />}
+                        variant='ghost'
+                        borderRadius='md'
+                        size='sm'
+                        p={2}
+                    />
+                </InputRightElement>
+            </InputGroup>
+        </HStack>
+        <HStack spacing={4} w='100%' mb={6}>
+            <HStack spacing={2}>
+                <Switch size='md' />
+                <Text>Исключить мои аллергены</Text>
+            </HStack>
+            <Select placeholder='Выберите из списка...' variant='filled' bg='white' w='200px' />
+        </HStack>
+    </Box>
+);
+
 const Main = () => (
     <Box p={8}>
         <Heading mb={4}>Приятного аппетита!</Heading>
-
+        <SearchBar />
         <VStack align='stretch' spacing={6}>
             <Heading size='lg'>Новые рецепты</Heading>
             <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4}>
