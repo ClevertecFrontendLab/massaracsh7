@@ -15,13 +15,13 @@ import {
     InputGroup,
     InputRightElement,
     Link,
-    Select,
     SimpleGrid,
     Switch,
     Text,
     VStack,
 } from '@chakra-ui/react';
 
+import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 import { blogs, newRecipes, popularRecipes, tryDishes, veganDishes } from '~/data/cardsData';
 import { BlogData, CardData, TryDish, VeganDish } from '~/types/typesData';
 
@@ -167,7 +167,8 @@ const SearchBar = () => (
                 <Switch size='md' />
                 <Text>Исключить мои аллергены</Text>
             </HStack>
-            <Select placeholder='Выберите из списка...' variant='filled' bg='white' w='200px' />
+            {/* <Select placeholder='Выберите из списка...' variant='filled' bg='white' w='200px' /> */}
+            <MultipleSelect />
         </HStack>
     </Box>
 );

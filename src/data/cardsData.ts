@@ -119,3 +119,20 @@ export const tryDishes: TryDish[] = [
     { icon: '/icons/pan.svg', title: 'Котлеты из гречки и фасоли' },
     { icon: '/icons/pot.svg', title: 'Сырный суп с лапшой и брокколи' },
 ];
+
+type Option = {
+    value: string;
+    label: string;
+};
+
+export const allergens: Option[] = [
+    { value: 'dairy', label: 'Молочные продукты' },
+    { value: 'eggs', label: 'Яйцо' },
+    { value: 'fish', label: 'Рыба' },
+    { value: 'mollusks', label: 'Моллюски' },
+    { value: 'nuts', label: 'Орехи' },
+    { value: 'tomato', label: 'Томат (помидор)' },
+    { value: 'citrus', label: 'Цитрусовые' },
+    { value: 'strawberry', label: 'Клубника (ягоды)' },
+    { value: 'chocolate', label: 'Шоколад' },
+];
