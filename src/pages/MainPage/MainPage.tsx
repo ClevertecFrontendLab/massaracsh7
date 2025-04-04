@@ -2,6 +2,7 @@ import {
     Avatar,
     Badge,
     Box,
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -14,8 +15,8 @@ import {
     VStack,
 } from '@chakra-ui/react';
 
-import { blogs, newRecipes, popularRecipes, veganDishes } from '~/data/cardsData';
-import { BlogData, CardData, VeganDish } from '~/types/typesData';
+import { blogs, newRecipes, popularRecipes, tryDishes, veganDishes } from '~/data/cardsData';
+import { BlogData, CardData, TryDish, VeganDish } from '~/types/typesData';
 
 const RecipeCard = ({ title, description, category, likes, comments, imageUrl }: CardData) => (
     <Card borderRadius='md' border='1px solid' borderColor='gray.200' overflow='hidden' bg='white'>
@@ -67,17 +68,61 @@ const BlogCard = ({ name, handle, description, imageUrl }: BlogData) => (
     </Card>
 );
 
-const VeganDishCard = ({ title, category }: VeganDish) => (
-    <Card variant='outline' maxW='sm' w='100%'>
-        <CardHeader>
-            <Heading size='md'>{title}</Heading>
+const VeganDishCard = ({ title, category, likes, comments, description }: VeganDish) => (
+    <Card p={6}>
+        <CardHeader p={0} pb={1} noOfLines={1} fontWeight={500} fontSize='20px' lineHeight='28px'>
+            {title}
         </CardHeader>
-        <CardBody>
-            <HStack spacing={2}>
-                <Text>Category:</Text>
-                <Badge colorScheme='green'>{category}</Badge>
+        <CardBody p={0}>
+            <Text noOfLines={3} pb={6}>
+                {description}
+            </Text>
+            <HStack spacing={2} justify='space-between' align='center'>
+                <Badge
+                    fontSize='md'
+                    lineHeight='middle'
+                    fontWeight='400'
+                    background='customLime.50'
+                    mb={2}
+                    textTransform='capitalize'
+                >
+                    {category}
+                </Badge>
+                <HStack>
+                    <HStack fontSize='xs' color='customLime.600'>
+                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />{' '}
+                        <Text>{likes}</Text>
+                    </HStack>
+                    <HStack fontSize='xs' color='customLime.600'>
+                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />{' '}
+                        <Text>{comments}</Text>
+                    </HStack>
+                </HStack>
             </HStack>
         </CardBody>
+    </Card>
+);
+
+const TryDishCard = ({ icon, title }: TryDish) => (
+    <Card w='100%' py={4} px={6} border='border'>
+        <HStack justify='space-between' align='center'>
+            <HStack fontSize='md'>
+                <Image src={icon} boxSize='16px' />
+                <Text size='md'>{title}</Text>
+            </HStack>
+            <Button
+                size='md'
+                height='auto'
+                variant='outline'
+                border='green'
+                borderRadius='small'
+                px='12px'
+                py='6px'
+                color='customLime.600'
+            >
+                Готовить
+            </Button>
+        </HStack>
     </Card>
 );
 
@@ -115,14 +160,26 @@ const Main = () => (
                     ))}
                 </SimpleGrid>
             </Box>
-            <Heading size='lg' mt={8}>
-                Веганская кухня
-            </Heading>
-            <VStack spacing={2}>
-                {veganDishes.map((dish, index) => (
-                    <VeganDishCard key={index} {...dish} />
-                ))}
-            </VStack>
+
+            <SimpleGrid columns={2} spacing={6} gap={6}>
+                <Heading size='lg' mt={8}>
+                    Веганская кухня
+                </Heading>
+                <Text fontWeight={500} fontSize='16px' lineHeight='24px' mt={8}>
+                    Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать
+                    вегетарианскую диету и готовить вкусные вегетарианские блюда.
+                </Text>
+                <HStack spacing={2}>
+                    {veganDishes.map((dish, index) => (
+                        <VeganDishCard key={index} {...dish} />
+                    ))}
+                </HStack>
+                <VStack spacing={2}>
+                    {tryDishes.map((item, index) => (
+                        <TryDishCard key={index} {...item} />
+                    ))}
+                </VStack>
+            </SimpleGrid>
         </VStack>
     </Box>
 );

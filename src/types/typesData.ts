@@ -17,6 +17,12 @@ export interface BlogData {
 export interface VeganDish {
     title: string;
     category: string;
+    description: string;
     likes: number;
     comments: number;
+}
+
+export interface TryDish {
+    title: string;
+    icon: string;
 }

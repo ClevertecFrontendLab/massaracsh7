@@ -1,4 +1,4 @@
-import { BlogData, CardData, VeganDish } from '~/types/typesData';
+import { BlogData, CardData, TryDish, VeganDish } from '~/types/typesData';
 
 export const newRecipes: CardData[] = [
     {
@@ -96,9 +96,26 @@ export const blogs: BlogData[] = [
 ];
 
 export const veganDishes: VeganDish[] = [
-    { title: 'Картошка, тушенная с бобами', category: 'Вторые блюда', likes: 1, comments: 1 },
-    { title: 'Капустные котлеты', category: 'Вторые блюда', likes: 2, comments: 1 },
-    // { title: 'Стейк для вегетарианцев'},
-    // { title: 'Котлеты из гречки и фасоли'},
-    // { title: 'Сырный суп с лапшой и брокколи'},
+    {
+        title: 'Картошка, тушенная с бобами',
+        description:
+            'Картошка, тушенная с болгарским перцем, фасолью, морковью и луком, -  вариант сытного блюда на каждый ден',
+        category: 'Вторые блюда',
+        likes: 1,
+        comments: 1,
+    },
+    {
+        title: 'Капустные котлеты',
+        description:
+            'Капустные котлеты по этому рецепту получаются необычайно пышными и  невероятно вкусными. Мягкий вкус и л',
+        category: 'Вторые блюда',
+        likes: 2,
+        comments: 1,
+    },
+];
+
+export const tryDishes: TryDish[] = [
+    { icon: '/icons/pan.svg', title: 'Стейк для вегетарианцев' },
+    { icon: '/icons/pan.svg', title: 'Котлеты из гречки и фасоли' },
+    { icon: '/icons/pot.svg', title: 'Сырный суп с лапшой и брокколи' },
 ];
