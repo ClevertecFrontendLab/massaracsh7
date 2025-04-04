@@ -3,7 +3,8 @@ import { BlogData, CardData, VeganDish } from '~/types/typesData';
 export const newRecipes: CardData[] = [
     {
         title: 'Солянка с грибами',
-        description: 'Как раз после праздников...',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить ',
         category: 'Первые блюда',
         likes: 1,
         comments: 1,
@@ -11,7 +12,8 @@ export const newRecipes: CardData[] = [
     },
     {
         title: 'Капустные котлеты',
-        description: 'Капустные котлеты по этому рецепту...',
+        description:
+            'Капустные котлеты по этому рецепту получаются необычайно пышными и  невероятно вкусными. Мягкий вкус и л',
         category: 'Веганские блюда',
         likes: 2,
         comments: 1,
@@ -19,7 +21,8 @@ export const newRecipes: CardData[] = [
     },
     {
         title: 'Оладьи на кефире "Пышные"',
-        description: 'Очень вкусные и нежные...',
+        description:
+            'Очень вкусные и нежные оладьи на кефире. Настоятельно рекомендую пышные кефирные оладьи на завтрак.',
         category: 'Десерты, выпечка',
         likes: 2,
         comments: 1,
@@ -27,7 +30,8 @@ export const newRecipes: CardData[] = [
     },
     {
         title: 'Салат "Здоровье"',
-        description: 'Сельдерей очень полезен...',
+        description:
+            'Сельдерей очень полезен для здоровья, пора набираться витаминов. Не  салат, а сплошное удовольствие:)',
         category: 'Салаты',
         likes: 1,
         comments: 1,

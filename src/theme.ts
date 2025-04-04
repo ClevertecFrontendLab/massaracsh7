@@ -18,6 +18,7 @@ const theme = extendTheme({
     },
     lineHeights: {
         short: '16px',
+        middle: '20px',
     },
     styles: {
         global: {
@@ -49,6 +50,9 @@ const theme = extendTheme({
     shadows: {
         base: '0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12)',
         menu: '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    },
+    border: {
+        card: '1px solid rgba(0, 0, 0, 0.08)',
     },
 });
 
