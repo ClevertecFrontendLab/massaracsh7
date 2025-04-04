@@ -1,19 +1,33 @@
-import { Badge, Box, Heading, HStack, Image, SimpleGrid, Text, VStack } from '@chakra-ui/react';
+import {
+    Avatar,
+    Badge,
+    Box,
+    Card,
+    CardBody,
+    CardHeader,
+    Heading,
+    HStack,
+    Image,
+    Link,
+    SimpleGrid,
+    Text,
+    VStack,
+} from '@chakra-ui/react';
 
-import { newRecipes, popularRecipes } from '~/data/cardsData';
-import { CardData } from '~/types/typesData';
+import { blogs, newRecipes, popularRecipes, veganDishes } from '~/data/cardsData';
+import { BlogData, CardData, VeganDish } from '~/types/typesData';
 
 const RecipeCard = ({ title, description, category, likes, comments, imageUrl }: CardData) => (
-    <Box borderRadius='medium' border='card' overflow='hidden' bg='white'>
+    <Card borderRadius='md' border='1px solid' borderColor='gray.200' overflow='hidden' bg='white'>
         <Image src={imageUrl} alt={title} w='100%' h='150px' objectFit='cover' />
-        <Box p={4}>
+        <CardBody>
             <Heading size='md' mb={2}>
                 {title}
             </Heading>
             <Text fontSize='sm' mb={2}>
                 {description}
             </Text>
-            <HStack>
+            <HStack spacing={3}>
                 <Badge
                     fontSize='md'
                     lineHeight='middle'
@@ -32,8 +46,39 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
                     <Text>{comments}</Text>
                 </HStack>
             </HStack>
-        </Box>
-    </Box>
+        </CardBody>
+    </Card>
+);
+
+const BlogCard = ({ name, handle, description, imageUrl }: BlogData) => (
+    <Card p={4} borderRadius='md'>
+        <CardBody>
+            <HStack spacing={4}>
+                <Avatar src={imageUrl} name={name} />
+                <VStack align='start' spacing={1}>
+                    <Text fontWeight='bold'>{name}</Text>
+                    <Text fontSize='sm' color='gray.600'>
+                        {handle}
+                    </Text>
+                    <Text fontSize='sm'>{description}</Text>
+                </VStack>
+            </HStack>
+        </CardBody>
+    </Card>
+);
+
+const VeganDishCard = ({ title, category }: VeganDish) => (
+    <Card variant='outline' maxW='sm' w='100%'>
+        <CardHeader>
+            <Heading size='md'>{title}</Heading>
+        </CardHeader>
+        <CardBody>
+            <HStack spacing={2}>
+                <Text>Category:</Text>
+                <Badge colorScheme='green'>{category}</Badge>
+            </HStack>
+        </CardBody>
+    </Card>
 );
 
 const Main = () => (
@@ -56,6 +101,28 @@ const Main = () => (
                     <RecipeCard key={index} {...recipe} />
                 ))}
             </SimpleGrid>
+
+            <Box as='section' bg='customLime.300' p={6} borderRadius='md'>
+                <HStack justify='space-between' align='center'>
+                    <Heading size='lg' mt={8}>
+                        Кулинарные блоги
+                    </Heading>
+                    <Link>Все авторы</Link>
+                </HStack>
+                <SimpleGrid bg='customLime.300' columns={{ base: 1, md: 3 }} spacing={4}>
+                    {blogs.map((blog, index) => (
+                        <BlogCard key={index} {...blog} />
+                    ))}
+                </SimpleGrid>
+            </Box>
+            <Heading size='lg' mt={8}>
+                Веганская кухня
+            </Heading>
+            <VStack spacing={2}>
+                {veganDishes.map((dish, index) => (
+                    <VeganDishCard key={index} {...dish} />
+                ))}
+            </VStack>
         </VStack>
     </Box>
 );

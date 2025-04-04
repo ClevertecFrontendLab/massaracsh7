@@ -9,15 +9,22 @@ import Sidebar from '~/components/Sidebar/Sidebar';
 const Layout = ({ children }: { children: React.ReactNode }) => (
     <Box display='flex' flexDirection='column' height='100vh'>
         <Header />
-        <Box display='flex' flex='1' maxW='1920px' mx='auto' height='calc(100vh - 80px)'>
-            <Box width='256px' shadow='base' pt={6} pb={8}>
+        <Box
+            display='flex'
+            flex='1'
+            maxW='1920px'
+            mx='auto'
+            height='calc(100vh - 80px)'
+            overflowY='auto'
+        >
+            <Box width='256px' shadow='base' pt={6} pb={8} position='sticky' top={0}>
                 <NavigationMenu />
                 <Footer />
             </Box>
-            <Box flex='1' pt={8} py={6} overflowY='auto'>
+            <Box flex='1' pt={8} py={6}>
                 <Content>{children}</Content>
             </Box>
-            <Box width='208px'>
+            <Box width='208px' position='sticky' top={0}>
                 <Sidebar />
             </Box>
         </Box>
