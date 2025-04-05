@@ -105,20 +105,23 @@ export const popularRecipes: CardData[] = [
 export const blogs: BlogData[] = [
     {
         name: 'Елена Высоцкая',
-        handle: '@lenavysockaya',
-        description: 'Как раз после праздников...',
+        username: '@lenavysockaya',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
         imageUrl: '/images/elena.png',
     },
     {
         name: 'Alex Cook',
-        handle: '@funtastocooking',
-        description: 'Как раз после праздников...',
+        username: '@funtastocooking',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
         imageUrl: '/images/alex.png',
     },
     {
         name: 'Екатерина Константинопольская',
-        handle: '@bake_and_pie',
-        description: 'Как раз после праздников...',
+        username: '@bake_and_pie',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
         imageUrl: '/images/ekaterina.png',
     },
 ];

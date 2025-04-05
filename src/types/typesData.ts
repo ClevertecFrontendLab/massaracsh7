@@ -23,7 +23,7 @@ export interface CardSliderData {
 
 export interface BlogData {
     name: string;
-    handle: string;
+    username: string;
     description: string;
     imageUrl: string;
 }

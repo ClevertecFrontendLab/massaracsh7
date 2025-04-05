@@ -2,19 +2,21 @@ import { Avatar, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
 
 import { BlogData } from '~/types/typesData';
 
-const BlogCard = ({ name, handle, description, imageUrl }: BlogData) => (
-    <Card p={4} borderRadius='md'>
-        <CardBody>
-            <HStack spacing={4}>
+const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
+    <Card border='card' borderRadius='medium' boxShadow='none'>
+        <CardBody p={6} pr={5}>
+            <HStack spacing={3} mb={6}>
                 <Avatar src={imageUrl} name={name} />
-                <VStack align='start' spacing={1}>
-                    <Text fontWeight='bold'>{name}</Text>
-                    <Text fontSize='sm' color='gray.600'>
-                        {handle}
+                <VStack align='start' spacing={1} pt='2px'>
+                    <Text fontSize='18px' fontWeight='500' lineHeight='28px'>
+                        {name}
                     </Text>
-                    <Text fontSize='sm'>{description}</Text>
+                    <Text fontSize='sm' color='secondaryText' lineHeight='20px'>
+                        {username}
+                    </Text>
                 </VStack>
             </HStack>
+            <Text lineHeight='20px'>{description}</Text>
         </CardBody>
     </Card>
 );
