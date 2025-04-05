@@ -7,6 +7,20 @@ export interface CardData {
     imageUrl: string;
 }
 
+export interface BadgeCategory {
+    title: string;
+    icon: string;
+}
+
+export interface CardSliderData {
+    title: string;
+    description: string;
+    category: BadgeCategory;
+    likes: number;
+    comments: number;
+    imageUrl: string;
+}
+
 export interface BlogData {
     name: string;
     handle: string;

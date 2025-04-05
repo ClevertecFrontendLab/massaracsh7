@@ -1,11 +1,14 @@
-import { BlogData, CardData, TryDish, VeganDish } from '~/types/typesData';
+import { BlogData, CardData, CardSliderData, TryDish, VeganDish } from '~/types/typesData';
 
-export const newRecipes: CardData[] = [
+export const newRecipes: CardSliderData[] = [
     {
         title: 'Солянка с грибами',
         description:
             'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить ',
-        category: 'Первые блюда',
+        category: {
+            title: 'Первые блюда',
+            icon: '/icons/soups.svg',
+        },
         likes: 1,
         comments: 1,
         imageUrl: '/images/solyanka.jpg',
@@ -14,7 +17,10 @@ export const newRecipes: CardData[] = [
         title: 'Капустные котлеты',
         description:
             'Капустные котлеты по этому рецепту получаются необычайно пышными и  невероятно вкусными. Мягкий вкус и л',
-        category: 'Веганские блюда',
+        category: {
+            title: 'Веганские блюда',
+            icon: '/icons/vegan.svg',
+        },
         likes: 2,
         comments: 1,
         imageUrl: '/images/kotlety.jpg',
@@ -23,7 +29,10 @@ export const newRecipes: CardData[] = [
         title: 'Оладьи на кефире "Пышные"',
         description:
             'Очень вкусные и нежные оладьи на кефире. Настоятельно рекомендую пышные кефирные оладьи на завтрак.',
-        category: 'Десерты, выпечка',
+        category: {
+            title: 'Десерты, выпечка',
+            icon: '/icons/cookies.svg',
+        },
         likes: 2,
         comments: 1,
         imageUrl: '/images/oladi.jpg',
@@ -32,7 +41,10 @@ export const newRecipes: CardData[] = [
         title: 'Салат "Здоровье"',
         description:
             'Сельдерей очень полезен для здоровья, пора набираться витаминов. Не  салат, а сплошное удовольствие:)',
-        category: 'Салаты',
+        category: {
+            title: 'Салаты',
+            icon: '/icons/salat.svg',
+        },
         likes: 1,
         comments: 1,
         imageUrl: '/images/salat.jpg',

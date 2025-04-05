@@ -23,6 +23,7 @@ const theme = extendTheme({
         secondary: `'Roboto', sans-serif`,
     },
     radii: {
+        mini: '4px',
         small: '6px',
         medium: '8px',
         large: '12px',
@@ -55,6 +56,7 @@ const theme = extendTheme({
         text: '#000',
         secondaryText: 'rgba(0, 0, 0, 0.64)',
         lightText: 'rgba(0, 0, 0, 0.24)',
+
         customLime: {
             50: '#ffffd3',
             100: '#eaffc7',

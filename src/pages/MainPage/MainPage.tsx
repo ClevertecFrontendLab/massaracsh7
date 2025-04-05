@@ -8,7 +8,7 @@ import SliderList from '~/components/SliderList/SliderList';
 import { tryDishes, veganDishes } from '~/data/cardsData';
 
 const Main = () => (
-    <Box>
+    <Box mx={6}>
         <Heading variant='pageTitle' mb={8} pt={1.5} pr='44px'>
             Приятного аппетита!
         </Heading>
