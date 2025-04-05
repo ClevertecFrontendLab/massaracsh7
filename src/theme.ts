@@ -31,10 +31,12 @@ const theme = extendTheme({
         sm: '12px',
         md: '14px',
         lg: '16px',
+        xlg: '18px',
     },
     lineHeights: {
         short: '16px',
         middle: '20px',
+        large: '22px',
     },
     styles: {
         global: {

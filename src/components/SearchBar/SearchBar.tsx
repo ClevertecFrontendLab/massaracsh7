@@ -13,26 +13,33 @@ import {
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 
 const SearchBar = () => (
-    <Box width='518px' mx='auto'>
-        <HStack spacing={4} w='100%' mb={6}>
+    <Box width='550px' mx='auto'>
+        <HStack spacing={4} w='100%' mb={4}>
             <IconButton
                 aria-label='Настройки поиска'
                 icon={<HamburgerIcon />}
                 variant='outline'
                 colorScheme='gray'
+                w={12}
             />
-            <InputGroup>
+            <InputGroup w='80%'>
                 <Input
                     placeholder='Название или ингредиент...'
                     variant='outline'
                     bg='white'
                     borderRadius='md'
-                    pr='3rem'
+                    pr={4}
+                    py='13px'
+                    fontSize='xlg'
+                    lineHeight='22px'
+                    color='customLime.800'
+                    _placeholder={{ color: 'customLime.800' }}
+                    height='48px'
                 />
                 <InputRightElement>
                     <IconButton
                         aria-label='Поиск'
-                        icon={<SearchIcon />}
+                        icon={<SearchIcon boxSize='18px' />}
                         variant='ghost'
                         size='sm'
                         p={2}
@@ -41,9 +48,11 @@ const SearchBar = () => (
             </InputGroup>
         </HStack>
         <HStack spacing={4} w='100%' mb={6}>
-            <HStack spacing={2}>
+            <HStack spacing={3} py={1.5} pr='6px'>
+                <Text fontSize='16px' fontWeight='500' lineHeight='24px'>
+                    Исключить мои аллергены
+                </Text>
                 <Switch size='md' />
-                <Text>Исключить мои аллергены</Text>
             </HStack>
             <MultipleSelect />
         </HStack>
