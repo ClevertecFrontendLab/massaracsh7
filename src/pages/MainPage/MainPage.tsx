@@ -1,4 +1,5 @@
-import { Box, Heading } from '@chakra-ui/react';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { Box, Button, Heading, HStack } from '@chakra-ui/react';
 
 import BlogList from '~/components/BlogList/BlogList';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
@@ -8,15 +9,27 @@ import SliderList from '~/components/SliderList/SliderList';
 import { tryDishes, veganDishes } from '~/data/cardsData';
 
 const Main = () => (
-    <Box mx={6}>
-        <Heading variant='pageTitle' mb={8} pt={1.5} pr='44px'>
+    <Box>
+        <Heading variant='pageTitle' mb={8} pt={1.5}>
             Приятного аппетита!
         </Heading>
         <SearchBar />
         <SliderList />
-        <Heading variant='sectionTitle' mt={8}>
-            Самое сочное
-        </Heading>
+        <HStack justify='space-between' mb={6}>
+            <Heading variant='sectionTitle'>Самое сочное</Heading>
+            <Button
+                background='customLime.400'
+                borderRadius='small'
+                py='16px'
+                px={6}
+                rightIcon={<ArrowForwardIcon />}
+                fontWeight='600'
+                fontSize='18px'
+                lineHeight='28px'
+            >
+                Вся подборка
+            </Button>
+        </HStack>
         <RecipeList />
         <BlogList />
         <KitchenSection

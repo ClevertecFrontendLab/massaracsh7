@@ -13,7 +13,7 @@ import {
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 
 const SearchBar = () => (
-    <Box width='550px' mx='auto' mb={14}>
+    <Box width='518px' mx='auto' mb={14}>
         <HStack spacing={4} w='100%' mb={4}>
             <IconButton
                 aria-label='Настройки поиска'
@@ -22,7 +22,7 @@ const SearchBar = () => (
                 colorScheme='gray'
                 w={12}
             />
-            <InputGroup w='80%'>
+            <InputGroup w='100%'>
                 <Input
                     placeholder='Название или ингредиент...'
                     variant='outline'

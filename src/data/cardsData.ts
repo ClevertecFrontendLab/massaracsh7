@@ -54,32 +54,48 @@ export const newRecipes: CardSliderData[] = [
 export const popularRecipes: CardData[] = [
     {
         title: 'Кнели со спагетти',
-        description: 'Как раз после праздников...',
-        category: 'Вторые блюда',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
         likes: 85,
         comments: 152,
         imageUrl: '/images/kneli.jpg',
     },
     {
         title: 'Пряная ветчина по-итальянски',
-        description: 'Как раз после праздников...',
-        category: 'Вторые блюда',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
         likes: 159,
         comments: 257,
         imageUrl: '/images/vetchina.jpg',
     },
     {
         title: 'Лапша с курицей и шафраном',
-        description: 'Как раз после праздников...',
-        category: 'Вторые блюда',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
         likes: 258,
         comments: 342,
         imageUrl: '/images/lapsha.jpg',
     },
     {
         title: 'Том-ям с капустой кимчи',
-        description: 'Как раз после праздников...',
-        category: 'Национальные',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Национальные',
+            icon: '/icons/national.svg',
+        },
         likes: 124,
         comments: 324,
         imageUrl: '/images/tom-yam.jpg',

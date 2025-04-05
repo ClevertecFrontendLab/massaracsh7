@@ -1,7 +1,7 @@
 export interface CardData {
     title: string;
     description: string;
-    category: string;
+    category: BadgeCategory;
     likes: number;
     comments: number;
     imageUrl: string;

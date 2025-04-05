@@ -10,7 +10,7 @@ const SliderCard = ({
     comments,
     imageUrl,
 }: CardSliderData) => (
-    <Card borderRadius='medium' border='card' overflow='hidden' bg='white'>
+    <Card borderRadius='medium' border='card' boxShadow='none' overflow='hidden' bg='white'>
         <Image src={imageUrl} alt={title} w='100%' h='230px' objectFit='cover' />
         <CardBody px={6} py={4} boxShadow='none'>
             <Heading fontSize='20px' lineHeight='28px' fontWeight='500' mb={2} noOfLines={1}>
