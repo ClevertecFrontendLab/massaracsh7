@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 
 import BlogList from '~/components/BlogList/BlogList';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
@@ -8,9 +8,15 @@ import SliderList from '~/components/SliderList/SliderList';
 import { tryDishes, veganDishes } from '~/data/cardsData';
 
 const Main = () => (
-    <Box p={8}>
+    <Box>
+        <Heading variant='pageTitle' mb={8} pt={1.5} pr='44px'>
+            Приятного аппетита!
+        </Heading>
         <SearchBar />
         <SliderList />
+        <Heading variant='sectionTitle' mt={8}>
+            Самое сочное
+        </Heading>
         <RecipeList />
         <BlogList />
         <KitchenSection

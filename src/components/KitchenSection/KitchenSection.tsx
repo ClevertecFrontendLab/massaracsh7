@@ -14,7 +14,7 @@ interface KitchenSectionProps {
 
 const KitchenSection = ({ title, description, veganDishes, tryDishes }: KitchenSectionProps) => (
     <SimpleGrid columns={2} spacing={6} gap={6}>
-        <Heading size='lg'>{title}</Heading>
+        <Heading variant='sectionTitle'>{title}</Heading>
         <Text fontWeight={500} fontSize='16px' lineHeight='24px' mt={8}>
             {description}
         </Text>

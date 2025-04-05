@@ -1,4 +1,20 @@
-import { extendTheme } from '@chakra-ui/react';
+import { defineStyleConfig, extendTheme } from '@chakra-ui/react';
+
+const Heading = defineStyleConfig({
+    variants: {
+        pageTitle: {
+            fontWeight: 700,
+            fontSize: '48px',
+            lineHeight: '48px',
+            textAlign: 'center',
+        },
+        sectionTitle: {
+            fontWeight: 500,
+            fontSize: '48px',
+            lineHeight: '48px',
+        },
+    },
+});
 
 const theme = extendTheme({
     fonts: {
@@ -54,6 +70,10 @@ const theme = extendTheme({
     borders: {
         card: '1px solid rgba(0, 0, 0, 0.08)',
         green: '1px solid #2db100',
+    },
+
+    components: {
+        Heading,
     },
 });
 
