@@ -12,8 +12,12 @@ import {
 
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 
-const SearchBar = () => (
-    <Box width='518px' mx='auto' mb={14}>
+interface SearchProps {
+    bottom?: number;
+}
+
+const SearchBar = ({ bottom }: SearchProps) => (
+    <Box width='518px' mx='auto' mb={bottom ? bottom : 14}>
         <HStack spacing={4} w='100%' mb={4}>
             <IconButton
                 aria-label='Настройки поиска'

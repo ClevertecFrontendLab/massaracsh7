@@ -304,3 +304,103 @@ export const tryDesertDishes: TryDish[] = [
     { icon: '/icons/national.svg', title: 'Панкейки' },
     { icon: '/icons/vegan.svg', title: 'Воздушное банановое печенье на сковороде' },
 ];
+
+export const juicyRecipes: CardData[] = [
+    {
+        title: 'Лапша с курицей и шафраном',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
+        likes: 258,
+        comments: 342,
+        imageUrl: '/images/lapsha.jpg',
+    },
+    {
+        title: 'Том-ям с капустой кимчи',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Национальные',
+            icon: '/icons/national.svg',
+        },
+        likes: 124,
+        comments: 324,
+        imageUrl: '/images/tom-yam.jpg',
+    },
+    {
+        title: 'Пряная ветчина по-итальянски',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
+        likes: 159,
+        comments: 257,
+        imageUrl: '/images/vetchina.jpg',
+    },
+    {
+        title: 'Кнели со спагетти',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
+        likes: 85,
+        comments: 152,
+        imageUrl: '/images/kneli.jpg',
+    },
+    {
+        title: 'Картошка, тушенная с болгарским перцем и фасолью в томатном соусе',
+        description:
+            'Картошка, тушенная с болгарским перцем, фасолью, морковью и луком, -  вариант сытного блюда на каждый день. Фасоль в данном случае заменяет  мясо, делая рагу сытным и',
+        category: {
+            title: 'Национальные',
+            icon: '/icons/national.svg',
+        },
+        likes: 85,
+        comments: 152,
+        imageUrl: '/images/potatoes-beans.jpg',
+    },
+
+    {
+        title: 'Картофельные рулетики с грибами',
+        description:
+            'Рекомендую всем приготовить постное блюдо из картофеля и грибов.  Готовится это блюдо без яиц, без мяса и без сыра, из самых простых ',
+        category: {
+            title: 'Детские блюда',
+            icon: '/icons/kids.svg',
+        },
+        likes: 85,
+        comments: 152,
+        imageUrl: '/images/potatoes-rolls.jpg',
+    },
+    {
+        title: 'Овощная лазанья из лава',
+        description:
+            'Большое, сытное блюдо для ценителей блюд без мяса! Такая лазанья  готовится с овощным соусом и соусом бешамель',
+        category: {
+            title: 'Блюда на гриле',
+            icon: '/icons/grill.svg',
+        },
+        likes: 85,
+        comments: 152,
+        imageUrl: '/images/lasagna.jpg',
+    },
+    {
+        title: 'Тефтели из булгура и чечевицы, запечённые в томатном соусе',
+        description:
+            'Тефтели из булгура и чечевицы – яркие и питательные, отлично подходят  для постного и вегетарианского меню. Тефтели получаются нежными, а также сочными и ароматными благод',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
+        likes: 85,
+        comments: 152,
+        imageUrl: '/images/meatballs.jpg',
+    },
+];
