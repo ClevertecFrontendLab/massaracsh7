@@ -6,7 +6,7 @@ import { blogs } from '~/data/cardsData';
 import BlogCard from '../BlogCard/BlogCard';
 
 const BlogList = () => (
-    <Box as='section' bg='customLime.300' p={6} borderRadius='16px'>
+    <Box as='section' bg='customLime.300' p={6} borderRadius='16px' mb={10}>
         <HStack justify='space-between' mb={6}>
             <Heading size='lg' fontWeight='400' fontSize='36px'>
                 Кулинарные блоги

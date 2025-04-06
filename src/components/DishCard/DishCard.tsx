@@ -1,19 +1,32 @@
 import { Badge, Card, CardBody, CardHeader, HStack, Image, Text } from '@chakra-ui/react';
 
-import { VeganDish } from '~/types/typesData';
+import { KitchenDish } from '~/types/typesData';
 
-const DishCard = ({ title, category, likes, comments, description }: VeganDish) => (
-    <Card p={6}>
-        <CardHeader p={0} pb={1} noOfLines={1} fontWeight={500} fontSize='20px'>
-            {title}
+const DishCard = ({ title, category, likes, comments, description }: KitchenDish) => (
+    <Card border='card' borderRadius='medium' boxShadow='none'>
+        <CardHeader p='24px' pb='8px'>
+            <Text noOfLines={1} fontWeight={500} fontSize='20px' lineHeight='28px'>
+                {title}
+            </Text>
         </CardHeader>
-        <CardBody p={0}>
-            <Text noOfLines={3} pb={6}>
+        <CardBody p='0px 24px 20px 24px'>
+            <Text noOfLines={3} mb={7} lineHeight='20px'>
                 {description}
             </Text>
-            <HStack spacing={2} justify='space-between'>
-                <Badge fontSize='md' background='customLime.50'>
-                    {category}
+            <HStack alignItems='center' justify='space-between'>
+                <Badge background='customLime.50' color='text' borderRadius='mini'>
+                    <HStack gap={2} px={1}>
+                        <Image src={category.icon} alt={category.title} boxSize='16px' />
+                        <Text
+                            fontSize='14px'
+                            lineHeight='middle'
+                            fontWeight='400'
+                            color='text'
+                            textTransform='none'
+                        >
+                            {category.title}
+                        </Text>
+                    </HStack>
                 </Badge>
                 <HStack>
                     <HStack fontSize='xs' color='customLime.600'>

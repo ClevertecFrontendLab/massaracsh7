@@ -1,4 +1,4 @@
-import { BlogData, CardData, CardSliderData, TryDish, VeganDish } from '~/types/typesData';
+import { BlogData, CardData, CardSliderData, KitchenDish, TryDish } from '~/types/typesData';
 
 export const newRecipes: CardSliderData[] = [
     {
@@ -126,12 +126,15 @@ export const blogs: BlogData[] = [
     },
 ];
 
-export const veganDishes: VeganDish[] = [
+export const veganDishes: KitchenDish[] = [
     {
         title: 'Картошка, тушенная с бобами',
         description:
             'Картошка, тушенная с болгарским перцем, фасолью, морковью и луком, -  вариант сытного блюда на каждый ден',
-        category: 'Вторые блюда',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
         likes: 1,
         comments: 1,
     },
@@ -139,7 +142,10 @@ export const veganDishes: VeganDish[] = [
         title: 'Капустные котлеты',
         description:
             'Капустные котлеты по этому рецепту получаются необычайно пышными и  невероятно вкусными. Мягкий вкус и л',
-        category: 'Вторые блюда',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
         likes: 2,
         comments: 1,
     },

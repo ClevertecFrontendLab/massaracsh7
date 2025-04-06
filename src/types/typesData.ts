@@ -28,9 +28,9 @@ export interface BlogData {
     imageUrl: string;
 }
 
-export interface VeganDish {
+export interface KitchenDish {
     title: string;
-    category: string;
+    category: BadgeCategory;
     description: string;
     likes: number;
     comments: number;
