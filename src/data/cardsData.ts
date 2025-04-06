@@ -188,42 +188,6 @@ export const veganRecipes: CardData[] = [
         imageUrl: '/images/potatoes-beans.jpg',
     },
     {
-        title: 'Том-ям с капустой кимчи',
-        description:
-            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
-        category: {
-            title: 'Национальные',
-            icon: '/icons/national.svg',
-        },
-        likes: 124,
-        comments: 324,
-        imageUrl: '/images/tom-yam.jpg',
-    },
-    {
-        title: 'Тефтели из булгура и чечевицы, запечённые в томатном соусе',
-        description:
-            'Тефтели из булгура и чечевицы – яркие и питательные, отлично подходят  для постного и вегетарианского меню. Тефтели получаются нежными, а также сочными и ароматными благод',
-        category: {
-            title: 'Вторые блюда',
-            icon: '/icons/main-dishes.svg',
-        },
-        likes: 85,
-        comments: 152,
-        imageUrl: '/images/meatballs.jpg',
-    },
-    {
-        title: 'Чесночная картошка',
-        description:
-            'Такая картошечка украсит любой семейный обед! Все будут в полном  восторге, очень вкусно! Аромат чеснока, хрустящая корочка на картошечке ',
-        category: {
-            title: 'Национальные',
-            icon: '/icons/national.svg',
-        },
-        likes: 124,
-        comments: 324,
-        imageUrl: '/images/potatoes-garlick.jpg',
-    },
-    {
         title: 'Картофельные рулетики с грибами',
         description:
             'Рекомендую всем приготовить постное блюдо из картофеля и грибов.  Готовится это блюдо без яиц, без мяса и без сыра, из самых простых ',
@@ -234,6 +198,18 @@ export const veganRecipes: CardData[] = [
         likes: 85,
         comments: 152,
         imageUrl: '/images/potatoes-rolls.jpg',
+    },
+    {
+        title: 'Том-ям с капустой кимчи',
+        description:
+            'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+        category: {
+            title: 'Национальные',
+            icon: '/icons/national.svg',
+        },
+        likes: 124,
+        comments: 324,
+        imageUrl: '/images/tom-yam.jpg',
     },
     {
         title: 'Овощная лазанья из лава',
@@ -258,6 +234,31 @@ export const veganRecipes: CardData[] = [
         likes: 85,
         comments: 152,
         imageUrl: '/images/meatballs.jpg',
+    },
+
+    {
+        title: 'Тефтели из булгура и чечевицы, запечённые в томатном соусе',
+        description:
+            'Тефтели из булгура и чечевицы – яркие и питательные, отлично подходят  для постного и вегетарианского меню. Тефтели получаются нежными, а также сочными и ароматными благод',
+        category: {
+            title: 'Вторые блюда',
+            icon: '/icons/main-dishes.svg',
+        },
+        likes: 85,
+        comments: 152,
+        imageUrl: '/images/meatballs.jpg',
+    },
+    {
+        title: 'Чесночная картошка',
+        description:
+            'Такая картошечка украсит любой семейный обед! Все будут в полном  восторге, очень вкусно! Аромат чеснока, хрустящая корочка на картошечке ',
+        category: {
+            title: 'Национальные',
+            icon: '/icons/national.svg',
+        },
+        likes: 124,
+        comments: 324,
+        imageUrl: '/images/potatoes-garlick.jpg',
     },
     {
         title: 'Пури',

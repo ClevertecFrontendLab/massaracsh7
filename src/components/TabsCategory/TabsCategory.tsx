@@ -1,6 +1,10 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useState } from 'react';
 
+import { veganRecipes } from '~/data/cardsData';
+
+import RecipeList from '../RecipeList/RecipeList';
+
 const veganCategories = [
     'Закуски',
     'Первые блюда',
@@ -17,34 +21,36 @@ const TabsCategory = () => {
 
     return (
         <Box borderBottom='1px solid' borderColor='gray.200'>
-            <Tabs index={tabIndex} onChange={setTabIndex} variant='unstyled'>
+            <Tabs index={tabIndex} onChange={setTabIndex} variant='unstyled' align='center'>
                 <TabList
                     overflowX='auto'
-                    borderBottom='1px solid'
-                    borderColor='gray.200'
                     sx={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
+                    mb={6}
                 >
                     {veganCategories.map((category, index) => (
                         <Tab
                             key={category}
-                            fontWeight='medium'
                             px={4}
-                            py={2}
+                            pt={4}
+                            pb={2}
                             whiteSpace='nowrap'
-                            color={tabIndex === index ? 'customLime600' : 'gray.600'}
-                            borderBottom='2px solid'
-                            borderColor={tabIndex === index ? 'customLime600' : 'transparent'}
-                            _hover={{ color: 'customLime600' }}
+                            fontWeight={500}
+                            fontSize='16px'
+                            lineHeight='24px'
+                            color={tabIndex === index ? 'customLime.600' : 'customLime.800'}
+                            borderBottom={tabIndex === index ? '2px solid' : '1px solid'}
+                            borderColor={tabIndex === index ? 'customLime.600' : 'gray.200'}
+                            _hover={{ color: 'customLime.600' }}
                         >
                             {category}
                         </Tab>
                     ))}
                 </TabList>
 
-                <TabPanels>
+                <TabPanels p='0'>
                     {veganCategories.map((category) => (
                         <TabPanel key={category} p={4}>
-                            <Box>{category}</Box>
+                            <RecipeList recipes={veganRecipes} space={[6, 4]} />
                         </TabPanel>
                     ))}
                 </TabPanels>

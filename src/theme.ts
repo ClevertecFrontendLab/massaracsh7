@@ -55,6 +55,7 @@ const theme = extendTheme({
         background: '#fff',
         text: '#000',
         secondaryText: 'rgba(0, 0, 0, 0.64)',
+        grayText: 'rgba(0, 0, 0, 0.48)',
         lightText: 'rgba(0, 0, 0, 0.24)',
 
         customLime: {

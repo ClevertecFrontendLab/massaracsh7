@@ -6,7 +6,7 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
-import { tryDishes, veganDishes } from '~/data/cardsData';
+import { popularRecipes, tryDishes, veganDishes } from '~/data/cardsData';
 
 const Main = () => (
     <Box>
@@ -30,7 +30,7 @@ const Main = () => (
                 Вся подборка
             </Button>
         </HStack>
-        <RecipeList />
+        <RecipeList recipes={popularRecipes} space={[6, 6]} />
         <BlogList />
         <KitchenSection
             title='Веганская кухня'
