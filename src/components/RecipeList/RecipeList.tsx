@@ -10,7 +10,12 @@ interface RecipeListProps {
 }
 
 const RecipeList = ({ recipes, space }: RecipeListProps) => (
-    <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacingX={space[0]} spacingY={space[1]} mb={10}>
+    <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 2 }}
+        spacingX={space[0]}
+        spacingY={space[1]}
+        mb={space[1] === 4 ? 4 : 10}
+    >
         {recipes.map((recipe, index) => (
             <RecipeCard key={index} {...recipe} />
         ))}

@@ -1,7 +1,10 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
 
+import KitchenSection from '~/components/KitchenSection/KitchenSection';
+import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
+import { desertDishes, tryDesertDishes, veganRecipes } from '~/data/cardsData';
 
 const VeganPage = () => (
     <Box>
@@ -22,6 +25,24 @@ const VeganPage = () => (
         </Box>
         <SearchBar />
         <TabsCategory />
+        <RecipeList recipes={veganRecipes} space={[6, 4]} />
+        <HStack justify='center' mb={10}>
+            <Button
+                size='md'
+                background='customLime.400'
+                fontSize='16px'
+                fontWeight='600'
+                lineHeight='24px'
+            >
+                Загрузить еще
+            </Button>
+        </HStack>
+        <KitchenSection
+            title='Десерты, выпечка'
+            description='Без них невозможно представить себе ни современную, ни традиционную  кулинарию. Пироги и печенья, блины, пончики, вареники и, конечно, хлеб - рецепты изделий из теста многообразны и невероятно популярны.'
+            veganDishes={desertDishes}
+            tryDishes={tryDesertDishes}
+        />
     </Box>
 );
 

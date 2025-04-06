@@ -1,9 +1,9 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { Box, Tab, TabList, Tabs } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import { veganRecipes } from '~/data/cardsData';
+// import { veganRecipes } from '~/data/cardsData';
 
-import RecipeList from '../RecipeList/RecipeList';
+// import RecipeList from '../RecipeList/RecipeList';
 
 const veganCategories = [
     'Закуски',
@@ -20,7 +20,7 @@ const TabsCategory = () => {
     const [tabIndex, setTabIndex] = useState(0);
 
     return (
-        <Box borderBottom='1px solid' borderColor='gray.200'>
+        <Box>
             <Tabs index={tabIndex} onChange={setTabIndex} variant='unstyled' align='center'>
                 <TabList
                     overflowX='auto'
@@ -47,13 +47,13 @@ const TabsCategory = () => {
                     ))}
                 </TabList>
 
-                <TabPanels p='0'>
+                {/* <TabPanels p='0'>
                     {veganCategories.map((category) => (
                         <TabPanel key={category} p={4}>
                             <RecipeList recipes={veganRecipes} space={[6, 4]} />
                         </TabPanel>
                     ))}
-                </TabPanels>
+                </TabPanels> */}
             </Tabs>
         </Box>
     );

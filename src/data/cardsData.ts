@@ -273,3 +273,34 @@ export const veganRecipes: CardData[] = [
         imageUrl: '/images/puri.jpg',
     },
 ];
+
+export const desertDishes: KitchenDish[] = [
+    {
+        title: 'Бананово-молочное желе',
+        description:
+            'Молочное желе – это просто, вкусно и полезно, ведь для его приготовления в качестве основы используется молоко.',
+        category: {
+            title: 'Детские блюда',
+            icon: '/icons/kids.svg',
+        },
+        likes: 1,
+        comments: 1,
+    },
+    {
+        title: 'Нежный сливочно-сырный крем для кексов',
+        description:
+            'Сливочно-сырным кремом можно украсить кексы, либо другую выпечку, а также этим кремом можно наполнить заварные пирожные.',
+        category: {
+            title: 'Детские блюда',
+            icon: '/icons/kids.svg',
+        },
+        likes: 1,
+        comments: 1,
+    },
+];
+
+export const tryDesertDishes: TryDish[] = [
+    { icon: '/icons/kids.svg', title: 'Домашние сырные палочки' },
+    { icon: '/icons/national.svg', title: 'Панкейки' },
+    { icon: '/icons/vegan.svg', title: 'Воздушное банановое печенье на сковороде' },
+];
