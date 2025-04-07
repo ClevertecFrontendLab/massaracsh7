@@ -20,26 +20,17 @@ const SliderCard = ({
     imageUrl,
 }: CardSliderData) => {
     const showDescription = useBreakpointValue({
-        base: 'false',
-        sm: 'false',
-        md: 'false',
-        lg: 'true',
-        xl: 'true',
-        '2xl': 'true',
+        base: false,
+        sm: false,
+        md: false,
+        lg: true,
+        xl: true,
+        '2xl': true,
     });
 
     return (
         <Card borderRadius='medium' border='card' boxShadow='none' overflow='hidden' bg='white'>
-            <Image
-                src={imageUrl}
-                alt={title}
-                w='100%'
-                h={{
-                    base: '128px',
-                    lg: '230px',
-                }}
-                objectFit='cover'
-            />
+            <Image src={imageUrl} alt={title} w='100%' h='230px' objectFit='cover' />
             <CardBody px={6} py={4} boxShadow='none'>
                 <Heading
                     variant='sliderTitle'
@@ -54,10 +45,12 @@ const SliderCard = ({
                 >
                     {title}
                 </Heading>
-                {showDescription && (
-                    <Text lineHeight='20px' mb={7} noOfLines={3}>
+                {showDescription ? (
+                    <Text mb={7} noOfLines={3}>
                         {description}
                     </Text>
+                ) : (
+                    ''
                 )}
                 <HStack spacing={3} justify='space-between' align='center'>
                     <Badge background='customLime.150' color='text' borderRadius='mini'>

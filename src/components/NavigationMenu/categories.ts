@@ -2,11 +2,13 @@ const categories = [
     {
         title: 'Салаты',
         icon: '/icons/salat.svg',
+        url: '/salads',
         items: ['Мясные салаты', 'Рыбные салаты', 'Овощные салаты', 'Теплые салаты'],
     },
     {
         title: 'Закуски',
         icon: '/icons/snacks.svg',
+        url: '/snacks',
         items: [
             'Мясные закуски',
             'Рыбные закуски',
@@ -19,11 +21,13 @@ const categories = [
     {
         title: 'Первые блюда',
         icon: '/icons/soups.svg',
+        url: '/soups',
         items: ['Мясные супы', 'Овощные супы', 'Бульоны', 'Холодные супы', 'Диетические супы'],
     },
     {
         title: 'Вторые блюда',
         icon: '/icons/main-dishes.svg',
+        url: '/main-dishes',
         items: [
             'Мясные',
             'Рыбные',
@@ -42,6 +46,7 @@ const categories = [
     {
         title: 'Десерты и выпечка',
         icon: '/icons/cookies.svg',
+        url: '/desserts',
         items: [
             'Блины и оладьи',
             'Пироги и пончики',
@@ -61,11 +66,13 @@ const categories = [
     {
         title: 'Блюда на гриле',
         icon: '/icons/grill.svg',
+        url: '/grill',
         items: ['Говядина', 'Свинина', 'Птица', 'Рыба', 'Грибы', 'Овощи'],
     },
     {
         title: 'Веганская кухня',
         icon: '/icons/vegan.svg',
+        url: '/vegan',
         items: [
             'Закуски',
             'Первые блюда',
@@ -79,6 +86,7 @@ const categories = [
     {
         title: 'Детские блюда',
         icon: '/icons/kids.svg',
+        url: '/kids',
         items: [
             'Первые блюда',
             'Вторые блюда',
@@ -93,6 +101,7 @@ const categories = [
     {
         title: 'Лечебное питание',
         icon: '/icons/diets.svg',
+        url: '/diets',
         items: [
             'Детская диета',
             'Диета №1',
@@ -115,6 +124,7 @@ const categories = [
     {
         title: 'Национальные блюда',
         icon: '/icons/national.svg',
+        url: '/national-cuisines',
         items: [
             'Американская кухня',
             'Армянская кухня',
@@ -136,11 +146,13 @@ const categories = [
     {
         title: 'Соусы',
         icon: '/icons/souse.svg',
+        url: '/sauces',
         items: ['Соусы мясные', 'Соусы сырные', 'Маринады'],
     },
     {
         title: 'Домашние заготовки',
         icon: '/icons/cans.svg',
+        url: '/preserves',
         items: [
             'Мясные заготовки',
             'Рыбные заготовки',
@@ -155,6 +167,7 @@ const categories = [
     {
         title: 'Напитки',
         icon: '/icons/drink.svg',
+        url: '/drinks',
         items: [
             'Соки и фреши',
             'Смузи',
