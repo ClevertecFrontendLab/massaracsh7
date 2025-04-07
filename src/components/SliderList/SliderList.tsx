@@ -1,12 +1,12 @@
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { Box, Heading, IconButton, SimpleGrid } from '@chakra-ui/react';
+import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
 
 import { newRecipes } from '~/data/cardsData';
 
 import SliderCard from '../SliderCard/SliderCard';
 
 const SliderList = () => (
-    <Box as='section' position='relative' mb={12}>
+    <Box as='section' position='relative' mb={12} maxW='1360px' mx='auto' px={{ base: 3, xl: 0 }}>
         <Heading variant='sectionTitle' mb={6}>
             Новые рецепты
         </Heading>
@@ -41,11 +41,32 @@ const SliderList = () => (
             zIndex={1}
             _hover={{ bg: 'gray.700' }}
         />
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6}>
+        <Flex
+            overflow='hidden'
+            maxW={{
+                base: '316px',
+                md: '728px',
+                lg: '880px',
+                xl: '1360px',
+            }}
+            // mx="auto"
+            gap={{ base: 3, xl: 6 }}
+        >
             {newRecipes.map((recipe, index) => (
-                <SliderCard key={index} {...recipe} />
+                <Box
+                    key={index}
+                    flex='0 0 auto'
+                    w={{
+                        base: '158px',
+                        md: '158px',
+                        lg: '277px',
+                        xl: '322px',
+                    }}
+                >
+                    <SliderCard {...recipe} />
+                </Box>
             ))}
-        </SimpleGrid>
+        </Flex>
     </Box>
 );
 

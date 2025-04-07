@@ -49,6 +49,18 @@ export const newRecipes: CardSliderData[] = [
         comments: 1,
         imageUrl: '/images/salat.jpg',
     },
+    {
+        title: 'Оладьи на кефире "Пышные"',
+        description:
+            'Очень вкусные и нежные оладьи на кефире. Настоятельно рекомендую пышные кефирные оладьи на завтрак.',
+        category: {
+            title: 'Десерты, выпечка',
+            icon: '/icons/cookies.svg',
+        },
+        likes: 2,
+        comments: 1,
+        imageUrl: '/images/oladi.jpg',
+    },
 ];
 
 export const popularRecipes: CardData[] = [

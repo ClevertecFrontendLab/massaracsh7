@@ -1,22 +1,75 @@
 import { defineStyleConfig, extendTheme } from '@chakra-ui/react';
 
 const Heading = defineStyleConfig({
+    defaultProps: {
+        size: '',
+    },
     variants: {
         pageTitle: {
             fontWeight: 700,
-            fontSize: '48px',
-            lineHeight: '48px',
+            fontSize: {
+                base: '24px',
+                sm: '24px',
+                md: '24px',
+                lg: '48px',
+                xl: '48px',
+            },
+            lineHeight: {
+                base: '32px',
+                sm: '32px',
+                md: '32px',
+                lg: '48px',
+                xl: '48px',
+            },
             textAlign: 'center',
         },
+
         sectionTitle: {
             fontWeight: 500,
-            fontSize: '48px',
-            lineHeight: '48px',
+            fontSize: {
+                base: '24px',
+                sm: '24px',
+                md: '24px',
+                lg: '36px',
+                xl: '48px',
+            },
+            lineHeight: {
+                base: '32px',
+                sm: '32px',
+                md: '32px',
+                lg: '40px',
+                xl: '48px',
+            },
+        },
+        sliderTitle: {
+            fontWeight: 500,
+            fontSize: {
+                base: '16px',
+                sm: '16px',
+                md: '16px',
+                lg: '18px',
+                xl: '20px',
+            },
+            lineHeight: {
+                base: '24px',
+                sm: '24px',
+                md: '24px',
+                lg: '28px',
+                xl: '28px',
+            },
         },
     },
 });
 
 const theme = extendTheme({
+    breakpoints: {
+        base: '0px',
+        sm: '360px',
+        md: '768px',
+        lg: '1440px',
+        xl: '1920px',
+        '2xl': '1930px',
+    },
     fonts: {
         heading: `'Inter', sans-serif`,
         body: `'Inter', sans-serif`,
@@ -45,7 +98,7 @@ const theme = extendTheme({
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: '400',
                 fontSize: '14px',
-                lineHeight: '1.42857',
+                lineHeight: '20px',
                 color: 'text',
                 bg: 'background',
             },
