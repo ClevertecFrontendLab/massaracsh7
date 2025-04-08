@@ -6,20 +6,29 @@ import RecipeCard from '../RecipeCard/RecipeCard';
 
 interface RecipeListProps {
     recipes: CardData[];
-    space: [number, number];
+    gridVariant?: 'wide' | 'low';
 }
 
-const RecipeList = ({ recipes, space }: RecipeListProps) => (
-    <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 2 }}
-        spacingX={space[0]}
-        spacingY={space[1]}
-        mb={space[1] === 4 ? 4 : 10}
-    >
-        {recipes.map((recipe, index) => (
-            <RecipeCard key={index} {...recipe} />
-        ))}
-    </SimpleGrid>
-);
+const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
+    const gridStyles =
+        gridVariant === 'wide'
+            ? {
+                  gap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '24px' },
+                  marginBottom: { base: '12px', sm: '16px', md: '16px', lg: '40px', xl: '40px' },
+              }
+            : {
+                  columnGap: '24px',
+                  rowGap: '16px',
+                  marginBottom: '16px',
+              };
+
+    return (
+        <SimpleGrid w='100%' columns={{ base: 1, sm: 1, md: 2, lg: 1, xl: 2 }} sx={gridStyles}>
+            {recipes.map((recipe, index) => (
+                <RecipeCard key={index} {...recipe} />
+            ))}
+        </SimpleGrid>
+    );
+};
 
 export default RecipeList;

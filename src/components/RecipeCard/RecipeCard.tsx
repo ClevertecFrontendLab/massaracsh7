@@ -1,5 +1,15 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Badge, Button, Card, CardBody, Heading, HStack, Image, Text } from '@chakra-ui/react';
+import {
+    Badge,
+    Button,
+    Card,
+    CardBody,
+    Heading,
+    Hide,
+    HStack,
+    Image,
+    Text,
+} from '@chakra-ui/react';
 
 import { CardData } from '~/types/typesData';
 
@@ -11,62 +21,78 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
         boxShadow='none'
         overflow='hidden'
         bg='white'
-        h='244px'
+        h={{ base: '128px', lg: '244px', xl: '244px' }}
+        position={{ base: 'static', md: 'relative', lg: 'static' }}
     >
-        <Image src={imageUrl} alt={title} w='100%' h='100%' maxW='346px' objectFit='cover' />
-
-        <CardBody px={6} py={5}>
-            <HStack spacing={3} alignItems='center' justify='space-between' mb='7'>
-                <Badge background='customLime.50' color='text' borderRadius='mini'>
+        <Image
+            src={imageUrl}
+            alt={title}
+            w='100%'
+            h='100%'
+            maxW={{ base: '158px', lg: '346px', xl: '346px' }}
+            objectFit='cover'
+        />
+        <CardBody
+            display='flex'
+            flexDirection='column'
+            px={{ md: '2', lg: '6', xl: '6' }}
+            pt={{ md: 2, lg: 5, xl: 5 }}
+            pb={{ md: 1, lg: 5, xl: 5 }}
+        >
+            <HStack
+                spacing={3}
+                alignItems='center'
+                justify='space-between'
+                mb={{ md: '0', lg: '7', xl: '7' }}
+            >
+                <Badge
+                    variant='lime50'
+                    position={{ base: 'static', md: 'absolute', lg: 'static' }}
+                    top={{ md: '8px' }}
+                    left={{ md: '8px' }}
+                >
                     <HStack gap={2} px={1}>
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
-                        <Text
-                            fontSize='14px'
-                            lineHeight='middle'
-                            fontWeight='400'
-                            color='text'
-                            textTransform='none'
-                        >
-                            {category.title}
-                        </Text>
+                        <Text textTransform='none'>{category.title}</Text>
                     </HStack>
                 </Badge>
-                <HStack fontSize='xs' color='customLime.600'>
-                    <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' /> <Text>{likes}</Text>
-                </HStack>
-                <HStack fontSize='xs' color='customLime.600'>
-                    <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />{' '}
-                    <Text>{comments}</Text>
+                <HStack>
+                    <HStack>
+                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />{' '}
+                        <Text textStyle='limeSmall'>{likes}</Text>
+                    </HStack>
+                    <HStack>
+                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />
+                        <Text textStyle='limeSmall'>{comments}</Text>
+                    </HStack>
                 </HStack>
             </HStack>
-            <Heading mb={2} noOfLines={1} fontWeight={500} fontSize='20px' lineHeight='28px'>
+            <Heading
+                mb={2}
+                sx={{
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    WebkitLineClamp: {
+                        base: 1,
+                        md: 2,
+                    },
+                }}
+                variant='cardTitle'
+            >
                 {title}
             </Heading>
-            <Text fontSize='14px' lineHeight='20px' mb={7} noOfLines={3}>
-                {description}
-            </Text>
-            <HStack justify='flex-end' gap={2}>
-                <Button
-                    size='sm'
-                    variant='outline'
-                    background='white'
-                    fontWeight='600'
-                    lineHeight='20px'
-                    fontSize='14px'
-                    leftIcon={<ArrowForwardIcon />}
-                >
-                    Сохранить
+            <Hide below='md'>
+                <Text mb={{ lg: '12', xl: '7' }} noOfLines={3}>
+                    {description}
+                </Text>
+            </Hide>
+            <HStack justify='flex-end' gap={2} mt={{ md: 'auto', lg: 'auto', xl: '0' }}>
+                <Button variant='whiteOutline' leftIcon={<ArrowForwardIcon />}>
+                    <Hide below='md'>Сохранить</Hide>
                 </Button>
-                <Button
-                    size='sm'
-                    background='text'
-                    color='white'
-                    fontWeight='600'
-                    lineHeight='20px'
-                    fontSize='14px'
-                >
-                    Готовить
-                </Button>
+
+                <Button variant='blackSolid'>Готовить</Button>
             </HStack>
         </CardBody>
     </Card>

@@ -23,9 +23,9 @@ const VeganPage = () => (
                 вегетарианскую диету и готовить вкусные вегетарианские блюда.
             </Text>
         </Box>
-        <SearchBar />
+        <SearchBar bottom='24px' />
         <TabsCategory />
-        <RecipeList recipes={veganRecipes} space={[6, 4]} />
+        <RecipeList recipes={veganRecipes} gridVariant='low' />
         <HStack justify='center' mb={10}>
             <Button
                 size='md'

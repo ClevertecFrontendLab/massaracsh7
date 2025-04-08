@@ -9,9 +9,9 @@ const Content = ({ children }: { children: React.ReactNode }) => (
             base: '100%',
             sm: '328px',
             md: '728px',
-            lg: '1160px',
-            xl: '1360px',
-            '2xl': '1360px',
+            lg: '975px',
+            xl: '1459px',
+            '2xl': '1456px',
         }}
         w='100%'
     >

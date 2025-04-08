@@ -122,7 +122,7 @@ const categories = [
         ],
     },
     {
-        title: 'Национальные блюда',
+        title: 'Национальные',
         icon: '/icons/national.svg',
         url: '/national-cuisines',
         items: [
@@ -150,7 +150,7 @@ const categories = [
         items: ['Соусы мясные', 'Соусы сырные', 'Маринады'],
     },
     {
-        title: 'Домашние заготовки',
+        title: 'Заготовки',
         icon: '/icons/cans.svg',
         url: '/preserves',
         items: [

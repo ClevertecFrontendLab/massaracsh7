@@ -1,5 +1,5 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack } from '@chakra-ui/react';
+import { Box, Button, Heading, Hide, HStack, Show } from '@chakra-ui/react';
 
 import BlogList from '~/components/BlogList/BlogList';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
@@ -15,22 +15,22 @@ const Main = () => (
         </Heading>
         <SearchBar />
         <SliderList />
-        <HStack justify='space-between' mb={6}>
+        <HStack justify='space-between' mb={{ base: 8, lg: 4, xl: 6 }}>
             <Heading variant='sectionTitle'>Самое сочное</Heading>
-            <Button
-                background='customLime.400'
-                borderRadius='small'
-                py='16px'
-                px={6}
-                rightIcon={<ArrowForwardIcon />}
-                fontWeight='600'
-                fontSize='18px'
-                lineHeight='28px'
-            >
+            <Hide below='md'>
+                <Button variant='limeSolid' size='large' rightIcon={<ArrowForwardIcon />}>
+                    Вся подборка
+                </Button>
+            </Hide>
+        </HStack>
+        <RecipeList recipes={popularRecipes} gridVariant='wide' />
+
+        <Show below='md'>
+            <Button variant='limeSolid' size='large' rightIcon={<ArrowForwardIcon />}>
                 Вся подборка
             </Button>
-        </HStack>
-        <RecipeList recipes={popularRecipes} space={[6, 6]} />
+        </Show>
+
         <BlogList />
         <KitchenSection
             title='Веганская кухня'

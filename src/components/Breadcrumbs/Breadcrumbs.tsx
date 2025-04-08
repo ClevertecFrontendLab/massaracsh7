@@ -12,22 +12,35 @@ const Breadcrumbs = () => {
     const currentSubcategory = pathSegments[1] ? decodeURIComponent(pathSegments[1]) : null;
 
     return (
-        <Breadcrumb separator={<ChevronRightIcon color='gray.500' />}>
-            <BreadcrumbItem>
-                <BreadcrumbLink as={RouterLink} to='/'>
+        <Breadcrumb separator={<ChevronRightIcon color='gray.800' />}>
+            <BreadcrumbItem isCurrentPage={!currentCategory} isLastChild={!currentCategory}>
+                <BreadcrumbLink
+                    as={RouterLink}
+                    to='/'
+                    textStyle={currentCategory ? 'navInactive' : 'navActive'}
+                >
                     Главная
                 </BreadcrumbLink>
             </BreadcrumbItem>
 
-            <BreadcrumbItem>
-                <BreadcrumbLink as={RouterLink} to={`/${currentCategory}`}>
-                    {getTitleByUrl(currentCategory)}
-                </BreadcrumbLink>
-            </BreadcrumbItem>
+            {currentCategory && (
+                <BreadcrumbItem
+                    isCurrentPage={!currentSubcategory}
+                    isLastChild={!currentSubcategory}
+                >
+                    <BreadcrumbLink
+                        as={RouterLink}
+                        to={`/${currentCategory}`}
+                        textStyle={currentSubcategory ? 'navInactive' : 'navActive'}
+                    >
+                        {getTitleByUrl(currentCategory)}
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+            )}
 
             {currentSubcategory && (
-                <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink>{currentSubcategory}</BreadcrumbLink>
+                <BreadcrumbItem isCurrentPage isLastChild>
+                    <BreadcrumbLink textStyle='navActive'>{currentSubcategory}</BreadcrumbLink>
                 </BreadcrumbItem>
             )}
         </Breadcrumb>

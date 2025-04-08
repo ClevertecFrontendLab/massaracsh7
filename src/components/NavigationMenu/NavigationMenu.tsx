@@ -27,6 +27,7 @@ const NavigationMenu = () => {
                 '&::-webkit-scrollbar-thumb': {
                     background: 'rgba(0, 0, 0, 0.16)',
                     borderRadius: '8px',
+                    maxHeight: '363px',
                 },
                 '&::-webkit-scrollbar-track': {
                     background: 'rgba(0, 0, 0, 0.04)',
@@ -36,17 +37,18 @@ const NavigationMenu = () => {
             height='calc(100vh - 80px - 144px)'
             borderRadius='large'
             boxShadow='menu'
-            pt={2.5}
             pl={2.5}
-            pr={4}
+            pr={1.5}
+            pt='0'
         >
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>
                     <AccordionButton
                         _hover={{ bg: 'customLime.50' }}
-                        _expanded={{ bg: 'customLime.100' }}
+                        _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
                         height='48px'
-                        padding='12px 8px'
+                        px={0}
+                        pt={1}
                         onClick={() => {
                             if (category.items && category.items.length > 0) {
                                 const firstSub = category.items[0];
@@ -54,7 +56,14 @@ const NavigationMenu = () => {
                             }
                         }}
                     >
-                        <Box flex='1' textAlign='left' display='flex' alignItems='center' gap={2}>
+                        <Box
+                            flex='1'
+                            pl='10px'
+                            display='flex'
+                            alignItems='center'
+                            gap={2}
+                            textStyle='nav'
+                        >
                             {category.icon && (
                                 <Image src={category.icon} alt={category.title} boxSize='24px' />
                             )}
@@ -63,20 +72,20 @@ const NavigationMenu = () => {
                         <AccordionIcon />
                     </AccordionButton>
                     <AccordionPanel pb={4}>
-                        <List spacing={1}>
+                        <List spacing={1.5}>
                             {category.items.map((item, index) => (
                                 <ListItem
                                     key={index}
-                                    padding='6px 8px 6px 40px'
+                                    padding='1px 8px 1px 24px'
                                     className='custom-nav-item'
                                 >
                                     <NavLink
                                         to={`/vegan/${item}`}
                                         className='custom-nav-link'
                                         style={({ isActive }) => ({
-                                            textDecoration: 'none',
-                                            padding: '6px 8px',
-                                            borderLeftWidth: isActive ? '8px' : '1px',
+                                            borderLeftWidth: '1px',
+                                            boxShadow: isActive ? '-8px 0 0 0 #c4ff61' : 'none',
+                                            fontWeight: isActive ? '700' : '400',
                                         })}
                                     >
                                         {item}

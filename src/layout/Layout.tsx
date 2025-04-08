@@ -35,7 +35,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 overflowY={isMobile ? 'visible' : 'auto'}
             >
                 {isDesktop && (
-                    <Box width='256px' shadow='base' pt={6} pb={8} position='sticky' top={0}>
+                    <Box
+                        width='256px'
+                        shadow='base'
+                        pt='34px'
+                        pb={8}
+                        pr={1}
+                        position='sticky'
+                        top={0}
+                    >
                         <NavigationMenu />
                         <Footer />
                     </Box>
