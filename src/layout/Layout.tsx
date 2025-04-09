@@ -3,6 +3,7 @@ import { Box, Hide, Show } from '@chakra-ui/react';
 import Content from '~/components/Content/Content';
 import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header/Header';
+import NavigationFooter from '~/components/NavigationFooter/NavigationFooter';
 import NavigationMenu from '~/components/NavigationMenu/NavigationMenu';
 import Sidebar from '~/components/Sidebar/Sidebar';
 
@@ -20,7 +21,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
             <Hide below='md'>
                 <Box width='256px' shadow='base' pt={6} pb={8} position='sticky' top={0}>
                     <NavigationMenu />
-                    <Footer />
+                    <NavigationFooter />
                 </Box>
             </Hide>
             <Box flex='1' pt={8} py={6}>
@@ -34,17 +35,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
         </Box>
 
         <Show below='md'>
-            <Box
-                position='fixed'
-                bottom={0}
-                left={0}
-                right={0}
-                height='84px'
-                zIndex={10}
-                background='white'
-            >
-                <Footer />
-            </Box>
+            <Footer />
         </Show>
     </Box>
 );
