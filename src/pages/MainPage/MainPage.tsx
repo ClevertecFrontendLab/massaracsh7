@@ -1,5 +1,5 @@
 import { ArrowForwardIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, Hide, HStack, Show } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Hide, HStack, Show } from '@chakra-ui/react';
 
 import BlogList from '~/components/BlogList/BlogList';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
@@ -26,9 +26,11 @@ const Main = () => (
         <RecipeList recipes={popularRecipes} gridVariant='wide' />
 
         <Show below='md'>
-            <Button variant='limeSolid' size='large' rightIcon={<ArrowForwardIcon />}>
-                Вся подборка
-            </Button>
+            <Center mb={10}>
+                <Button variant='limeSolid' size='large' rightIcon={<ArrowForwardIcon />}>
+                    Вся подборка
+                </Button>
+            </Center>
         </Show>
 
         <BlogList />

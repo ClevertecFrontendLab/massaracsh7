@@ -41,6 +41,24 @@ const Heading = defineStyleConfig({
                 xl: '48px',
             },
         },
+
+        sectionBlogTitle: {
+            fontWeight: 400,
+            fontSize: {
+                base: '24px',
+                sm: '24px',
+                md: '24px',
+                lg: '30px',
+                xl: '36px',
+            },
+            lineHeight: {
+                base: '32px',
+                sm: '32px',
+                md: '32px',
+                lg: '36px',
+                xl: '40px',
+            },
+        },
         sliderTitle: {
             fontWeight: 500,
             fontSize: {
@@ -86,6 +104,13 @@ export const Button = defineStyleConfig({
     variants: {
         limeSolid: {
             bg: 'customLime.400',
+            color: 'black',
+            _hover: {
+                bg: 'customLime.500',
+            },
+        },
+        limeLightSolid: {
+            bg: 'customLime.300',
             color: 'black',
             _hover: {
                 bg: 'customLime.500',
@@ -253,6 +278,20 @@ const theme = extendTheme({
             fontSize: 'lg',
             lineHeight: '24px',
             color: 'customLime.600',
+        },
+        linkText: {
+            fontWeight: 600,
+            fontSize: { lg: 'lg', xl: 'xlg' },
+            lineHeight: { lg: '24px', xl: '28px' },
+        },
+        nameText: {
+            fontWeight: 500,
+            fontSize: { md: '16px', lg: '18px', xl: '18px' },
+            lineHeight: { md: '24px', lg: '28px', xl: '28px' },
+        },
+        miniText: {
+            fontSize: { md: '12px', lg: '14px', xl: '14px' },
+            lineHeight: { md: '16px', lg: '20px', xl: '20px' },
         },
     },
 
