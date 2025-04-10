@@ -1,31 +1,33 @@
-import { Badge, Card, CardBody, CardHeader, HStack, Image, Text } from '@chakra-ui/react';
+import { Badge, Card, CardBody, CardHeader, Heading, HStack, Image, Text } from '@chakra-ui/react';
 
 import { KitchenDish } from '~/types/typesData';
 
 const DishCard = ({ title, category, likes, comments, description }: KitchenDish) => (
     <Card border='card' borderRadius='medium' boxShadow='none'>
-        <CardHeader p='24px' pb='8px'>
-            <Text noOfLines={1} fontWeight={500} fontSize='20px' lineHeight='28px'>
+        <CardHeader
+            pt={{ base: '3', md: '3', lg: '4', xl: '6' }}
+            pl={{ base: '3', md: '3', lg: '4', xl: '6' }}
+            pb={{ base: '2', md: '2', lg: '2', xl: '2' }}
+            pr={{ md: '3', lg: '1', xl: '6' }}
+        >
+            <Heading variant='cardTitle' noOfLines={1}>
                 {title}
-            </Text>
+            </Heading>
         </CardHeader>
-        <CardBody p='0px 24px 20px 24px'>
-            <Text noOfLines={3} mb={7} lineHeight='20px'>
+        <CardBody
+            pt={0}
+            pl={{ base: '3', md: '3', lg: '4', xl: '6' }}
+            pb={{ base: '3', md: '3', lg: '5', xl: '5' }}
+            pr={{ base: '3', md: '3', lg: '4', xl: '6' }}
+        >
+            <Text noOfLines={3} mb={{ sm: '30px', md: '30px', lg: '30px', xl: '7' }}>
                 {description}
             </Text>
             <HStack alignItems='center' justify='space-between'>
-                <Badge background='customLime.50' color='text' borderRadius='mini'>
+                <Badge variant='lime50'>
                     <HStack gap={2} px={1}>
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
-                        <Text
-                            fontSize='14px'
-                            lineHeight='middle'
-                            fontWeight='400'
-                            color='text'
-                            textTransform='none'
-                        >
-                            {category.title}
-                        </Text>
+                        <Text textTransform='none'>{category.title}</Text>
                     </HStack>
                 </Badge>
                 <HStack>

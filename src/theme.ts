@@ -116,6 +116,18 @@ export const Button = defineStyleConfig({
                 bg: 'customLime.500',
             },
         },
+        limeOutline: {
+            bg: 'transparent',
+            border: '1px solid',
+            borderColor: 'customLime.600',
+            color: 'customLime.600',
+            fontSize: { base: '12px', md: '12px', lg: '12px', xl: '14px' },
+            lineHeight: { base: '16px', md: '16px', lg: '16px', xl: '20px' },
+            px: { base: '2', md: '2', lg: '2', xl: '3' },
+            py: { base: '1', md: '1', lg: '2', xl: '6px' },
+            minW: { base: '70px', md: '70px', lg: '70px', xl: '87px' },
+            h: { base: '6', md: '8', lg: '8', xl: '8' },
+        },
         whiteOutline: {
             bg: 'white',
             border: '1px solid',

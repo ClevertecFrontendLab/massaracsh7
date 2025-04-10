@@ -11,11 +11,12 @@ const Sidebar = () => (
             display='flex'
             flexDirection='column'
             justifyContent='space-between'
+            alignItems='center'
             py={4}
-            pr='56px'
-            pl='66px'
         >
-            <SocialList />
+            <Box pr='56px' pl='66px'>
+                <SocialList />
+            </Box>
 
             <CreateRecipeButton />
         </Box>

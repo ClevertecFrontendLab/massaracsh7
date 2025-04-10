@@ -17,6 +17,8 @@ const SliderList = () => (
         //     lg: 'calc(277px * 3.5 + 24px * 3)',
         //     xl: 'calc(322px * 4 + 24px * 3)',
         // }}
+        pr='56px'
+        pl='66px'
     >
         <Heading variant='sectionTitle' mb={6}>
             Новые рецепты

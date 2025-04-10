@@ -8,7 +8,12 @@ import NavigationMenu from '~/components/NavigationMenu/NavigationMenu';
 import Sidebar from '~/components/Sidebar/Sidebar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => (
-    <Box display='flex' flexDirection='column' height='100vh' pb={{ mb: '84px', lg: '0', xl: '0' }}>
+    <Box
+        display='flex'
+        flexDirection='column'
+        pb={{ base: '84px', sm: '96px', md: '104px', lg: '0', xl: '0' }}
+        height='100vh'
+    >
         <Header />
         <Box
             display='flex'
