@@ -1,4 +1,3 @@
-import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
     Badge,
     Button,
@@ -7,10 +6,13 @@ import {
     Heading,
     Hide,
     HStack,
+    IconButton,
     Image,
+    Show,
     Text,
 } from '@chakra-ui/react';
 
+import { BookmarkHeart } from '~/assets/icons/icons';
 import { CardData } from '~/types/typesData';
 
 const RecipeCard = ({ title, description, category, likes, comments, imageUrl }: CardData) => (
@@ -90,10 +92,23 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
                 </Text>
             </Hide>
             <HStack justify='flex-end' gap={2} mt={{ sm: 'auto', md: 'auto', lg: 'auto', xl: '0' }}>
-                <Button variant='whiteOutline' leftIcon={<ArrowForwardIcon />}>
-                    <Hide below='md'>Сохранить</Hide>
-                </Button>
-
+                <Hide below='md'>
+                    <Button variant='whiteOutline' leftIcon={<BookmarkHeart />}>
+                        Сохранить
+                    </Button>
+                </Hide>
+                <Show below='md'>
+                    <IconButton
+                        aria-label='Сохранить'
+                        icon={<BookmarkHeart />}
+                        variant='outline'
+                        boxSize='24px'
+                        minWidth='0'
+                        p={0}
+                        colorScheme='black'
+                        fontSize='12px'
+                    />
+                </Show>
                 <Button variant='blackSolid'>Готовить</Button>
             </HStack>
         </CardBody>

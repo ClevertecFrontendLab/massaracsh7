@@ -8,34 +8,58 @@ import NavigationMenu from '~/components/NavigationMenu/NavigationMenu';
 import Sidebar from '~/components/Sidebar/Sidebar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => (
-    <Box
-        display='flex'
-        flexDirection='column'
-        pb={{ base: '84px', sm: '96px', md: '104px', lg: '0', xl: '0' }}
-        minHeight='100vh'
-    >
-        <Header />
-        <Box display='flex' flex='1' maxW='1920px' mx='auto' height='calc(100vh - 80px)'>
+    <>
+        <Box position='fixed' top={0} left={0} right={0} zIndex={10}>
+            <Header />
+        </Box>
+
+        <Box
+            pt='80px'
+            pb={{ base: '84px', sm: '96px', md: '104px', lg: '0', xl: '0' }}
+            maxW='1920px'
+            mx='auto'
+            display='flex'
+        >
             <Hide below='md'>
-                <Box width='256px' shadow='base' pt={6} pb={8} position='sticky' top={0}>
+                <Box
+                    position='fixed'
+                    top='80px'
+                    left={0}
+                    width='256px'
+                    height='calc(100vh - 80px)'
+                    shadow='base'
+                    pt={6}
+                    pb={8}
+                >
                     <NavigationMenu />
                     <NavigationFooter />
                 </Box>
             </Hide>
-            <Box flex='1' pt={8} py={6}>
+
+            <Box flex='1' ml={{ md: '256px' }} mr={{ md: '208px' }} px={4} pt={8} pb={6}>
                 <Content>{children}</Content>
             </Box>
+
             <Hide below='md'>
-                <Box width='208px' position='sticky' top={0}>
+                <Box
+                    position='fixed'
+                    top='80px'
+                    right={0}
+                    width='208px'
+                    height='calc(100vh - 80px)'
+                    overflowY='auto'
+                >
                     <Sidebar />
                 </Box>
             </Hide>
         </Box>
 
         <Show below='md'>
-            <Footer />
+            <Box position='fixed' bottom={0} left={0} right={0} zIndex={10}>
+                <Footer />
+            </Box>
         </Show>
-    </Box>
+    </>
 );
 
 export default Layout;

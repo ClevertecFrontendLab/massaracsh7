@@ -1,6 +1,6 @@
-import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
 
+import { ArrowLeft, ArrowRight } from '~/assets/icons/icons';
 import { newRecipes } from '~/data/cardsData';
 
 import SliderCard from '../SliderCard/SliderCard';
@@ -25,7 +25,7 @@ const SliderList = () => (
         </Heading>
         <IconButton
             aria-label='Previous'
-            icon={<ArrowBackIcon />}
+            icon={<ArrowLeft />}
             position='absolute'
             width='48px'
             height='48px'
@@ -41,7 +41,7 @@ const SliderList = () => (
 
         <IconButton
             aria-label='Next'
-            icon={<ArrowForwardIcon />}
+            icon={<ArrowRight />}
             position='absolute'
             width='48px'
             height='48px'

@@ -1,7 +1,7 @@
-import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Box, Button, Heading, HStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router';
 
+import { ArrowBlackRight } from '~/assets/icons/icons';
 import BlogList from '~/components/BlogList/BlogList';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
@@ -26,7 +26,7 @@ const Main = () => {
                     data-test-id='juiciest-link'
                     variant='limeSolid'
                     size='large'
-                    rightIcon={<ArrowForwardIcon />}
+                    rightIcon={<ArrowBlackRight />}
                     onClick={() => navigate('/juicy')}
                 >
                     Вся подборка
@@ -41,7 +41,7 @@ const Main = () => {
                 size='large'
                 mb={10}
                 mx='auto'
-                rightIcon={<ArrowForwardIcon />}
+                rightIcon={<ArrowBlackRight />}
                 onClick={() => navigate('/juicy')}
             >
                 Вся подборка

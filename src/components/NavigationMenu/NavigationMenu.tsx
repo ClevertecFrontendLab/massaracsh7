@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { NavLink, useNavigate } from 'react-router';
 
+import { ShevronDown } from '~/assets/icons/icons';
 import categories from '~/data/categories';
 
 const NavigationMenu = () => {
@@ -27,7 +28,7 @@ const NavigationMenu = () => {
                 '&::-webkit-scrollbar-thumb': {
                     background: 'rgba(0, 0, 0, 0.16)',
                     borderRadius: '8px',
-                    maxHeight: '363px',
+                    maxHeight: '30%',
                 },
                 '&::-webkit-scrollbar-track': {
                     background: 'rgba(0, 0, 0, 0.04)',
@@ -70,7 +71,7 @@ const NavigationMenu = () => {
                             )}
                             {category.title}
                         </Box>
-                        <AccordionIcon />
+                        <AccordionIcon as={ShevronDown} />
                     </AccordionButton>
                     <AccordionPanel pb={4}>
                         <List spacing={1.5}>

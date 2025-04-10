@@ -1,6 +1,6 @@
-import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Heading, Hide, HStack, Show, SimpleGrid } from '@chakra-ui/react';
 
+import { ArrowBlackRight } from '~/assets/icons/icons';
 import { blogs } from '~/data/cardsData';
 
 import BlogCard from '../BlogCard/BlogCard';
@@ -16,7 +16,7 @@ const BlogList = () => (
         <HStack justify='space-between' mb={{ base: '12px', md: '12px', lg: '18px', xl: '6' }}>
             <Heading variant='sectionBlogTitle'>Кулинарные блоги</Heading>
             <Hide below='md'>
-                <Button variant='limeLightSolid' size='large' rightIcon={<ArrowForwardIcon />}>
+                <Button variant='limeLightSolid' size='large' rightIcon={<ArrowBlackRight />}>
                     Все авторы
                 </Button>
             </Hide>
@@ -28,7 +28,7 @@ const BlogList = () => (
         </SimpleGrid>
         <Show below='md'>
             <Center mt={{ sm: '3' }}>
-                <Button variant='limeLightSolid' size='large' rightIcon={<ArrowForwardIcon />}>
+                <Button variant='limeLightSolid' size='large' rightIcon={<ArrowBlackRight />}>
                     Все авторы
                 </Button>
             </Center>
