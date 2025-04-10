@@ -23,7 +23,7 @@ const KitchenSection = ({ title, description, veganDishes, tryDishes }: KitchenS
         <Heading variant='sectionTitle'>{title}</Heading>
         <Text
             fontWeight={500}
-            fontSize={{ md: '14px', lg: 4, xl: 4 }}
+            fontSize={{ sm: '14px', md: '14px', lg: '16px', xl: '16px' }}
             lineHeight={{ md: '20px', lg: '24px', xl: '24px' }}
             gridColumn={{
                 base: 'auto',

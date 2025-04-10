@@ -17,9 +17,9 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
                   marginBottom: { base: '12px', sm: '16px', md: '16px', lg: '40px', xl: '40px' },
               }
             : {
-                  columnGap: '24px',
-                  rowGap: '16px',
-                  marginBottom: '16px',
+                  columnGap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '24px' },
+                  rowGap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '16px' },
+                  marginBottom: { base: '12px', sm: '16px', md: '16px', lg: '40px', xl: '16px' },
               };
 
     return (

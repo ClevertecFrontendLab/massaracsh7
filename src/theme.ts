@@ -153,8 +153,8 @@ export const Button = defineStyleConfig({
         medium: {
             fontSize: '16px',
             lineHeight: '24px',
-            px: '24px',
-            py: '10px',
+            px: { base: '16px', md: '16px', lg: '24px', xl: '24px' },
+            py: { base: '8px', md: '8px', lg: '10px', xl: '10px' },
         },
         large: {
             fontSize: { base: '16px', xl: '18px', '2xl': '18px' },

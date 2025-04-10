@@ -22,7 +22,7 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
         overflow='hidden'
         bg='white'
         h={{ base: '128px', lg: '244px', xl: '244px' }}
-        position={{ base: 'static', md: 'relative', lg: 'static' }}
+        position={{ base: 'static', sm: 'relative', md: 'relative', lg: 'static' }}
     >
         <Image
             src={imageUrl}
@@ -35,9 +35,9 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
         <CardBody
             display='flex'
             flexDirection='column'
-            px={{ md: '2', lg: '6', xl: '6' }}
-            pt={{ md: 2, lg: 5, xl: 5 }}
-            pb={{ md: 1, lg: 5, xl: 5 }}
+            px={{ sm: '2', md: '2', lg: '6', xl: '6' }}
+            pt={{ sm: '2', md: '2', lg: '5', xl: '5' }}
+            pb={{ sm: '1', md: '1', lg: '5', xl: '5' }}
         >
             <HStack
                 spacing={3}
@@ -47,9 +47,9 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
             >
                 <Badge
                     variant='lime50'
-                    position={{ base: 'static', md: 'absolute', lg: 'static' }}
-                    top={{ md: '8px' }}
-                    left={{ md: '8px' }}
+                    position={{ base: 'static', sm: 'absolute', md: 'absolute', lg: 'static' }}
+                    top={{ sm: '8px', md: '8px' }}
+                    left={{ sm: '8px', md: '8px' }}
                 >
                     <HStack gap={2} px={1}>
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
@@ -76,6 +76,7 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
                     WebkitLineClamp: {
                         base: 1,
                         md: 2,
+                        sm: 2,
                     },
                 }}
                 variant='cardTitle'
@@ -87,7 +88,7 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
                     {description}
                 </Text>
             </Hide>
-            <HStack justify='flex-end' gap={2} mt={{ md: 'auto', lg: 'auto', xl: '0' }}>
+            <HStack justify='flex-end' gap={2} mt={{ sm: 'auto', md: 'auto', lg: 'auto', xl: '0' }}>
                 <Button variant='whiteOutline' leftIcon={<ArrowForwardIcon />}>
                     <Hide below='md'>Сохранить</Hide>
                 </Button>

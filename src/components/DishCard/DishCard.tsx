@@ -20,7 +20,7 @@ const DishCard = ({ title, category, likes, comments, description }: KitchenDish
             pb={{ base: '3', md: '3', lg: '5', xl: '5' }}
             pr={{ base: '3', md: '3', lg: '4', xl: '6' }}
         >
-            <Text noOfLines={3} mb={{ sm: '30px', md: '30px', lg: '30px', xl: '7' }}>
+            <Text noOfLines={3} mb={{ sm: '30px', md: '30px', lg: '30px', xl: '7' }} color='text'>
                 {description}
             </Text>
             <HStack alignItems='center' justify='space-between'>

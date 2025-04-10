@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
@@ -11,13 +11,13 @@ const VeganPage = () => (
         <Heading variant='pageTitle' mb={3} pt={1.5}>
             Веганская кухня
         </Heading>
-        <Box width='700px' mx='auto' mb={8}>
+        <Box width={{ sm: '100%', md: '100%', lg: '700px', xl: '700px' }} mx='auto' mb={8}>
             <Text
                 textAlign='center'
                 color='grayText'
                 fontWeight={500}
-                fontSize='16px'
-                lineHeight='24px'
+                fontSize={{ sm: '14px', md: '14px', lg: '16px', xl: '16px' }}
+                lineHeight={{ sm: '20px', md: '20px', lg: '24px', xl: '24px' }}
             >
                 Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать
                 вегетарианскую диету и готовить вкусные вегетарианские блюда.
@@ -26,17 +26,11 @@ const VeganPage = () => (
         <SearchBar bottom='24px' />
         <TabsCategory />
         <RecipeList recipes={veganRecipes} gridVariant='low' />
-        <HStack justify='center' mb={10}>
-            <Button
-                size='md'
-                background='customLime.400'
-                fontSize='16px'
-                fontWeight='600'
-                lineHeight='24px'
-            >
-                Загрузить еще
+        <Center mb={{ sm: '8', md: '8', lg: '10', xl: '10' }}>
+            <Button variant='limeSolid' size='medium'>
+                Загрузить ещё
             </Button>
-        </HStack>
+        </Center>
         <KitchenSection
             title='Десерты, выпечка'
             description='Без них невозможно представить себе ни современную, ни традиционную  кулинарию. Пироги и печенья, блины, пончики, вареники и, конечно, хлеб - рецепты изделий из теста многообразны и невероятно популярны.'
