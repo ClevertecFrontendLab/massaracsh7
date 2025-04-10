@@ -50,8 +50,9 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
                     position={{ base: 'static', sm: 'absolute', md: 'absolute', lg: 'static' }}
                     top={{ sm: '8px', md: '8px' }}
                     left={{ sm: '8px', md: '8px' }}
+                    p={{ sm: '0', md: '0' }}
                 >
-                    <HStack gap={2} px={1}>
+                    <HStack gap={{ base: '0.5', md: '0.5', lg: '2' }} px={1}>
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
                         <Text textTransform='none'>{category.title}</Text>
                     </HStack>

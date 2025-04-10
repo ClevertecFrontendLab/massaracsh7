@@ -17,8 +17,8 @@ const SliderList = () => (
         //     lg: 'calc(277px * 3.5 + 24px * 3)',
         //     xl: 'calc(322px * 4 + 24px * 3)',
         // }}
-        pr='56px'
-        pl='66px'
+        // pr='56px'
+        // pl='66px'
     >
         <Heading variant='sectionTitle' mb={6}>
             Новые рецепты
@@ -56,11 +56,10 @@ const SliderList = () => (
         />
         <Flex
             overflowX='auto'
-            whiteSpace='nowrap'
             gap={{ base: 3, xl: 6 }}
             w='100%'
             sx={{
-                '::-webkit-scrollbar': { display: 'none' }, // скрыть скролл
+                '::-webkit-scrollbar': { display: 'none' },
             }}
         >
             {newRecipes.map((recipe, index) => (
@@ -68,8 +67,9 @@ const SliderList = () => (
                     key={index}
                     flex='0 0 auto'
                     w={{
-                        base: '158px',
-                        md: '158px',
+                        base: '160px',
+                        sm: '160px',
+                        md: '160px',
                         lg: '277px',
                         xl: '322px',
                     }}

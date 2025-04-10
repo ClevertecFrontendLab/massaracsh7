@@ -10,9 +10,27 @@ const SliderCard = ({
     comments,
     imageUrl,
 }: CardSliderData) => (
-    <Card borderRadius='medium' border='card' boxShadow='none' overflow='hidden' bg='white'>
-        <Image src={imageUrl} alt={title} w='100%' h='230px' objectFit='cover' />
-        <CardBody px={6} py={4} boxShadow='none'>
+    <Card
+        borderRadius='medium'
+        border='card'
+        boxShadow='none'
+        overflow='hidden'
+        bg='white'
+        position={{ base: 'static', sm: 'relative', md: 'relative', lg: 'static' }}
+    >
+        <Image
+            src={imageUrl}
+            alt={title}
+            w='100%'
+            h={{ sm: '128px', md: '128px', lg: '230px', xl: '230px' }}
+            objectFit='cover'
+        />
+        <CardBody
+            display='flex'
+            flexDirection='column'
+            px={{ sm: '2', md: '2', lg: '6', xl: '6' }}
+            py={{ sm: '2', md: '2', lg: '4', xl: '4' }}
+        >
             <Heading
                 variant='sliderTitle'
                 mb={2}
@@ -32,18 +50,16 @@ const SliderCard = ({
                 </Text>
             </Hide>
             <HStack spacing={3} justify='space-between' align='center'>
-                <Badge background='customLime.150' color='text' borderRadius='mini'>
-                    <HStack gap={2} px={1}>
+                <Badge
+                    variant='lime150'
+                    position={{ base: 'static', sm: 'absolute', md: 'absolute', lg: 'static' }}
+                    top={{ sm: '8px', md: '8px' }}
+                    left={{ sm: '8px', md: '8px' }}
+                    p={{ sm: '0', md: '0' }}
+                >
+                    <HStack gap={{ base: '0.5', md: '0.5', lg: '2' }} px={1}>
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
-                        <Text
-                            fontSize='14px'
-                            lineHeight='middle'
-                            fontWeight='400'
-                            color='text'
-                            textTransform='none'
-                        >
-                            {category.title}
-                        </Text>
+                        <Text textTransform='none'>{category.title}</Text>
                     </HStack>
                 </Badge>
                 <HStack gap={2}>

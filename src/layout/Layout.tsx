@@ -12,17 +12,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
         display='flex'
         flexDirection='column'
         pb={{ base: '84px', sm: '96px', md: '104px', lg: '0', xl: '0' }}
-        height='100vh'
+        minHeight='100vh'
     >
         <Header />
-        <Box
-            display='flex'
-            flex='1'
-            maxW='1920px'
-            mx='auto'
-            height='calc(100vh - 80px)'
-            overflowY='auto'
-        >
+        <Box display='flex' flex='1' maxW='1920px' mx='auto' height='calc(100vh - 80px)'>
             <Hide below='md'>
                 <Box width='256px' shadow='base' pt={6} pb={8} position='sticky' top={0}>
                     <NavigationMenu />

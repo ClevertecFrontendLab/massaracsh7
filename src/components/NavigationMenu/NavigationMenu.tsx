@@ -44,6 +44,7 @@ const NavigationMenu = () => {
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>
                     <AccordionButton
+                        data-test-id={category.title === 'Веганская кухня' ? 'vegan-cuisine' : ''}
                         _hover={{ bg: 'customLime.50' }}
                         _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
                         height='48px'

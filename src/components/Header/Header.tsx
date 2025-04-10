@@ -5,7 +5,7 @@ import { BurgerButton } from '../BurgerButton/BurgerButton';
 import SocialList from '../SocialList/SocialList';
 
 const Header = () => (
-    <Box as='header' bg='#ffffd3' color='black' py={4}>
+    <Box as='header' bg='#ffffd3' color='black' py={4} data-test-id='header'>
         <Box maxW='1920px' pl={4} pr={14} mx='auto'>
             <HStack justify='space-between' align='center'>
                 <HStack spacing={32} align='center'>

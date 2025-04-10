@@ -12,6 +12,7 @@ function Footer() {
             height='84px'
             zIndex={10}
             bg='#ffffd3'
+            data-test-id='footer'
         >
             <nav>
                 <Flex justify='space-around' align='center' height='100%' color='secondaryText'>
