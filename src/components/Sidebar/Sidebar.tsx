@@ -7,14 +7,13 @@ const Sidebar = () => (
     <aside>
         <Box
             height='calc(100vh - 80px)'
-            p='4'
             display='flex'
             flexDirection='column'
             justifyContent='space-between'
-            alignItems='center'
+            alignItems='flex-start'
             py={4}
         >
-            <Box pr='56px' pl='66px'>
+            <Box pl='83px'>
                 <SocialList />
             </Box>
 

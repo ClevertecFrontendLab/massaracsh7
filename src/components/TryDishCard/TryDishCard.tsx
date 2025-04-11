@@ -5,9 +5,9 @@ import { TryDish } from '~/types/typesData';
 const TryDishCard = ({ icon, title }: TryDish) => (
     <Card
         w='100%'
-        pt={{ sm: '10px', md: '10px', lg: '10px', xl: '3' }}
-        pl={{ sm: '3', md: '6px', lg: '14px', xl: '6' }}
-        pb={{ sm: '10px', md: '8px', lg: '8px', xl: '3' }}
+        pt={{ sm: '10px', md: '10px', lg: '10px', xl: '10px' }}
+        pl={{ sm: '3', md: '6px', lg: '14px', xl: '8' }}
+        pb={{ sm: '8px', md: '8px', lg: '8px', xl: '3' }}
         pr={{ sm: '3', md: '6px', lg: '8px', xl: '6' }}
         border='card'
         borderRadius='medium'

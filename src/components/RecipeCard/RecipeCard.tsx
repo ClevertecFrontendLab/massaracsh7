@@ -38,14 +38,14 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
             display='flex'
             flexDirection='column'
             px={{ sm: '2', md: '2', lg: '6', xl: '6' }}
-            pt={{ sm: '2', md: '2', lg: '5', xl: '5' }}
+            pt={{ sm: '3.5', md: '2', lg: '5', xl: '5' }}
             pb={{ sm: '1', md: '1', lg: '5', xl: '5' }}
         >
             <HStack
                 spacing={3}
                 alignItems='center'
                 justify='space-between'
-                mb={{ md: '0', lg: '7', xl: '7' }}
+                mb={{ md: '1', lg: '7', xl: '7' }}
             >
                 <Badge
                     variant='lime50'
@@ -59,19 +59,19 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
                         <Text textTransform='none'>{category.title}</Text>
                     </HStack>
                 </Badge>
-                <HStack>
-                    <HStack>
-                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />{' '}
+                <HStack spacing={3.5} px={1}>
+                    <HStack spacing={1}>
+                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />
                         <Text textStyle='limeSmall'>{likes}</Text>
                     </HStack>
-                    <HStack>
+                    <HStack spacing={1}>
                         <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />
                         <Text textStyle='limeSmall'>{comments}</Text>
                     </HStack>
                 </HStack>
             </HStack>
             <Heading
-                mb={2}
+                pb={2}
                 sx={{
                     display: '-webkit-box',
                     WebkitBoxOrient: 'vertical',
@@ -80,13 +80,15 @@ const RecipeCard = ({ title, description, category, likes, comments, imageUrl }:
                         base: 1,
                         md: 2,
                         sm: 2,
+                        lg: 1,
+                        xl: 1,
                     },
                 }}
                 variant='cardTitle'
             >
                 {title}
             </Heading>
-            <Hide below='md'>
+            <Hide below='mid'>
                 <Text mb={{ lg: '12', xl: '7' }} noOfLines={3}>
                     {description}
                 </Text>

@@ -20,7 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
             mx='auto'
             display='flex'
         >
-            <Hide below='md'>
+            <Hide below='mid'>
                 <Box
                     position='fixed'
                     top='80px'
@@ -28,7 +28,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
                     width='256px'
                     height='calc(100vh - 80px)'
                     shadow='base'
-                    pt={6}
+                    pt={9}
                     pb={8}
                 >
                     <NavigationMenu />
@@ -36,11 +36,17 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
                 </Box>
             </Hide>
 
-            <Box flex='1' ml={{ md: '256px' }} mr={{ md: '208px' }} px={4} pt={8} pb={6}>
+            <Box
+                flex='1'
+                ml={{ mid: '256px', lg: '256px', xl: '256px' }}
+                mr={{ mid: '208px', lg: '208px', xl: '256px' }}
+                pt={{ md: '0', lg: '8', xl: '8' }}
+                pb={6}
+            >
                 <Content>{children}</Content>
             </Box>
 
-            <Hide below='md'>
+            <Hide below='mid'>
                 <Box
                     position='fixed'
                     top='80px'
@@ -54,7 +60,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
             </Hide>
         </Box>
 
-        <Show below='md'>
+        <Show below='mid'>
             <Box position='fixed' bottom={0} left={0} right={0} zIndex={10}>
                 <Footer />
             </Box>

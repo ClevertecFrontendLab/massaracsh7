@@ -4,7 +4,7 @@ const CreateRecipeButton = () => (
     <Box w='208px' bg='bg' h='208px'>
         <Center layerStyle='radialAsideBg' w='208px' h='208px'>
             <Button variant='ghost'>
-                <VStack spacing={2}>
+                <VStack spacing={3} pt='10px'>
                     <Image src='/icons/IconPen.svg' boxSize='48px' />
                     <Text mt='2px' fontSize='sm' color='secondaryText'>
                         Записать рецепт

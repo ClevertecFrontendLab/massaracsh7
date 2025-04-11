@@ -14,16 +14,26 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
         gridVariant === 'wide'
             ? {
                   gap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '24px' },
-                  marginBottom: { base: '12px', sm: '16px', md: '16px', lg: '40px', xl: '40px' },
+                  marginBottom: { base: '12px', sm: '12px', md: '12px', lg: '36px', xl: '36px' },
               }
             : {
                   columnGap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '24px' },
                   rowGap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '16px' },
-                  marginBottom: { base: '12px', sm: '16px', md: '16px', lg: '40px', xl: '16px' },
+                  marginBottom: { base: '12px', sm: '16px', md: '16px', lg: '14px', xl: '14px' },
               };
 
     return (
-        <SimpleGrid w='100%' columns={{ base: 1, sm: 1, md: 2, lg: 1, xl: 2 }} sx={gridStyles}>
+        <SimpleGrid
+            w='100%'
+            templateColumns={{
+                base: '1fr',
+                md: 'repeat(2, 1fr)',
+                lg: '1fr',
+                xl: 'repeat(2, 668px)',
+            }}
+            justifyContent='center'
+            sx={gridStyles}
+        >
             {recipes.map((recipe, index) => (
                 <RecipeCard key={index} {...recipe} />
             ))}

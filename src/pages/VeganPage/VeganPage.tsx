@@ -8,10 +8,14 @@ import { desertDishes, tryDesertDishes, veganRecipes } from '~/data/cardsData';
 
 const VeganPage = () => (
     <Box>
-        <Heading variant='pageTitle' mb={3} pt={1.5}>
+        <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}>
             Веганская кухня
         </Heading>
-        <Box width={{ sm: '100%', md: '100%', lg: '700px', xl: '700px' }} mx='auto' mb={8}>
+        <Box
+            width={{ sm: '100%', md: '100%', lg: '700px', xl: '700px' }}
+            mx='auto'
+            mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
+        >
             <Text
                 textAlign='center'
                 color='grayText'
@@ -26,7 +30,7 @@ const VeganPage = () => (
         <SearchBar bottom='24px' />
         <TabsCategory />
         <RecipeList recipes={veganRecipes} gridVariant='low' />
-        <Center mb={{ sm: '8', md: '8', lg: '10', xl: '10' }}>
+        <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
             <Button variant='limeSolid' size='medium'>
                 Загрузить ещё
             </Button>

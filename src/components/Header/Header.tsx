@@ -5,22 +5,27 @@ import { BurgerButton } from '../BurgerButton/BurgerButton';
 import SocialList from '../SocialList/SocialList';
 
 const Header = () => (
-    <Box as='header' bg='#ffffd3' color='black' py={4} data-test-id='header'>
-        <Box maxW='1920px' pl={4} pr={14} mx='auto'>
+    <Box as='header' bg='#ffffd3' py={4} data-test-id='header'>
+        <Box
+            maxW='1920px'
+            pl={{ sm: '5', md: '5', lg: '4', xl: '4' }}
+            pr={{ sm: '6', md: '6', lg: '14', xl: '14' }}
+            mx='auto'
+        >
             <HStack justify='space-between' align='center'>
                 <HStack spacing={32} align='center'>
-                    <Hide below='sm'>
+                    <Hide below='smPlus'>
                         <Box as='img' src='/logo.png' alt='Logo' h='32px' />
                     </Hide>
-                    <Show below='sm'>
+                    <Show below='smPlus'>
                         <Box as='img' src='/logo-mini.png' alt='Logo' h='32px' />
                     </Show>
 
-                    <Hide below='md'>
+                    <Hide below='mid'>
                         <Breadcrumbs />
                     </Hide>
                 </HStack>
-                <Hide below='md'>
+                <Hide below='mid'>
                     <HStack spacing={3} px={6} align='center'>
                         <Avatar name='Екатерина Константинопольская' src='/avatar.png' w='48px' />
                         <Box>
@@ -33,8 +38,8 @@ const Header = () => (
                         </Box>
                     </HStack>
                 </Hide>
-                <Show below='md'>
-                    <HStack>
+                <Show below='mid'>
+                    <HStack spacing={{ sm: '6', md: '8' }}>
                         <SocialList />
                         <BurgerButton />
                     </HStack>

@@ -14,19 +14,19 @@ const Main = () => {
 
     return (
         <Box>
-            <Heading variant='pageTitle' mb={8} pt={1.5}>
+            <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
                 Приятного аппетита!
             </Heading>
             <SearchBar />
             <SliderList />
-            <HStack justify='space-between' mb={{ base: 8, lg: 4, xl: 6 }}>
+            <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
                 <Heading variant='sectionTitle'>Самое сочное</Heading>
                 <Button
-                    display={{ base: 'block', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
+                    display={{ base: 'flex', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }}
                     data-test-id='juiciest-link'
                     variant='limeSolid'
                     size='large'
-                    rightIcon={<ArrowBlackRight />}
+                    rightIcon={<ArrowBlackRight w='14px' />}
                     onClick={() => navigate('/juicy')}
                 >
                     Вся подборка
@@ -39,9 +39,9 @@ const Main = () => {
                 data-test-id='juiciest-link-mobile'
                 variant='limeSolid'
                 size='large'
-                mb={10}
+                mb={8}
                 mx='auto'
-                rightIcon={<ArrowBlackRight />}
+                rightIcon={<ArrowBlackRight w='14px' />}
                 onClick={() => navigate('/juicy')}
             >
                 Вся подборка

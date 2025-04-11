@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
+import { Box, Flex, Heading, Hide, IconButton } from '@chakra-ui/react';
 
 import { ArrowLeft, ArrowRight } from '~/assets/icons/icons';
 import { newRecipes } from '~/data/cardsData';
@@ -9,55 +9,51 @@ const SliderList = () => (
     <Box
         as='section'
         position='relative'
-        mb={12}
+        mb={{ sm: '30px', md: '30px', lg: '40px', xl: '44px' }}
         w='100%'
-        // maxW={{
-        //     base: 'calc(158px * 2 + 12px)',
-        //     md: 'calc(158px * 4.5 + 12px * 4)',
-        //     lg: 'calc(277px * 3.5 + 24px * 3)',
-        //     xl: 'calc(322px * 4 + 24px * 3)',
-        // }}
-        // pr='56px'
-        // pl='66px'
     >
-        <Heading variant='sectionTitle' mb={6}>
+        <Heading variant='sectionTitle' mb={{ sm: '12px', md: '12px', lg: '6', xl: '6' }}>
             Новые рецепты
         </Heading>
-        <IconButton
-            aria-label='Previous'
-            icon={<ArrowLeft />}
-            position='absolute'
-            width='48px'
-            height='48px'
-            top='50%'
-            left='-10px'
-            transform='translateY(-50%)'
-            bg='black'
-            color='customLime.50'
-            borderRadius='small'
-            zIndex={1}
-            _hover={{ bg: 'gray.700' }}
-        />
-
-        <IconButton
-            aria-label='Next'
-            icon={<ArrowRight />}
-            position='absolute'
-            width='48px'
-            height='48px'
-            top='50%'
-            right='40px'
-            transform='translateY(-50%)'
-            bg='black'
-            color='customLime.50'
-            borderRadius='small'
-            zIndex={1}
-            _hover={{ bg: 'gray.700' }}
-        />
+        <Hide below='mid'>
+            <IconButton
+                aria-label='Previous'
+                icon={<ArrowLeft w='24px' />}
+                position='absolute'
+                width={{ base: '40px', lg: '40px', xl: '48px' }}
+                height={{ base: '40px', lg: '40px', xl: '48px' }}
+                top='50%'
+                left='-6px'
+                transform='translateY(-50%)'
+                bg='black'
+                color='customLime.50'
+                borderRadius='small'
+                zIndex={1}
+                _hover={{ bg: 'gray.700' }}
+            />
+        </Hide>
+        <Hide below='mid'>
+            <IconButton
+                aria-label='Next'
+                icon={<ArrowRight w='24px' />}
+                position='absolute'
+                width={{ base: '40px', lg: '40px', xl: '48px' }}
+                height={{ base: '40px', lg: '40px', xl: '48px' }}
+                top='50%'
+                right='-6px'
+                transform='translateY(-50%)'
+                bg='black'
+                color='customLime.50'
+                borderRadius='small'
+                zIndex={1}
+                _hover={{ bg: 'gray.700' }}
+            />
+        </Hide>
         <Flex
             overflowX='auto'
-            gap={{ base: 3, xl: 6 }}
+            gap={{ sm: '10px', md: '10px', lg: 6, xl: 6 }}
             w='100%'
+            justify={{ sm: 'center', md: 'center', mid: 'center' }}
             sx={{
                 '::-webkit-scrollbar': { display: 'none' },
             }}

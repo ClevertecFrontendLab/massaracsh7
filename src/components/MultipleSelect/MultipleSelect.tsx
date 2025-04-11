@@ -67,6 +67,7 @@ const MultipleSelect = () => {
                 lineHeight='24px'
                 color='secondaryText'
                 py={4}
+                pr={2}
             >
                 Выберите из списка...
             </MenuButton>

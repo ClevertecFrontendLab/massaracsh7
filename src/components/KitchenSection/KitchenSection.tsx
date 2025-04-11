@@ -18,7 +18,7 @@ const KitchenSection = ({ title, description, veganDishes, tryDishes }: KitchenS
         borderTop='card'
         pt={{ sm: '2', md: '2', lg: '6', xl: '6' }}
         rowGap={{ sm: '3', md: '3', lg: '6', xl: '6' }}
-        columnGap={{ md: '3', lg: '4', xl: '6' }}
+        columnGap={{ md: '3', lg: '4', xl: '4' }}
     >
         <Heading variant='sectionTitle'>{title}</Heading>
         <Text
@@ -47,7 +47,7 @@ const KitchenSection = ({ title, description, veganDishes, tryDishes }: KitchenS
                 <DishCard key={index} {...dish} />
             ))}
         </Stack>
-        <VStack spacing={{ base: '4', sm: '4', md: '6px', lg: '3', xl: '3' }} align='flex-start'>
+        <VStack spacing={{ base: '4', sm: '12px', md: '6px', lg: '3', xl: '3' }} align='flex-start'>
             {tryDishes.map((item, index) => (
                 <TryDishCard key={index} {...item} />
             ))}

@@ -7,12 +7,12 @@ import { juicyRecipes, tryDishes, veganDishes } from '~/data/cardsData';
 
 const JuicyPage = () => (
     <Box>
-        <Heading variant='pageTitle' mb={3} pt={1.5}>
+        <Heading variant='pageTitle' mb={8}>
             Самое сочное
         </Heading>
         <SearchBar bottom='32px' />
         <RecipeList recipes={juicyRecipes} gridVariant='low' />
-        <Center mb={{ sm: '8', md: '8', lg: '10', xl: '10' }}>
+        <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
             <Button variant='limeSolid' size='medium'>
                 Загрузить ещё
             </Button>

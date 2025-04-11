@@ -38,9 +38,6 @@ const NavigationMenu = () => {
             height='calc(100vh - 80px - 144px)'
             borderRadius='large'
             boxShadow='menu'
-            pl={2.5}
-            pr={1.5}
-            pt='0'
         >
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>
@@ -49,7 +46,8 @@ const NavigationMenu = () => {
                         _hover={{ bg: 'customLime.50' }}
                         _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
                         height='48px'
-                        px={0}
+                        pr='18px'
+                        pl='10px'
                         pt={1}
                         onClick={() => {
                             if (category.items && category.items.length > 0) {
@@ -71,7 +69,7 @@ const NavigationMenu = () => {
                             )}
                             {category.title}
                         </Box>
-                        <AccordionIcon as={ShevronDown} />
+                        <AccordionIcon as={ShevronDown} w='14px' h='10px' />
                     </AccordionButton>
                     <AccordionPanel pb={4}>
                         <List spacing={1.5}>

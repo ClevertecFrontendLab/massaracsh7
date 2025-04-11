@@ -10,15 +10,15 @@ const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
         >
             <HStack
                 spacing={{ base: '2', md: '2', lg: '3', xl: '3' }}
-                mb={{ md: '2', lg: '4', xl: '6' }}
+                mb={{ sm: '4', md: '4', lg: '4', xl: '6' }}
             >
                 <Avatar
                     src={imageUrl}
                     name={name}
-                    w={{ base: '32px', md: '32px' }}
-                    h={{ base: '32px', md: '32px' }}
+                    w={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
+                    h={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
                 />
-                <VStack align='start' spacing={{ lg: '0', xl: '1' }} pt='2px'>
+                <VStack align='start' spacing={{ lg: '0', xl: '0' }} pt='2px'>
                     <Text
                         textStyle='nameText'
                         sx={{
@@ -43,6 +43,7 @@ const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                     WebkitLineClamp: {
+                        sm: 3,
                         md: 3,
                         lg: 3,
                     },

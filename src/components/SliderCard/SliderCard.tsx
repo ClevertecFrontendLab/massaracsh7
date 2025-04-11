@@ -28,8 +28,10 @@ const SliderCard = ({
         <CardBody
             display='flex'
             flexDirection='column'
-            px={{ sm: '2', md: '2', lg: '6', xl: '6' }}
-            py={{ sm: '2', md: '2', lg: '4', xl: '4' }}
+            pr={{ sm: '2', md: '2', lg: '3', xl: '6' }}
+            pb={{ sm: '2', md: '2', lg: '3', xl: '4' }}
+            pt={{ sm: '2', md: '2', lg: '3', xl: '4' }}
+            pl={{ sm: '2', md: '2', lg: '3', xl: '6' }}
         >
             <Heading
                 variant='sliderTitle'
@@ -45,7 +47,7 @@ const SliderCard = ({
                 {title}
             </Heading>
             <Hide below='md'>
-                <Text mb={7} noOfLines={3}>
+                <Text mb='30px' noOfLines={3}>
                     {description}
                 </Text>
             </Hide>
@@ -57,7 +59,10 @@ const SliderCard = ({
                     left={{ sm: '8px', md: '8px' }}
                     p={{ sm: '0', md: '0' }}
                 >
-                    <HStack gap={{ base: '0.5', md: '0.5', lg: '2' }} px={1}>
+                    <HStack
+                        gap={{ base: '0.5', md: '0.5', lg: '2' }}
+                        px={{ sm: 1, md: 1, lg: 2, xl: 2 }}
+                    >
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
                         <Text textTransform='none'>{category.title}</Text>
                     </HStack>
