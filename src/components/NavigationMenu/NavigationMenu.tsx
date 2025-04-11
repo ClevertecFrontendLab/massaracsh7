@@ -9,6 +9,7 @@ import {
     List,
     ListItem,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 
 import { ShevronDown } from '~/assets/icons/icons';
@@ -17,8 +18,11 @@ import categories from '~/data/categories';
 const NavigationMenu = () => {
     const navigate = useNavigate();
 
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <Accordion
+            onChange={() => setIsOpen(!isOpen)}
             allowToggle
             overflowY='auto'
             css={{
@@ -37,7 +41,7 @@ const NavigationMenu = () => {
             }}
             height='calc(100vh - 80px - 144px)'
             borderRadius='large'
-            boxShadow='menu'
+            boxShadow={isOpen ? 'menu' : 'none'}
         >
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>
@@ -77,16 +81,16 @@ const NavigationMenu = () => {
                                 <ListItem
                                     key={index}
                                     padding='1px 8px 1px 24px'
-                                    className='custom-nav-item'
+                                    _hover={{
+                                        bg: 'customLime.50',
+                                        borderLeft: '1px solid transparent',
+                                    }}
                                 >
                                     <NavLink
                                         to={`/vegan/${item}`}
-                                        className='custom-nav-link'
-                                        style={({ isActive }) => ({
-                                            borderLeftWidth: '1px',
-                                            boxShadow: isActive ? '-8px 0 0 0 #c4ff61' : 'none',
-                                            fontWeight: isActive ? '700' : '400',
-                                        })}
+                                        className={({ isActive }) =>
+                                            `custom-nav-link${isActive ? ' active' : ''}`
+                                        }
                                     >
                                         {item}
                                     </NavLink>

@@ -2,8 +2,10 @@ import { Badge, Card, CardBody, CardHeader, Heading, HStack, Image, Text } from 
 
 import { KitchenDish } from '~/types/typesData';
 
+import LikesInfo from '../LikesInfo/LikesInfo';
+
 const DishCard = ({ title, category, likes, comments, description }: KitchenDish) => (
-    <Card border='card' borderRadius='medium' boxShadow='none'>
+    <Card variant='basic'>
         <CardHeader
             pt={{ base: '3', md: '3', lg: '4', xl: '6' }}
             pl={{ base: '3', md: '3', lg: '4', xl: '6' }}
@@ -30,16 +32,7 @@ const DishCard = ({ title, category, likes, comments, description }: KitchenDish
                         <Text textTransform='none'>{category.title}</Text>
                     </HStack>
                 </Badge>
-                <HStack>
-                    <HStack fontSize='xs' color='customLime.600'>
-                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />{' '}
-                        <Text>{likes}</Text>
-                    </HStack>
-                    <HStack fontSize='xs' color='customLime.600'>
-                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />{' '}
-                        <Text>{comments}</Text>
-                    </HStack>
-                </HStack>
+                <LikesInfo likes={likes} comments={comments} />
             </HStack>
         </CardBody>
     </Card>

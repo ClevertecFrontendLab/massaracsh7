@@ -1,4 +1,8 @@
-import { defineStyleConfig, extendTheme } from '@chakra-ui/react';
+import { cardAnatomy } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers, defineStyleConfig, extendTheme } from '@chakra-ui/react';
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
+    cardAnatomy.keys,
+);
 
 const Heading = defineStyleConfig({
     defaultProps: {
@@ -105,16 +109,10 @@ export const Button = defineStyleConfig({
         limeSolid: {
             bg: 'customLime.400',
             color: 'black',
-            _hover: {
-                bg: 'customLime.500',
-            },
         },
         limeLightSolid: {
             bg: 'customLime.300',
             color: 'black',
-            _hover: {
-                bg: 'customLime.500',
-            },
         },
         limeOutline: {
             bg: 'transparent',
@@ -149,6 +147,15 @@ export const Button = defineStyleConfig({
             py: { base: '4px', sm: '4px', md: '4px', lg: '6px' },
             height: { base: '24px', sm: '24px', md: '24px', lg: '32px', xl: '32px' },
         },
+        radial: {
+            bg: 'transparent',
+            _hover: {
+                bg: 'radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
+            },
+            _active: {
+                bg: 'radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
+            },
+        },
     },
     sizes: {
         medium: {
@@ -181,6 +188,40 @@ const Badge = defineStyleConfig({
         lime150: {
             bg: 'customLime.150',
         },
+    },
+});
+
+const cardBaseStyle = definePartsStyle({
+    container: {
+        borderRadius: 'medium',
+        border: '1px solid rgba(0, 0, 0, 0.08)',
+        overflow: 'hidden',
+        bg: 'white',
+        position: 'relative',
+    },
+    header: {},
+    body: {},
+    footer: {},
+});
+
+const cardVariants = {
+    basic: definePartsStyle({
+        container: {
+            boxShadow: 'none',
+            _hover: {
+                cursor: `url('/icons/cursor.svg'), auto`,
+                boxShadow:
+                    '0px 4px 6px -1px rgba(32, 126, 0, 0.1), 0px 2px 4px -1px rgba(32, 126, 0, 0.06)',
+            },
+        },
+    }),
+};
+
+const cardTheme = defineMultiStyleConfig({
+    baseStyle: cardBaseStyle,
+    variants: cardVariants,
+    defaultProps: {
+        variant: 'basic',
     },
 });
 
@@ -259,7 +300,7 @@ const theme = extendTheme({
             bg: 'radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
         },
         radialAsideBg: {
-            bg: 'radial-gradient(50% 50% at 50% 50%, #c4ff61 0%, rgba(255, 255, 255, 0) 100%);radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
+            bg: 'radial-gradient(50% 50% at 50% 50%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%);radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
         },
     },
 
@@ -294,19 +335,14 @@ const theme = extendTheme({
             lineHeight: '24px',
             color: 'customLime.600',
         },
-        linkText: {
-            fontWeight: 600,
-            fontSize: { lg: 'lg', xl: 'xlg' },
-            lineHeight: { lg: '24px', xl: '28px' },
-        },
         nameText: {
             fontWeight: 500,
-            fontSize: { md: '16px', lg: '18px', xl: '18px' },
-            lineHeight: { md: '24px', lg: '28px', xl: '28px' },
+            fontSize: { base: '16px', md: '16px', lg: '18px', xl: '18px' },
+            lineHeight: { base: '24px', md: '24px', lg: '28px', xl: '28px' },
         },
         miniText: {
-            fontSize: { md: '12px', lg: '14px', xl: '14px' },
-            lineHeight: { md: '16px', lg: '20px', xl: '20px' },
+            fontSize: { base: '12px', md: '12px', lg: '14px', xl: '14px' },
+            lineHeight: { base: '16px', md: '16px', lg: '20px', xl: '20px' },
         },
     },
 
@@ -314,6 +350,7 @@ const theme = extendTheme({
         Heading,
         Button,
         Badge,
+        Card: cardTheme,
         Link: {
             baseStyle: {
                 textDecoration: 'none',

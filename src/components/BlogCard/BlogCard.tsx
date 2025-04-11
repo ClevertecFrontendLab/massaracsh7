@@ -3,7 +3,7 @@ import { Avatar, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
 import { BlogData } from '~/types/typesData';
 
 const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
-    <Card border='card' borderRadius='medium' boxShadow='none'>
+    <Card variant='basic'>
         <CardBody
             p={{ base: '4', md: '4', lg: '4', xl: '6' }}
             pr={{ base: '4', md: '4', lg: '4', xl: '5' }}

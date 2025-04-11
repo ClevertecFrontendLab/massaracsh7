@@ -2,6 +2,8 @@ import { Badge, Card, CardBody, Heading, Hide, HStack, Image, Text } from '@chak
 
 import { CardSliderData } from '~/types/typesData';
 
+import LikesInfo from '../LikesInfo/LikesInfo';
+
 const SliderCard = ({
     title,
     description,
@@ -11,11 +13,7 @@ const SliderCard = ({
     imageUrl,
 }: CardSliderData) => (
     <Card
-        borderRadius='medium'
-        border='card'
-        boxShadow='none'
-        overflow='hidden'
-        bg='white'
+        variant='basic'
         position={{ base: 'static', sm: 'relative', md: 'relative', lg: 'static' }}
     >
         <Image
@@ -67,16 +65,7 @@ const SliderCard = ({
                         <Text textTransform='none'>{category.title}</Text>
                     </HStack>
                 </Badge>
-                <HStack gap={2}>
-                    <HStack fontSize='xs' color='customLime.600'>
-                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />{' '}
-                        <Text>{likes}</Text>
-                    </HStack>
-                    <HStack fontSize='xs' color='customLime.600'>
-                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />
-                        <Text>{comments}</Text>
-                    </HStack>
-                </HStack>
+                <LikesInfo likes={likes} comments={comments} />
             </HStack>
         </CardBody>
     </Card>

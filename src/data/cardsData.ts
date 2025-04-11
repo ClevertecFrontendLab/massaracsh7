@@ -87,6 +87,13 @@ export const popularRecipes: CardData[] = [
         likes: 159,
         comments: 257,
         imageUrl: '/images/vetchina.jpg',
+        recomended: {
+            name: 'Елена Высоцкая',
+            username: '@lenavysockaya',
+            description:
+                'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+            imageUrl: '/images/elena.png',
+        },
     },
     {
         title: 'Лапша с курицей и шафраном',
@@ -99,6 +106,13 @@ export const popularRecipes: CardData[] = [
         likes: 258,
         comments: 342,
         imageUrl: '/images/lapsha.jpg',
+        recomended: {
+            name: 'Alex Cook',
+            username: '@funtastocooking',
+            description:
+                'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',
+            imageUrl: '/images/alex.png',
+        },
     },
     {
         title: 'Том-ям с капустой кимчи',

@@ -5,6 +5,7 @@ export interface CardData {
     likes: number;
     comments: number;
     imageUrl: string;
+    recomended?: BlogData;
 }
 
 export interface BadgeCategory {

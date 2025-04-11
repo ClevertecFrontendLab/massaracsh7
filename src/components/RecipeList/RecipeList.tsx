@@ -28,6 +28,7 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
             templateColumns={{
                 base: '1fr',
                 md: 'repeat(2, 1fr)',
+                mid: '1fr',
                 lg: '1fr',
                 xl: 'repeat(2, 668px)',
             }}
@@ -35,7 +36,7 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
             sx={gridStyles}
         >
             {recipes.map((recipe, index) => (
-                <RecipeCard key={index} {...recipe} />
+                <RecipeCard key={index} recipe={recipe} />
             ))}
         </SimpleGrid>
     );
