@@ -148,12 +148,21 @@ export const Button = defineStyleConfig({
             height: { base: '24px', sm: '24px', md: '24px', lg: '32px', xl: '32px' },
         },
         radial: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
+            height: '100%',
+            borderRadius: '50%',
             bg: 'transparent',
             _hover: {
-                bg: 'radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
+                bg: 'radial-gradient(50% 50% at 50% 50%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%)',
+                color: 'text',
             },
             _active: {
-                bg: 'radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
+                bg: 'radial-gradient(50% 50% at 50% 50%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%)',
+                color: 'text',
             },
         },
     },
@@ -295,15 +304,6 @@ const theme = extendTheme({
         card: '1px solid rgba(0, 0, 0, 0.08)',
         green: '1px solid #2db100',
     },
-    layerStyles: {
-        radialBg: {
-            bg: 'radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
-        },
-        radialAsideBg: {
-            bg: 'radial-gradient(50% 50% at 50% 50%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%);radial-gradient(62.5% 62.5% at 48.89% 37.5%, rgba(196, 255, 97, 0.5) 0%, rgba(255, 255, 255, 0) 100%), rgba(255, 255, 211, 0.7)',
-        },
-    },
-
     textStyles: {
         nav: {
             fontSize: 'lg',
