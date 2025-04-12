@@ -356,8 +356,10 @@ const theme = extendTheme({
             display: '-webkit-box',
             overflow: 'hidden',
             WebkitBoxOrient: 'vertical',
-            wordBreak: 'break-all',
+            overfloWrap: 'anywhere',
             textOverflow: 'ellipsis',
+            webkitHyphens: 'auto',
+            hyphens: 'auto',
         },
     },
 
