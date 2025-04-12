@@ -7,22 +7,33 @@ import LikesInfo from '../LikesInfo/LikesInfo';
 const DishCard = ({ title, category, likes, comments, description }: KitchenDish) => (
     <Card variant='basic'>
         <CardHeader
-            pt={{ base: '3', md: '3', lg: '4', xl: '6' }}
-            pl={{ base: '3', md: '3', lg: '4', xl: '6' }}
-            pb={{ base: '2', md: '2', lg: '2', xl: '2' }}
-            pr={{ md: '3', lg: '1', xl: '6' }}
+            pt={{ base: 3, md: 3, lg: 4, xl: 5 }}
+            pb={{ base: 2, md: 2, lg: 2, xl: 2 }}
+            px={{ base: 3, md: 3, lg: 4, xl: 6 }}
         >
-            <Heading variant='cardTitle' noOfLines={1}>
+            <Heading
+                variant='cardTitle'
+                textStyle='cutText'
+                sx={{
+                    WebkitLineClamp: 1,
+                }}
+            >
                 {title}
             </Heading>
         </CardHeader>
         <CardBody
             pt={0}
-            pl={{ base: '3', md: '3', lg: '4', xl: '6' }}
-            pb={{ base: '3', md: '3', lg: '5', xl: '5' }}
-            pr={{ base: '3', md: '3', lg: '4', xl: '6' }}
+            pb={{ base: 3, md: 3, lg: 5, xl: 5 }}
+            px={{ base: 3, md: 3, lg: 4, xl: 6 }}
         >
-            <Text noOfLines={3} mb={{ sm: '30px', md: '30px', lg: '30px', xl: '7' }} color='text'>
+            <Text
+                mb={{ sm: '30px', md: '30px', lg: '30px', xl: '7' }}
+                color='text'
+                textStyle='cutText'
+                sx={{
+                    WebkitLineClamp: 3,
+                }}
+            >
                 {description}
             </Text>
             <HStack alignItems='center' justify='space-between'>

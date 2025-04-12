@@ -9,10 +9,10 @@ const userData = [
 const SocialList = () => (
     <Stack
         direction={{ sm: 'row', md: 'row', mid: 'column', lg: 'column', xl: 'column' }}
-        spacing={{ base: '4', sm: '4', mid: '4', lg: '6' }}
+        spacing={{ base: 4, mid: 4, lg: 6 }}
     >
         {userData.map((item, index) => (
-            <HStack key={index} gap={2} py={{ base: '1', sm: '1', md: '1.5', lg: '2' }}>
+            <HStack key={index} gap={2} py={{ base: 1, sm: 1, md: 1.5, lg: 2 }}>
                 <Image
                     src={item.icon}
                     boxSize={{ base: '12px', sm: '12px', md: '12px', lg: '16px' }}

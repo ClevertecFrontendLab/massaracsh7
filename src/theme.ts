@@ -255,6 +255,7 @@ const theme = extendTheme({
         small: '6px',
         medium: '8px',
         large: '12px',
+        xlarge: '16px',
     },
     fontSizes: {
         sm: '12px',
@@ -341,8 +342,22 @@ const theme = extendTheme({
             lineHeight: { base: '24px', md: '24px', lg: '28px', xl: '28px' },
         },
         miniText: {
-            fontSize: { base: '12px', md: '12px', lg: '14px', xl: '14px' },
-            lineHeight: { base: '16px', md: '16px', lg: '20px', xl: '20px' },
+            color: 'secondaryText',
+            fontSize: { base: '12px', md: '12px', mid: '12px', lg: '14px', xl: '14px' },
+            lineHeight: { base: '16px', md: '16px', mid: '16px', lg: '20px', xl: '20px' },
+        },
+        descriptionText: {
+            color: 'grayText',
+            fontWeight: 500,
+            fontSize: { base: '14px', sm: '14px', md: '14px', lg: '16px', xl: '16px' },
+            lineHeight: { base: '20px', sm: '20px', md: '20px', lg: '24px', xl: '24px' },
+        },
+        cutText: {
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitBoxOrient: 'vertical',
+            wordBreak: 'break-all',
+            textOverflow: 'ellipsis',
         },
     },
 

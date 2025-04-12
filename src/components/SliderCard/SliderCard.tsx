@@ -22,30 +22,32 @@ const SliderCard = ({
             w='100%'
             h={{ sm: '128px', md: '128px', lg: '230px', xl: '230px' }}
             objectFit='cover'
+            loading='lazy'
         />
         <CardBody
             display='flex'
             flexDirection='column'
-            pr={{ sm: '2', md: '2', lg: '3', xl: '6' }}
-            pb={{ sm: '2', md: '2', lg: '3', xl: '4' }}
-            pt={{ sm: '2', md: '2', lg: '3', xl: '4' }}
-            pl={{ sm: '2', md: '2', lg: '3', xl: '6' }}
+            py={{ sm: 2, md: 2, lg: 3, xl: 4 }}
+            px={{ sm: 2, md: 2, lg: 3, xl: 6 }}
         >
             <Heading
                 variant='sliderTitle'
                 mb={2}
+                textStyle='cutText'
                 sx={{
-                    display: '-webkit-box',
-                    overflow: 'hidden',
-                    WebkitBoxOrient: 'vertical',
-                    lineClamp: { base: 2, md: 2, lg: 1 },
                     WebkitLineClamp: { base: 2, md: 2, lg: 1 },
                 }}
             >
                 {title}
             </Heading>
             <Hide below='md'>
-                <Text mb='30px' noOfLines={3}>
+                <Text
+                    mb='30px'
+                    textStyle='cutText'
+                    sx={{
+                        WebkitLineClamp: { base: 2, mid: 3, lg: 3, xl: 3 },
+                    }}
+                >
                     {description}
                 </Text>
             </Hide>
@@ -53,14 +55,11 @@ const SliderCard = ({
                 <Badge
                     variant='lime150'
                     position={{ base: 'static', sm: 'absolute', md: 'absolute', lg: 'static' }}
-                    top={{ sm: '8px', md: '8px' }}
-                    left={{ sm: '8px', md: '8px' }}
+                    top={{ sm: 2, md: 2 }}
+                    left={{ sm: 2, md: 2 }}
                     p={{ sm: '0', md: '0' }}
                 >
-                    <HStack
-                        gap={{ base: '0.5', md: '0.5', lg: '2' }}
-                        px={{ sm: 1, md: 1, lg: 2, xl: 2 }}
-                    >
+                    <HStack gap={{ base: 0.5, md: 0.5, lg: 2 }} px={{ sm: 1, md: 1, lg: 2, xl: 2 }}>
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
                         <Text textTransform='none'>{category.title}</Text>
                     </HStack>

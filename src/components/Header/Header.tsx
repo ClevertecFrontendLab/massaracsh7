@@ -5,7 +5,7 @@ import { BurgerButton } from '../BurgerButton/BurgerButton';
 import SocialList from '../SocialList/SocialList';
 
 const Header = () => (
-    <Box as='header' bg='#ffffd3' py={4} data-test-id='header'>
+    <Box as='header' bg='customLime.50' py={4} data-test-id='header'>
         <Box
             maxW='1920px'
             pl={{ sm: '5', md: '5', lg: '4', xl: '4' }}
@@ -29,17 +29,13 @@ const Header = () => (
                     <HStack spacing={3} px={6} align='center'>
                         <Avatar name='Екатерина Константинопольская' src='/avatar.png' w='48px' />
                         <Box>
-                            <Text fontSize='18px' fontWeight='500' lineHeight='28px'>
-                                Екатерина Константинопольская
-                            </Text>
-                            <Text fontSize='14px' color='gray.400' lineHeight='1.6'>
-                                @bake_and_pie
-                            </Text>
+                            <Text textStyle='nameText'>Екатерина Константинопольская</Text>
+                            <Text textStyle='miniText'>@bake_and_pie</Text>
                         </Box>
                     </HStack>
                 </Hide>
                 <Show below='mid'>
-                    <HStack spacing={{ sm: '6', md: '8' }}>
+                    <HStack spacing={{ sm: 6, md: 8 }}>
                         <SocialList />
                         <BurgerButton />
                     </HStack>

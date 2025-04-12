@@ -37,23 +37,12 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 h='100%'
                 maxW={{ base: '158px', mid: '346px', lg: '346px', xl: '346px' }}
                 objectFit='cover'
+                loading='lazy'
             />
             <Hide below='mid'>
                 {recomended && (
-                    <Badge
-                        variant='lime150'
-                        position={{
-                            base: 'absolute',
-                            mid: 'absolute',
-                            lg: 'absolute',
-                            xl: 'absolute',
-                        }}
-                        bottom={{ sm: '8px', md: '8px' }}
-                        left={{ sm: '8px', md: '8px' }}
-                        py='4px'
-                        px='8px'
-                    >
-                        <HStack gap={{ base: '0.5', md: '0.5', lg: '2', xl: '2' }} px={1}>
+                    <Badge variant='lime150' position='absolute' bottom={5} left={6} py={1} px={2}>
+                        <HStack spacing={{ base: '0.5', md: '0.5', lg: '1', xl: '1' }} px={1}>
                             <Image
                                 src={recomended?.imageUrl}
                                 alt={recomended?.name}
@@ -89,26 +78,14 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                             <Text textTransform='none'>{category.title}</Text>
                         </HStack>
                     </Badge>
-                    {/* <HStack spacing={2}>
-                        <HStack spacing={1}>
-                            <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />
-                            <Text textStyle='limeSmall'>{likes}</Text>
-                        </HStack>
-                        <HStack spacing={1}>
-                            <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />
-                            <Text textStyle='limeSmall'></Text>
-                        </HStack>
-                    </HStack> */}
                     <Box px={1}>
                         <LikesInfo likes={likes} comments={comments} />
                     </Box>
                 </HStack>
                 <Heading
                     pb={2}
+                    textStyle='cutText'
                     sx={{
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
                         WebkitLineClamp: {
                             base: 1,
                             md: 2,
@@ -122,7 +99,13 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                     {title}
                 </Heading>
                 <Hide below='mid'>
-                    <Text mb={{ lg: '12', xl: '7' }} noOfLines={3}>
+                    <Text
+                        mb={{ lg: '12', xl: '7' }}
+                        textStyle='cutText'
+                        sx={{
+                            WebkitLineClamp: { base: 2, mid: 3, lg: 3, xl: 3 },
+                        }}
+                    >
                         {description}
                     </Text>
                 </Hide>

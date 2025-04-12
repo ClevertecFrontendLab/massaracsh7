@@ -52,7 +52,7 @@ const NavigationMenu = () => {
                         height='48px'
                         pr='18px'
                         pl='10px'
-                        pt={1}
+                        pt='4px'
                         onClick={() => {
                             if (category.items && category.items.length > 0) {
                                 const firstSub = category.items[0];

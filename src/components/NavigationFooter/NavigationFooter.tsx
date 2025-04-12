@@ -23,7 +23,7 @@ const NavigationFooter = () => (
                 aria-label='Выйти'
                 icon={<Image src='/icons/left-icon.svg' alt='Exit' boxSize='12px' />}
                 variant='ghost'
-                size='12px'
+                size='sm'
             />
             <Link fontWeight='600'>Выйти</Link>
         </HStack>

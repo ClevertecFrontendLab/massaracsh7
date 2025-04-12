@@ -5,10 +5,10 @@ import { TryDish } from '~/types/typesData';
 const TryDishCard = ({ icon, title }: TryDish) => (
     <Card
         w='100%'
-        pt={{ sm: '10px', md: '10px', lg: '10px', xl: '10px' }}
-        pl={{ sm: '3', md: '6px', lg: '14px', xl: '8' }}
-        pb={{ sm: '8px', md: '8px', lg: '8px', xl: '3' }}
-        pr={{ sm: '3', md: '6px', lg: '8px', xl: '6' }}
+        pt={2}
+        pl={{ sm: 3, md: 1.5, lg: 3.5, xl: 8 }}
+        pb={{ sm: 2, md: 2, lg: 2, xl: 3 }}
+        pr={{ sm: 3, md: 1.5, lg: 2, xl: 6 }}
         border='card'
         borderRadius='medium'
         boxShadow='none'
@@ -18,10 +18,8 @@ const TryDishCard = ({ icon, title }: TryDish) => (
                 <Image src={icon} boxSize='24px' />
                 <Heading
                     variant='sliderTitle'
+                    textStyle='cutText'
                     sx={{
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
                         WebkitLineClamp: {
                             md: 1,
                             sm: 1,

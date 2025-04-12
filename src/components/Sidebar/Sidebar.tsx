@@ -13,7 +13,7 @@ const Sidebar = () => (
             alignItems='flex-start'
             py={4}
         >
-            <Box pl='83px'>
+            <Box pl='82px'>
                 <SocialList />
             </Box>
 

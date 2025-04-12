@@ -23,15 +23,15 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => (
         mb={{ sm: '32px', md: '32px', lg: bottom, xl: bottom }}
         mx='auto'
     >
-        <HStack spacing={{ base: '3', sm: '3', md: '3', lg: '4' }} w='100%' mb={4}>
+        <HStack spacing={{ base: 3, sm: 3, md: 3, lg: 4 }} w='100%' mb={4}>
             <IconButton
                 aria-label='Настройки поиска'
                 icon={<FilterIcon boxSize={{ base: '12px', md: '12px', lg: '18px' }} />}
                 variant='outline'
                 colorScheme='gray'
-                w={{ base: '8', sm: '8', md: '8', lg: '12' }}
-                minW={{ base: '8', sm: '8', md: '8', lg: '12' }}
-                h={{ base: '8', sm: '8', md: '8', lg: '12' }}
+                w={{ base: 8, sm: 8, md: 8, lg: 12 }}
+                minW={{ base: 8, sm: 8, md: 8, lg: 12 }}
+                h={{ base: 8, sm: 8, md: 8, lg: 12 }}
             />
             <InputGroup w='100%'>
                 <Input
@@ -39,14 +39,14 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => (
                     variant='outline'
                     bg='white'
                     borderRadius='md'
-                    pr={{ md: '6', lg: '4' }}
+                    pr={{ md: 6, lg: 4 }}
                     pl='12px'
                     py='13px'
                     fontSize={{ md: '14px', lg: '18px' }}
                     lineHeight={{ md: '17px', lg: '22px' }}
                     color='customLime.800'
                     _placeholder={{ color: 'customLime.800' }}
-                    height={{ base: '32px', sm: '32px', md: '32px', lg: '48px' }}
+                    height={{ base: 8, sm: 8, md: 8, lg: 12 }}
                 />
                 <InputRightElement
                     alignItems={{
@@ -68,10 +68,8 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => (
         </HStack>
         <Hide below='md'>
             <HStack spacing='15px' w='100%' mb={6}>
-                <HStack spacing={3} py={1.5} pl='8px'>
-                    <Text fontSize='16px' fontWeight='500' lineHeight='24px'>
-                        Исключить мои аллергены
-                    </Text>
+                <HStack spacing={3} py={1.5} pl={2}>
+                    <Text textStyle='descriptionText'>Исключить мои аллергены</Text>
                     <Switch size='md' />
                 </HStack>
                 <MultipleSelect />

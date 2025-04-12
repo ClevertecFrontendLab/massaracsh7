@@ -15,15 +15,7 @@ function Footer() {
             bg='#ffffd3'
             data-test-id='footer'
         >
-            <Flex
-                as='nav'
-                justify='space-around'
-                align='flex-end'
-                height='100%'
-                fontSize='12px'
-                lineHeight='16px'
-                color='secondaryText'
-            >
+            <Flex as='nav' justify='space-around' align='flex-end' height='100%'>
                 <Button variant='radial'>
                     <Flex
                         align='center'
@@ -34,17 +26,17 @@ function Footer() {
                     >
                         <Image src='/icons/house.svg' alt='Главная' boxSize='16px' />
                     </Flex>
-                    <Text>Главная</Text>
+                    <Text textStyle='miniText'>Главная</Text>
                 </Button>
 
                 <Button variant='radial'>
                     <SearchGlass boxSize='24px' mb='4px' />
-                    <Text>Поиск</Text>
+                    <Text textStyle='miniText'>Поиск</Text>
                 </Button>
 
                 <Button variant='radial'>
                     <Image src='/icons/pen-nout.svg' alt='Записать' boxSize='24px' mb='4px' />
-                    <Text>Записать</Text>
+                    <Text textStyle='miniText'>Записать</Text>
                 </Button>
 
                 <Button variant='radial'>
@@ -55,7 +47,7 @@ function Footer() {
                         h='40px'
                         mb='4px'
                     />
-                    <Text>Мой профиль</Text>
+                    <Text textStyle='miniText'>Мой профиль</Text>
                 </Button>
             </Flex>
         </Box>

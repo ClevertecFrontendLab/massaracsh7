@@ -27,7 +27,7 @@ const TabsCategory = () => {
                 <TabList
                     overflowX='auto'
                     sx={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
-                    mb={{ sm: '6', md: '5', lg: '6', xl: '6' }}
+                    mb={{ sm: 6, md: 5, lg: 6, xl: 6 }}
                 >
                     {veganCategories.map((category, index) => (
                         <Tab
@@ -48,14 +48,6 @@ const TabsCategory = () => {
                         </Tab>
                     ))}
                 </TabList>
-
-                {/* <TabPanels p='0'>
-                    {veganCategories.map((category) => (
-                        <TabPanel key={category} p={4}>
-                            <RecipeList recipes={veganRecipes} space={[6, 4]} />
-                        </TabPanel>
-                    ))}
-                </TabPanels> */}
             </Tabs>
         </Box>
     );

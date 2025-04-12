@@ -12,7 +12,7 @@ const SliderList = () => (
         mb={{ sm: '30px', md: '30px', lg: '40px', xl: '44px' }}
         w='100%'
     >
-        <Heading variant='sectionTitle' mb={{ sm: '12px', md: '12px', lg: '6', xl: '6' }}>
+        <Heading variant='sectionTitle' mb={{ sm: 3, md: 3, lg: 6, xl: 6 }}>
             Новые рецепты
         </Heading>
         <Hide below='mid'>
@@ -29,7 +29,6 @@ const SliderList = () => (
                 color='customLime.50'
                 borderRadius='small'
                 zIndex={1}
-                _hover={{ bg: 'gray.700' }}
             />
         </Hide>
         <Hide below='mid'>
@@ -46,14 +45,20 @@ const SliderList = () => (
                 color='customLime.50'
                 borderRadius='small'
                 zIndex={1}
-                _hover={{ bg: 'gray.700' }}
             />
         </Hide>
         <Flex
             overflowX='auto'
-            gap={{ sm: '10px', md: '10px', lg: 6, xl: 6 }}
+            gap={{ sm: '10px', md: '10px', lg: 3, xl: 6 }}
             w='100%'
-            justify={{ sm: 'center', md: 'center', mid: 'center' }}
+            justify={{
+                base: 'center',
+                sm: 'center',
+                md: 'flex-start',
+                mid: 'center',
+                lg: 'flex-start',
+                xl: 'flex-start',
+            }}
             sx={{
                 '::-webkit-scrollbar': { display: 'none' },
             }}

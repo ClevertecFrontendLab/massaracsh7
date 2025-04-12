@@ -1,25 +1,6 @@
-export interface CardData {
-    title: string;
-    description: string;
-    category: BadgeCategory;
-    likes: number;
-    comments: number;
-    imageUrl: string;
-    recomended?: BlogData;
-}
-
 export interface BadgeCategory {
     title: string;
     icon: string;
-}
-
-export interface CardSliderData {
-    title: string;
-    description: string;
-    category: BadgeCategory;
-    likes: number;
-    comments: number;
-    imageUrl: string;
 }
 
 export interface BlogData {
@@ -29,13 +10,24 @@ export interface BlogData {
     imageUrl: string;
 }
 
-export interface KitchenDish {
+export interface BaseCard {
     title: string;
-    category: BadgeCategory;
     description: string;
+    category: BadgeCategory;
     likes: number;
     comments: number;
 }
+
+export interface CardSliderData extends BaseCard {
+    imageUrl: string;
+}
+
+export interface CardData extends CardSliderData {
+    recomended?: BlogData;
+    imageUrl: string;
+}
+
+export interface KitchenDish extends BaseCard {}
 
 export interface TryDish {
     title: string;

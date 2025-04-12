@@ -39,7 +39,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
             <Box
                 flex='1'
                 ml={{ mid: '256px', lg: '256px', xl: '256px' }}
-                mr={{ mid: '208px', lg: '208px', xl: '256px' }}
+                mr={{ mid: '208px', lg: '208px', xl: '208px' }}
                 pt={{ md: '0', lg: '8', xl: '8' }}
                 pb={6}
             >

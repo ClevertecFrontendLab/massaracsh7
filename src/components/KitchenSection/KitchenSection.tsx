@@ -16,30 +16,27 @@ const KitchenSection = ({ title, description, veganDishes, tryDishes }: KitchenS
     <SimpleGrid
         columns={{ base: 1, sm: 1, md: 3, lg: 3, xl: 2 }}
         borderTop='card'
-        pt={{ sm: '2', md: '2', lg: '6', xl: '6' }}
-        rowGap={{ sm: '3', md: '3', lg: '6', xl: '6' }}
-        columnGap={{ md: '3', lg: '4', xl: '4' }}
+        pt={{ sm: 2, md: 2, lg: 6, xl: 6 }}
+        rowGap={{ sm: 3, md: 3, lg: 5, xl: 5 }}
+        columnGap={{ md: 3, lg: 4, xl: 4 }}
     >
         <Heading variant='sectionTitle'>{title}</Heading>
         <Text
-            fontWeight={500}
-            fontSize={{ sm: '14px', md: '14px', lg: '16px', xl: '16px' }}
-            lineHeight={{ md: '20px', lg: '24px', xl: '24px' }}
+            textStyle='descriptionText'
             gridColumn={{
                 base: 'auto',
                 md: 'span 3',
                 lg: 'span 2',
                 xl: 'auto',
             }}
-            px={{ lg: '1' }}
-            pb={{ md: '1' }}
-            color='secondaryText'
+            px={{ lg: 1 }}
+            pb={{ md: 1 }}
         >
             {description}
         </Text>
         <Stack
             direction={{ base: 'column', sm: 'column', md: 'row', lg: 'row', xl: 'row' }}
-            spacing={{ base: '3', sm: '3', md: '3', lg: '4', xl: '6' }}
+            spacing={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}
             align='flex-start'
             gridColumn={{ base: 'auto', md: 'span 2', lg: 'span 2', xl: 'auto' }}
         >
@@ -47,7 +44,7 @@ const KitchenSection = ({ title, description, veganDishes, tryDishes }: KitchenS
                 <DishCard key={index} {...dish} />
             ))}
         </Stack>
-        <VStack spacing={{ base: '4', sm: '12px', md: '6px', lg: '3', xl: '3' }} align='flex-start'>
+        <VStack spacing={{ base: 4, sm: 4, md: 1.5, lg: 3, xl: 3 }} align='flex-start'>
             {tryDishes.map((item, index) => (
                 <TryDishCard key={index} {...item} />
             ))}

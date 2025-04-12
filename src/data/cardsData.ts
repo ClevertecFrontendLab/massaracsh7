@@ -144,7 +144,7 @@ export const blogs: BlogData[] = [
         imageUrl: '/images/alex.png',
     },
     {
-        name: 'Екатерина К.',
+        name: 'Екатерина Константинопольская',
         username: '@bake_and_pie',
         description:
             'Как раз после праздников, когда мясные продукты еще остались, но никто их уже не хочет, время варить солянку.',

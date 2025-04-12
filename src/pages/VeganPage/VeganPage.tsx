@@ -16,13 +16,7 @@ const VeganPage = () => (
             mx='auto'
             mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
         >
-            <Text
-                textAlign='center'
-                color='grayText'
-                fontWeight={500}
-                fontSize={{ sm: '14px', md: '14px', lg: '16px', xl: '16px' }}
-                lineHeight={{ sm: '20px', md: '20px', lg: '24px', xl: '24px' }}
-            >
+            <Text textAlign='center' textStyle='descriptionText'>
                 Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать
                 вегетарианскую диету и готовить вкусные вегетарианские блюда.
             </Text>

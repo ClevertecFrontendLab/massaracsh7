@@ -8,10 +8,7 @@ const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
             p={{ base: '4', md: '4', lg: '4', xl: '6' }}
             pr={{ base: '4', md: '4', lg: '4', xl: '5' }}
         >
-            <HStack
-                spacing={{ base: '2', md: '2', lg: '3', xl: '3' }}
-                mb={{ sm: '4', md: '4', lg: '4', xl: '6' }}
-            >
+            <HStack spacing={{ base: 2, md: 2, lg: 3, xl: 3 }} mb={{ sm: 4, md: 4, lg: 4, xl: 7 }}>
                 <Avatar
                     src={imageUrl}
                     name={name}
@@ -25,23 +22,19 @@ const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
                             display: '-webkit-box',
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',
-                            WebkitLineClamp: {
-                                md: 1,
-                            },
+                            WebkitLineClamp: 1,
+                            wordBreak: 'break-all',
+                            textOverflow: 'ellipsis',
                         }}
                     >
                         {name}
                     </Text>
-                    <Text color='secondaryText' textStyle='miniText'>
-                        {username}
-                    </Text>
+                    <Text textStyle='miniText'>{username}</Text>
                 </VStack>
             </HStack>
             <Text
+                textStyle='cutText'
                 sx={{
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
                     WebkitLineClamp: {
                         sm: 3,
                         md: 3,

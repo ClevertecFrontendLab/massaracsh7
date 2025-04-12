@@ -13,13 +13,13 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
     const gridStyles =
         gridVariant === 'wide'
             ? {
-                  gap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '24px' },
-                  marginBottom: { base: '12px', sm: '12px', md: '12px', lg: '36px', xl: '36px' },
+                  gap: { base: 3, sm: 3, md: 4, lg: 4, xl: 6 },
+                  marginBottom: { base: 3, sm: 3, md: 3, lg: 10, xl: 10 },
               }
             : {
-                  columnGap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '24px' },
-                  rowGap: { base: '12px', sm: '12px', md: '16px', lg: '16px', xl: '16px' },
-                  marginBottom: { base: '12px', sm: '16px', md: '16px', lg: '14px', xl: '14px' },
+                  columnGap: { base: 3, sm: 3, md: 4, lg: 4, xl: 6 },
+                  rowGap: { base: 3, sm: 3, md: 4, lg: 4, xl: 4 },
+                  marginBottom: { base: 3, sm: 4, md: 4, lg: 3.5, xl: 3.5 },
               };
 
     return (
