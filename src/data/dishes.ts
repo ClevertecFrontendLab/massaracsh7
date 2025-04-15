@@ -1,0 +1,70 @@
+export const dishes = [
+    {
+        id: '7',
+        title: 'Лапша с курицей и шафраном',
+        description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
+        category: ['second-dish'],
+        subcategory: ['poultry-dish'],
+        image: 'путь к изображению в вашем проекте',
+        bookmarks: 258,
+        likes: 1342,
+        date: '2024-03-08T00:00:00Z',
+        time: '40 минут',
+        portions: 4,
+        nutritionValue: { calories: 400, proteins: 30, fats: 15, carbohydrates: 50 },
+        ingredients: [
+            { title: 'лапша', count: '200', measureUnit: 'г' },
+            { title: 'курица', count: '300', measureUnit: 'г' },
+            { title: 'шафран', count: '1', measureUnit: 'ч. л.' },
+            { title: 'лук', count: '1', measureUnit: 'шт.' },
+        ],
+        steps: [
+            {
+                stepNumber: 1,
+                description: 'Отварить лапшу.',
+                image: 'url',
+            },
+            {
+                stepNumber: 2,
+                description: 'Обжарить курицу с луком и шафраном.',
+                image: 'url',
+            },
+            {
+                stepNumber: 3,
+                description: 'Смешать лапшу с курицей и подавать.',
+                image: 'url',
+            },
+        ],
+    },
+    {
+        id: '8',
+        title: 'Гриль-салат с овощами',
+        description: 'Салат с обжаренными на гриле овощами и легкой заправкой.',
+        category: ['salads'],
+        subcategory: ['warm-salads'],
+        image: 'путь к изображению в вашем проекте',
+        bookmarks: 10,
+        likes: 80,
+        date: '2023-03-20T00:00:00Z',
+        time: '25 минут',
+        nutritionValue: { calories: 150, proteins: 4, fats: 6, carbohydrates: 20 },
+        ingredients: [
+            { title: 'цуккини', count: '1', measureUnit: 'шт.' },
+            { title: 'болгарский перец', count: '1', measureUnit: 'шт.' },
+            { title: 'баклажан', count: '1', measureUnit: 'шт.' },
+            { title: 'оливковое масло', count: '0', measureUnit: 'по вкусу' },
+        ],
+        steps: [
+            {
+                stepNumber: 1,
+                description: 'Обжарить овощи на гриле.',
+                image: 'url',
+            },
+            {
+                stepNumber: 2,
+                description: 'Смешать с заправкой и подавать.',
+                image: 'url',
+            },
+        ],
+    },
+];
