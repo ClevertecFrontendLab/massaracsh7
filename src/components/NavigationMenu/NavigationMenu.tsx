@@ -55,7 +55,7 @@ const NavigationMenu = () => {
                         pt='4px'
                         onClick={() => {
                             if (category.items && category.items.length > 0) {
-                                const firstSub = category.items[0];
+                                const firstSub = category.items[0].subcategory;
                                 navigate(`/vegan/${firstSub}`);
                             }
                         }}
@@ -87,12 +87,12 @@ const NavigationMenu = () => {
                                     }}
                                 >
                                     <NavLink
-                                        to={`/vegan/${item}`}
+                                        to={`/vegan/${item.subcategory}`}
                                         className={({ isActive }) =>
                                             `custom-nav-link${isActive ? ' active' : ''}`
                                         }
                                     >
-                                        {item}
+                                        {item.title}
                                     </NavLink>
                                 </ListItem>
                             ))}

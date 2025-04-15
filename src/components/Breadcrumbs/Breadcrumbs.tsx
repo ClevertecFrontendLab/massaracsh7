@@ -2,45 +2,52 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router';
 
-import { getTitleByUrl } from '~/utils/getTitleByUrl';
+import categories from '~/data/categories';
 
 const Breadcrumbs = () => {
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(Boolean);
 
-    const currentCategory = pathSegments[0];
-    const currentSubcategory = pathSegments[1] ? decodeURIComponent(pathSegments[1]) : null;
+    const categorySlug = pathSegments[0];
+    const subcategorySlug = pathSegments[1];
+    console.log(pathSegments);
+
+    const category = categories.find((cat) => cat.url.slice(1) === categorySlug);
+    const subcategory = category?.items.find((item) => item.subcategory === subcategorySlug);
 
     return (
         <Breadcrumb separator={<ChevronRightIcon color='gray.800' />}>
-            <BreadcrumbItem isCurrentPage={!currentCategory} isLastChild={!currentCategory}>
+            <BreadcrumbItem isCurrentPage={!category}>
                 <BreadcrumbLink
                     as={RouterLink}
                     to='/'
-                    textStyle={currentCategory ? 'navInactive' : 'navActive'}
+                    textStyle={category ? 'navInactive' : 'navActive'}
                 >
                     Главная
                 </BreadcrumbLink>
             </BreadcrumbItem>
 
-            {currentCategory && (
-                <BreadcrumbItem
-                    isCurrentPage={!currentSubcategory}
-                    isLastChild={!currentSubcategory}
-                >
+            {category && (
+                <BreadcrumbItem isCurrentPage={!subcategory}>
                     <BreadcrumbLink
                         as={RouterLink}
-                        to={`/${currentCategory}`}
-                        textStyle={currentSubcategory ? 'navInactive' : 'navActive'}
+                        to={`/${categorySlug}`}
+                        textStyle={subcategory ? 'navInactive' : 'navActive'}
                     >
-                        {getTitleByUrl(currentCategory)}
+                        {category.title}
                     </BreadcrumbLink>
                 </BreadcrumbItem>
             )}
 
-            {currentSubcategory && (
-                <BreadcrumbItem isCurrentPage isLastChild>
-                    <BreadcrumbLink textStyle='navActive'>{currentSubcategory}</BreadcrumbLink>
+            {subcategory && (
+                <BreadcrumbItem isCurrentPage>
+                    <BreadcrumbLink
+                        as={RouterLink}
+                        to={`/${categorySlug}/${subcategorySlug}`}
+                        textStyle='navActive'
+                    >
+                        {subcategory.title}
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
             )}
         </Breadcrumb>
