@@ -2,7 +2,7 @@ const categories = [
     {
         title: 'Салаты',
         icon: '/icons/salat.svg',
-        url: '/salads',
+        url: 'salads',
         items: [
             { subcategory: 'meat-salads', title: 'Мясные салаты' },
             { subcategory: 'fish-salads', title: 'Рыбные салаты' },
@@ -13,7 +13,7 @@ const categories = [
     {
         title: 'Закуски',
         icon: '/icons/snacks.svg',
-        url: '/snacks',
+        url: 'snacks',
         items: [
             { subcategory: 'meat-snacks', title: 'Мясные закуски' },
             { subcategory: 'fish-snacks', title: 'Рыбные закуски' },
@@ -26,7 +26,7 @@ const categories = [
     {
         title: 'Первые блюда',
         icon: '/icons/soups.svg',
-        url: '/soups',
+        url: 'soups',
         items: [
             { subcategory: 'meat-soups', title: 'Мясные супы' },
             { subcategory: 'vegetable-soups', title: 'Овощные супы' },
@@ -38,7 +38,7 @@ const categories = [
     {
         title: 'Вторые блюда',
         icon: '/icons/main-dishes.svg',
-        url: '/main-dishes',
+        url: 'main-dishes',
         items: [
             { subcategory: 'meat-dishes', title: 'Мясные' },
             { subcategory: 'fish-dishes', title: 'Рыбные' },
@@ -57,7 +57,7 @@ const categories = [
     {
         title: 'Десерты и выпечка',
         icon: '/icons/cookies.svg',
-        url: '/desserts',
+        url: 'desserts',
         items: [
             { subcategory: 'pancakes', title: 'Блины и оладьи' },
             { subcategory: 'pies-donuts', title: 'Пироги и пончики' },
@@ -77,7 +77,7 @@ const categories = [
     {
         title: 'Блюда на гриле',
         icon: '/icons/grill.svg',
-        url: '/grill',
+        url: 'grill',
         items: [
             { subcategory: 'beef', title: 'Говядина' },
             { subcategory: 'pork', title: 'Свинина' },
@@ -90,7 +90,7 @@ const categories = [
     {
         title: 'Веганская кухня',
         icon: '/icons/vegan.svg',
-        url: '/vegan',
+        url: 'vegan',
         items: [
             { subcategory: 'vegan-snacks', title: 'Закуски' },
             { subcategory: 'vegan-first', title: 'Первые блюда' },
@@ -104,7 +104,7 @@ const categories = [
     {
         title: 'Детские блюда',
         icon: '/icons/kids.svg',
-        url: '/kids',
+        url: 'kids',
         items: [
             { subcategory: 'kids-first', title: 'Первые блюда' },
             { subcategory: 'kids-second', title: 'Вторые блюда' },
@@ -119,7 +119,7 @@ const categories = [
     {
         title: 'Лечебное питание',
         icon: '/icons/diets.svg',
-        url: '/diets',
+        url: 'diets',
         items: [
             { subcategory: 'child-diet', title: 'Детская диета' },
             { subcategory: 'diet-1', title: 'Диета №1' },
@@ -142,7 +142,7 @@ const categories = [
     {
         title: 'Национальные',
         icon: '/icons/national.svg',
-        url: '/national-cuisines',
+        url: 'national-cuisines',
         items: [
             { subcategory: 'american', title: 'Американская кухня' },
             { subcategory: 'armenian', title: 'Армянская кухня' },
@@ -164,7 +164,7 @@ const categories = [
     {
         title: 'Соусы',
         icon: '/icons/souse.svg',
-        url: '/sauces',
+        url: 'sauces',
         items: [
             { subcategory: 'meat-sauces', title: 'Соусы мясные' },
             { subcategory: 'cheese-sauces', title: 'Соусы сырные' },
@@ -174,7 +174,7 @@ const categories = [
     {
         title: 'Заготовки',
         icon: '/icons/cans.svg',
-        url: '/preserves',
+        url: 'preserves',
         items: [
             { subcategory: 'meat-preserves', title: 'Мясные заготовки' },
             { subcategory: 'fish-preserves', title: 'Рыбные заготовки' },
@@ -189,7 +189,7 @@ const categories = [
     {
         title: 'Напитки',
         icon: '/icons/drink.svg',
-        url: '/drinks',
+        url: 'drinks',
         items: [
             { subcategory: 'juices', title: 'Соки и фреши' },
             { subcategory: 'smoothies', title: 'Смузи' },
