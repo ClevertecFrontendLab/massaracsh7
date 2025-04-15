@@ -11,12 +11,12 @@ import categories from '~/data/categories';
 const VeganPage = () => {
     const { category } = useParams();
 
-    const item = categories.find((item) => item.url === category);
+    const cat = categories.find((item) => item.url === category);
 
     return (
         <Box>
             <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}>
-                {item?.title}
+                {cat?.title}
             </Heading>
             <Box
                 width={{ sm: '100%', md: '100%', lg: '700px', xl: '700px' }}
@@ -29,7 +29,7 @@ const VeganPage = () => {
                 </Text>
             </Box>
             <SearchBar bottom='24px' />
-            <TabsCategory />
+            <TabsCategory subcategories={cat?.items ?? []} />
             <RecipeList recipes={veganRecipes} gridVariant='low' />
             <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
                 <Button variant='limeSolid' size='medium'>

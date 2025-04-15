@@ -1,25 +1,36 @@
 import { Box, Tab, TabList, Tabs } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
-const veganCategories = [
-    'Закуски',
-    'Первые блюда',
-    'Вторые блюда',
-    'Гарниры',
-    'Десерты',
-    'Выпечка',
-    'Сыроедческие блюда',
-    'Напитки',
-];
+import { SubcategoryItem } from '~/types/typeCategory';
 
-const TabsCategory = () => {
+interface TabCategoryProps {
+    subcategories: SubcategoryItem[];
+}
+
+const TabsCategory = ({ subcategories }: TabCategoryProps) => {
+    const navigate = useNavigate();
+    const { category, subcategorySlug } = useParams();
     const [tabIndex, setTabIndex] = useState(0);
+
+    useEffect(() => {
+        const index = subcategories.findIndex((cat) => cat.subcategory === subcategorySlug);
+        if (index !== -1 && index !== tabIndex) {
+            setTabIndex(index);
+        }
+    }, [subcategorySlug, subcategories, tabIndex]);
+
+    const handleTabChange = (index: number) => {
+        setTabIndex(index);
+        const slug = subcategories[index].subcategory;
+        navigate(`/${category}/${slug}`);
+    };
 
     return (
         <Box>
             <Tabs
                 index={tabIndex}
-                onChange={setTabIndex}
+                onChange={handleTabChange}
                 variant='unstyled'
                 align='center'
                 mx={{ sm: '-16px', md: '-20px' }}
@@ -29,9 +40,9 @@ const TabsCategory = () => {
                     sx={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
                     mb={{ sm: 6, md: 5, lg: 6, xl: 6 }}
                 >
-                    {veganCategories.map((category, index) => (
+                    {subcategories.map((category, index) => (
                         <Tab
-                            key={category}
+                            key={category.title}
                             px={4}
                             pt={{ sm: '3px', md: '3px', lg: 4, xl: 4 }}
                             pb={2}
@@ -44,7 +55,7 @@ const TabsCategory = () => {
                             borderColor={tabIndex === index ? 'customLime.600' : 'gray.200'}
                             _hover={{ color: 'customLime.600' }}
                         >
-                            {category}
+                            {category.title}
                         </Tab>
                     ))}
                 </TabList>
