@@ -1,9 +1,14 @@
-import { Box, Flex, Heading, Hide, IconButton } from '@chakra-ui/react';
+import '../../../node_modules/swiper/swiper.css';
+
+import { Box, Heading, Hide, IconButton } from '@chakra-ui/react';
+import { Keyboard, Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ArrowLeft, ArrowRight } from '~/assets/icons/icons';
 import { newRecipes } from '~/data/cardsData';
 
 import SliderCard from '../SliderCard/SliderCard';
+// import '../../../node_modules/swiper/modules/navigation.css';
 
 const SliderList = () => (
     <Box
@@ -18,6 +23,7 @@ const SliderList = () => (
         <Hide below='mid'>
             <IconButton
                 aria-label='Previous'
+                className='prev'
                 icon={<ArrowLeft w='24px' />}
                 position='absolute'
                 width={{ base: '40px', lg: '40px', xl: '48px' }}
@@ -28,12 +34,13 @@ const SliderList = () => (
                 bg='black'
                 color='customLime.50'
                 borderRadius='small'
-                zIndex={1}
+                zIndex={10}
             />
         </Hide>
         <Hide below='mid'>
             <IconButton
                 aria-label='Next'
+                className='next'
                 icon={<ArrowRight w='24px' />}
                 position='absolute'
                 width={{ base: '40px', lg: '40px', xl: '48px' }}
@@ -44,41 +51,49 @@ const SliderList = () => (
                 bg='black'
                 color='customLime.50'
                 borderRadius='small'
-                zIndex={1}
+                zIndex={10}
             />
         </Hide>
-        <Flex
-            overflowX='auto'
-            gap={{ sm: '10px', md: '10px', lg: 3, xl: 6 }}
-            w='100%'
-            justify={{
-                base: 'center',
-                sm: 'center',
-                md: 'flex-start',
-                mid: 'center',
-                lg: 'flex-start',
-                xl: 'flex-start',
+        <Swiper
+            loop={true}
+            modules={[Navigation, Keyboard]}
+            keyboard={{ enabled: true }}
+            className='mySwiper'
+            spaceBetween={16}
+            slidesPerView={4}
+            navigation={{
+                nextEl: '.next',
+                prevEl: '.prev',
             }}
-            sx={{
-                '::-webkit-scrollbar': { display: 'none' },
+            breakpoints={{
+                0: {
+                    slidesPerView: 2,
+                    spaceBetween: 10,
+                },
+                768: {
+                    slidesPerView: 4,
+                    spaceBetween: 10,
+                },
+                1024: {
+                    slidesPerView: 3.2,
+                    spaceBetween: 24,
+                },
+                1440: {
+                    slidesPerView: 3.5,
+                    spaceBetween: 24,
+                },
+                1920: {
+                    slidesPerView: 4,
+                    spaceBetween: 24,
+                },
             }}
         >
             {newRecipes.map((recipe, index) => (
-                <Box
-                    key={index}
-                    flex='0 0 auto'
-                    w={{
-                        base: '160px',
-                        sm: '160px',
-                        md: '160px',
-                        lg: '277px',
-                        xl: '322px',
-                    }}
-                >
+                <SwiperSlide key={index}>
                     <SliderCard {...recipe} />
-                </Box>
+                </SwiperSlide>
             ))}
-        </Flex>
+        </Swiper>
     </Box>
 );
 
