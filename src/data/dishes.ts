@@ -1,4 +1,6 @@
-export const dishes = [
+import { Recipe } from '~/types/typeRecipe';
+
+export const dishes: Recipe[] = [
     {
         id: '0',
         title: 'Картошка, тушенная с болгарским перцем и фасолью в томатном соусе',
@@ -6,7 +8,7 @@ export const dishes = [
             'Картошка, тушенная с болгарским перцем, фасолью, морковью и луком, - вариант сытного блюда на каждый день. Фасоль в данном случае заменяет мясо, делая рагу сытным и питательным. Чтобы сократить время приготовления, возьмём консервированную фасоль. Блюдо хоть и простое, но в полной мере наполнено ароматами и имеет выразительный вкус за счёт добавления томатной пасты.',
         category: ['vegan', 'second-dish'],
         subcategory: ['snacks', 'vegetables'],
-        image: 'путь к изображению в вашем проекте',
+        image: '/images/potatoes-beans.jpg',
         bookmarks: 85,
         likes: 152,
         date: '2025-02-28T00:00:00Z',
@@ -323,6 +325,7 @@ export const dishes = [
         likes: 80,
         date: '2023-03-20T00:00:00Z',
         time: '25 минут',
+        portions: 3,
         nutritionValue: { calories: 150, proteins: 4, fats: 6, carbohydrates: 20 },
         ingredients: [
             { title: 'цуккини', count: '1', measureUnit: 'шт.' },

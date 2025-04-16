@@ -33,8 +33,6 @@
     src: url('/fonts/Roboto-Regular.woff2') format('woff2');
 }
 
-@import 'swiper/css';
-
 *,
 *:before,
 *:after {
