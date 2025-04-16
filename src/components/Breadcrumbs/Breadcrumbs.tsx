@@ -10,11 +10,10 @@ const Breadcrumbs = () => {
 
     const categorySlug = pathSegments[0];
     const subcategorySlug = pathSegments[1];
-    console.log(pathSegments);
 
-    const category = categories.find((cat) => cat.url.slice(1) === categorySlug);
+    const category = categories.find((cat) => cat.url === categorySlug);
     const subcategory = category?.items.find((item) => item.subcategory === subcategorySlug);
-
+    console.log(category, subcategory);
     return (
         <Breadcrumb separator={<ChevronRightIcon color='gray.800' />}>
             <BreadcrumbItem isCurrentPage={!category}>

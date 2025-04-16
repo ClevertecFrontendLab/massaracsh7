@@ -5,7 +5,7 @@ import MobileMenu from '../MobileMenu/MobileMenu';
 import SocialList from '../SocialList/SocialList';
 
 const Header = () => (
-    <Box as='header' bg='customLime.50' py={4} data-test-id='header' w='100%'>
+    <Box as='header' bg='customLime.50' py={4} data-test-id='header' w='100vw'>
         <Box
             maxW='1920px'
             pl={{ sm: '5', md: '5', lg: '4', xl: '4' }}

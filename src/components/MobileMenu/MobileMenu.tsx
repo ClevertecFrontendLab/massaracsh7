@@ -1,7 +1,10 @@
 import { Box, useDisclosure, useOutsideClick } from '@chakra-ui/react';
 import { useRef } from 'react';
 
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { BurgerButton } from '../BurgerButton/BurgerButton';
+import NavigationFooter from '../NavigationFooter/NavigationFooter';
+import NavigationMenu from '../NavigationMenu/NavigationMenu';
 
 const MobileMenu = () => {
     const { isOpen, onToggle, onClose } = useDisclosure();
@@ -44,8 +47,13 @@ const MobileMenu = () => {
                         zIndex='12'
                         overflowY='auto'
                     >
-                        <Box>Хлебные крошки</Box>
-                        <Box>Навигационное меню</Box>
+                        <Box>
+                            <Breadcrumbs />
+                        </Box>
+                        <Box>
+                            <NavigationMenu />
+                            <NavigationFooter />
+                        </Box>
                     </Box>
                 </>
             )}
