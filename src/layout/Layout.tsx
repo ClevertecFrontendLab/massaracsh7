@@ -61,7 +61,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
         </Box>
 
         <Show below='mid'>
-            <Box position='fixed' bottom={0} left={0} right={0} zIndex={10}>
+            <Box position='fixed' bottom={0} left={0} right={0}>
                 <Footer />
             </Box>
         </Show>

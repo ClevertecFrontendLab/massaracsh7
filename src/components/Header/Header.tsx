@@ -1,11 +1,11 @@
 import { Avatar, Box, Hide, HStack, Show, Text } from '@chakra-ui/react';
 
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import { BurgerButton } from '../BurgerButton/BurgerButton';
+import MobileMenu from '../MobileMenu/MobileMenu';
 import SocialList from '../SocialList/SocialList';
 
 const Header = () => (
-    <Box as='header' bg='customLime.50' py={4} data-test-id='header' w='100vw'>
+    <Box as='header' bg='customLime.50' py={4} data-test-id='header' w='100%'>
         <Box
             maxW='1920px'
             pl={{ sm: '5', md: '5', lg: '4', xl: '4' }}
@@ -37,7 +37,7 @@ const Header = () => (
                 <Show below='mid'>
                     <HStack spacing={{ sm: 6, md: 8 }}>
                         <SocialList />
-                        <BurgerButton />
+                        <MobileMenu />
                     </HStack>
                 </Show>
             </HStack>
