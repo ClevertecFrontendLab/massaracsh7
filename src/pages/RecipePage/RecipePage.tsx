@@ -8,9 +8,15 @@ import {
     Heading,
     HStack,
     Image,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
     Stack,
     Text,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useParams } from 'react-router';
 
 import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
@@ -23,6 +29,7 @@ const RecipePage = () => {
 
     const recipe = dishes.find((item) => item.id === id);
     const author = authors[0];
+    const [portions, setPortions] = useState(recipe?.portions ?? 1);
 
     return (
         <Box>
@@ -59,6 +66,16 @@ const RecipePage = () => {
                         {recipe?.description}
                     </Text>
                     <HStack spacing={4}>
+                        <Badge variant='gray06'>
+                            <HStack
+                                gap={{ base: 0.5, md: 0.5, lg: 2 }}
+                                py='2px'
+                                px={{ sm: 1, md: 1, lg: 2, xl: 2 }}
+                            >
+                                <Image src='/icons/BsAlarm.svg' alt='alarm' boxSize='16px' />
+                                <Text>{recipe?.time}</Text>
+                            </HStack>
+                        </Badge>
                         <Button
                             size='sm'
                             leftIcon={<Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />}
@@ -76,7 +93,7 @@ const RecipePage = () => {
                     </HStack>
                 </Box>
             </Flex>
-
+            <Text>* Калорийность на 1 порцию</Text>
             <Flex mt={8} justify='space-between' gap={4} wrap='wrap'>
                 {[
                     { label: 'ККАЛ', value: recipe?.nutritionValue.calories },
@@ -105,7 +122,25 @@ const RecipePage = () => {
 
             <Box mt={12}>
                 <Heading size='md' mb={4}>
-                    Ингредиенты
+                    <HStack justify='space-between'>
+                        <Text>Ингредиенты</Text>
+                        <HStack>
+                            <Text>Порций</Text>
+                            <NumberInput
+                                size='sm'
+                                maxW={100}
+                                min={1}
+                                value={portions}
+                                onChange={(value) => setPortions(Number(value))}
+                            >
+                                <NumberInputField />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </HStack>
+                    </HStack>
                 </Heading>
                 <Box as='ul' pl={4}>
                     {recipe?.ingredients.map((ingredient, index) => (
@@ -116,7 +151,9 @@ const RecipePage = () => {
                             py={2}
                         >
                             <Text>{ingredient.title}</Text>
-                            <Text color='gray.600'>{ingredient.count}</Text>
+                            <Text color='gray.600'>
+                                {ingredient.count} {ingredient.measureUnit}
+                            </Text>
                         </Flex>
                     ))}
                 </Box>
@@ -152,7 +189,7 @@ const RecipePage = () => {
                 </Stack>
             </Box>
 
-            <Box mt={12} p={6} bg='green.100' borderRadius='xl'>
+            <Box mt={12} p={6} bg='customLime.300' borderRadius='xl'>
                 <HStack spacing={4}>
                     <Avatar
                         src={author.imageUrl}
@@ -163,11 +200,24 @@ const RecipePage = () => {
                     <Box>
                         <Text fontWeight='bold'>{author.name}</Text>
                         <Text>{author.username}</Text>
-                        <Button size='xs' variant='solid' mt={1}>
+                        <Button
+                            variant='blackSolid'
+                            mt={1}
+                            leftIcon={
+                                <Image
+                                    src='/icons/followIcon.svg'
+                                    alt='Подписаться'
+                                    boxSize='16px'
+                                />
+                            }
+                        >
                             Подписаться
                         </Button>
                     </Box>
-                    <Text fontWeight='bold'>{author.numbers}</Text>
+                    <HStack>
+                        <Image src='/icons/people.svg' alt='numbers' boxSize='16px' />{' '}
+                        <Text textStyle='limeSmall'>{author.numbers}</Text>
+                    </HStack>
                 </HStack>
             </Box>
         </Box>

@@ -197,6 +197,9 @@ const Badge = defineStyleConfig({
         lime150: {
             bg: 'customLime.150',
         },
+        gray06: {
+            bg: 'rgba(0, 0, 0, 0.06)',
+        },
     },
 });
 
