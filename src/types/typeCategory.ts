@@ -9,3 +9,8 @@ export interface Category {
     url: string;
     items: SubcategoryItem[];
 }
+
+export interface Allergen {
+    value: string;
+    label: string;
+}

@@ -1,4 +1,5 @@
 import { Box, Button, Heading, HStack } from '@chakra-ui/react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
@@ -7,17 +8,33 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
-import { popularRecipes, tryDishes, veganDishes } from '~/data/cardsData';
+import { tryDishes, veganDishes } from '~/data/cardsData';
+import { dishes } from '~/data/dishes';
 
 const Main = () => {
     const navigate = useNavigate();
+    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
+    const [excludeAllergens, setExcludeAllergens] = useState<boolean>(false);
+    const filteredPopular = useMemo(
+        () =>
+            dishes.filter((recipe) => {
+                const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
+                return !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
+            }),
+        [selectedAllergens],
+    );
 
     return (
         <Box>
             <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
                 Приятного аппетита!
             </Heading>
-            <SearchBar />
+            <SearchBar
+                selectedAllergens={selectedAllergens}
+                onChangeSelectedAllergens={setSelectedAllergens}
+                excludeAllergens={excludeAllergens}
+                onToggleExcludeAllergens={() => setExcludeAllergens((prev) => !prev)}
+            />
             <SliderList />
             <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
                 <Heading variant='sectionTitle'>Самое сочное</Heading>
@@ -32,7 +49,7 @@ const Main = () => {
                     Вся подборка
                 </Button>
             </HStack>
-            <RecipeList recipes={popularRecipes} gridVariant='wide' />
+            <RecipeList recipes={filteredPopular} gridVariant='wide' />
 
             <Button
                 display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}

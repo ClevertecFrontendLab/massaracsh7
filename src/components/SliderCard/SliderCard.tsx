@@ -56,8 +56,9 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
                     </Text>
                 </Hide>
                 <HStack spacing={3} justify='space-between' align='center'>
-                    {recipe.category.map((catUrl) => (
+                    {recipe.category.map((catUrl, index) => (
                         <Badge
+                            key={catUrl + index}
                             variant='lime150'
                             position={{
                                 base: 'static',
@@ -69,7 +70,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
                             left={{ sm: 2, md: 2 }}
                             p={{ sm: '0', md: '0' }}
                         >
-                            <CategoryBadge key={catUrl} categoryUrl={catUrl} />
+                            <CategoryBadge categoryUrl={catUrl} />
                         </Badge>
                     ))}
                     <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />

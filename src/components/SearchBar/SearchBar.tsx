@@ -15,9 +15,19 @@ import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 
 interface SearchProps {
     bottom?: string;
+    selectedAllergens: string[];
+    onChangeSelectedAllergens: (values: string[]) => void;
+    excludeAllergens: boolean;
+    onToggleExcludeAllergens: () => void;
 }
 
-const SearchBar = ({ bottom = '56px' }: SearchProps) => (
+const SearchBar = ({
+    bottom = '56px',
+    selectedAllergens,
+    onChangeSelectedAllergens,
+    excludeAllergens,
+    onToggleExcludeAllergens,
+}: SearchProps) => (
     <Box
         width={{ base: '100%', sm: '328px', md: '448px', lg: '518px' }}
         mb={{ sm: '32px', md: '32px', lg: bottom, xl: bottom }}
@@ -70,9 +80,13 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => (
             <HStack spacing='15px' w='100%' mb={6}>
                 <HStack spacing={3} py={1.5} pl={2}>
                     <Text textStyle='descriptionText'>Исключить мои аллергены</Text>
-                    <Switch size='md' />
+                    <Switch
+                        size='md'
+                        isChecked={excludeAllergens}
+                        onChange={onToggleExcludeAllergens}
+                    />
                 </HStack>
-                <MultipleSelect />
+                <MultipleSelect selected={selectedAllergens} onChange={onChangeSelectedAllergens} />
             </HStack>
         </Hide>
     </Box>
