@@ -10,9 +10,8 @@ import {
     MenuItem,
     MenuList,
     Tag,
-    TagCloseButton,
     TagLabel,
-    Text,
+    useDisclosure,
     Wrap,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -26,6 +25,7 @@ interface MultipleSelectProps {
 
 const MultipleSelect = ({ selected, onChange }: MultipleSelectProps) => {
     const [newAllergen, setNewAllergen] = useState<string>('');
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSelect = (value: string) => {
         const newSelected = selected.includes(value)
@@ -34,9 +34,9 @@ const MultipleSelect = ({ selected, onChange }: MultipleSelectProps) => {
         onChange(newSelected);
     };
 
-    const handleRemove = (value: string) => {
-        onChange(selected.filter((item) => item !== value));
-    };
+    // const handleRemove = (value: string) => {
+    //     onChange(selected.filter((item) => item !== value));
+    // };
 
     const handleAddCustom = () => {
         if (newAllergen && !selected.includes(newAllergen)) {
@@ -46,10 +46,16 @@ const MultipleSelect = ({ selected, onChange }: MultipleSelectProps) => {
     };
 
     return (
-        <Menu closeOnSelect={false}>
+        <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnSelect={false}>
             <MenuButton
                 as={Button}
-                rightIcon={<ChevronDownIcon boxSize='20px' />}
+                rightIcon={
+                    <ChevronDownIcon
+                        boxSize='20px'
+                        transition='transform 0.2s'
+                        transform={isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
+                    />
+                }
                 variant='outline'
                 w='234px'
                 fontSize='16px'
@@ -59,38 +65,28 @@ const MultipleSelect = ({ selected, onChange }: MultipleSelectProps) => {
                 py={4}
                 pr={2}
             >
-                Выберите из списка...
+                {selected.length > 0 ? (
+                    <Wrap spacing={2}>
+                        {selected.map((item) => (
+                            <Tag size='sm' key={item} borderRadius='full' variant='solid'>
+                                <TagLabel>{item}</TagLabel>
+                            </Tag>
+                        ))}
+                    </Wrap>
+                ) : (
+                    'Выберите из списка...'
+                )}
             </MenuButton>
-            <MenuList maxH='300px' overflowY='auto' p={3}>
-                <Box mb={2}>
-                    <Text fontSize='sm' fontWeight='medium' mb={1}>
-                        Выбранные аллергены:
-                    </Text>
-                    {selected.length > 0 ? (
-                        <Wrap>
-                            {selected.map((item) => (
-                                <Tag size='sm' key={item} borderRadius='full' variant='solid'>
-                                    <TagLabel>{item}</TagLabel>
-                                    <TagCloseButton onClick={() => handleRemove(item)} />
-                                </Tag>
-                            ))}
-                        </Wrap>
-                    ) : (
-                        <Text fontSize='sm' color='gray.500'>
-                            Пока ничего не выбрано
-                        </Text>
-                    )}
-                </Box>
-
-                {allergens.map((item) => (
-                    <MenuItem key={item.value} p={0}>
+            <MenuList maxH='300px' overflowY='auto' p={3} zIndex='11'>
+                {allergens.map((option) => (
+                    <MenuItem key={option.value} p={0}>
                         <Checkbox
-                            isChecked={selected.includes(item.label)}
-                            onChange={() => handleSelect(item.label)}
+                            isChecked={selected.includes(option.label)}
+                            onChange={() => handleSelect(option.label)}
                             p={2}
                             w='100%'
                         >
-                            {item.label}
+                            {option.label}
                         </Checkbox>
                     </MenuItem>
                 ))}

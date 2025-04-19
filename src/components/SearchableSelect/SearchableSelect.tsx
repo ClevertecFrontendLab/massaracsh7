@@ -1,17 +1,21 @@
-// components/SearchableSelect.tsx
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
     Box,
+    Button,
     Checkbox,
-    Input,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Tag,
     TagCloseButton,
     TagLabel,
     Text,
+    useDisclosure,
     VStack,
     Wrap,
     WrapItem,
 } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
 
 interface SearchableSelectProps {
     label: string;
@@ -26,12 +30,7 @@ export const SearchableSelect = ({
     selectedValues,
     onChange,
 }: SearchableSelectProps) => {
-    const [searchTerm, setSearchTerm] = useState('');
-
-    const filteredOptions = useMemo(
-        () => options.filter((option) => option.toLowerCase().includes(searchTerm.toLowerCase())),
-        [options, searchTerm],
-    );
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleToggle = (value: string) => {
         if (selectedValues.includes(value)) {
@@ -50,47 +49,75 @@ export const SearchableSelect = ({
             <Text mb={2} fontWeight='bold'>
                 {label}
             </Text>
-            <Input
-                placeholder='Поиск...'
-                size='sm'
-                mb={2}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <VStack
-                spacing={1}
-                maxHeight='150px'
-                overflowY='auto'
-                border='1px solid'
-                borderColor='gray.200'
-                borderRadius='md'
-                p={2}
-                mb={2}
-                align='start'
-            >
-                {filteredOptions.map((option, index) => (
-                    <Checkbox
-                        key={index}
-                        isChecked={selectedValues.includes(option)}
-                        onChange={() => handleToggle(option)}
-                    >
-                        {option}
-                    </Checkbox>
-                ))}
-            </VStack>
-            <Wrap>
-                {selectedValues.map((value) => {
-                    const label = options.find((opt) => opt === value) || value;
-                    return (
-                        <WrapItem key={value}>
-                            <Tag size='sm' borderRadius='full' variant='solid' colorScheme='green'>
-                                <TagLabel>{label}</TagLabel>
-                                <TagCloseButton onClick={() => handleRemove(value)} />
-                            </Tag>
-                        </WrapItem>
-                    );
-                })}
-            </Wrap>
+            <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnSelect={false}>
+                <MenuButton
+                    as={Button}
+                    rightIcon={
+                        <ChevronDownIcon
+                            boxSize='20px'
+                            transition='transform 0.2s'
+                            transform={isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
+                        />
+                    }
+                    variant='outline'
+                    w='100%'
+                    fontSize='16px'
+                    fontWeight='400'
+                    lineHeight='24px'
+                    color='secondaryText'
+                    py={4}
+                    pr={2}
+                >
+                    {selectedValues.length > 0 ? (
+                        <Wrap spacing={2}>
+                            {selectedValues.map((item) => (
+                                <Tag size='sm' key={item} borderRadius='full' variant='solid'>
+                                    <TagLabel>{item}</TagLabel>
+                                </Tag>
+                            ))}
+                        </Wrap>
+                    ) : (
+                        'Выберите из списка...'
+                    )}
+                </MenuButton>
+                <MenuList maxH='300px' overflowY='auto' p={3} zIndex='11' w='100%'>
+                    <VStack align='start' spacing={1}>
+                        {options.map((option) => (
+                            <MenuItem key={option} p={0} w='100%'>
+                                <Checkbox
+                                    isChecked={selectedValues.includes(option)}
+                                    onChange={() => handleToggle(option)}
+                                    p={2}
+                                    w='100%'
+                                >
+                                    {option}
+                                </Checkbox>
+                            </MenuItem>
+                        ))}
+                    </VStack>
+                </MenuList>
+            </Menu>
+
+            {selectedValues.length > 0 && (
+                <Wrap mt={2}>
+                    {selectedValues.map((value) => {
+                        const label = options.find((opt) => opt === value) || value;
+                        return (
+                            <WrapItem key={value}>
+                                <Tag
+                                    size='sm'
+                                    borderRadius='full'
+                                    variant='solid'
+                                    colorScheme='green'
+                                >
+                                    <TagLabel>{label}</TagLabel>
+                                    <TagCloseButton onClick={() => handleRemove(value)} />
+                                </Tag>
+                            </WrapItem>
+                        );
+                    })}
+                </Wrap>
+            )}
         </Box>
     );
 };

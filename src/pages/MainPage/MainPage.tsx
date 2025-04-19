@@ -15,14 +15,25 @@ const Main = () => {
     const navigate = useNavigate();
     const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
     const [excludeAllergens, setExcludeAllergens] = useState<boolean>(false);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+
     const filteredPopular = useMemo(
         () =>
             dishes.filter((recipe) => {
                 const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-                return !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
+                const titleMatch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase());
+                const passesAllergens =
+                    !excludeAllergens ||
+                    !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
+
+                return passesAllergens && (!searchTerm || titleMatch);
             }),
-        [selectedAllergens],
+        [selectedAllergens, excludeAllergens, searchTerm],
     );
+
+    const handleRecipeSearch = (query: string) => {
+        setSearchTerm(query);
+    };
 
     return (
         <Box>
@@ -34,22 +45,38 @@ const Main = () => {
                 onChangeSelectedAllergens={setSelectedAllergens}
                 excludeAllergens={excludeAllergens}
                 onToggleExcludeAllergens={() => setExcludeAllergens((prev) => !prev)}
+                onSearch={handleRecipeSearch}
             />
-            <SliderList />
-            <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
-                <Heading variant='sectionTitle'>Самое сочное</Heading>
-                <Button
-                    display={{ base: 'flex', sm: 'none', md: 'none', lg: 'flex', xl: 'flex' }}
-                    data-test-id='juiciest-link'
-                    variant='limeSolid'
-                    size='large'
-                    rightIcon={<ArrowBlackRight w='14px' />}
-                    onClick={() => navigate('/juicy')}
-                >
-                    Вся подборка
-                </Button>
-            </HStack>
-            <RecipeList recipes={filteredPopular} gridVariant='wide' />
+            {searchTerm.length < 3 && <SliderList />}
+
+            {searchTerm.length < 3 && (
+                <>
+                    <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
+                        <Heading variant='sectionTitle'>Самое сочное</Heading>
+                        <Button
+                            display={{
+                                base: 'flex',
+                                sm: 'none',
+                                md: 'none',
+                                lg: 'flex',
+                                xl: 'flex',
+                            }}
+                            data-test-id='juiciest-link'
+                            variant='limeSolid'
+                            size='large'
+                            rightIcon={<ArrowBlackRight w='14px' />}
+                            onClick={() => navigate('/juicy')}
+                        >
+                            Вся подборка
+                        </Button>
+                    </HStack>
+                </>
+            )}
+
+            <RecipeList
+                recipes={filteredPopular}
+                gridVariant={searchTerm.length >= 3 ? 'low' : 'wide'}
+            />
 
             <Button
                 display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}

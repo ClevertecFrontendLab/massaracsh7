@@ -22,6 +22,7 @@ interface SearchProps {
     onChangeSelectedAllergens: (values: string[]) => void;
     excludeAllergens: boolean;
     onToggleExcludeAllergens: () => void;
+    onSearch: (query: string) => void; // 👈 добавлен проп
 }
 
 const SearchBar = ({
@@ -30,14 +31,32 @@ const SearchBar = ({
     onChangeSelectedAllergens,
     excludeAllergens,
     onToggleExcludeAllergens,
+    onSearch,
 }: SearchProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
-    const openFilterDrawer = () => {
-        setFilterOpen(true);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const openFilterDrawer = () => setFilterOpen(true);
+    const closeFilterDrawer = () => setFilterOpen(false);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
     };
-    const closeFilterDrawer = () => {
-        setFilterOpen(false);
+
+    const handleSearch = () => {
+        if (searchTerm.trim().length >= 3) {
+            onSearch(searchTerm.trim());
+        }
     };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    const isSearchActive = searchTerm.trim().length >= 3;
+
     return (
         <Box
             width={{ base: '100%', sm: '328px', md: '448px', lg: '518px' }}
@@ -56,6 +75,7 @@ const SearchBar = ({
                     onClick={openFilterDrawer}
                 />
                 <FilterDrawer isOpen={isFilterOpen} onClose={closeFilterDrawer} />
+
                 <InputGroup w='100%'>
                     <Input
                         placeholder='Название или ингредиент...'
@@ -70,6 +90,9 @@ const SearchBar = ({
                         color='customLime.800'
                         _placeholder={{ color: 'customLime.800' }}
                         height={{ base: 8, sm: 8, md: 8, lg: 12 }}
+                        value={searchTerm}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}
                     />
                     <InputRightElement
                         alignItems={{
@@ -85,10 +108,13 @@ const SearchBar = ({
                             variant='ghost'
                             size='sm'
                             p={2}
+                            isDisabled={!isSearchActive}
+                            onClick={handleSearch}
                         />
                     </InputRightElement>
                 </InputGroup>
             </HStack>
+
             <Hide below='md'>
                 <HStack spacing='15px' w='100%' mb={6}>
                     <HStack spacing={3} py={1.5} pl={2}>

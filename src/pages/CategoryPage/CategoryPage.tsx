@@ -1,17 +1,33 @@
 import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
-import { desertDishes, tryDesertDishes, veganRecipes } from '~/data/cardsData';
+import { desertDishes, tryDesertDishes } from '~/data/cardsData';
 import categories from '~/data/categories';
+import { dishes } from '~/data/dishes';
 
-const VeganPage = () => {
+const CategoryPage = () => {
     const { category } = useParams();
 
     const cat = categories.find((item) => item.url === category);
+
+    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
+    const [excludeAllergens, setExcludeAllergens] = useState<boolean>(false);
+    const filteredPopular = useMemo(
+        () =>
+            dishes.filter((recipe) => {
+                const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
+                return !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
+            }),
+        [selectedAllergens],
+    );
+    const handleRecipeSearch = (query: string) => {
+        console.log('Поиск рецепта:', query);
+    };
 
     return (
         <Box>
@@ -28,9 +44,16 @@ const VeganPage = () => {
                     вегетарианскую диету и готовить вкусные вегетарианские блюда.
                 </Text>
             </Box>
-            <SearchBar bottom='24px' />
+            <SearchBar
+                selectedAllergens={selectedAllergens}
+                onChangeSelectedAllergens={setSelectedAllergens}
+                excludeAllergens={excludeAllergens}
+                onToggleExcludeAllergens={() => setExcludeAllergens((prev) => !prev)}
+                onSearch={handleRecipeSearch}
+                bottom='24px'
+            />
             <TabsCategory subcategories={cat?.items ?? []} />
-            <RecipeList recipes={veganRecipes} gridVariant='low' />
+            <RecipeList recipes={filteredPopular} gridVariant='low' />
             <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
                 <Button variant='limeSolid' size='medium'>
                     Загрузить ещё
@@ -46,4 +69,4 @@ const VeganPage = () => {
     );
 };
 
-export default VeganPage;
+export default CategoryPage;
