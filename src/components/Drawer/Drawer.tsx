@@ -19,12 +19,22 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { authors } from '~/data/authors';
 import categories from '~/data/categories';
+import {
+    resetAllFilters,
+    setSelectedAuthors,
+    setSelectedCategories,
+    setSelectedMeat,
+    setSelectedSide,
+    toggleExcludeAllergens,
+} from '~/store/filter-slice';
 
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
+// import { ApplicationState } from '~/store/configure-store';
 
 interface FilterData {
     categories: string[];
@@ -32,47 +42,46 @@ interface FilterData {
     meatTypes: string[];
     sideTypes: string[];
     excludeAllergens: boolean;
-    allergens: string[];
 }
 
-interface Props {
+interface FilterDrawerProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const FilterDrawer = ({ isOpen, onClose }: Props) => {
+const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
+    const dispatch = useDispatch();
+    // const isAllergens = useSelector((state: ApplicationState) => state.filters.excludeAllergens);
+
     const [filters, setFilters] = useState<FilterData>({
         categories: [],
         authors: [],
         meatTypes: [],
         sideTypes: [],
         excludeAllergens: false,
-        allergens: [],
     });
-
-    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
 
     const categoryOptions = categories.map((item) => item.title);
     const authorOptions = authors.map((item) => item.name);
 
     const handleClear = () => {
+        dispatch(resetAllFilters());
         setFilters({
             categories: [],
             authors: [],
             meatTypes: [],
             sideTypes: [],
             excludeAllergens: false,
-            allergens: [],
         });
-        setSelectedAllergens([]);
     };
 
     const handleSearch = () => {
-        const fullFilters = {
-            ...filters,
-            allergens: selectedAllergens,
-        };
-        console.log('Selected filters:', fullFilters);
+        dispatch(setSelectedAuthors(filters.authors));
+        dispatch(setSelectedCategories(filters.categories));
+        dispatch(setSelectedMeat(filters.meatTypes));
+        dispatch(setSelectedSide(filters.sideTypes));
+        dispatch(toggleExcludeAllergens());
+        console.log('Selected filters:', filters);
         onClose();
     };
 
@@ -81,8 +90,7 @@ const FilterDrawer = ({ isOpen, onClose }: Props) => {
         filters.authors.length ||
         filters.meatTypes.length ||
         filters.sideTypes.length ||
-        filters.excludeAllergens ||
-        selectedAllergens.length;
+        filters.excludeAllergens;
 
     const removeTag = (value: string) => {
         setFilters((prev) => ({
@@ -92,7 +100,6 @@ const FilterDrawer = ({ isOpen, onClose }: Props) => {
             meatTypes: prev.meatTypes.filter((v) => v !== value),
             sideTypes: prev.sideTypes.filter((v) => v !== value),
         }));
-        setSelectedAllergens((prev) => prev.filter((v) => v !== value));
     };
 
     return (
@@ -157,10 +164,7 @@ const FilterDrawer = ({ isOpen, onClose }: Props) => {
                                 }
                             />
                         </HStack>
-                        <MultipleSelect
-                            selected={selectedAllergens}
-                            onChange={setSelectedAllergens}
-                        />
+                        <MultipleSelect />
 
                         <Box>
                             <Text mb={2}>Выбранные фильтры:</Text>
@@ -170,7 +174,6 @@ const FilterDrawer = ({ isOpen, onClose }: Props) => {
                                     ...filters.authors,
                                     ...filters.meatTypes,
                                     ...filters.sideTypes,
-                                    ...selectedAllergens,
                                 ].map((tag) => (
                                     <Tag key={tag} variant='subtle' colorScheme='green'>
                                         <TagLabel>{tag}</TagLabel>

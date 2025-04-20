@@ -1,5 +1,6 @@
 import { Box, Button, Heading, HStack } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
@@ -8,27 +9,74 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
+import { authors } from '~/data/authors';
 import { tryDishes, veganDishes } from '~/data/cardsData';
 import { dishes } from '~/data/dishes';
+import { ApplicationState } from '~/store/configure-store';
 
 const Main = () => {
     const navigate = useNavigate();
-    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
-    const [excludeAllergens, setExcludeAllergens] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const selectedAllergens = useSelector(
+        (state: ApplicationState) => state.filters.selectedAllergens,
+    );
+    const excludeAllergens = useSelector(
+        (state: ApplicationState) => state.filters.excludeAllergens,
+    );
+    const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
+    const selectedCategories = useSelector(
+        (state: ApplicationState) => state.filters.selectedCategories,
+    );
+    const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
+    const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
 
     const filteredPopular = useMemo(
         () =>
             dishes.filter((recipe) => {
                 const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-                const titleMatch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase());
+                const recipeTitle = recipe.title.toLowerCase();
+                const lowerSearch = searchTerm.toLowerCase();
+
                 const passesAllergens =
                     !excludeAllergens ||
                     !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
 
-                return passesAllergens && (!searchTerm || titleMatch);
+                const passesAuthors =
+                    !selectedAuthors.length ||
+                    authors.some(
+                        (author) =>
+                            selectedAuthors.includes(author.name) &&
+                            author.recipesId.includes(recipe.id),
+                    );
+
+                const passesCategories =
+                    !selectedCategories.length ||
+                    selectedCategories.some((category) => recipe.category.includes(category));
+
+                const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
+
+                const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
+
+                const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
+
+                return (
+                    passesAllergens &&
+                    passesAuthors &&
+                    passesCategories &&
+                    passesMeat &&
+                    passesSide &&
+                    titleMatch
+                );
             }),
-        [selectedAllergens, excludeAllergens, searchTerm],
+        [
+            selectedAllergens,
+            excludeAllergens,
+            selectedAuthors,
+            selectedCategories,
+            selectedMeat,
+            selectedSide,
+            searchTerm,
+        ],
     );
 
     const handleRecipeSearch = (query: string) => {
@@ -40,13 +88,7 @@ const Main = () => {
             <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
                 Приятного аппетита!
             </Heading>
-            <SearchBar
-                selectedAllergens={selectedAllergens}
-                onChangeSelectedAllergens={setSelectedAllergens}
-                excludeAllergens={excludeAllergens}
-                onToggleExcludeAllergens={() => setExcludeAllergens((prev) => !prev)}
-                onSearch={handleRecipeSearch}
-            />
+            <SearchBar onSearch={handleRecipeSearch} />
             {searchTerm.length < 3 && <SliderList />}
 
             {searchTerm.length < 3 && (

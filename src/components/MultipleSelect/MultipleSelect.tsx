@@ -15,32 +15,29 @@ import {
     Wrap,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { allergens } from '~/data/allergens';
+import { ApplicationState } from '~/store/configure-store';
+import { setSelectedAllergens } from '~/store/filter-slice';
 
-interface MultipleSelectProps {
-    selected: string[];
-    onChange: (selected: string[]) => void;
-}
-
-const MultipleSelect = ({ selected, onChange }: MultipleSelectProps) => {
-    const [newAllergen, setNewAllergen] = useState<string>('');
+const MultipleSelect = () => {
+    const dispatch = useDispatch();
+    const selected = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const [newAllergen, setNewAllergen] = useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleSelect = (value: string) => {
-        const newSelected = selected.includes(value)
+        const updated = selected.includes(value)
             ? selected.filter((item) => item !== value)
             : [...selected, value];
-        onChange(newSelected);
+
+        dispatch(setSelectedAllergens(updated));
     };
 
-    // const handleRemove = (value: string) => {
-    //     onChange(selected.filter((item) => item !== value));
-    // };
-
     const handleAddCustom = () => {
-        if (newAllergen && !selected.includes(newAllergen)) {
-            onChange([...selected, newAllergen]);
+        if (newAllergen.trim() && !selected.includes(newAllergen.trim())) {
+            dispatch(setSelectedAllergens([...selected, newAllergen.trim()]));
             setNewAllergen('');
         }
     };
@@ -77,6 +74,7 @@ const MultipleSelect = ({ selected, onChange }: MultipleSelectProps) => {
                     'Выберите из списка...'
                 )}
             </MenuButton>
+
             <MenuList maxH='300px' overflowY='auto' p={3} zIndex='11'>
                 {allergens.map((option) => (
                     <MenuItem key={option.value} p={0}>

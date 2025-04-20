@@ -1,3 +1,4 @@
+import { CloseIcon } from '@chakra-ui/icons';
 import {
     Box,
     Hide,
@@ -10,31 +11,27 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
+import { ApplicationState } from '~/store/configure-store';
+import { toggleExcludeAllergens } from '~/store/filter-slice';
 
 import FilterDrawer from '../Drawer/Drawer';
 
 interface SearchProps {
     bottom?: string;
-    selectedAllergens: string[];
-    onChangeSelectedAllergens: (values: string[]) => void;
-    excludeAllergens: boolean;
-    onToggleExcludeAllergens: () => void;
-    onSearch: (query: string) => void; // 👈 добавлен проп
+    onSearch: (query: string) => void;
 }
 
-const SearchBar = ({
-    bottom = '56px',
-    selectedAllergens,
-    onChangeSelectedAllergens,
-    excludeAllergens,
-    onToggleExcludeAllergens,
-    onSearch,
-}: SearchProps) => {
+const SearchBar = ({ bottom = '56px', onSearch }: SearchProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const dispatch = useDispatch();
+    const excludeAllergens = useSelector(
+        (state: ApplicationState) => state.filters.excludeAllergens,
+    );
 
     const openFilterDrawer = () => setFilterOpen(true);
     const closeFilterDrawer = () => setFilterOpen(false);
@@ -53,6 +50,11 @@ const SearchBar = ({
         if (e.key === 'Enter') {
             handleSearch();
         }
+    };
+
+    const handleClearInput = () => {
+        setSearchTerm('');
+        onSearch('');
     };
 
     const isSearchActive = searchTerm.trim().length >= 3;
@@ -82,7 +84,7 @@ const SearchBar = ({
                         variant='outline'
                         bg='white'
                         borderRadius='md'
-                        pr={{ md: 6, lg: 4 }}
+                        pr={{ base: 10, lg: 12 }}
                         pl='12px'
                         py='13px'
                         fontSize={{ md: '14px', lg: '18px' }}
@@ -102,6 +104,15 @@ const SearchBar = ({
                             lg: 'flex-end',
                         }}
                     >
+                        {searchTerm && (
+                            <IconButton
+                                aria-label='Очистить'
+                                icon={<CloseIcon boxSize='10px' />}
+                                size='xs'
+                                variant='ghost'
+                                onClick={handleClearInput}
+                            />
+                        )}
                         <IconButton
                             aria-label='Поиск'
                             icon={<SearchGlass boxSize={{ md: '14px', lg: '18px' }} />}
@@ -122,13 +133,10 @@ const SearchBar = ({
                         <Switch
                             size='md'
                             isChecked={excludeAllergens}
-                            onChange={onToggleExcludeAllergens}
+                            onChange={() => dispatch(toggleExcludeAllergens())}
                         />
                     </HStack>
-                    <MultipleSelect
-                        selected={selectedAllergens}
-                        onChange={onChangeSelectedAllergens}
-                    />
+                    <MultipleSelect />
                 </HStack>
             </Hide>
         </Box>

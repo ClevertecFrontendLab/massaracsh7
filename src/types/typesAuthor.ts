@@ -3,4 +3,5 @@ export interface AuthorData {
     username: string;
     imageUrl: string;
     numbers: number;
+    recipesId: string[];
 }
