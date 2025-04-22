@@ -13,16 +13,16 @@ import {
     Stack,
     Switch,
     Tag,
-    TagCloseButton,
     TagLabel,
     Text,
     VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { authors } from '~/data/authors';
 import categories from '~/data/categories';
+import { ApplicationState } from '~/store/configure-store';
 import {
     resetAllFilters,
     setSelectedAuthors,
@@ -34,7 +34,6 @@ import {
 
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
-// import { ApplicationState } from '~/store/configure-store';
 
 interface FilterData {
     categories: string[];
@@ -51,7 +50,7 @@ interface FilterDrawerProps {
 
 const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     const dispatch = useDispatch();
-    // const isAllergens = useSelector((state: ApplicationState) => state.filters.excludeAllergens);
+    const allergens = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
 
     const [filters, setFilters] = useState<FilterData>({
         categories: [],
@@ -92,15 +91,15 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.sideTypes.length ||
         filters.excludeAllergens;
 
-    const removeTag = (value: string) => {
-        setFilters((prev) => ({
-            ...prev,
-            categories: prev.categories.filter((v) => v !== value),
-            authors: prev.authors.filter((v) => v !== value),
-            meatTypes: prev.meatTypes.filter((v) => v !== value),
-            sideTypes: prev.sideTypes.filter((v) => v !== value),
-        }));
-    };
+    // const removeTag = (value: string) => {
+    //     setFilters((prev) => ({
+    //         ...prev,
+    //         categories: prev.categories.filter((v) => v !== value),
+    //         authors: prev.authors.filter((v) => v !== value),
+    //         meatTypes: prev.meatTypes.filter((v) => v !== value),
+    //         sideTypes: prev.sideTypes.filter((v) => v !== value),
+    //     }));
+    // };
 
     return (
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
@@ -177,20 +176,13 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 ].map((tag) => (
                                     <Tag key={tag} variant='subtle' colorScheme='green'>
                                         <TagLabel>{tag}</TagLabel>
-                                        <TagCloseButton onClick={() => removeTag(tag)} />
                                     </Tag>
                                 ))}
-                                {filters.excludeAllergens && (
+                                {filters.excludeAllergens && allergens.length > 0 && (
                                     <Tag variant='subtle' colorScheme='red'>
-                                        <TagLabel>Исключить аллергены</TagLabel>
-                                        <TagCloseButton
-                                            onClick={() =>
-                                                setFilters((f) => ({
-                                                    ...f,
-                                                    excludeAllergens: false,
-                                                }))
-                                            }
-                                        />
+                                        {allergens.map((item) => (
+                                            <TagLabel>{item}</TagLabel>
+                                        ))}
                                     </Tag>
                                 )}
                             </HStack>

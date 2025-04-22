@@ -1,5 +1,5 @@
 import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
@@ -15,7 +15,6 @@ import { ApplicationState } from '~/store/configure-store';
 
 const CategoryPage = () => {
     const { category, subcategory } = useParams();
-    console.log(category, subcategory);
 
     const cat = categories.find((item) => item.url === category);
     const reipesCategories = useMemo(() => {
@@ -30,7 +29,7 @@ const CategoryPage = () => {
         return dishes;
     }, [category, subcategory]);
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
+    // const [searchTerm, setSearchTerm] = useState<string>('');
     const selectedAllergens = useSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
@@ -43,6 +42,7 @@ const CategoryPage = () => {
     );
     const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
     const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
+    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
 
     const filteredPopular = useMemo(
         () =>
@@ -94,9 +94,9 @@ const CategoryPage = () => {
         ],
     );
 
-    const handleRecipeSearch = (query: string) => {
-        setSearchTerm(query);
-    };
+    // const handleRecipeSearch = (query: string) => {
+    //     setSearchTerm(query);
+    // };
 
     return (
         <Box>
@@ -113,7 +113,7 @@ const CategoryPage = () => {
                     вегетарианскую диету и готовить вкусные вегетарианские блюда.
                 </Text>
             </Box>
-            <SearchBar onSearch={handleRecipeSearch} bottom='24px' />
+            <SearchBar bottom='24px' />
             <TabsCategory subcategories={cat?.items ?? []} />
             <RecipeList recipes={filteredPopular} gridVariant='low' />
             <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>

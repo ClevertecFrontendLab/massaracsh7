@@ -10,15 +10,16 @@ interface TabCategoryProps {
 
 const TabsCategory = ({ subcategories }: TabCategoryProps) => {
     const navigate = useNavigate();
-    const { category, subcategorySlug } = useParams();
+    const { category, subcategory } = useParams();
     const [tabIndex, setTabIndex] = useState(0);
-
     useEffect(() => {
-        const index = subcategories.findIndex((cat) => cat.subcategory === subcategorySlug);
-        if (index !== -1 && index !== tabIndex) {
+        if (!subcategory || subcategories.length === 0) return;
+        const index = subcategories.findIndex((cat) => cat.subcategory === subcategory);
+
+        if (index !== -1) {
             setTabIndex(index);
         }
-    }, [subcategorySlug, subcategories, tabIndex]);
+    }, [category, subcategory, subcategories]);
 
     const handleTabChange = (index: number) => {
         setTabIndex(index);
@@ -36,13 +37,15 @@ const TabsCategory = ({ subcategories }: TabCategoryProps) => {
                 mx={{ sm: '-16px', md: '-20px' }}
             >
                 <TabList
-                    overflowX='auto'
+                    display='flex'
+                    flexWrap={{ base: 'nowrap', mid: 'wrap' }}
+                    overflowX={{ base: 'auto', mid: 'visible' }}
                     sx={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
                     mb={{ sm: 6, md: 5, lg: 6, xl: 6 }}
                 >
                     {subcategories.map((category, index) => (
                         <Tab
-                            key={category.title}
+                            key={category.subcategory}
                             px={4}
                             pt={{ sm: '3px', md: '3px', lg: 4, xl: 4 }}
                             pb={2}

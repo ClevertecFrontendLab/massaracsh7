@@ -16,18 +16,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 import { ApplicationState } from '~/store/configure-store';
-import { toggleExcludeAllergens } from '~/store/filter-slice';
+import { setSearchTerm, toggleExcludeAllergens } from '~/store/filter-slice';
 
 import FilterDrawer from '../Drawer/Drawer';
 
 interface SearchProps {
     bottom?: string;
-    onSearch: (query: string) => void;
 }
 
-const SearchBar = ({ bottom = '56px', onSearch }: SearchProps) => {
+const SearchBar = ({ bottom = '56px' }: SearchProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchText, setSearchText] = useState('');
     const dispatch = useDispatch();
     const excludeAllergens = useSelector(
         (state: ApplicationState) => state.filters.excludeAllergens,
@@ -37,12 +36,12 @@ const SearchBar = ({ bottom = '56px', onSearch }: SearchProps) => {
     const closeFilterDrawer = () => setFilterOpen(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value);
+        setSearchText(e.target.value);
     };
 
     const handleSearch = () => {
-        if (searchTerm.trim().length >= 3) {
-            onSearch(searchTerm.trim());
+        if (searchText.trim().length >= 3) {
+            dispatch(setSearchTerm(searchText));
         }
     };
 
@@ -53,11 +52,11 @@ const SearchBar = ({ bottom = '56px', onSearch }: SearchProps) => {
     };
 
     const handleClearInput = () => {
-        setSearchTerm('');
-        onSearch('');
+        setSearchText('');
+        dispatch(setSearchTerm(''));
     };
 
-    const isSearchActive = searchTerm.trim().length >= 3;
+    const isSearchActive = searchText.trim().length >= 3;
 
     return (
         <Box
@@ -92,7 +91,7 @@ const SearchBar = ({ bottom = '56px', onSearch }: SearchProps) => {
                         color='customLime.800'
                         _placeholder={{ color: 'customLime.800' }}
                         height={{ base: 8, sm: 8, md: 8, lg: 12 }}
-                        value={searchTerm}
+                        value={searchText}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                     />
@@ -104,7 +103,7 @@ const SearchBar = ({ bottom = '56px', onSearch }: SearchProps) => {
                             lg: 'flex-end',
                         }}
                     >
-                        {searchTerm && (
+                        {searchText && (
                             <IconButton
                                 aria-label='Очистить'
                                 icon={<CloseIcon boxSize='10px' />}

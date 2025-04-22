@@ -1,5 +1,5 @@
 import { Box, Button, Heading, HStack } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -16,7 +16,7 @@ import { ApplicationState } from '~/store/configure-store';
 
 const Main = () => {
     const navigate = useNavigate();
-    const [searchTerm, setSearchTerm] = useState<string>('');
+    // const [searchTerm, setSearchTerm] = useState<string>('');
     const selectedAllergens = useSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
@@ -29,6 +29,7 @@ const Main = () => {
     );
     const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
     const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
+    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
 
     const filteredPopular = useMemo(
         () =>
@@ -79,16 +80,16 @@ const Main = () => {
         ],
     );
 
-    const handleRecipeSearch = (query: string) => {
-        setSearchTerm(query);
-    };
+    // const handleRecipeSearch = (query: string) => {
+    //     setSearchTerm(query);
+    // };
 
     return (
         <Box>
             <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
                 Приятного аппетита!
             </Heading>
-            <SearchBar onSearch={handleRecipeSearch} />
+            <SearchBar />
             {searchTerm.length < 3 && <SliderList />}
 
             {searchTerm.length < 3 && (

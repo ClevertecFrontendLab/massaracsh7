@@ -8,13 +8,11 @@ import {
     MenuItem,
     MenuList,
     Tag,
-    TagCloseButton,
     TagLabel,
     Text,
     useDisclosure,
     VStack,
     Wrap,
-    WrapItem,
 } from '@chakra-ui/react';
 
 interface SearchableSelectProps {
@@ -38,10 +36,6 @@ export const SearchableSelect = ({
         } else {
             onChange([...selectedValues, value]);
         }
-    };
-
-    const handleRemove = (value: string) => {
-        onChange(selectedValues.filter((v) => v !== value));
     };
 
     return (
@@ -98,7 +92,7 @@ export const SearchableSelect = ({
                 </MenuList>
             </Menu>
 
-            {selectedValues.length > 0 && (
+            {/* {selectedValues.length > 0 && (
                 <Wrap mt={2}>
                     {selectedValues.map((value) => {
                         const label = options.find((opt) => opt === value) || value;
@@ -117,7 +111,7 @@ export const SearchableSelect = ({
                         );
                     })}
                 </Wrap>
-            )}
+            )} */}
         </Box>
     );
 };
