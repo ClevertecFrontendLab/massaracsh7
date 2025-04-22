@@ -1,32 +1,101 @@
 import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
+import { authors } from '~/data/authors';
 import { desertDishes, tryDesertDishes } from '~/data/cardsData';
 import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
+import { ApplicationState } from '~/store/configure-store';
 
 const CategoryPage = () => {
-    const { category } = useParams();
+    const { category, subcategory } = useParams();
+    console.log(category, subcategory);
 
     const cat = categories.find((item) => item.url === category);
+    const reipesCategories = useMemo(() => {
+        if (category && subcategory) {
+            return dishes.filter(
+                (dish) =>
+                    dish.category.includes(category) && dish.subcategory.includes(subcategory),
+            );
+        } else if (category) {
+            return dishes.filter((dish) => dish.category.includes(category));
+        }
+        return dishes;
+    }, [category, subcategory]);
 
-    const [selectedAllergens, setSelectedAllergens] = useState<string[]>([]);
-    const [excludeAllergens, setExcludeAllergens] = useState<boolean>(false);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const selectedAllergens = useSelector(
+        (state: ApplicationState) => state.filters.selectedAllergens,
+    );
+    const excludeAllergens = useSelector(
+        (state: ApplicationState) => state.filters.excludeAllergens,
+    );
+    const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
+    const selectedCategories = useSelector(
+        (state: ApplicationState) => state.filters.selectedCategories,
+    );
+    const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
+    const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
+
     const filteredPopular = useMemo(
         () =>
-            dishes.filter((recipe) => {
+            reipesCategories.filter((recipe) => {
                 const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-                return !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
+                const recipeTitle = recipe.title.toLowerCase();
+                const lowerSearch = searchTerm.toLowerCase();
+
+                const passesAllergens =
+                    !excludeAllergens ||
+                    !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
+
+                const passesAuthors =
+                    !selectedAuthors.length ||
+                    authors.some(
+                        (author) =>
+                            selectedAuthors.includes(author.name) &&
+                            author.recipesId.includes(recipe.id),
+                    );
+
+                const passesCategories =
+                    !selectedCategories.length ||
+                    selectedCategories.some((category) => recipe.category.includes(category));
+
+                const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
+
+                const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
+
+                const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
+
+                return (
+                    passesAllergens &&
+                    passesAuthors &&
+                    passesCategories &&
+                    passesMeat &&
+                    passesSide &&
+                    titleMatch
+                );
             }),
-        [selectedAllergens],
+        [
+            selectedAllergens,
+            excludeAllergens,
+            selectedAuthors,
+            selectedCategories,
+            selectedMeat,
+            selectedSide,
+            searchTerm,
+            reipesCategories,
+        ],
     );
+
     const handleRecipeSearch = (query: string) => {
-        console.log('Поиск рецепта:', query);
+        setSearchTerm(query);
     };
 
     return (
@@ -44,14 +113,7 @@ const CategoryPage = () => {
                     вегетарианскую диету и готовить вкусные вегетарианские блюда.
                 </Text>
             </Box>
-            <SearchBar
-                selectedAllergens={selectedAllergens}
-                onChangeSelectedAllergens={setSelectedAllergens}
-                excludeAllergens={excludeAllergens}
-                onToggleExcludeAllergens={() => setExcludeAllergens((prev) => !prev)}
-                onSearch={handleRecipeSearch}
-                bottom='24px'
-            />
+            <SearchBar onSearch={handleRecipeSearch} bottom='24px' />
             <TabsCategory subcategories={cat?.items ?? []} />
             <RecipeList recipes={filteredPopular} gridVariant='low' />
             <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
