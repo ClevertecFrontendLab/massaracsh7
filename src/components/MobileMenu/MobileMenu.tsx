@@ -1,21 +1,33 @@
 import { Box, useDisclosure, useOutsideClick } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
 import { BurgerButton } from '../BurgerButton/BurgerButton';
 import NavigationFooter from '../NavigationFooter/NavigationFooter';
 import NavigationMenu from '../NavigationMenu/NavigationMenu';
 
-const MobileMenu = () => {
+interface MobileMenuProps {
+    onOpenChange?: (isOpen: boolean) => void;
+}
+
+const MobileMenu = ({ onOpenChange }: MobileMenuProps) => {
     const { isOpen, onToggle, onClose } = useDisclosure();
     const menuRef = useRef<HTMLDivElement>(null);
+    const [isAccardeonOpen, setIsAccardeonOpen] = useState(false);
 
     useOutsideClick({
         ref: menuRef as React.RefObject<HTMLElement>,
         handler: () => {
-            if (isOpen) onClose();
+            if (isOpen) {
+                onClose();
+                onOpenChange?.(false);
+            }
         },
     });
+
+    useEffect(() => {
+        onOpenChange?.(isOpen);
+    }, [isOpen, onOpenChange]);
 
     return (
         <Box position='relative' ref={menuRef} zIndex='popover'>
@@ -25,7 +37,7 @@ const MobileMenu = () => {
                 <>
                     <Box
                         position='fixed'
-                        top='64px'
+                        top={isAccardeonOpen ? '64px' : '48px'}
                         left={0}
                         bottom={0}
                         width='100vw'
@@ -39,19 +51,21 @@ const MobileMenu = () => {
                         position='fixed'
                         top='64px'
                         right={0}
-                        height='100vh'
+                        borderRadius='0 0 16px 16px'
+                        bottom='92px'
                         width='80%'
-                        maxW='300px'
+                        maxW='344px'
                         bg='white'
                         boxShadow='lg'
                         zIndex='12'
                         overflowY='auto'
+                        py={4}
                     >
                         <Box>
                             <Breadcrumbs />
                         </Box>
                         <Box>
-                            <NavigationMenu />
+                            <NavigationMenu handleOpen={setIsAccardeonOpen} />
                             <NavigationFooter />
                         </Box>
                     </Box>

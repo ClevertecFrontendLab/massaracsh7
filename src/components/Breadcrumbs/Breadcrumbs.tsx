@@ -13,9 +13,12 @@ const Breadcrumbs = () => {
 
     const category = categories.find((cat) => cat.url === categorySlug);
     const subcategory = category?.items.find((item) => item.subcategory === subcategorySlug);
-    console.log(category, subcategory);
     return (
-        <Breadcrumb separator={<ChevronRightIcon color='gray.800' />}>
+        <Breadcrumb
+            separator={<ChevronRightIcon color='gray.800' />}
+            pl={{ md: '20px' }}
+            pb={{ md: '12px' }}
+        >
             <BreadcrumbItem isCurrentPage={!category}>
                 <BreadcrumbLink
                     as={RouterLink}

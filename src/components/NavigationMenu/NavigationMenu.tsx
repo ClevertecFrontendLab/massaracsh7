@@ -15,14 +15,22 @@ import { NavLink, useNavigate } from 'react-router';
 import { ShevronDown } from '~/assets/icons/icons';
 import categories from '~/data/categories';
 
-const NavigationMenu = () => {
+interface NavProps {
+    handleOpen?: (isOpen: boolean) => void;
+}
+const NavigationMenu = ({ handleOpen }: NavProps) => {
     const navigate = useNavigate();
 
     const [isOpen, setIsOpen] = useState(false);
+    const handleAccordion = () => {
+        const newIsOpen = !isOpen;
+        setIsOpen(newIsOpen);
+        handleOpen?.(newIsOpen);
+    };
 
     return (
         <Accordion
-            onChange={() => setIsOpen(!isOpen)}
+            onChange={handleAccordion}
             allowToggle
             overflowY='auto'
             css={{
@@ -39,7 +47,12 @@ const NavigationMenu = () => {
                     borderRadius: '8px',
                 },
             }}
-            height='calc(100vh - 80px - 144px)'
+            height={{
+                base: 'calc(100vh - 280px)',
+                mid: 'calc(100vh - 280px)',
+                lg: 'calc(100vh - 80px - 144px)',
+                xl: 'calc(100vh - 80px - 144px)',
+            }}
             borderRadius='large'
             boxShadow={isOpen ? 'menu' : 'none'}
         >
