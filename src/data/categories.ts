@@ -38,15 +38,15 @@ const categories = [
     {
         title: 'Вторые блюда',
         icon: '/icons/main-dishes.svg',
-        url: 'main-dishes',
+        url: 'second-dish',
         items: [
-            { subcategory: 'meat-dishes', title: 'Мясные' },
-            { subcategory: 'fish-dishes', title: 'Рыбные' },
-            { subcategory: 'vegetable-dishes', title: 'Овощные' },
-            { subcategory: 'poultry-dishes', title: 'Из птицы' },
-            { subcategory: 'mushroom-dishes', title: 'Из грибов' },
-            { subcategory: 'offal-dishes', title: 'Из субпродуктов' },
-            { subcategory: 'steamed-dishes', title: 'На пару' },
+            { subcategory: 'meat', title: 'Мясные' },
+            { subcategory: 'fish', title: 'Рыбные' },
+            { subcategory: 'vegetable', title: 'Овощные' },
+            { subcategory: 'poultry', title: 'Из птицы' },
+            { subcategory: 'mushroom', title: 'Из грибов' },
+            { subcategory: 'offal', title: 'Из субпродуктов' },
+            { subcategory: 'steamed', title: 'На пару' },
             { subcategory: 'dumplings', title: 'Пельмени, вареники' },
             { subcategory: 'pasta-sides', title: 'Мучные гарниры' },
             { subcategory: 'vegetable-sides', title: 'Овощные гарниры' },
@@ -142,7 +142,7 @@ const categories = [
     {
         title: 'Национальные',
         icon: '/icons/national.svg',
-        url: 'national-cuisines',
+        url: 'national',
         items: [
             { subcategory: 'american', title: 'Американская кухня' },
             { subcategory: 'armenian', title: 'Армянская кухня' },

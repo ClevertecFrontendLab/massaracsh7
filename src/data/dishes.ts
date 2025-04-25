@@ -131,7 +131,7 @@ export const dishes: Recipe[] = [
         description:
             'Тефтели из булгура и чечевицы – яркие и питательные, отлично подходят для постного и вегетарианского меню. Тефтели получаются нежными, а также сочными и ароматными благодаря использованию томатного соуса и душистых пряностей.',
         category: ['vegan', 'second-dish'],
-        subcategory: ['second-dish', 'poultry-dish'],
+        subcategory: ['second-dish', 'poultry'],
         image: 'путь к изображению в вашем проекте',
         bookmarks: 85,
         likes: 152,
@@ -281,8 +281,8 @@ export const dishes: Recipe[] = [
         id: '7',
         title: 'Лапша с курицей и шафраном',
         description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
-        category: ['second-dish'],
-        subcategory: ['poultry-dish'],
+        category: ['second-dish', 'national', 'kids'],
+        subcategory: ['poultry', 'italian', 'second-dish'],
         image: '/images/lapsha.jpg',
         bookmarks: 258,
         likes: 1342,
@@ -382,7 +382,7 @@ export const dishes: Recipe[] = [
         title: 'Кнели со спагетти',
         description:
             'Лёгкие и нежные мясные кнели с томатным соусом и спагетти — прекрасный вариант для уютного ужина.',
-        category: ['main-dishes'],
+        category: ['second-dish'],
         subcategory: ['meat', 'pasta'],
         image: '/images/kneli.jpg',
         bookmarks: 32,
@@ -420,7 +420,7 @@ export const dishes: Recipe[] = [
         title: 'Пряная ветчина по-итальянски',
         description:
             'Ароматная ветчина, маринованная с пряностями и обжаренная до румяной корочки.',
-        category: ['main-dishes'],
+        category: ['second-dish'],
         subcategory: ['meat'],
         image: '/images/vetchina.jpg',
         bookmarks: 45,

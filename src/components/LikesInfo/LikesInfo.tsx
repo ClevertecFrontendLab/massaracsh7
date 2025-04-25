@@ -3,9 +3,10 @@ import { HStack, Image, Text } from '@chakra-ui/react';
 interface LikesAndCommentsInfoProps {
     likes?: number;
     comments?: number;
+    size?: string;
 }
 
-const LikesInfo = ({ likes, comments }: LikesAndCommentsInfoProps) => {
+const LikesInfo = ({ likes, comments, size = 'limeSmall' }: LikesAndCommentsInfoProps) => {
     if (!likes && !comments) return null;
 
     return (
@@ -13,13 +14,13 @@ const LikesInfo = ({ likes, comments }: LikesAndCommentsInfoProps) => {
             {likes !== undefined && likes > 0 && (
                 <HStack spacing={1}>
                     <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />
-                    <Text textStyle='limeSmall'>{likes}</Text>
+                    <Text textStyle={size}>{likes}</Text>
                 </HStack>
             )}
             {comments !== undefined && comments > 0 && (
                 <HStack spacing={1}>
                     <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />
-                    <Text textStyle='limeSmall'>{comments}</Text>
+                    <Text textStyle={size}>{comments}</Text>
                 </HStack>
             )}
         </HStack>

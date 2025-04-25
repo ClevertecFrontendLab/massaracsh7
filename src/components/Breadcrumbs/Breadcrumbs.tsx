@@ -3,6 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { Link as RouterLink, useLocation } from 'react-router';
 
 import categories from '~/data/categories';
+import { dishes } from '~/data/dishes';
 
 const Breadcrumbs = () => {
     const location = useLocation();
@@ -10,9 +11,12 @@ const Breadcrumbs = () => {
 
     const categorySlug = pathSegments[0];
     const subcategorySlug = pathSegments[1];
+    const dishSlug = pathSegments[2];
+    console.log(pathSegments);
 
     const category = categories.find((cat) => cat.url === categorySlug);
     const subcategory = category?.items.find((item) => item.subcategory === subcategorySlug);
+    const dish = dishes?.find((item) => item.id === dishSlug);
     return (
         <Breadcrumb
             separator={<ChevronRightIcon color='gray.800' />}
@@ -42,16 +46,22 @@ const Breadcrumbs = () => {
             )}
 
             {subcategory && (
-                <BreadcrumbItem isCurrentPage>
+                <BreadcrumbItem isCurrentPage={!dish}>
                     <BreadcrumbLink
                         as={RouterLink}
                         to={`/${categorySlug}/${subcategorySlug}`}
-                        textStyle='navActive'
+                        textStyle={dish ? 'navInactive' : 'navActive'}
                     >
                         {subcategory.title}
                     </BreadcrumbLink>
                 </BreadcrumbItem>
             )}
+
+            {dish ? (
+                <BreadcrumbItem isCurrentPage>
+                    <BreadcrumbLink textStyle='navActive'>{dish.title}</BreadcrumbLink>
+                </BreadcrumbItem>
+            ) : null}
         </Breadcrumb>
     );
 };

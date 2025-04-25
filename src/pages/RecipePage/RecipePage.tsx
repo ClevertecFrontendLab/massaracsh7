@@ -5,6 +5,7 @@ import {
     Button,
     Card,
     Flex,
+    Grid,
     Heading,
     HStack,
     Image,
@@ -13,8 +14,8 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
-    Stack,
     Text,
+    VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router';
@@ -34,40 +35,51 @@ const RecipePage = () => {
 
     return (
         <>
-            <Box>
-                <Flex direction={{ base: 'column', md: 'row' }} gap={8}>
+            <Box pt={6}>
+                <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
                     <Image
                         src={recipe?.image}
                         alt={recipe?.title}
                         objectFit='cover'
-                        borderRadius='2xl'
-                        maxW={{ md: '480px' }}
+                        borderRadius='medium'
+                        width={{ sm: '328px', md: '232px', lg: '353px', xl: '553px' }}
+                        height='410px'
                     />
-                    <Box flex='1'>
-                        <HStack spacing={3} justify='space-between' align='center'>
-                            {recipe?.category.map((catUrl) => (
-                                <Badge
-                                    variant='lime150'
-                                    position={{
-                                        base: 'static',
-                                        sm: 'absolute',
-                                        md: 'absolute',
-                                        lg: 'static',
-                                    }}
-                                    top={{ sm: 2, md: 2 }}
-                                    left={{ sm: 2, md: 2 }}
-                                    p={{ sm: '0', md: '0' }}
-                                >
-                                    <CategoryBadge key={catUrl} categoryUrl={catUrl} />
-                                </Badge>
-                            ))}
-                            <LikesInfo likes={recipe?.likes} comments={recipe?.bookmarks} />
+                    <Box flex='1' display='flex' flexDirection='column'>
+                        <HStack spacing={3} justify='space-between' align='center' mb={10}>
+                            <HStack spacing={1} align='center'>
+                                {recipe?.category.map((catUrl) => (
+                                    <Badge
+                                        variant='lime150'
+                                        position={{
+                                            base: 'static',
+                                            sm: 'absolute',
+                                            md: 'absolute',
+                                            lg: 'static',
+                                        }}
+                                        top={{ sm: 2, md: 2 }}
+                                        left={{ sm: 2, md: 2 }}
+                                        p={{ sm: '0', md: '0' }}
+                                    >
+                                        <CategoryBadge key={catUrl} categoryUrl={catUrl} />
+                                    </Badge>
+                                ))}
+                            </HStack>
+                            <LikesInfo
+                                likes={recipe?.likes}
+                                comments={recipe?.bookmarks}
+                                size='limeMd'
+                            />
                         </HStack>
-                        <Heading variant='pageTitle'>{recipe?.title}</Heading>
-                        <Text fontSize='sm' mt={2} mb={4}>
-                            {recipe?.description}
-                        </Text>
-                        <HStack spacing={4}>
+                        <Box maxW='528px'>
+                            <Heading variant='pageTitle' textAlign='left' mb={6}>
+                                {recipe?.title}
+                            </Heading>
+                            <Text textAlign='left' mt={2} mb={4}>
+                                {recipe?.description}
+                            </Text>
+                        </Box>
+                        <HStack spacing={4} mt='auto' justify='space-between' alignItems='flex-end'>
                             <Badge variant='gray06'>
                                 <HStack
                                     gap={{ base: 0.5, md: 0.5, lg: 2 }}
@@ -78,153 +90,220 @@ const RecipePage = () => {
                                     <Text>{recipe?.time}</Text>
                                 </HStack>
                             </Badge>
-                            <Button
-                                size='sm'
-                                leftIcon={<Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />}
-                                variant='outline'
-                            >
-                                Оценить рецепт
-                            </Button>
-                            <Button
-                                size='sm'
-                                leftIcon={
-                                    <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />
-                                }
-                                colorScheme='green'
-                            >
-                                Сохранить в закладки
-                            </Button>
-                        </HStack>
-                    </Box>
-                </Flex>
-                <Text>* Калорийность на 1 порцию</Text>
-                <Flex mt={8} justify='space-between' gap={4} wrap='wrap'>
-                    {[
-                        { label: 'ККАЛ', value: recipe?.nutritionValue.calories },
-                        { label: 'БЕЛКИ', value: recipe?.nutritionValue.proteins },
-                        { label: 'ЖИРЫ', value: recipe?.nutritionValue.fats },
-                        { label: 'УГЛЕВОДЫ', value: recipe?.nutritionValue.carbohydrates },
-                    ].map((item) => (
-                        <Box
-                            key={item.label}
-                            p={4}
-                            borderWidth='1px'
-                            borderRadius='lg'
-                            textAlign='center'
-                            flex='1'
-                            minW='100px'
-                        >
-                            <Text fontSize='2xl' fontWeight='bold'>
-                                {item.value}
-                            </Text>
-                            <Text fontSize='sm' color='gray.500'>
-                                {item.label}
-                            </Text>
-                        </Box>
-                    ))}
-                </Flex>
-
-                <Box mt={12}>
-                    <Heading size='md' mb={4}>
-                        <HStack justify='space-between'>
-                            <Text>Ингредиенты</Text>
-                            <HStack>
-                                <Text>Порций</Text>
-                                <NumberInput
-                                    size='sm'
-                                    maxW={100}
-                                    min={1}
-                                    value={portions}
-                                    onChange={(value) => setPortions(Number(value))}
+                            <HStack spacing={4}>
+                                <Button
+                                    leftIcon={
+                                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='16px' />
+                                    }
+                                    variant='outline'
+                                    colorScheme='black'
+                                    py={4}
+                                    px={6}
+                                    height='48px'
                                 >
-                                    <NumberInputField />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
+                                    <Text textStyle='nameText'>Оценить рецепт</Text>
+                                </Button>
+                                <Button
+                                    leftIcon={
+                                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='16px' />
+                                    }
+                                    variant='limeSolid'
+                                    py={4}
+                                    px={6}
+                                    height='48px'
+                                >
+                                    <Text textStyle='nameText'>Сохранить в закладки</Text>
+                                </Button>
                             </HStack>
                         </HStack>
-                    </Heading>
-                    <Box as='ul' pl={4}>
-                        {recipe?.ingredients.map((ingredient, index) => (
-                            <Flex
-                                key={index}
-                                justify='space-between'
-                                borderBottom='1px solid #eee'
-                                py={2}
-                            >
-                                <Text>{ingredient.title}</Text>
-                                <Text color='gray.600'>
-                                    {ingredient.count} {ingredient.measureUnit}
-                                </Text>
-                            </Flex>
-                        ))}
                     </Box>
-                </Box>
-
-                <Box mt={12}>
-                    <Heading size='md' mb={6}>
-                        Шаги приготовления
-                    </Heading>
-                    <Stack spacing={6}>
-                        {recipe?.steps.map((step, idx) => (
-                            <Card>
-                                <Flex key={idx} direction={{ base: 'column', md: 'row' }} gap={4}>
-                                    {step.image && (
-                                        <Image
-                                            src={step.image}
-                                            alt={`Шаг ${step.stepNumber}`}
-                                            borderRadius='xl'
-                                            w={{ base: '100%', md: '250px' }}
-                                            h='auto'
-                                            objectFit='cover'
-                                        />
-                                    )}
-                                    <Box>
-                                        <Text fontWeight='bold' mb={2}>
-                                            Шаг {step.stepNumber}
-                                        </Text>
-                                        <Text fontSize='sm'>{step.description}</Text>
-                                    </Box>
-                                </Flex>
-                            </Card>
-                        ))}
-                    </Stack>
-                </Box>
-
-                <Box mt={12} p={6} bg='customLime.300' borderRadius='xl'>
-                    <HStack spacing={4}>
-                        <Avatar
-                            src={author.imageUrl}
-                            name={author.name}
-                            w={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
-                            h={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
-                        />
-                        <Box>
-                            <Text fontWeight='bold'>{author.name}</Text>
-                            <Text>{author.username}</Text>
-                            <Button
-                                variant='blackSolid'
-                                mt={1}
-                                leftIcon={
-                                    <Image
-                                        src='/icons/followIcon.svg'
-                                        alt='Подписаться'
-                                        boxSize='16px'
-                                    />
-                                }
+                </Flex>
+                <VStack maxW='668px' mx='auto' pt={10} alignItems='left'>
+                    <Text color='darkText' mb='12px'>
+                        * Калорийность на 1 порцию
+                    </Text>
+                    <Flex justify='space-between' gap={4} wrap='wrap' mb='40px'>
+                        {[
+                            {
+                                label: 'калорийность',
+                                value: recipe?.nutritionValue.calories,
+                                unit: 'ККАЛ',
+                            },
+                            {
+                                label: 'белки',
+                                value: recipe?.nutritionValue.proteins,
+                                unit: 'ГРАММ',
+                            },
+                            { label: 'жиры', value: recipe?.nutritionValue.fats, unit: 'ГРАММ' },
+                            {
+                                label: 'углеводы',
+                                value: recipe?.nutritionValue.carbohydrates,
+                                unit: 'ГРАММ',
+                            },
+                        ].map((item) => (
+                            <VStack
+                                key={item.label}
+                                p={4}
+                                spacing={3}
+                                borderWidth='1px'
+                                borderColor='rgba(0, 0, 0, 0.08)'
+                                borderRadius='xlarge'
+                                textAlign='center'
+                                flex='1'
+                                width='117px'
                             >
-                                Подписаться
-                            </Button>
-                        </Box>
-                        <HStack>
-                            <Image src='/icons/people.svg' alt='numbers' boxSize='16px' />{' '}
-                            <Text textStyle='limeSmall'>{author.numbers}</Text>
+                                <Text color='secondaryText'>{item.label}</Text>
+                                <Heading
+                                    variant='sectionBlogTitle'
+                                    fontWeight='600'
+                                    color='customLime.800'
+                                >
+                                    {item.value}
+                                </Heading>
+                                <Text fontWeight='bold' color='rgba(0, 0, 0, 0.92)'>
+                                    {item.unit}
+                                </Text>
+                            </VStack>
+                        ))}
+                    </Flex>
+
+                    <Box mb={8}>
+                        <Heading size='md' mb={2}>
+                            <HStack justify='space-between'>
+                                <Text textStyle='limeSmall' textTransform='uppercase' px={6}>
+                                    Ингредиенты
+                                </Text>
+                                <HStack>
+                                    <Text textStyle='limeSmall' textTransform='uppercase' px={2}>
+                                        Порций
+                                    </Text>
+                                    <NumberInput
+                                        textStyle='nav'
+                                        maxW={90}
+                                        min={1}
+                                        value={portions}
+                                        onChange={(value) => setPortions(Number(value))}
+                                    >
+                                        <NumberInputField />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                </HStack>
+                            </HStack>
+                        </Heading>
+                        <Grid templateColumns='1fr 1fr'>
+                            {recipe?.ingredients.map((ingredient, index) => (
+                                <>
+                                    <Box
+                                        py={4}
+                                        px={6}
+                                        bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
+                                    >
+                                        <Text color='colorBlack'>{ingredient.title}</Text>
+                                    </Box>
+
+                                    <Box
+                                        py={4}
+                                        px={6}
+                                        bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
+                                        textAlign='right'
+                                    >
+                                        <Text color='colorBlack'>
+                                            {ingredient.count} {ingredient.measureUnit}
+                                        </Text>
+                                    </Box>
+                                </>
+                            ))}
+                        </Grid>
+                    </Box>
+
+                    <Box mb={8}>
+                        <Heading variant='pageTitle' textAlign='left' mb={5} fontWeight='500'>
+                            Шаги приготовления
+                        </Heading>
+                        <VStack spacing='18px'>
+                            {recipe?.steps.map((step, index) => (
+                                <Card w='100%'>
+                                    <Flex
+                                        key={index}
+                                        direction={{ base: 'column', md: 'row' }}
+                                        gap={4}
+                                    >
+                                        {step.image && (
+                                            <Image
+                                                src={step.image}
+                                                alt={`Шаг ${step.stepNumber}`}
+                                                w={{ base: '100%', xl: '346px' }}
+                                                h='244px'
+                                                objectFit='cover'
+                                            />
+                                        )}
+                                        <Box
+                                            py='22px'
+                                            pl={step.image ? '8px' : '24px'}
+                                            pr='24px'
+                                            flex={step.image ? 'auto' : 1}
+                                        >
+                                            <Badge
+                                                variant='gray06'
+                                                mb='18px'
+                                                textTransform='capitalize'
+                                            >
+                                                Шаг {step.stepNumber}
+                                            </Badge>
+                                            <Text>{step.description}</Text>
+                                        </Box>
+                                    </Flex>
+                                </Card>
+                            ))}
+                        </VStack>
+                    </Box>
+
+                    <Box p={6} bg='customLime.300' borderRadius='xl'>
+                        <HStack spacing={4} alignItems='stretch'>
+                            <Avatar
+                                src={author.imageUrl}
+                                name={author.name}
+                                w={{ base: '32px', md: '32px', lg: '96px', xl: '96px' }}
+                                h={{ base: '32px', md: '32px', lg: '96px', xl: '96px' }}
+                            />
+                            <Box>
+                                <Heading variant='nameTitle' mb={1}>
+                                    {author.name}
+                                </Heading>
+                                <Text mb={4}>{author.username}</Text>
+                                <Button
+                                    bg='#000000'
+                                    color='white'
+                                    h='24px'
+                                    fontSize='12px'
+                                    lineHeight='16px'
+                                    px={2}
+                                    leftIcon={
+                                        <Image
+                                            src='/icons/followIcon.svg'
+                                            alt='Подписаться'
+                                            boxSize='12px'
+                                        />
+                                    }
+                                >
+                                    Подписаться
+                                </Button>
+                            </Box>
+                            <VStack justify='space-between' alignItems='flex-end' ml='auto'>
+                                <Text>Автор рецепта</Text>
+                                <HStack py={1} px={1.5}>
+                                    <Image src='/icons/people.svg' alt='numbers' boxSize='12px' />{' '}
+                                    <Text textStyle='limeSmall'>{author.numbers}</Text>
+                                </HStack>
+                            </VStack>
                         </HStack>
-                    </HStack>
-                </Box>
+                    </Box>
+                </VStack>
             </Box>
+
             <SliderList />
         </>
     );

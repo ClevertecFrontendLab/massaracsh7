@@ -97,6 +97,23 @@ const Heading = defineStyleConfig({
                 xl: '28px',
             },
         },
+        nameTitle: {
+            fontWeight: 700,
+            fontSize: {
+                base: '16px',
+                sm: '16px',
+                md: '16px',
+                lg: '24px',
+                xl: '24px',
+            },
+            lineHeight: {
+                base: '24px',
+                sm: '24px',
+                md: '24px',
+                lg: '32px',
+                xl: '32px',
+            },
+        },
     },
 });
 
@@ -289,6 +306,8 @@ const theme = extendTheme({
         secondaryText: 'rgba(0, 0, 0, 0.64)',
         grayText: 'rgba(0, 0, 0, 0.48)',
         lightText: 'rgba(0, 0, 0, 0.24)',
+        darkText: 'rgba(0, 0, 0, 0.8)',
+        colorBlack: 'rgba(0, 0, 0, 0.92)',
 
         customLime: {
             50: '#ffffd3',
@@ -331,6 +350,12 @@ const theme = extendTheme({
             fontWeight: 600,
             fontSize: 'sm',
             lineHeight: '16px',
+            color: 'customLime.600',
+        },
+        limeMd: {
+            fontWeight: 600,
+            fontSize: 'md',
+            lineHeight: '20px',
             color: 'customLime.600',
         },
         limeLg: {
