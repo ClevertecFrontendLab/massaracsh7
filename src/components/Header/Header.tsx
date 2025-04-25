@@ -15,7 +15,7 @@ const Header = () => {
             mb={isMenuOpen ? '16px' : '8px'}
             py={4}
             data-test-id='header'
-            w='100vw'
+            w='100%'
         >
             <Box
                 maxW='1920px'

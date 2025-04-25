@@ -1,4 +1,15 @@
-import { Badge, Card, CardBody, Heading, Hide, HStack, Image, Link, Text } from '@chakra-ui/react';
+import {
+    Badge,
+    Card,
+    CardBody,
+    Heading,
+    Hide,
+    HStack,
+    Image,
+    Link,
+    Text,
+    VStack,
+} from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router';
 
 import { Recipe } from '~/types/typeRecipe';
@@ -63,23 +74,24 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
                     </Text>
                 </Hide>
                 <HStack spacing={3} justify='space-between' align='center'>
-                    {recipe.category.map((catUrl, index) => (
-                        <Badge
-                            key={catUrl + index}
-                            variant='lime150'
-                            position={{
-                                base: 'static',
-                                sm: 'absolute',
-                                md: 'absolute',
-                                lg: 'static',
-                            }}
-                            top={{ sm: 2, md: 2 }}
-                            left={{ sm: 2, md: 2 }}
-                            p={{ sm: '0', md: '0' }}
-                        >
-                            <CategoryBadge categoryUrl={catUrl} />
-                        </Badge>
-                    ))}
+                    <VStack
+                        position='absolute'
+                        align='flex-start'
+                        top={{ base: 2, md: 2, lg: 'auto' }}
+                        bottom={{ base: 'auto', lg: 4, xl: 4 }}
+                        left={{ sm: 2, md: 2, lg: 5, xl: 5 }}
+                    >
+                        {recipe.category.slice(0, 2).map((catUrl, index) => (
+                            <Badge
+                                key={catUrl + index}
+                                variant='lime150'
+                                p={{ sm: '0', md: '0' }}
+                                maxW='100%'
+                            >
+                                <CategoryBadge categoryUrl={catUrl} />
+                            </Badge>
+                        ))}
+                    </VStack>
                     <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />
                 </HStack>
             </CardBody>

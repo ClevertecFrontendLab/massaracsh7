@@ -21,6 +21,8 @@ const SliderList = () => {
             position='relative'
             mb={{ sm: '30px', md: '30px', lg: '40px', xl: '44px' }}
             w='100%'
+            maxW='100%'
+            overflowX='hidden'
         >
             <Heading variant='sectionTitle' mb={{ sm: 3, md: 3, lg: 6, xl: 6 }}>
                 Новые рецепты
@@ -78,6 +80,10 @@ const SliderList = () => {
                         slidesPerView: 2,
                         spaceBetween: 10,
                     },
+                    480: {
+                        slidesPerView: 3,
+                        spaceBetween: 10,
+                    },
                     768: {
                         slidesPerView: 4,
                         spaceBetween: 10,
@@ -95,6 +101,7 @@ const SliderList = () => {
                         spaceBetween: 24,
                     },
                 }}
+                style={{ maxWidth: '1360px', width: '100%', margin: '0 auto' }}
             >
                 {newRecipes.map((recipe) => (
                     <SwiperSlide key={recipe.id}>

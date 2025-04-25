@@ -91,16 +91,6 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.sideTypes.length ||
         filters.excludeAllergens;
 
-    // const removeTag = (value: string) => {
-    //     setFilters((prev) => ({
-    //         ...prev,
-    //         categories: prev.categories.filter((v) => v !== value),
-    //         authors: prev.authors.filter((v) => v !== value),
-    //         meatTypes: prev.meatTypes.filter((v) => v !== value),
-    //         sideTypes: prev.sideTypes.filter((v) => v !== value),
-    //     }));
-    // };
-
     return (
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
             <DrawerOverlay />

@@ -12,6 +12,7 @@ import {
     Link,
     Show,
     Text,
+    VStack,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router';
 
@@ -58,7 +59,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => (
                     justify='right'
                     mb={{ md: '1', lg: '7', xl: '7' }}
                 >
-                    <HStack
+                    <VStack
                         position={{
                             base: 'static',
                             sm: 'absolute',
@@ -68,13 +69,14 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => (
                         }}
                         top={{ sm: '8px', md: '8px', lg: '16px', xl: '16px' }}
                         left={{ sm: '8px', md: '8px' }}
+                        align='flex-start'
                     >
                         {recipe.category.map((catUrl, index) => (
                             <Badge key={catUrl + index} variant='lime50' p={{ sm: '0', md: '0' }}>
                                 <CategoryBadge categoryUrl={catUrl} />
                             </Badge>
                         ))}
-                    </HStack>
+                    </VStack>
                     <Box px={1}>
                         <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />
                     </Box>

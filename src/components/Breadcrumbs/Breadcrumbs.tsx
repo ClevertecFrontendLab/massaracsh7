@@ -20,8 +20,11 @@ const Breadcrumbs = () => {
     return (
         <Breadcrumb
             separator={<ChevronRightIcon color='gray.800' />}
-            pl={{ md: '20px' }}
-            pb={{ md: '12px' }}
+            pl={{ sm: '20px', md: '20px' }}
+            pb={{ sm: '12px', md: '12px' }}
+            listProps={{
+                style: { flexWrap: 'wrap' },
+            }}
         >
             <BreadcrumbItem isCurrentPage={!category}>
                 <BreadcrumbLink

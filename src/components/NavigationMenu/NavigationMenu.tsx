@@ -17,8 +17,9 @@ import categories from '~/data/categories';
 
 interface NavProps {
     handleOpen?: (isOpen: boolean) => void;
+    onClose?: () => void;
 }
-const NavigationMenu = ({ handleOpen }: NavProps) => {
+const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
     const navigate = useNavigate();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -98,6 +99,9 @@ const NavigationMenu = ({ handleOpen }: NavProps) => {
                                     _hover={{
                                         bg: 'customLime.50',
                                         borderLeft: '1px solid transparent',
+                                    }}
+                                    onClick={() => {
+                                        onClose?.();
                                     }}
                                 >
                                     <NavLink

@@ -60,7 +60,7 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => {
 
     return (
         <Box
-            width={{ base: '100%', sm: '328px', md: '448px', lg: '518px' }}
+            width={{ base: '100%', sm: '328px', md: '448px', lg: '518px', xl: '518px' }}
             mb={{ sm: '32px', md: '32px', lg: bottom, xl: bottom }}
             mx='auto'
         >

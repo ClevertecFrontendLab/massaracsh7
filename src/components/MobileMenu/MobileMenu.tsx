@@ -52,8 +52,8 @@ const MobileMenu = ({ onOpenChange }: MobileMenuProps) => {
                         top={isAccardeonOpen ? '64px' : '48px'}
                         left={0}
                         bottom={0}
-                        width='100vw'
-                        height='100vh'
+                        width='100%'
+                        height='100%'
                         bg='blackAlpha.300'
                         onClick={onClose}
                         zIndex='11'
@@ -77,7 +77,7 @@ const MobileMenu = ({ onOpenChange }: MobileMenuProps) => {
                             <Breadcrumbs />
                         </Box>
                         <Box>
-                            <NavigationMenu handleOpen={setIsAccardeonOpen} />
+                            <NavigationMenu handleOpen={setIsAccardeonOpen} onClose={onClose} />
                             <NavigationFooter />
                         </Box>
                     </Box>
