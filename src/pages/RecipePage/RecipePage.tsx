@@ -14,6 +14,7 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
+    Stack,
     Text,
     VStack,
 } from '@chakra-ui/react';
@@ -41,45 +42,36 @@ const RecipePage = () => {
     };
 
     return (
-        <>
-            <Box pt={6}>
-                <Flex direction={{ base: 'column', md: 'row' }} gap={6}>
+        <Box>
+            <Box pt={6} mb={{ base: 10, sm: 10, md: 10, lg: 8, xl: 8 }}>
+                <Flex
+                    flexDirection={{ base: 'column', sm: 'column', md: 'row' }}
+                    gap={{ sm: 4, md: 4, lg: 6, xl: 6 }}
+                >
                     <Image
                         src={recipe?.image}
                         alt={recipe?.title}
                         objectFit='cover'
                         borderRadius='medium'
-                        width={{ sm: '328px', md: '232px', lg: '353px', xl: '553px' }}
-                        height='410px'
+                        width={{ base: '100%', sm: '100%', md: '232px', lg: '353px', xl: '553px' }}
+                        height={{ base: 'auto', sm: 'auto', md: '224px', lg: '410px', xl: '410px' }}
                     />
-                    <Box flex='1' display='flex' flexDirection='column'>
-                        <HStack spacing={3} justify='space-between' align='center' mb={10}>
-                            <HStack spacing={1} align='center'>
+                    <Flex flex='1' flexDirection='column'>
+                        <HStack spacing={3} justify='space-between' align='flex-start' mb={10}>
+                            <Flex gap={2} align='center' wrap='wrap'>
                                 {recipe?.category.map((catUrl, index) => (
-                                    <Badge
-                                        key={index}
-                                        variant='lime150'
-                                        position={{
-                                            base: 'static',
-                                            sm: 'absolute',
-                                            md: 'absolute',
-                                            lg: 'static',
-                                        }}
-                                        top={{ sm: 2, md: 2 }}
-                                        left={{ sm: 2, md: 2 }}
-                                        p={{ sm: '0', md: '0' }}
-                                    >
+                                    <Badge key={index} variant='lime50'>
                                         <CategoryBadge categoryUrl={catUrl} />
                                     </Badge>
                                 ))}
-                            </HStack>
+                            </Flex>
                             <LikesInfo
                                 likes={recipe?.likes}
                                 comments={recipe?.bookmarks}
                                 size='limeMd'
                             />
                         </HStack>
-                        <Box maxW='528px'>
+                        <Box maxW={{ sm: '100%', md: '503px', lg: '503px', xl: '528px' }}>
                             <Heading variant='pageTitle' textAlign='left' mb={6}>
                                 {recipe?.title}
                             </Heading>
@@ -87,7 +79,13 @@ const RecipePage = () => {
                                 {recipe?.description}
                             </Text>
                         </Box>
-                        <HStack spacing={4} mt='auto' justify='space-between' alignItems='flex-end'>
+                        <HStack
+                            spacing={4}
+                            mt='auto'
+                            justify='space-between'
+                            alignItems='flex-end'
+                            wrap='wrap'
+                        >
                             <Badge variant='gray06'>
                                 <HStack
                                     gap={{ base: 0.5, md: 0.5, lg: 2 }}
@@ -95,42 +93,90 @@ const RecipePage = () => {
                                     px={{ sm: 1, md: 1, lg: 2, xl: 2 }}
                                 >
                                     <Image src='/icons/BsAlarm.svg' alt='alarm' boxSize='16px' />
-                                    <Text>{recipe?.time}</Text>
+                                    <Text textTransform='lowercase'>{recipe?.time}</Text>
                                 </HStack>
                             </Badge>
                             <HStack spacing={4}>
                                 <Button
                                     leftIcon={
-                                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='16px' />
+                                        <Image
+                                            src='/icons/BsEmojiHeartEyes.svg'
+                                            boxSize={{ base: '14px', lg: '14px', xl: '16px' }}
+                                        />
                                     }
                                     variant='outline'
                                     colorScheme='black'
-                                    py={4}
-                                    px={6}
-                                    height='48px'
+                                    py={{ base: '6px', lg: '6px', xl: '4' }}
+                                    px={{ base: '3', lg: '3', xl: '6' }}
+                                    height={{ sm: '24px', md: '24px', lg: '32px', xl: '48px' }}
                                 >
-                                    <Text textStyle='nameText'>Оценить рецепт</Text>
+                                    <Text
+                                        fontWeight='500'
+                                        fontSize={{
+                                            base: '12px',
+                                            md: '12px',
+                                            lg: '14px',
+                                            xl: '18px',
+                                        }}
+                                        lineHeight={{
+                                            base: '16px',
+                                            md: '16px',
+                                            lg: '20px',
+                                            xl: '28px',
+                                        }}
+                                    >
+                                        Оценить рецепт
+                                    </Text>
                                 </Button>
                                 <Button
                                     leftIcon={
-                                        <Image src='/icons/BsBookmarkHeart.svg' boxSize='16px' />
+                                        <Image
+                                            src='/icons/BsBookmarkHeart.svg'
+                                            boxSize={{ base: '14px', lg: '14px', xl: '16px' }}
+                                        />
                                     }
                                     variant='limeSolid'
-                                    py={4}
-                                    px={6}
-                                    height='48px'
+                                    py={{ base: '6px', lg: '6px', xl: '4' }}
+                                    px={{ base: '3', lg: '3', xl: '6' }}
+                                    height={{ sm: '24px', md: '24px', lg: '32px', xl: '48px' }}
                                 >
-                                    <Text textStyle='nameText'>Сохранить в закладки</Text>
+                                    <Text
+                                        fontWeight='500'
+                                        fontSize={{
+                                            base: '12px',
+                                            md: '12px',
+                                            lg: '14px',
+                                            xl: '18px',
+                                        }}
+                                        lineHeight={{
+                                            base: '16px',
+                                            md: '16px',
+                                            lg: '20px',
+                                            xl: '28px',
+                                        }}
+                                    >
+                                        Сохранить в закладки
+                                    </Text>
                                 </Button>
                             </HStack>
                         </HStack>
-                    </Box>
+                    </Flex>
                 </Flex>
-                <VStack maxW='668px' mx='auto' pt={10} alignItems='left'>
+                <VStack
+                    maxW={{ sm: '100%', md: '100%', lg: '668px', xl: '668px' }}
+                    mx='auto'
+                    pt={{ sm: 6, md: 6, lg: 10, xl: 10 }}
+                    alignItems='left'
+                >
                     <Text color='darkText' mb='12px'>
                         * Калорийность на 1 порцию
                     </Text>
-                    <Flex justify='space-between' gap={4} wrap='wrap' mb='40px'>
+                    <Flex
+                        flexDirection={{ sm: 'column', md: 'row' }}
+                        justify='space-between'
+                        gap={4}
+                        mb={{ sm: '6', md: '10', lg: '10', xl: '10' }}
+                    >
                         {[
                             {
                                 label: 'калорийность',
@@ -149,18 +195,21 @@ const RecipePage = () => {
                                 unit: 'ГРАММ',
                             },
                         ].map((item, index) => (
-                            <VStack
+                            <Stack
                                 key={index}
                                 p={4}
+                                flexDirection={{ sm: 'row', md: 'column' }}
                                 spacing={3}
                                 borderWidth='1px'
                                 borderColor='rgba(0, 0, 0, 0.08)'
                                 borderRadius='xlarge'
-                                textAlign='center'
+                                align='center'
                                 flex='1'
-                                width='117px'
+                                width={{ sm: '100%', md: '117px' }}
                             >
-                                <Text color='secondaryText'>{item.label}</Text>
+                                <Text color='secondaryText' mr={{ sm: 'auto' }}>
+                                    {item.label}
+                                </Text>
                                 <Heading
                                     variant='sectionBlogTitle'
                                     fontWeight='600'
@@ -171,14 +220,18 @@ const RecipePage = () => {
                                 <Text fontWeight='bold' color='rgba(0, 0, 0, 0.92)'>
                                     {item.unit}
                                 </Text>
-                            </VStack>
+                            </Stack>
                         ))}
                     </Flex>
 
-                    <Box mb={8}>
+                    <Box w={{ sm: '100%', md: '604px' }} mb={8} mx='auto'>
                         <Heading size='md' mb={2}>
                             <HStack justify='space-between'>
-                                <Text textStyle='limeSmall' textTransform='uppercase' px={6}>
+                                <Text
+                                    textStyle='limeSmall'
+                                    textTransform='uppercase'
+                                    px={{ md: '6' }}
+                                >
                                     Ингредиенты
                                 </Text>
                                 <HStack>
@@ -237,72 +290,126 @@ const RecipePage = () => {
                         </Grid>
                     </Box>
 
-                    <Box mb={8}>
+                    <Box w={{ md: '604px' }} mb={8} mx='auto'>
                         <Heading variant='pageTitle' textAlign='left' mb={5} fontWeight='500'>
                             Шаги приготовления
                         </Heading>
                         <VStack spacing='18px'>
                             {recipe?.steps.map((step, index) => (
                                 <Card key={index} w='100%'>
-                                    <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                                    <HStack gap={{ sm: 0, md: 2, lg: 4, xl: 4 }}>
                                         {step.image && (
                                             <Image
                                                 src={step.image}
                                                 alt={`Шаг ${step.stepNumber}`}
-                                                w={{ base: '100%', xl: '346px' }}
-                                                h='244px'
+                                                w={{
+                                                    base: '158px',
+                                                    md: '158px',
+                                                    lg: '346px',
+                                                    xl: '346px',
+                                                }}
+                                                h={{
+                                                    base: '128px',
+                                                    md: '128px',
+                                                    lg: '244px',
+                                                    xl: '244px',
+                                                }}
                                                 objectFit='cover'
                                             />
                                         )}
                                         <Box
-                                            py='22px'
-                                            pl={step.image ? '8px' : '24px'}
+                                            py={{ sm: '2px', md: '8px', lg: '22px', xl: '22px' }}
+                                            pl={
+                                                step.image
+                                                    ? '8px'
+                                                    : {
+                                                          base: '8px',
+                                                          md: '8px',
+                                                          lg: '24px',
+                                                          xl: '24px',
+                                                      }
+                                            }
                                             pr='24px'
                                             flex={step.image ? 'auto' : 1}
                                         >
                                             <Badge
-                                                variant='gray06'
+                                                variant={
+                                                    index === recipe.steps.length - 1
+                                                        ? 'lime50'
+                                                        : 'gray06'
+                                                }
                                                 mb='18px'
                                                 textTransform='capitalize'
                                             >
                                                 Шаг {step.stepNumber}
                                             </Badge>
-                                            <Text>{step.description}</Text>
+                                            <Text
+                                                textStyle='cutText'
+                                                sx={{
+                                                    WebkitLineClamp: { sm: 4 },
+                                                }}
+                                            >
+                                                {step.description}
+                                            </Text>
                                         </Box>
-                                    </Flex>
+                                    </HStack>
                                 </Card>
                             ))}
                         </VStack>
                     </Box>
 
-                    <Box p={6} bg='customLime.300' borderRadius='xl'>
-                        <HStack spacing={4} alignItems='stretch'>
-                            <Avatar
-                                src={author.imageUrl}
-                                name={author.name}
-                                w={{ base: '32px', md: '32px', lg: '96px', xl: '96px' }}
-                                h={{ base: '32px', md: '32px', lg: '96px', xl: '96px' }}
-                            />
-                            <Box>
-                                <Heading variant='nameTitle' mb={1}>
+                    <Box
+                        w={{ sm: '100%', md: '604px' }}
+                        p={{ sm: '3', md: '6', lg: '6', xl: '6' }}
+                        bg='customLime.300'
+                        borderRadius='xl'
+                        mx='auto'
+                    >
+                        <HStack
+                            spacing={{ sm: '1', md: '4', lg: '4', xl: '4' }}
+                            alignItems='stretch'
+                        >
+                            <Avatar src={author.imageUrl} name={author.name} w='96px' h='96px' />
+                            <Box w={{ sm: '150px' }} mr={{ sm: '-40px' }}>
+                                <Heading variant='nameTitle' mb={1} pt={{ sm: '14px' }}>
                                     {author.name}
                                 </Heading>
-                                <Text mb={4}>{author.username}</Text>
+                                <Text mb={{ sm: '2', md: '4' }}>{author.username}</Text>
                                 <Button
-                                    variant='limeSolid'
+                                    bg='#000000'
+                                    color='white'
+                                    h='24px'
+                                    fontSize='12px'
+                                    lineHeight='16px'
+                                    px={2}
                                     leftIcon={
-                                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='16px' />
+                                        <Image
+                                            src='/icons/followIcon.svg'
+                                            alt='Подписаться'
+                                            boxSize='12px'
+                                        />
                                     }
                                 >
-                                    Оценить рецепт
+                                    Подписаться
                                 </Button>
                             </Box>
+                            <VStack
+                                justify='space-between'
+                                alignItems='flex-end'
+                                ml={{ sm: '-20px', md: 'auto', lg: 'auto', xl: 'auto' }}
+                            >
+                                <Text>Автор рецепта</Text>
+                                <HStack py={1} px={1.5}>
+                                    <Image src='/icons/people.svg' alt='numbers' boxSize='12px' />
+                                    <Text textStyle='limeSmall'>{author.numbers}</Text>
+                                </HStack>
+                            </VStack>
                         </HStack>
                     </Box>
                 </VStack>
             </Box>
             <SliderList />
-        </>
+        </Box>
     );
 };
 

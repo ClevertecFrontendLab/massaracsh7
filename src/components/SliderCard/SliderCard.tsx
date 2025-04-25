@@ -18,7 +18,13 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
     >
         <Card
             variant='basic'
-            position={{ base: 'static', sm: 'relative', md: 'relative', lg: 'static' }}
+            position={{
+                base: 'static',
+                sm: 'relative',
+                md: 'relative',
+                lg: 'static',
+                xl: 'static',
+            }}
         >
             <Image
                 src={recipe.image}
@@ -41,6 +47,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
                     sx={{
                         WebkitLineClamp: { base: 2, md: 2, lg: 1 },
                     }}
+                    minH={{ md: 12 }}
                 >
                     {recipe.title}
                 </Heading>

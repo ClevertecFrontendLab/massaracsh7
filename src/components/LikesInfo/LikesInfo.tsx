@@ -10,7 +10,7 @@ const LikesInfo = ({ likes, comments, size = 'limeSmall' }: LikesAndCommentsInfo
     if (!likes && !comments) return null;
 
     return (
-        <HStack spacing={3.5} px={1}>
+        <HStack spacing={3.5} px={1} width='100%' justify='flex-end'>
             {likes !== undefined && likes > 0 && (
                 <HStack spacing={1}>
                     <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />
