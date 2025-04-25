@@ -33,6 +33,13 @@ const RecipePage = () => {
     const author = authors[0];
     const [portions, setPortions] = useState(recipe?.portions ?? 1);
 
+    const getAdjustedCount = (ingredientCount: number, initialPortions: number) =>
+        (ingredientCount * portions) / initialPortions;
+
+    const handlePortionsChange = (value: string) => {
+        setPortions(Number(value));
+    };
+
     return (
         <>
             <Box pt={6}>
@@ -48,8 +55,9 @@ const RecipePage = () => {
                     <Box flex='1' display='flex' flexDirection='column'>
                         <HStack spacing={3} justify='space-between' align='center' mb={10}>
                             <HStack spacing={1} align='center'>
-                                {recipe?.category.map((catUrl) => (
+                                {recipe?.category.map((catUrl, index) => (
                                     <Badge
+                                        key={index}
                                         variant='lime150'
                                         position={{
                                             base: 'static',
@@ -61,7 +69,7 @@ const RecipePage = () => {
                                         left={{ sm: 2, md: 2 }}
                                         p={{ sm: '0', md: '0' }}
                                     >
-                                        <CategoryBadge key={catUrl} categoryUrl={catUrl} />
+                                        <CategoryBadge categoryUrl={catUrl} />
                                     </Badge>
                                 ))}
                             </HStack>
@@ -140,9 +148,9 @@ const RecipePage = () => {
                                 value: recipe?.nutritionValue.carbohydrates,
                                 unit: 'ГРАММ',
                             },
-                        ].map((item) => (
+                        ].map((item, index) => (
                             <VStack
-                                key={item.label}
+                                key={index}
                                 p={4}
                                 spacing={3}
                                 borderWidth='1px'
@@ -182,7 +190,7 @@ const RecipePage = () => {
                                         maxW={90}
                                         min={1}
                                         value={portions}
-                                        onChange={(value) => setPortions(Number(value))}
+                                        onChange={(value) => handlePortionsChange(value)}
                                     >
                                         <NumberInputField />
                                         <NumberInputStepper>
@@ -194,28 +202,38 @@ const RecipePage = () => {
                             </HStack>
                         </Heading>
                         <Grid templateColumns='1fr 1fr'>
-                            {recipe?.ingredients.map((ingredient, index) => (
-                                <>
-                                    <Box
-                                        py={4}
-                                        px={6}
-                                        bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
-                                    >
-                                        <Text color='colorBlack'>{ingredient.title}</Text>
-                                    </Box>
+                            {recipe?.ingredients.map((ingredient, index) => {
+                                const newCount = getAdjustedCount(
+                                    Number(ingredient.count),
+                                    recipe?.portions ?? 1,
+                                );
 
-                                    <Box
-                                        py={4}
-                                        px={6}
-                                        bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
-                                        textAlign='right'
-                                    >
-                                        <Text color='colorBlack'>
-                                            {ingredient.count} {ingredient.measureUnit}
-                                        </Text>
-                                    </Box>
-                                </>
-                            ))}
+                                return (
+                                    <>
+                                        <Box
+                                            py={4}
+                                            px={6}
+                                            bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
+                                        >
+                                            <Text color='colorBlack'>{ingredient.title}</Text>
+                                        </Box>
+
+                                        <Box
+                                            py={4}
+                                            px={6}
+                                            bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
+                                            textAlign='right'
+                                        >
+                                            <Text color='colorBlack'>
+                                                {ingredient.measureUnit === 'по вкусу'
+                                                    ? ingredient.count
+                                                    : newCount.toFixed(2)}{' '}
+                                                {ingredient.measureUnit}
+                                            </Text>
+                                        </Box>
+                                    </>
+                                );
+                            })}
                         </Grid>
                     </Box>
 
@@ -225,12 +243,8 @@ const RecipePage = () => {
                         </Heading>
                         <VStack spacing='18px'>
                             {recipe?.steps.map((step, index) => (
-                                <Card w='100%'>
-                                    <Flex
-                                        key={index}
-                                        direction={{ base: 'column', md: 'row' }}
-                                        gap={4}
-                                    >
+                                <Card key={index} w='100%'>
+                                    <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
                                         {step.image && (
                                             <Image
                                                 src={step.image}
@@ -275,35 +289,18 @@ const RecipePage = () => {
                                 </Heading>
                                 <Text mb={4}>{author.username}</Text>
                                 <Button
-                                    bg='#000000'
-                                    color='white'
-                                    h='24px'
-                                    fontSize='12px'
-                                    lineHeight='16px'
-                                    px={2}
+                                    variant='limeSolid'
                                     leftIcon={
-                                        <Image
-                                            src='/icons/followIcon.svg'
-                                            alt='Подписаться'
-                                            boxSize='12px'
-                                        />
+                                        <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='16px' />
                                     }
                                 >
-                                    Подписаться
+                                    Оценить рецепт
                                 </Button>
                             </Box>
-                            <VStack justify='space-between' alignItems='flex-end' ml='auto'>
-                                <Text>Автор рецепта</Text>
-                                <HStack py={1} px={1.5}>
-                                    <Image src='/icons/people.svg' alt='numbers' boxSize='12px' />{' '}
-                                    <Text textStyle='limeSmall'>{author.numbers}</Text>
-                                </HStack>
-                            </VStack>
                         </HStack>
                     </Box>
                 </VStack>
             </Box>
-
             <SliderList />
         </>
     );
