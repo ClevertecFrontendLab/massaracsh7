@@ -9,6 +9,7 @@ import {
     MenuButton,
     MenuItem,
     MenuList,
+    ResponsiveValue,
     Tag,
     TagLabel,
     useDisclosure,
@@ -21,7 +22,11 @@ import { allergens } from '~/data/allergens';
 import { ApplicationState } from '~/store/configure-store';
 import { setSelectedAllergens } from '~/store/filter-slice';
 
-const MultipleSelect = () => {
+interface MultipleSelectProps {
+    width: ResponsiveValue<string>;
+}
+
+const MultipleSelect = ({ width }: MultipleSelectProps) => {
     const dispatch = useDispatch();
     const selected = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
     const [newAllergen, setNewAllergen] = useState('');
@@ -54,19 +59,32 @@ const MultipleSelect = () => {
                     />
                 }
                 variant='outline'
-                w='234px'
+                w={width}
                 fontSize='16px'
                 fontWeight='400'
-                lineHeight='24px'
+                lineHeight='1.5'
                 color='secondaryText'
-                py={4}
+                borderColor='customLime.300'
+                bg='white'
+                py='10px'
                 pr={2}
+                whiteSpace='normal'
+                _hover={{ bg: 'white' }}
+                _expanded={{ bg: 'white' }}
+                height='auto'
             >
                 {selected.length > 0 ? (
                     <Wrap spacing={2}>
                         {selected.map((item) => (
-                            <Tag size='sm' key={item} borderRadius='full' variant='solid'>
-                                <TagLabel>{item}</TagLabel>
+                            <Tag
+                                size='sm'
+                                key={item}
+                                borderRadius='6px'
+                                bg='white'
+                                border='1px solid'
+                                borderColor='customLime.400'
+                            >
+                                <TagLabel color='customLime.600'>{item}</TagLabel>
                             </Tag>
                         ))}
                     </Wrap>
@@ -75,9 +93,13 @@ const MultipleSelect = () => {
                 )}
             </MenuButton>
 
-            <MenuList maxH='300px' overflowY='auto' p={3} zIndex='11'>
-                {allergens.map((option) => (
-                    <MenuItem key={option.value} p={0}>
+            <MenuList maxH='300px' overflowY='auto' borderRadius='6px' zIndex='11' w={width}>
+                {allergens.map((option, index) => (
+                    <MenuItem
+                        key={option.value}
+                        p={0}
+                        bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
+                    >
                         <Checkbox
                             isChecked={selected.includes(option.label)}
                             onChange={() => handleSelect(option.label)}
@@ -89,18 +111,25 @@ const MultipleSelect = () => {
                     </MenuItem>
                 ))}
 
-                <Box p={2} display='flex' alignItems='center'>
+                <Box display='flex' alignItems='center' p={2}>
                     <Input
                         placeholder='Другой аллерген'
-                        size='sm'
+                        size='md'
                         mr={2}
                         value={newAllergen}
                         onChange={(e) => setNewAllergen(e.target.value)}
+                        borderColor='blackAlpha.200'
+                        focusBorderColor='blackAlpha.200'
+                        _hover={{ borderColor: 'blackAlpha.200' }}
                     />
                     <IconButton
-                        size='sm'
-                        icon={<AddIcon />}
+                        size='12px'
+                        p='4px'
+                        icon={<AddIcon boxSize='8px' />}
                         onClick={handleAddCustom}
+                        bg='customLime.600'
+                        color='white'
+                        borderRadius='50%'
                         aria-label='Добавить аллерген'
                     />
                 </Box>

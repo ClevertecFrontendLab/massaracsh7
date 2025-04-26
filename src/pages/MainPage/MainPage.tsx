@@ -16,7 +16,6 @@ import { ApplicationState } from '~/store/configure-store';
 
 const Main = () => {
     const navigate = useNavigate();
-    // const [searchTerm, setSearchTerm] = useState<string>('');
     const selectedAllergens = useSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
@@ -80,17 +79,22 @@ const Main = () => {
         ],
     );
 
-    // const handleRecipeSearch = (query: string) => {
-    //     setSearchTerm(query);
-    // };
-
     return (
         <Box>
-            <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
-                Приятного аппетита!
-            </Heading>
-            <SearchBar />
-            {searchTerm.length < 3 && <SliderList />}
+            <Box
+                boxShadow={
+                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
+                }
+                pb={8}
+                mb={6}
+                borderRadius={6}
+            >
+                <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
+                    Приятного аппетита!
+                </Heading>
+                <SearchBar />
+            </Box>
+            {searchTerm.length < 3 && <SliderList recipes={filteredPopular} />}
 
             {searchTerm.length < 3 && (
                 <>
@@ -134,13 +138,15 @@ const Main = () => {
                 Вся подборка
             </Button>
 
-            <BlogList />
-            <KitchenSection
-                title='Веганская кухня'
-                description='Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.'
-                veganDishes={veganDishes}
-                tryDishes={tryDishes}
-            />
+            {searchTerm.length < 3 && <BlogList />}
+            {searchTerm.length < 3 && (
+                <KitchenSection
+                    title='Веганская кухня'
+                    description='Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.'
+                    veganDishes={veganDishes}
+                    tryDishes={tryDishes}
+                />
+            )}
         </Box>
     );
 };

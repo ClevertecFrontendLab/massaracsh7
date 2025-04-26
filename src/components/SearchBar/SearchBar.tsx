@@ -20,11 +20,7 @@ import { setSearchTerm, toggleExcludeAllergens } from '~/store/filter-slice';
 
 import FilterDrawer from '../Drawer/Drawer';
 
-interface SearchProps {
-    bottom?: string;
-}
-
-const SearchBar = ({ bottom = '56px' }: SearchProps) => {
+const SearchBar = () => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
     const dispatch = useDispatch();
@@ -59,11 +55,7 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => {
     const isSearchActive = searchText.trim().length >= 3;
 
     return (
-        <Box
-            width={{ base: '100%', sm: '328px', md: '448px', lg: '518px', xl: '518px' }}
-            mb={{ sm: '32px', md: '32px', lg: bottom, xl: bottom }}
-            mx='auto'
-        >
+        <Box width={{ base: '100%', sm: '328px', md: '448px', lg: '518px', xl: '518px' }} mx='auto'>
             <HStack spacing={{ base: 3, sm: 3, md: 3, lg: 4 }} w='100%' mb={4}>
                 <IconButton
                     aria-label='Фильтр поиска'
@@ -94,6 +86,8 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => {
                         value={searchText}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
+                        focusBorderColor='blackAlpha.200'
+                        _hover={{ borderColor: 'blackAlpha.200' }}
                     />
                     <InputRightElement
                         alignItems={{
@@ -102,6 +96,7 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => {
                             md: 'flex-start',
                             lg: 'flex-end',
                         }}
+                        right={searchText ? '10px' : '0'}
                     >
                         {searchText && (
                             <IconButton
@@ -126,16 +121,17 @@ const SearchBar = ({ bottom = '56px' }: SearchProps) => {
             </HStack>
 
             <Hide below='md'>
-                <HStack spacing='15px' w='100%' mb={6}>
+                <HStack spacing='15px' w='100%'>
                     <HStack spacing={3} py={1.5} pl={2}>
                         <Text textStyle='descriptionText'>Исключить мои аллергены</Text>
                         <Switch
                             size='md'
                             isChecked={excludeAllergens}
                             onChange={() => dispatch(toggleExcludeAllergens())}
+                            bg='lime.400'
                         />
                     </HStack>
-                    <MultipleSelect />
+                    <MultipleSelect width='234px' />
                 </HStack>
             </Hide>
         </Box>

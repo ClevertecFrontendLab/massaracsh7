@@ -5,12 +5,16 @@ import { Keyboard, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ArrowLeft, ArrowRight } from '~/assets/icons/icons';
-import { dishes } from '~/data/dishes';
+import { Recipe } from '~/types/typeRecipe';
 
 import SliderCard from '../SliderCard/SliderCard';
 
-const SliderList = () => {
-    const newRecipes = dishes
+interface SliderListProps {
+    recipes: Recipe[];
+}
+
+const SliderList = ({ recipes }: SliderListProps) => {
+    const newRecipes = recipes
         .slice()
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .slice(0, 9);

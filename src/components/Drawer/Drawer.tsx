@@ -1,3 +1,4 @@
+import { CloseIcon } from '@chakra-ui/icons';
 import {
     Box,
     Button,
@@ -10,6 +11,7 @@ import {
     DrawerHeader,
     DrawerOverlay,
     HStack,
+    IconButton,
     Stack,
     Switch,
     Tag,
@@ -94,9 +96,27 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     return (
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
             <DrawerOverlay />
-            <DrawerContent>
-                <DrawerHeader>Фильтры</DrawerHeader>
-                <DrawerBody>
+            <DrawerContent
+                position='relative'
+                maxW={{ sm: '344px', md: '344px', lg: '463px', xl: '463px' }}
+                p={8}
+            >
+                <HStack justify='space-between' align='center' mb={6}>
+                    <DrawerHeader p={0}>Фильтры</DrawerHeader>
+                    <IconButton
+                        icon={<CloseIcon boxSize='10px' />}
+                        onClick={onClose}
+                        aria-label='Закрыть фильтр'
+                        size='24px'
+                        bg='black'
+                        color='white'
+                        borderRadius='full'
+                        p={2}
+                        _hover={{ bg: 'gray.700' }}
+                    />
+                </HStack>
+
+                <DrawerBody p={0}>
                     <VStack align='stretch' spacing={4}>
                         <SearchableSelect
                             label='Категория'
@@ -105,7 +125,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                             onChange={(val) => setFilters((f) => ({ ...f, categories: val }))}
                         />
                         <SearchableSelect
-                            label='Автор'
+                            label='Поиск по автору'
                             options={authorOptions}
                             selectedValues={filters.authors}
                             onChange={(val) => setFilters((f) => ({ ...f, authors: val }))}
@@ -119,9 +139,11 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    <Checkbox value='говядина'>Говядина</Checkbox>
                                     <Checkbox value='курица'>Курица</Checkbox>
-                                    <Checkbox value='рыба'>Рыба</Checkbox>
+                                    <Checkbox value='свинина'>Свинина</Checkbox>
+                                    <Checkbox value='говядина'>Говядина</Checkbox>
+                                    <Checkbox value='индейка'>Индейка</Checkbox>
+                                    <Checkbox value='утка'>Утка</Checkbox>
                                 </Stack>
                             </CheckboxGroup>
                         </Box>
@@ -134,9 +156,14 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    <Checkbox value='овощи'>Овощи</Checkbox>
-                                    <Checkbox value='картофель'>Картофель</Checkbox>
+                                    <Checkbox value='картошка'>Картошка</Checkbox>
+                                    <Checkbox value='гречка'>Гречка</Checkbox>
+                                    <Checkbox value='паста'>Паста</Checkbox>
+                                    <Checkbox value='спагетти'>Спагетти</Checkbox>
                                     <Checkbox value='рис'>Рис</Checkbox>
+                                    <Checkbox value='капуста'>Капуста</Checkbox>
+                                    <Checkbox value='фасоль'>Фасоль</Checkbox>
+                                    <Checkbox value='другие овощи'>Другие овощи</Checkbox>
                                 </Stack>
                             </CheckboxGroup>
                         </Box>
@@ -153,7 +180,9 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             />
                         </HStack>
-                        <MultipleSelect />
+                        <MultipleSelect
+                            width={{ sm: '308px', md: '308px', lg: '399px', xl: '399px' }}
+                        />
 
                         <Box>
                             <Text mb={2}>Выбранные фильтры:</Text>
@@ -164,26 +193,56 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                     ...filters.meatTypes,
                                     ...filters.sideTypes,
                                 ].map((tag) => (
-                                    <Tag key={tag} variant='subtle' colorScheme='green'>
-                                        <TagLabel>{tag}</TagLabel>
+                                    <Tag
+                                        size='sm'
+                                        key={tag}
+                                        borderRadius='6px'
+                                        bg='white'
+                                        border='1px solid'
+                                        borderColor='customLime.400'
+                                    >
+                                        <TagLabel color='customLime.600'>{tag}</TagLabel>
                                     </Tag>
                                 ))}
                                 {filters.excludeAllergens && allergens.length > 0 && (
-                                    <Tag variant='subtle' colorScheme='red'>
+                                    <>
                                         {allergens.map((item) => (
-                                            <TagLabel>{item}</TagLabel>
+                                            <Tag
+                                                size='sm'
+                                                key={item}
+                                                borderRadius='6px'
+                                                bg='white'
+                                                border='1px solid'
+                                                borderColor='customLime.400'
+                                            >
+                                                <TagLabel color='customLime.600'>{item}</TagLabel>
+                                            </Tag>
                                         ))}
-                                    </Tag>
+                                    </>
                                 )}
                             </HStack>
                         </Box>
                     </VStack>
                 </DrawerBody>
-                <DrawerFooter justifyContent='space-between'>
-                    <Button variant='outline' onClick={handleClear}>
+                <DrawerFooter justifyContent='center' gap={2} mt='20px' py='0'>
+                    <Button
+                        variant='outline'
+                        h='48px'
+                        borderColor='black'
+                        onClick={handleClear}
+                        size='large'
+                    >
                         Очистить фильтр
                     </Button>
-                    <Button colorScheme='green' onClick={handleSearch} isDisabled={!anySelected}>
+                    <Button
+                        variant='solid'
+                        color='white'
+                        bg='black'
+                        h='48px'
+                        onClick={handleSearch}
+                        isDisabled={!anySelected}
+                        size='large'
+                    >
                         Найти рецепт
                     </Button>
                 </DrawerFooter>

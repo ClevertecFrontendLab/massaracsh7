@@ -40,9 +40,6 @@ export const SearchableSelect = ({
 
     return (
         <Box>
-            <Text mb={2} fontWeight='bold'>
-                {label}
-            </Text>
             <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnSelect={false}>
                 <MenuButton
                     as={Button}
@@ -61,23 +58,37 @@ export const SearchableSelect = ({
                     color='secondaryText'
                     py={4}
                     pr={2}
+                    _hover={{ bg: 'white' }}
+                    _expanded={{ bg: 'white' }}
                 >
                     {selectedValues.length > 0 ? (
                         <Wrap spacing={2}>
                             {selectedValues.map((item) => (
-                                <Tag size='sm' key={item} borderRadius='full' variant='solid'>
-                                    <TagLabel>{item}</TagLabel>
+                                <Tag
+                                    size='sm'
+                                    key={item}
+                                    borderRadius='6px'
+                                    bg='white'
+                                    border='1px solid'
+                                    borderColor='customLime.400'
+                                >
+                                    <TagLabel color='customLime.600'>{item}</TagLabel>
                                 </Tag>
                             ))}
                         </Wrap>
                     ) : (
-                        'Выберите из списка...'
+                        <Text textAlign='left'>{label}</Text>
                     )}
                 </MenuButton>
-                <MenuList maxH='300px' overflowY='auto' p={3} zIndex='11' w='100%'>
-                    <VStack align='start' spacing={1}>
-                        {options.map((option) => (
-                            <MenuItem key={option} p={0} w='100%'>
+                <MenuList maxH='300px' overflowY='auto' p={0} zIndex='11' w='399px'>
+                    <VStack align='stretch' spacing={1}>
+                        {options.map((option, index) => (
+                            <MenuItem
+                                key={option}
+                                p={0}
+                                w='100%'
+                                bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
+                            >
                                 <Checkbox
                                     isChecked={selectedValues.includes(option)}
                                     onChange={() => handleToggle(option)}
@@ -91,27 +102,6 @@ export const SearchableSelect = ({
                     </VStack>
                 </MenuList>
             </Menu>
-
-            {/* {selectedValues.length > 0 && (
-                <Wrap mt={2}>
-                    {selectedValues.map((value) => {
-                        const label = options.find((opt) => opt === value) || value;
-                        return (
-                            <WrapItem key={value}>
-                                <Tag
-                                    size='sm'
-                                    borderRadius='full'
-                                    variant='solid'
-                                    colorScheme='green'
-                                >
-                                    <TagLabel>{label}</TagLabel>
-                                    <TagCloseButton onClick={() => handleRemove(value)} />
-                                </Tag>
-                            </WrapItem>
-                        );
-                    })}
-                </Wrap>
-            )} */}
         </Box>
     );
 };
