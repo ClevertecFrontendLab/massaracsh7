@@ -25,6 +25,7 @@ const Breadcrumbs = () => {
             listProps={{
                 style: { flexWrap: 'wrap' },
             }}
+            data-test-id='breadcrumbs'
         >
             <BreadcrumbItem isCurrentPage={!category}>
                 <BreadcrumbLink

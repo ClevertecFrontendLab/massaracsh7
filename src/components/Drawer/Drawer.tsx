@@ -94,12 +94,12 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.excludeAllergens;
 
     return (
-        <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
+        <Drawer isOpen={isOpen} placement='right' onClose={onClose} data-test-id='filter-drawer'>
             <DrawerOverlay />
             <DrawerContent
                 position='relative'
                 maxW={{ sm: '344px', md: '344px', lg: '463px', xl: '463px' }}
-                p={8}
+                p={{ sm: '4', md: '4', mid: '4', lg: '8', xl: '8' }}
             >
                 <HStack justify='space-between' align='center' mb={6}>
                     <DrawerHeader p={0}>Фильтры</DrawerHeader>
@@ -113,6 +113,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderRadius='full'
                         p={2}
                         _hover={{ bg: 'gray.700' }}
+                        data-test-id='close-filter-drawer'
                     />
                 </HStack>
 
@@ -156,7 +157,9 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    <Checkbox value='картошка'>Картошка</Checkbox>
+                                    <Checkbox value='картошка' data-test-id='checkbox-картошка'>
+                                        Картошка
+                                    </Checkbox>
                                     <Checkbox value='гречка'>Гречка</Checkbox>
                                     <Checkbox value='паста'>Паста</Checkbox>
                                     <Checkbox value='спагетти'>Спагетти</Checkbox>
@@ -178,10 +181,18 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         excludeAllergens: e.target.checked,
                                     }))
                                 }
+                                data-test-id='allergens-switcher-filter'
                             />
                         </HStack>
                         <MultipleSelect
-                            width={{ sm: '308px', md: '308px', lg: '399px', xl: '399px' }}
+                            width={{
+                                sm: '100%',
+                                md: '100%',
+                                mid: '100%',
+                                lg: '399px',
+                                xl: '399px',
+                            }}
+                            sourse='drawer'
                         />
 
                         <Box>
@@ -200,6 +211,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         bg='white'
                                         border='1px solid'
                                         borderColor='customLime.400'
+                                        data-test-id='filter-tag'
                                     >
                                         <TagLabel color='customLime.600'>{tag}</TagLabel>
                                     </Tag>
@@ -231,6 +243,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderColor='black'
                         onClick={handleClear}
                         size='large'
+                        data-test-id='clear-filter-button'
                     >
                         Очистить фильтр
                     </Button>
@@ -242,6 +255,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         onClick={handleSearch}
                         isDisabled={!anySelected}
                         size='large'
+                        data-test-id='find-recipe-button'
                     >
                         Найти рецепт
                     </Button>

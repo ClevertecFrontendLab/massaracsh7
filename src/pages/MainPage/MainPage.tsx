@@ -94,7 +94,7 @@ const Main = () => {
                 </Heading>
                 <SearchBar />
             </Box>
-            {searchTerm.length < 3 && <SliderList recipes={filteredPopular} />}
+            {searchTerm.length < 3 && <SliderList recipes={filteredPopular.slice(-10)} />}
 
             {searchTerm.length < 3 && (
                 <>

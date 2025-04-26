@@ -17,7 +17,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
     const newRecipes = recipes
         .slice()
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 9);
+        .slice(0, 10);
 
     return (
         <Box
@@ -47,6 +47,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
                     color='customLime.50'
                     borderRadius='small'
                     zIndex={10}
+                    data-test-id='carousel-forward'
                 />
             </Hide>
 
@@ -65,10 +66,12 @@ const SliderList = ({ recipes }: SliderListProps) => {
                     color='customLime.50'
                     borderRadius='small'
                     zIndex={10}
+                    data-test-id='carousel-back'
                 />
             </Hide>
 
             <Swiper
+                data-test-id='carousel'
                 loop={true}
                 modules={[Navigation, Keyboard]}
                 keyboard={{ enabled: true }}
@@ -107,8 +110,8 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 }}
                 style={{ maxWidth: '1360px', width: '100%', margin: '0 auto' }}
             >
-                {newRecipes.map((recipe) => (
-                    <SwiperSlide key={recipe.id}>
+                {newRecipes.map((recipe, index) => (
+                    <SwiperSlide key={recipe.id} data-test-id={`carousel-card-${index}`}>
                         <SliderCard recipe={recipe} />
                     </SwiperSlide>
                 ))}

@@ -9,7 +9,13 @@ interface BurgerButtonProps {
 export const BurgerButton = ({ isOpen, onToggle }: BurgerButtonProps) => (
     <IconButton
         aria-label={isOpen ? 'Закрыть меню' : 'Открыть/меню'}
-        icon={isOpen ? <CloseIcon /> : <HamburgerIcon w='20px' h='20px' />}
+        icon={
+            isOpen ? (
+                <CloseIcon data-test-id='close-icon' />
+            ) : (
+                <HamburgerIcon w='20px' h='20px' data-test-id='hamburger-icon' />
+            )
+        }
         variant='ghost'
         colorScheme='black'
         onClick={onToggle}

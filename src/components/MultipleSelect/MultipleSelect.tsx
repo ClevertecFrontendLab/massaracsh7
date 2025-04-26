@@ -24,9 +24,10 @@ import { setSelectedAllergens } from '~/store/filter-slice';
 
 interface MultipleSelectProps {
     width: ResponsiveValue<string>;
+    sourse?: string;
 }
 
-const MultipleSelect = ({ width }: MultipleSelectProps) => {
+const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
     const dispatch = useDispatch();
     const selected = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
     const [newAllergen, setNewAllergen] = useState('');
@@ -44,6 +45,13 @@ const MultipleSelect = ({ width }: MultipleSelectProps) => {
         if (newAllergen.trim() && !selected.includes(newAllergen.trim())) {
             dispatch(setSelectedAllergens([...selected, newAllergen.trim()]));
             setNewAllergen('');
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleAddCustom();
         }
     };
 
@@ -72,6 +80,9 @@ const MultipleSelect = ({ width }: MultipleSelectProps) => {
                 _hover={{ bg: 'white' }}
                 _expanded={{ bg: 'white' }}
                 height='auto'
+                data-test-id={
+                    sourse === 'drawer' ? 'allergens-menu-button-filter' : 'allergens-menu-button'
+                }
             >
                 {selected.length > 0 ? (
                     <Wrap spacing={2}>
@@ -93,7 +104,14 @@ const MultipleSelect = ({ width }: MultipleSelectProps) => {
                 )}
             </MenuButton>
 
-            <MenuList maxH='300px' overflowY='auto' borderRadius='6px' zIndex='11' w={width}>
+            <MenuList
+                maxH='300px'
+                overflowY='auto'
+                borderRadius='6px'
+                zIndex='11'
+                w={width}
+                data-test-id='allergens-menu'
+            >
                 {allergens.map((option, index) => (
                     <MenuItem
                         key={option.value}
@@ -105,6 +123,7 @@ const MultipleSelect = ({ width }: MultipleSelectProps) => {
                             onChange={() => handleSelect(option.label)}
                             p={2}
                             w='100%'
+                            data-test-id={`allergen-${index}`}
                         >
                             {option.label}
                         </Checkbox>
@@ -121,6 +140,8 @@ const MultipleSelect = ({ width }: MultipleSelectProps) => {
                         borderColor='blackAlpha.200'
                         focusBorderColor='blackAlpha.200'
                         _hover={{ borderColor: 'blackAlpha.200' }}
+                        data-test-id='add-other-allergen'
+                        onKeyDown={handleKeyDown}
                     />
                     <IconButton
                         size='12px'
@@ -131,6 +152,7 @@ const MultipleSelect = ({ width }: MultipleSelectProps) => {
                         color='white'
                         borderRadius='50%'
                         aria-label='Добавить аллерген'
+                        data-test-id='add-allergen-button'
                     />
                 </Box>
             </MenuList>

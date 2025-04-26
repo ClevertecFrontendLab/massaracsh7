@@ -41,6 +41,8 @@ const RecipePage = () => {
         setPortions(Number(value));
     };
 
+    const filteredPopular = dishes.slice(-10);
+
     return (
         <Box>
             <Box pt={6} mb={{ base: 10, sm: 10, md: 10, lg: 8, xl: 8 }}>
@@ -247,8 +249,8 @@ const RecipePage = () => {
                                     >
                                         <NumberInputField />
                                         <NumberInputStepper>
-                                            <NumberIncrementStepper />
-                                            <NumberDecrementStepper />
+                                            <NumberIncrementStepper data-test-id='increment-stepper' />
+                                            <NumberDecrementStepper data-test-id='decrement-stepper' />
                                         </NumberInputStepper>
                                     </NumberInput>
                                 </HStack>
@@ -278,9 +280,11 @@ const RecipePage = () => {
                                             textAlign='right'
                                         >
                                             <Text color='colorBlack'>
-                                                {ingredient.measureUnit === 'по вкусу'
-                                                    ? ingredient.count
-                                                    : newCount.toFixed(2)}{' '}
+                                                <span data-test-id={`ingredient-quantity-${index}`}>
+                                                    {ingredient.measureUnit === 'по вкусу'
+                                                        ? ingredient.count
+                                                        : newCount.toFixed(2)}
+                                                </span>
                                                 {ingredient.measureUnit}
                                             </Text>
                                         </Box>
@@ -408,7 +412,7 @@ const RecipePage = () => {
                     </Box>
                 </VStack>
             </Box>
-            <SliderList />
+            <SliderList recipes={filteredPopular} />
         </Box>
     );
 };

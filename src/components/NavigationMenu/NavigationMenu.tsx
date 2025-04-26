@@ -31,6 +31,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
 
     return (
         <Accordion
+            data-test-id='nav'
             onChange={handleAccordion}
             allowToggle
             overflowY='auto'
@@ -60,6 +61,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>
                     <AccordionButton
+                        data-test-id={`${category}`}
                         _hover={{ bg: 'customLime.50' }}
                         _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
                         height='48px'
@@ -110,7 +112,14 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                                             `custom-nav-link${isActive ? ' active' : ''}`
                                         }
                                     >
-                                        {item.title}
+                                        {({ isActive }) => (
+                                            <Box
+                                                as='span'
+                                                data-test-id={`${item.subcategory}${isActive ? '-active' : ''}`}
+                                            >
+                                                {item.title}
+                                            </Box>
+                                        )}
                                     </NavLink>
                                 </ListItem>
                             ))}

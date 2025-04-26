@@ -60,6 +60,7 @@ export const SearchableSelect = ({
                     pr={2}
                     _hover={{ bg: 'white' }}
                     _expanded={{ bg: 'white' }}
+                    data-test-id={label === 'Категория' ? 'filter-menu-button-категория' : ''}
                 >
                     {selectedValues.length > 0 ? (
                         <Wrap spacing={2}>
@@ -80,7 +81,13 @@ export const SearchableSelect = ({
                         <Text textAlign='left'>{label}</Text>
                     )}
                 </MenuButton>
-                <MenuList maxH='300px' overflowY='auto' p={0} zIndex='11' w='399px'>
+                <MenuList
+                    maxH='300px'
+                    overflowY='auto'
+                    p={0}
+                    zIndex='11'
+                    w={{ sm: '308px', md: '308px', mid: '308px', lg: '399px', xl: '399px' }}
+                >
                     <VStack align='stretch' spacing={1}>
                         {options.map((option, index) => (
                             <MenuItem
@@ -94,6 +101,11 @@ export const SearchableSelect = ({
                                     onChange={() => handleToggle(option)}
                                     p={2}
                                     w='100%'
+                                    data-test-id={
+                                        option === 'Веганская кухня'
+                                            ? 'checkbox-веганская кухня'
+                                            : ''
+                                    }
                                 >
                                     {option}
                                 </Checkbox>

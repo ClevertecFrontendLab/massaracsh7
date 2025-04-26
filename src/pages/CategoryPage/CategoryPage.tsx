@@ -100,20 +100,32 @@ const CategoryPage = () => {
 
     return (
         <Box>
-            <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}>
-                {cat?.title}
-            </Heading>
             <Box
-                width={{ sm: '100%', md: '100%', lg: '700px', xl: '700px' }}
-                mx='auto'
-                mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
+                boxShadow={
+                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
+                }
+                pb={8}
+                mb={6}
+                borderRadius={6}
             >
-                <Text textAlign='center' textStyle='descriptionText'>
-                    Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать
-                    вегетарианскую диету и готовить вкусные вегетарианские блюда.
-                </Text>
+                <Heading
+                    variant='pageTitle'
+                    mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
+                >
+                    {cat?.title}
+                </Heading>
+                <Box
+                    width={{ sm: '100%', md: '100%', lg: '700px', xl: '700px' }}
+                    mx='auto'
+                    mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
+                >
+                    <Text textAlign='center' textStyle='descriptionText'>
+                        Интересны не только убеждённым вегетарианцам, но и тем, кто хочет
+                        попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.
+                    </Text>
+                </Box>
+                <SearchBar />
             </Box>
-            <SearchBar bottom='24px' />
             <TabsCategory subcategories={cat?.items ?? []} />
             <RecipeList recipes={filteredPopular} gridVariant='low' />
             <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>

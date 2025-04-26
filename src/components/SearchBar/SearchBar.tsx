@@ -66,6 +66,7 @@ const SearchBar = () => {
                     minW={{ base: 8, sm: 8, md: 8, lg: 12 }}
                     h={{ base: 8, sm: 8, md: 8, lg: 12 }}
                     onClick={openFilterDrawer}
+                    data-test-id='filter-button'
                 />
                 <FilterDrawer isOpen={isFilterOpen} onClose={closeFilterDrawer} />
 
@@ -88,6 +89,7 @@ const SearchBar = () => {
                         onKeyDown={handleKeyDown}
                         focusBorderColor='blackAlpha.200'
                         _hover={{ borderColor: 'blackAlpha.200' }}
+                        data-test-id='search-input '
                     />
                     <InputRightElement
                         alignItems={{
@@ -115,6 +117,7 @@ const SearchBar = () => {
                             p={2}
                             isDisabled={!isSearchActive}
                             onClick={handleSearch}
+                            data-test-id='search-button'
                         />
                     </InputRightElement>
                 </InputGroup>
@@ -129,6 +132,7 @@ const SearchBar = () => {
                             isChecked={excludeAllergens}
                             onChange={() => dispatch(toggleExcludeAllergens())}
                             bg='lime.400'
+                            data-test-id='allergens-switcher'
                         />
                     </HStack>
                     <MultipleSelect width='234px' />
