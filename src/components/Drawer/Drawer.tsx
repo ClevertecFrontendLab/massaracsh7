@@ -190,7 +190,15 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                             >
                                 <Stack spacing={1}>
                                     {sideTypes.map((side: MeatSide) => (
-                                        <Checkbox key={side.value} value={side.value}>
+                                        <Checkbox
+                                            key={side.value}
+                                            value={side.value}
+                                            data-test-id={
+                                                side.value === 'potatoes'
+                                                    ? 'checkbox-картошка'
+                                                    : undefined
+                                            }
+                                        >
                                             {side.label}
                                         </Checkbox>
                                     ))}
