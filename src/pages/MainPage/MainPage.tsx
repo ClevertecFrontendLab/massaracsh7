@@ -1,6 +1,6 @@
 import { Box, Button, Heading, HStack } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
@@ -14,9 +14,11 @@ import { tryDishes, veganDishes } from '~/data/cardsData';
 import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
 import { ApplicationState } from '~/store/configure-store';
+import { setHasResults } from '~/store/filter-slice';
 
 const Main = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const selectedAllergens = useSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
@@ -27,7 +29,6 @@ const Main = () => {
     const selectedCategories = useSelector(
         (state: ApplicationState) => state.filters.selectedCategories,
     );
-    console.log(excludeAllergens, selectedAllergens);
     const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
     const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
     const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
@@ -95,7 +96,10 @@ const Main = () => {
             searchTerm,
         ],
     );
-    console.log(filteredPopular);
+
+    dispatch(
+        setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
+    );
     return (
         <Box>
             <Box

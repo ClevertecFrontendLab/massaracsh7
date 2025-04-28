@@ -1,6 +1,6 @@
 import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
@@ -12,9 +12,11 @@ import { desertDishes, tryDesertDishes } from '~/data/cardsData';
 import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
 import { ApplicationState } from '~/store/configure-store';
+import { setHasResults } from '~/store/filter-slice';
 
 const CategoryPage = () => {
     const { category, subcategory } = useParams();
+    const dispatch = useDispatch();
 
     const cat = categories.find((item) => item.url === category);
     const recipesCategories = useMemo(() => {
@@ -108,7 +110,9 @@ const CategoryPage = () => {
             recipesCategories,
         ],
     );
-
+    dispatch(
+        setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
+    );
     return (
         <Box>
             <Box
@@ -129,7 +133,8 @@ const CategoryPage = () => {
                     {cat?.title}
                 </Heading>
                 <Box
-                    width={{ sm: '100%', md: '100%', lg: '700px', xl: '700px' }}
+                    width='100%'
+                    maxW='700px'
                     mx='auto'
                     mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
                 >

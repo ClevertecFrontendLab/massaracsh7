@@ -56,7 +56,10 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                 xl: 'calc(100vh - 80px - 144px)',
             }}
             borderRadius='large'
-            boxShadow={isOpen ? 'menu' : 'none'}
+            boxShadow={{
+                base: 'none',
+                mid: isOpen ? 'menu' : 'none',
+            }}
         >
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>

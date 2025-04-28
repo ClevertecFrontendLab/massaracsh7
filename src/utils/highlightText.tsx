@@ -9,7 +9,7 @@ export const highlightText = (text: string, query: string): ReactNode => {
 
     return parts.map((part, index) =>
         part.toLowerCase() === query.toLowerCase() ? (
-            <chakra.span color='customLime.400' key={index}>
+            <chakra.span color='customLime.600' key={index}>
                 {part}
             </chakra.span>
         ) : (

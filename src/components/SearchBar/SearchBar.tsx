@@ -16,7 +16,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 import { ApplicationState } from '~/store/configure-store';
-import { resetAllFilters, setSearchTerm, toggleExcludeAllergens } from '~/store/filter-slice';
+import {
+    resetAllFilters,
+    setHasResults,
+    setSearchTerm,
+    toggleExcludeAllergens,
+} from '~/store/filter-slice';
 
 import FilterDrawer from '../Drawer/Drawer';
 
@@ -27,6 +32,8 @@ const SearchBar = () => {
     const excludeAllergens = useSelector(
         (state: ApplicationState) => state.filters.excludeAllergens,
     );
+
+    const hasResults = useSelector((state: ApplicationState) => state.filters.hasResults);
 
     const openFilterDrawer = () => {
         dispatch(resetAllFilters());
@@ -53,9 +60,11 @@ const SearchBar = () => {
     const handleClearInput = () => {
         setSearchText('');
         dispatch(setSearchTerm(''));
+        dispatch(setHasResults(null));
     };
 
     const isSearchActive = searchText.trim().length >= 3;
+    console.log(hasResults);
 
     return (
         <Box>
@@ -89,7 +98,20 @@ const SearchBar = () => {
                         value={searchText}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
-                        focusBorderColor='blackAlpha.200'
+                        focusBorderColor={
+                            hasResults === true
+                                ? 'customLime.600'
+                                : hasResults === false
+                                  ? 'red.600'
+                                  : 'blackAlpha.200'
+                        }
+                        borderColor={
+                            hasResults === true
+                                ? 'customLime.600'
+                                : hasResults === false
+                                  ? 'red.600'
+                                  : 'blackAlpha.200'
+                        }
                         _hover={{ borderColor: 'blackAlpha.200' }}
                         autoFocus
                         data-test-id='search-input'

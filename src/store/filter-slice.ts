@@ -8,6 +8,7 @@ export type FiltersState = {
     selectedCategories: string[];
     selectedMeat: string[];
     selectedSide: string[];
+    hasResults: boolean | null;
 };
 
 const initialState: FiltersState = {
@@ -18,6 +19,7 @@ const initialState: FiltersState = {
     selectedCategories: [],
     selectedMeat: [],
     selectedSide: [],
+    hasResults: null,
 };
 
 export const filtersSlice = createSlice({
@@ -51,6 +53,9 @@ export const filtersSlice = createSlice({
         setSelectedSide(state, { payload }: PayloadAction<string[]>) {
             state.selectedSide = payload;
         },
+        setHasResults(state, { payload }: PayloadAction<boolean | null>) {
+            state.hasResults = payload;
+        },
         resetAllFilters(state) {
             state.selectedAllergens = [];
             state.excludeAllergens = false;
@@ -71,6 +76,7 @@ export const {
     setSelectedCategories,
     setSelectedMeat,
     setSelectedSide,
+    setHasResults,
     resetAllFilters,
 } = filtersSlice.actions;
 
