@@ -5,7 +5,11 @@ import { Link as RouterLink, useLocation } from 'react-router';
 import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
 
-const Breadcrumbs = () => {
+interface BreadcrumbsProps {
+    onClose?: () => void;
+}
+
+const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(Boolean);
 
@@ -13,7 +17,10 @@ const Breadcrumbs = () => {
     const subcategorySlug = pathSegments[1];
     const dishSlug = pathSegments[2];
     console.log(pathSegments);
-
+    const catName =
+        categorySlug === 'the-juiciest'
+            ? 'Самое сочное'
+            : categories.find((cat) => cat.url === categorySlug)?.title;
     const category = categories.find((cat) => cat.url === categorySlug);
     const subcategory = category?.items.find((item) => item.subcategory === subcategorySlug);
     const dish = dishes?.find((item) => item.id === dishSlug);
@@ -27,24 +34,26 @@ const Breadcrumbs = () => {
             }}
             data-test-id='breadcrumbs'
         >
-            <BreadcrumbItem isCurrentPage={!category}>
+            <BreadcrumbItem isCurrentPage={!catName}>
                 <BreadcrumbLink
                     as={RouterLink}
                     to='/'
                     textStyle={category ? 'navInactive' : 'navActive'}
+                    onClick={() => onClose?.()}
                 >
                     Главная
                 </BreadcrumbLink>
             </BreadcrumbItem>
 
-            {category && (
+            {catName && (
                 <BreadcrumbItem isCurrentPage={!subcategory}>
                     <BreadcrumbLink
                         as={RouterLink}
-                        to={`/${categorySlug}`}
+                        to={`/${categorySlug}/${category?.items[0].subcategory}`}
                         textStyle={subcategory ? 'navInactive' : 'navActive'}
+                        onClick={() => onClose?.()}
                     >
-                        {category.title}
+                        {catName}
                     </BreadcrumbLink>
                 </BreadcrumbItem>
             )}
@@ -55,6 +64,7 @@ const Breadcrumbs = () => {
                         as={RouterLink}
                         to={`/${categorySlug}/${subcategorySlug}`}
                         textStyle={dish ? 'navInactive' : 'navActive'}
+                        onClick={() => onClose?.()}
                     >
                         {subcategory.title}
                     </BreadcrumbLink>

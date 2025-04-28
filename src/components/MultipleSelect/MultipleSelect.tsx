@@ -15,7 +15,7 @@ import {
     useDisclosure,
     Wrap,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { allergens } from '~/data/allergens';
@@ -25,9 +25,10 @@ import { setSelectedAllergens } from '~/store/filter-slice';
 interface MultipleSelectProps {
     width: ResponsiveValue<string>;
     sourse?: string;
+    isDisabled?: boolean;
 }
 
-const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
+const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
     const dispatch = useDispatch();
     const selected = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
     const [newAllergen, setNewAllergen] = useState('');
@@ -39,6 +40,9 @@ const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
             : [...selected, value];
 
         dispatch(setSelectedAllergens(updated));
+        setTimeout(() => {
+            inputRef.current?.focus();
+        }, 0);
     };
 
     const handleAddCustom = () => {
@@ -54,6 +58,13 @@ const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
             handleAddCustom();
         }
     };
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        if (isOpen && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isOpen]);
 
     return (
         <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnSelect={false}>
@@ -80,9 +91,13 @@ const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
                 _hover={{ bg: 'white' }}
                 _expanded={{ bg: 'white' }}
                 height='auto'
+                isDisabled={isDisabled}
                 data-test-id={
                     sourse === 'drawer' ? 'allergens-menu-button-filter' : 'allergens-menu-button'
                 }
+                sx={{
+                    pointerEvents: isDisabled ? 'none' : 'auto',
+                }}
             >
                 {selected.length > 0 ? (
                     <Wrap spacing={2}>
@@ -100,7 +115,7 @@ const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
                         ))}
                     </Wrap>
                 ) : (
-                    'Выберите из списка...'
+                    'Выберите из списка аллергенов'
                 )}
             </MenuButton>
 
@@ -132,6 +147,7 @@ const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
 
                 <Box display='flex' alignItems='center' p={2}>
                     <Input
+                        ref={inputRef}
                         placeholder='Другой аллерген'
                         size='md'
                         mr={2}
@@ -141,6 +157,7 @@ const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
                         focusBorderColor='blackAlpha.200'
                         _hover={{ borderColor: 'blackAlpha.200' }}
                         data-test-id='add-other-allergen'
+                        autoFocus={true}
                         onKeyDown={handleKeyDown}
                     />
                     <IconButton
@@ -153,6 +170,8 @@ const MultipleSelect = ({ width, sourse }: MultipleSelectProps) => {
                         borderRadius='50%'
                         aria-label='Добавить аллерген'
                         data-test-id='add-allergen-button'
+                        isDisabled={isDisabled}
+                        sx={{ pointerEvents: isDisabled ? 'none' : 'auto' }}
                     />
                 </Box>
             </MenuList>

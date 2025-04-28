@@ -7,6 +7,7 @@ import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import { authors } from '~/data/authors';
 import { tryDishes, veganDishes } from '~/data/cardsData';
+import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
 import { ApplicationState } from '~/store/configure-store';
 
@@ -35,7 +36,19 @@ const JuicyPage = () => {
 
                     const passesAllergens =
                         !excludeAllergens ||
-                        !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
+                        !selectedAllergens.length ||
+                        !ingredients.some((ingredient) => {
+                            const lowerIngredient = ingredient.toLowerCase();
+                            return selectedAllergens.some((allergen) => {
+                                const allergenParts = allergen
+                                    .toLowerCase()
+                                    .replace(/[()]/g, '')
+                                    .split(/[,\s]+/);
+                                return allergenParts.some(
+                                    (part) => part && lowerIngredient.includes(part),
+                                );
+                            });
+                        });
 
                     const passesAuthors =
                         !selectedAuthors.length ||
@@ -45,9 +58,13 @@ const JuicyPage = () => {
                                 author.recipesId.includes(recipe.id),
                         );
 
+                    const catUrl = categories
+                        .filter((item) => selectedCategories.includes(item.title))
+                        .map((item) => item.url);
+
                     const passesCategories =
                         !selectedCategories.length ||
-                        selectedCategories.some((category) => recipe.category.includes(category));
+                        catUrl?.some((item: string) => recipe.category?.includes(item));
 
                     const passesMeat =
                         !selectedMeat.length || selectedMeat.includes(recipe.meat || '');

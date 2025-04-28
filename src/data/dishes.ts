@@ -2,6 +2,74 @@ import { Recipe } from '~/types/typeRecipe';
 
 export const dishes: Recipe[] = [
     {
+        id: '7',
+        title: 'Лапша с курицей и шафраном',
+        description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
+        category: ['second-dish', 'national', 'kids'],
+        subcategory: ['poultry', 'italian', 'second-dish'],
+        image: '/images/lapsha.jpg',
+        bookmarks: 258,
+        likes: 13042,
+        date: '2024-03-08T00:00:00Z',
+        time: '40 минут',
+        portions: 4,
+        nutritionValue: { calories: 400, proteins: 30, fats: 15, carbohydrates: 50 },
+        ingredients: [
+            { title: 'лапша', count: '200', measureUnit: 'г' },
+            { title: 'курица', count: '300', measureUnit: 'г' },
+            { title: 'шафран', count: '1', measureUnit: 'ч. л.' },
+            { title: 'лук', count: '1', measureUnit: 'шт.' },
+        ],
+        steps: [
+            {
+                stepNumber: 1,
+                description:
+                    'Зелёный лук нарезать на 1 см. кружочки. Лук и чеснок на мелкие кубики.',
+                image: '/images/steps/1.jpg',
+            },
+            {
+                stepNumber: 2,
+                description:
+                    'Мясо помыть, высушить, нарезать на полосочки и обжарить на масле.  Посолить, поперчить и вынуть со сковороды.',
+                image: '/images/steps/2.jpg',
+            },
+            {
+                stepNumber: 3,
+                description: 'Спагетти отварить в течение  10 минут в подсоленной воде.',
+                image: '/images/steps/3.jpg',
+            },
+            {
+                stepNumber: 4,
+                description:
+                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
+                image: '/images/steps/4.jpg',
+            },
+            {
+                stepNumber: 5,
+                description: 'Всыпать шафран, корицу и муки, перемешать и коротко прожарить.',
+                image: '',
+            },
+            {
+                stepNumber: 6,
+                description:
+                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
+                image: '/images/steps/6.jpg',
+            },
+            {
+                stepNumber: 7,
+                description:
+                    'Сливки смешать с бульоном, влить к луку и протушить на среднем огне около 10 минут.',
+                image: '',
+            },
+            {
+                stepNumber: 8,
+                description:
+                    'Соус посолить, поперчить, вложить мясо, зелёный лук. Прогреть и осторожно смешать со спагетти. При подаче посыпать нарезанной петрушкой.',
+                image: '/images/steps/8.jpg',
+            },
+        ],
+    },
+    {
         id: '0',
         title: 'Картошка, тушенная с болгарским перцем и фасолью в томатном соусе',
         description:
@@ -92,7 +160,7 @@ export const dishes: Recipe[] = [
         title: 'Овощная лазанья из лаваша',
         description:
             'Большое, сытное блюдо для ценителей блюд без мяса! Такая лазанья готовится с овощным соусом и соусом бешамель, а вместо листов для лазаньи используется тонкий лаваш.',
-        category: ['vegan', 'second-dish', 'national'],
+        category: ['vegan', 'second-dish', 'national', 'vegan'],
         subcategory: ['second-dish', 'vegetables', 'italian', 'snacks'],
         image: '/images/lasagna.jpg',
         bookmarks: 85,
@@ -168,7 +236,7 @@ export const dishes: Recipe[] = [
         title: 'Чесночная картошка',
         description:
             'Такая картошечка украсит любой семейный обед! Все будут в полном восторге, очень вкусно! Аромат чеснока, хрустящая корочка на картошечке - просто объедение! Отличная идея для обеда или ужина, готовится просто!',
-        category: ['vegan', 'second-dish'],
+        category: ['vegan', 'vegan', 'second-dish'],
         subcategory: ['side-dishes', 'second-dish', 'vegetables'],
         image: '/images/potatoes-garlick.jpg',
         bookmarks: 124,
@@ -207,7 +275,7 @@ export const dishes: Recipe[] = [
         title: 'Капустные котлеты',
         description:
             'Капустные котлеты по этому рецепту получаются необычайно пышными и невероятно вкусными. Мягкий вкус и лёгкая пряная нотка наверняка помогут сделать эти чудесные котлеты из капусты одним из ваших любимых овощных блюд.',
-        category: ['vegan'],
+        category: ['vegan', 'vegan'],
         subcategory: ['second-dish', 'snacks'],
         image: 'путь к изображению в вашем проекте',
         bookmarks: 2,
@@ -243,7 +311,7 @@ export const dishes: Recipe[] = [
         id: '6',
         title: 'Овощное рагу',
         description: 'Сытное рагу из сезонных овощей, приправленное травами.',
-        category: ['vegan', 'second-dish'],
+        category: ['vegan', 'second-dish', 'vegan'],
         subcategory: ['side-dishes', 'vegetables', 'snacks'],
         image: 'путь к изображению в вашем проекте',
         bookmarks: 8,
@@ -277,74 +345,7 @@ export const dishes: Recipe[] = [
             },
         ],
     },
-    {
-        id: '7',
-        title: 'Лапша с курицей и шафраном',
-        description: 'Ароматная лапша с курицей и шафраном, идеальное сочетание для сытного обеда.',
-        category: ['second-dish', 'national', 'kids'],
-        subcategory: ['poultry', 'italian', 'second-dish'],
-        image: '/images/lapsha.jpg',
-        bookmarks: 258,
-        likes: 1342,
-        date: '2024-03-08T00:00:00Z',
-        time: '40 минут',
-        portions: 4,
-        nutritionValue: { calories: 400, proteins: 30, fats: 15, carbohydrates: 50 },
-        ingredients: [
-            { title: 'лапша', count: '200', measureUnit: 'г' },
-            { title: 'курица', count: '300', measureUnit: 'г' },
-            { title: 'шафран', count: '1', measureUnit: 'ч. л.' },
-            { title: 'лук', count: '1', measureUnit: 'шт.' },
-        ],
-        steps: [
-            {
-                stepNumber: 1,
-                description:
-                    'Зелёный лук нарезать на 1 см. кружочки. Лук и чеснок на мелкие кубики.',
-                image: '/images/steps/1.jpg',
-            },
-            {
-                stepNumber: 2,
-                description:
-                    'Мясо помыть, высушить, нарезать на полосочки и обжарить на масле.  Посолить, поперчить и вынуть со сковороды.',
-                image: '/images/steps/2.jpg',
-            },
-            {
-                stepNumber: 3,
-                description: 'Спагетти отварить в течение  10 минут в подсоленной воде.',
-                image: '/images/steps/3.jpg',
-            },
-            {
-                stepNumber: 4,
-                description:
-                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
-                image: '/images/steps/4.jpg',
-            },
-            {
-                stepNumber: 5,
-                description: 'Всыпать шафран, корицу и муки, перемешать и коротко прожарить.',
-                image: '',
-            },
-            {
-                stepNumber: 6,
-                description:
-                    'В сковороде, на оставшемся жире поджарить лук до золотистого цвета, добавить чеснок и прожарить ещё около 1 минуты.',
-                image: '/images/steps/6.jpg',
-            },
-            {
-                stepNumber: 7,
-                description:
-                    'Сливки смешать с бульоном, влить к луку и протушить на среднем огне около 10 минут.',
-                image: '',
-            },
-            {
-                stepNumber: 8,
-                description:
-                    'Соус посолить, поперчить, вложить мясо, зелёный лук. Прогреть и осторожно смешать со спагетти. При подаче посыпать нарезанной петрушкой.',
-                image: '/images/steps/8.jpg',
-            },
-        ],
-    },
+
     {
         id: '8',
         title: 'Гриль-салат с овощами',
@@ -387,7 +388,7 @@ export const dishes: Recipe[] = [
         image: '/images/kneli.jpg',
         bookmarks: 32,
         likes: 85,
-        date: '2025-03-02T00:00:00Z',
+        date: '2024-03-02T00:00:00Z',
         time: '50 минут',
         portions: 3,
         nutritionValue: {
@@ -425,7 +426,7 @@ export const dishes: Recipe[] = [
         image: '/images/vetchina.jpg',
         bookmarks: 45,
         likes: 159,
-        date: '2025-03-01T00:00:00Z',
+        date: '2024-03-01T00:00:00Z',
         time: '1 час 20 минут',
         portions: 4,
         nutritionValue: {
@@ -459,7 +460,7 @@ export const dishes: Recipe[] = [
         image: '/images/salat.jpg',
         bookmarks: 12,
         likes: 1,
-        date: '2025-03-05T00:00:00Z',
+        date: '2023-01-05T00:00:00Z',
         time: '15 минут',
         portions: 2,
         nutritionValue: {
@@ -489,7 +490,7 @@ export const dishes: Recipe[] = [
         image: '/images/oladi.jpg',
         bookmarks: 18,
         likes: 2,
-        date: '2025-03-04T00:00:00Z',
+        date: '2024-03-04T00:00:00Z',
         time: '30 минут',
         portions: 4,
         nutritionValue: {
@@ -521,7 +522,7 @@ export const dishes: Recipe[] = [
         image: '/images/solyanka.jpg',
         bookmarks: 6,
         likes: 1,
-        date: '2025-03-03T00:00:00Z',
+        date: '2024-03-03T00:00:00Z',
         time: '1 час',
         portions: 5,
         nutritionValue: {

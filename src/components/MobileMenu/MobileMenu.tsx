@@ -74,7 +74,7 @@ const MobileMenu = ({ onOpenChange }: MobileMenuProps) => {
                         py={4}
                     >
                         <Box>
-                            <Breadcrumbs />
+                            <Breadcrumbs onClose={onClose} />
                         </Box>
                         <Box>
                             <NavigationMenu handleOpen={setIsAccardeonOpen} onClose={onClose} />

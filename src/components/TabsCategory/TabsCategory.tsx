@@ -57,7 +57,7 @@ const TabsCategory = ({ subcategories }: TabCategoryProps) => {
                             borderBottom={tabIndex === index ? '2px solid' : '1px solid'}
                             borderColor={tabIndex === index ? 'customLime.600' : 'gray.200'}
                             _hover={{ color: 'customLime.600' }}
-                            data-test-id={`tab-${subcategory}-${index}`}
+                            data-test-id={`tab-${category.subcategory}-${index}`}
                         >
                             {category.title}
                         </Tab>

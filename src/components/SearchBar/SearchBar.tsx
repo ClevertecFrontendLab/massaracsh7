@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 import { ApplicationState } from '~/store/configure-store';
-import { setSearchTerm, toggleExcludeAllergens } from '~/store/filter-slice';
+import { resetAllFilters, setSearchTerm, toggleExcludeAllergens } from '~/store/filter-slice';
 
 import FilterDrawer from '../Drawer/Drawer';
 
@@ -28,7 +28,10 @@ const SearchBar = () => {
         (state: ApplicationState) => state.filters.excludeAllergens,
     );
 
-    const openFilterDrawer = () => setFilterOpen(true);
+    const openFilterDrawer = () => {
+        dispatch(resetAllFilters());
+        setFilterOpen(true);
+    };
     const closeFilterDrawer = () => setFilterOpen(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +71,6 @@ const SearchBar = () => {
                     onClick={openFilterDrawer}
                     data-test-id='filter-button'
                 />
-                <FilterDrawer isOpen={isFilterOpen} onClose={closeFilterDrawer} />
 
                 <InputGroup w='100%'>
                     <Input
@@ -89,36 +91,35 @@ const SearchBar = () => {
                         onKeyDown={handleKeyDown}
                         focusBorderColor='blackAlpha.200'
                         _hover={{ borderColor: 'blackAlpha.200' }}
-                        data-test-id='search-input '
+                        autoFocus
+                        data-test-id='search-input'
                     />
-                    <InputRightElement
-                        alignItems={{
-                            base: 'flex-start',
-                            sm: 'flex-start',
-                            md: 'flex-start',
-                            lg: 'flex-end',
-                        }}
-                        right={searchText ? '10px' : '0'}
-                    >
-                        {searchText && (
+                    <InputRightElement height='100%' pr='24px' autoFocus>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <IconButton
                                 aria-label='Очистить'
                                 icon={<CloseIcon boxSize='10px' />}
                                 size='xs'
                                 variant='ghost'
                                 onClick={handleClearInput}
+                                style={{
+                                    visibility: searchText ? 'visible' : 'hidden',
+                                }}
                             />
-                        )}
-                        <IconButton
-                            aria-label='Поиск'
-                            icon={<SearchGlass boxSize={{ md: '14px', lg: '18px' }} />}
-                            variant='ghost'
-                            size='sm'
-                            p={2}
-                            isDisabled={!isSearchActive}
-                            onClick={handleSearch}
-                            data-test-id='search-button'
-                        />
+                            <IconButton
+                                aria-label='Поиск'
+                                icon={<SearchGlass boxSize={{ md: '14px', lg: '18px' }} />}
+                                variant='ghost'
+                                size='sm'
+                                p={2}
+                                isDisabled={!isSearchActive}
+                                onClick={handleSearch}
+                                data-test-id='search-button'
+                                sx={{
+                                    pointerEvents: isSearchActive ? 'auto' : 'none',
+                                }}
+                            />
+                        </div>
                     </InputRightElement>
                 </InputGroup>
             </HStack>
@@ -135,9 +136,12 @@ const SearchBar = () => {
                             data-test-id='allergens-switcher'
                         />
                     </HStack>
-                    <MultipleSelect width='234px' />
+                    {!isFilterOpen && (
+                        <MultipleSelect width='234px' isDisabled={!excludeAllergens} />
+                    )}
                 </HStack>
             </Hide>
+            <FilterDrawer isOpen={isFilterOpen} onClose={closeFilterDrawer} />
         </Box>
     );
 };

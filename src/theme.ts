@@ -297,6 +297,7 @@ const theme = extendTheme({
                 lineHeight: '20px',
                 color: 'text',
                 bg: 'background',
+                position: 'relative',
             },
         },
     },

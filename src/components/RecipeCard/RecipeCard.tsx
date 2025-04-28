@@ -37,6 +37,7 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
             variant='basic'
             h={{ base: '128px', lg: '244px', xl: '244px' }}
             position='relative'
+            data-test-id={`food-card-${index}`}
         >
             <Image
                 src={recipe.image}
@@ -72,7 +73,7 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                         left={{ sm: '8px', md: '8px' }}
                         align='flex-start'
                     >
-                        {recipe.category.map((catUrl, index) => (
+                        {[...new Set(recipe.category)].map((catUrl, index) => (
                             <Badge key={catUrl + index} variant='lime50' p={{ sm: '0', md: '0' }}>
                                 <CategoryBadge categoryUrl={catUrl} />
                             </Badge>

@@ -11,6 +11,7 @@ import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
 import { authors } from '~/data/authors';
 import { tryDishes, veganDishes } from '~/data/cardsData';
+import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
 import { ApplicationState } from '~/store/configure-store';
 
@@ -26,6 +27,7 @@ const Main = () => {
     const selectedCategories = useSelector(
         (state: ApplicationState) => state.filters.selectedCategories,
     );
+    console.log(excludeAllergens, selectedAllergens);
     const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
     const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
     const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
@@ -39,8 +41,19 @@ const Main = () => {
 
                 const passesAllergens =
                     !excludeAllergens ||
-                    !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
-
+                    !selectedAllergens.length ||
+                    !ingredients.some((ingredient) => {
+                        const lowerIngredient = ingredient.toLowerCase();
+                        return selectedAllergens.some((allergen) => {
+                            const allergenParts = allergen
+                                .toLowerCase()
+                                .replace(/[()]/g, '')
+                                .split(/[,\s]+/);
+                            return allergenParts.some(
+                                (part) => part && lowerIngredient.includes(part),
+                            );
+                        });
+                    });
                 const passesAuthors =
                     !selectedAuthors.length ||
                     authors.some(
@@ -49,9 +62,13 @@ const Main = () => {
                             author.recipesId.includes(recipe.id),
                     );
 
+                const catUrl = categories
+                    .filter((item) => selectedCategories.includes(item.title))
+                    .map((item) => item.url);
+
                 const passesCategories =
                     !selectedCategories.length ||
-                    selectedCategories.some((category) => recipe.category.includes(category));
+                    catUrl?.some((item: string) => recipe.category?.includes(item));
 
                 const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
 
@@ -78,7 +95,7 @@ const Main = () => {
             searchTerm,
         ],
     );
-
+    console.log(filteredPopular);
     return (
         <Box>
             <Box
@@ -94,7 +111,7 @@ const Main = () => {
                 </Heading>
                 <SearchBar />
             </Box>
-            {searchTerm.length < 3 && <SliderList recipes={filteredPopular.slice(-10)} />}
+            {searchTerm.length < 3 && <SliderList recipes={filteredPopular} />}
 
             {searchTerm.length < 3 && (
                 <>
@@ -112,7 +129,7 @@ const Main = () => {
                             variant='limeSolid'
                             size='large'
                             rightIcon={<ArrowBlackRight w='14px' />}
-                            onClick={() => navigate('/juicy')}
+                            onClick={() => navigate('/the-juiciest')}
                         >
                             Вся подборка
                         </Button>
@@ -133,7 +150,7 @@ const Main = () => {
                 mb={8}
                 mx='auto'
                 rightIcon={<ArrowBlackRight w='14px' />}
-                onClick={() => navigate('/juicy')}
+                onClick={() => navigate('/the-juiciest')}
             >
                 Вся подборка
             </Button>

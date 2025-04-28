@@ -14,7 +14,7 @@ function App() {
                     <Route path='/' element={<MainPage />} />
                     <Route path='/:category/:subcategory' element={<CategoryPage />} />
                     <Route path='/:category/:subcategory/:id' element={<RecipePage />} />
-                    <Route path='/juicy' element={<JuicyPage />} />
+                    <Route path='/the-juiciest' element={<JuicyPage />} />
                 </Routes>
             </Layout>
         </Router>

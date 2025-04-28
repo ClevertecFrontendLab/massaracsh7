@@ -19,7 +19,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { authors } from '~/data/authors';
@@ -61,7 +61,17 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         sideTypes: [],
         excludeAllergens: false,
     });
-
+    useEffect(() => {
+        if (isOpen) {
+            setFilters({
+                categories: [],
+                authors: [],
+                meatTypes: [],
+                sideTypes: [],
+                excludeAllergens: false,
+            });
+        }
+    }, [isOpen]);
     const categoryOptions = categories.map((item) => item.title);
     const authorOptions = authors.map((item) => item.name);
 
@@ -94,15 +104,16 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.excludeAllergens;
 
     return (
-        <Drawer isOpen={isOpen} placement='right' onClose={onClose} data-test-id='filter-drawer'>
+        <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
             <DrawerOverlay />
             <DrawerContent
                 position='relative'
                 maxW={{ sm: '344px', md: '344px', lg: '463px', xl: '463px' }}
                 p={{ sm: '4', md: '4', mid: '4', lg: '8', xl: '8' }}
+                data-test-id='filter-drawer'
             >
                 <HStack justify='space-between' align='center' mb={6}>
-                    <DrawerHeader p={0}>Фильтры</DrawerHeader>
+                    <DrawerHeader p={0}>Фильтр</DrawerHeader>
                     <IconButton
                         icon={<CloseIcon boxSize='10px' />}
                         onClick={onClose}
@@ -140,11 +151,11 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    <Checkbox value='курица'>Курица</Checkbox>
-                                    <Checkbox value='свинина'>Свинина</Checkbox>
-                                    <Checkbox value='говядина'>Говядина</Checkbox>
-                                    <Checkbox value='индейка'>Индейка</Checkbox>
-                                    <Checkbox value='утка'>Утка</Checkbox>
+                                    <Checkbox value='chicken'>Курица</Checkbox>
+                                    <Checkbox value='pork'>Свинина</Checkbox>
+                                    <Checkbox value='beef'>Говядина</Checkbox>
+                                    <Checkbox value='turkey'>Индейка</Checkbox>
+                                    <Checkbox value='duck'>Утка</Checkbox>
                                 </Stack>
                             </CheckboxGroup>
                         </Box>
@@ -157,16 +168,16 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    <Checkbox value='картошка' data-test-id='checkbox-картошка'>
+                                    <Checkbox value='potatoes' data-test-id='checkbox-картошка'>
                                         Картошка
                                     </Checkbox>
-                                    <Checkbox value='гречка'>Гречка</Checkbox>
-                                    <Checkbox value='паста'>Паста</Checkbox>
-                                    <Checkbox value='спагетти'>Спагетти</Checkbox>
-                                    <Checkbox value='рис'>Рис</Checkbox>
-                                    <Checkbox value='капуста'>Капуста</Checkbox>
-                                    <Checkbox value='фасоль'>Фасоль</Checkbox>
-                                    <Checkbox value='другие овощи'>Другие овощи</Checkbox>
+                                    <Checkbox value='buckwheat'>Гречка</Checkbox>
+                                    <Checkbox value='pasta'>Паста</Checkbox>
+                                    <Checkbox value='spaghetti'>Спагетти</Checkbox>
+                                    <Checkbox value='rice'>Рис</Checkbox>
+                                    <Checkbox value='cabbage'>Капуста</Checkbox>
+                                    <Checkbox value='beans'>Фасоль</Checkbox>
+                                    <Checkbox value='other vegetables'>Другие овощи</Checkbox>
                                 </Stack>
                             </CheckboxGroup>
                         </Box>
@@ -193,6 +204,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 xl: '399px',
                             }}
                             sourse='drawer'
+                            isDisabled={!filters.excludeAllergens}
                         />
 
                         <Box>
@@ -203,6 +215,9 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                     ...filters.authors,
                                     ...filters.meatTypes,
                                     ...filters.sideTypes,
+                                    ...(filters.excludeAllergens && allergens.length > 0
+                                        ? allergens
+                                        : []),
                                 ].map((tag) => (
                                     <Tag
                                         size='sm'
@@ -216,22 +231,6 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         <TagLabel color='customLime.600'>{tag}</TagLabel>
                                     </Tag>
                                 ))}
-                                {filters.excludeAllergens && allergens.length > 0 && (
-                                    <>
-                                        {allergens.map((item) => (
-                                            <Tag
-                                                size='sm'
-                                                key={item}
-                                                borderRadius='6px'
-                                                bg='white'
-                                                border='1px solid'
-                                                borderColor='customLime.400'
-                                            >
-                                                <TagLabel color='customLime.600'>{item}</TagLabel>
-                                            </Tag>
-                                        ))}
-                                    </>
-                                )}
                             </HStack>
                         </Box>
                     </VStack>
@@ -256,6 +255,9 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         isDisabled={!anySelected}
                         size='large'
                         data-test-id='find-recipe-button'
+                        sx={{
+                            pointerEvents: anySelected ? 'auto' : 'none',
+                        }}
                     >
                         Найти рецепт
                     </Button>

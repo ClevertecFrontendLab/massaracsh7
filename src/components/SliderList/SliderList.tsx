@@ -1,6 +1,6 @@
 import '../../../node_modules/swiper/swiper.css';
 
-import { Box, Heading, Hide, IconButton } from '@chakra-ui/react';
+import { Box, Heading, IconButton } from '@chakra-ui/react';
 import { Keyboard, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -14,6 +14,7 @@ interface SliderListProps {
 }
 
 const SliderList = ({ recipes }: SliderListProps) => {
+    console.log(recipes);
     const newRecipes = recipes
         .slice()
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -32,43 +33,41 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 Новые рецепты
             </Heading>
 
-            <Hide below='mid'>
-                <IconButton
-                    aria-label='Previous'
-                    className='prev'
-                    icon={<ArrowLeft w='24px' />}
-                    position='absolute'
-                    width={{ base: '40px', lg: '40px', xl: '48px' }}
-                    height={{ base: '40px', lg: '40px', xl: '48px' }}
-                    top='50%'
-                    left='-6px'
-                    transform='translateY(-50%)'
-                    bg='black'
-                    color='customLime.50'
-                    borderRadius='small'
-                    zIndex={10}
-                    data-test-id='carousel-forward'
-                />
-            </Hide>
+            <IconButton
+                aria-label='Previous'
+                className='prev'
+                icon={<ArrowLeft w='24px' />}
+                position='absolute'
+                width={{ base: '40px', lg: '40px', xl: '48px' }}
+                height={{ base: '40px', lg: '40px', xl: '48px' }}
+                top='50%'
+                left='-6px'
+                transform='translateY(-50%)'
+                bg='black'
+                color='customLime.50'
+                borderRadius='small'
+                zIndex={10}
+                data-test-id='carousel-back'
+                display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
+            />
 
-            <Hide below='mid'>
-                <IconButton
-                    aria-label='Next'
-                    className='next'
-                    icon={<ArrowRight w='24px' />}
-                    position='absolute'
-                    width={{ base: '40px', lg: '40px', xl: '48px' }}
-                    height={{ base: '40px', lg: '40px', xl: '48px' }}
-                    top='50%'
-                    right='-6px'
-                    transform='translateY(-50%)'
-                    bg='black'
-                    color='customLime.50'
-                    borderRadius='small'
-                    zIndex={10}
-                    data-test-id='carousel-back'
-                />
-            </Hide>
+            <IconButton
+                aria-label='Next'
+                className='next'
+                icon={<ArrowRight w='24px' />}
+                position='absolute'
+                width={{ base: '40px', lg: '40px', xl: '48px' }}
+                height={{ base: '40px', lg: '40px', xl: '48px' }}
+                top='50%'
+                right='-6px'
+                transform='translateY(-50%)'
+                bg='black'
+                color='customLime.50'
+                borderRadius='small'
+                zIndex={10}
+                data-test-id='carousel-forward'
+                display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
+            />
 
             <Swiper
                 data-test-id='carousel'
@@ -84,6 +83,10 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 }}
                 breakpoints={{
                     0: {
+                        slidesPerView: 2,
+                        spaceBetween: 10,
+                    },
+                    360: {
                         slidesPerView: 2,
                         spaceBetween: 10,
                     },

@@ -16,6 +16,11 @@ const Header = () => {
             py={4}
             data-test-id='header'
             w='100%'
+            position='fixed'
+            top={0}
+            left={0}
+            right={0}
+            zIndex={10}
         >
             <Box
                 maxW='1920px'
@@ -49,12 +54,20 @@ const Header = () => {
                             </Box>
                         </HStack>
                     </Hide>
-                    <Show below='mid'>
-                        <HStack spacing={{ sm: 6, md: 8 }}>
-                            {!isMenuOpen && <SocialList />}
-                            <MobileMenu onOpenChange={setIsMenuOpen} />
-                        </HStack>
-                    </Show>
+                    <HStack
+                        spacing={{ sm: 6, md: 8 }}
+                        display={{
+                            base: 'none',
+                            sm: 'flex',
+                            md: 'flex',
+                            mid: 'flex',
+                            lg: 'none',
+                            xl: 'none',
+                        }}
+                    >
+                        {!isMenuOpen && <SocialList />}
+                        <MobileMenu onOpenChange={setIsMenuOpen} />
+                    </HStack>
                 </HStack>
             </Box>
         </Box>

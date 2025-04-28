@@ -37,12 +37,7 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
             sx={gridStyles}
         >
             {recipes.map((recipe, index) => (
-                <RecipeCard
-                    key={recipe.id}
-                    recipe={recipe}
-                    data-test-id={`food-card-${index}`}
-                    index={index}
-                />
+                <RecipeCard key={recipe.id} recipe={recipe} index={index} />
             ))}
         </SimpleGrid>
     );

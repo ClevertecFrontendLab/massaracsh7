@@ -61,7 +61,11 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>
                     <AccordionButton
-                        data-test-id={`${category}`}
+                        data-test-id={
+                            category.title === 'Веганская кухня'
+                                ? 'vegan-cuisine'
+                                : `${category.url}`
+                        }
                         _hover={{ bg: 'customLime.50' }}
                         _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
                         height='48px'
@@ -70,7 +74,6 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                         pt='4px'
                         onClick={() => {
                             if (category.items && category.items.length > 0) {
-                                console.log(category);
                                 const categorySlug = category.url;
                                 const firstSub = category.items[0].subcategory;
                                 navigate(`/${categorySlug}/${firstSub}`);

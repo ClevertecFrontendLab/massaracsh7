@@ -17,11 +17,12 @@ const CategoryPage = () => {
     const { category, subcategory } = useParams();
 
     const cat = categories.find((item) => item.url === category);
-    const reipesCategories = useMemo(() => {
+    const recipesCategories = useMemo(() => {
         if (category && subcategory) {
-            return dishes.filter(
-                (dish) =>
-                    dish.category.includes(category) && dish.subcategory.includes(subcategory),
+            return dishes.filter((dish) =>
+                dish.category.some(
+                    (cat, index) => cat === category && dish.subcategory[index] === subcategory,
+                ),
             );
         } else if (category) {
             return dishes.filter((dish) => dish.category.includes(category));
@@ -29,7 +30,6 @@ const CategoryPage = () => {
         return dishes;
     }, [category, subcategory]);
 
-    // const [searchTerm, setSearchTerm] = useState<string>('');
     const selectedAllergens = useSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
@@ -46,15 +46,26 @@ const CategoryPage = () => {
 
     const filteredPopular = useMemo(
         () =>
-            reipesCategories.filter((recipe) => {
+            recipesCategories.filter((recipe) => {
                 const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
                 const recipeTitle = recipe.title.toLowerCase();
                 const lowerSearch = searchTerm.toLowerCase();
 
                 const passesAllergens =
                     !excludeAllergens ||
-                    !selectedAllergens.some((a) => ingredients.includes(a.toLowerCase()));
-
+                    !selectedAllergens.length ||
+                    !ingredients.some((ingredient) => {
+                        const lowerIngredient = ingredient.toLowerCase();
+                        return selectedAllergens.some((allergen) => {
+                            const allergenParts = allergen
+                                .toLowerCase()
+                                .replace(/[()]/g, '')
+                                .split(/[,\s]+/);
+                            return allergenParts.some(
+                                (part) => part && lowerIngredient.includes(part),
+                            );
+                        });
+                    });
                 const passesAuthors =
                     !selectedAuthors.length ||
                     authors.some(
@@ -63,9 +74,13 @@ const CategoryPage = () => {
                             author.recipesId.includes(recipe.id),
                     );
 
+                const catUrl = categories
+                    .filter((item) => selectedCategories.includes(item.title))
+                    .map((item) => item.url);
+
                 const passesCategories =
                     !selectedCategories.length ||
-                    selectedCategories.some((category) => recipe.category.includes(category));
+                    catUrl?.some((item: string) => recipe.category?.includes(item));
 
                 const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
 
@@ -90,7 +105,7 @@ const CategoryPage = () => {
             selectedMeat,
             selectedSide,
             searchTerm,
-            reipesCategories,
+            recipesCategories,
         ],
     );
 

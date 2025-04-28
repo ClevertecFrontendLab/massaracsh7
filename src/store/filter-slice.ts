@@ -35,6 +35,9 @@ export const filtersSlice = createSlice({
         },
         toggleExcludeAllergens(state) {
             state.excludeAllergens = !state.excludeAllergens;
+            if (state.excludeAllergens === false) {
+                state.selectedAllergens = [];
+            }
         },
         setSelectedAuthors(state, { payload }: PayloadAction<string[]>) {
             state.selectedAuthors = payload;
@@ -49,7 +52,12 @@ export const filtersSlice = createSlice({
             state.selectedSide = payload;
         },
         resetAllFilters(state) {
-            Object.assign(state, initialState);
+            state.selectedAllergens = [];
+            state.excludeAllergens = false;
+            state.selectedAuthors = [];
+            state.selectedCategories = [];
+            state.selectedMeat = [];
+            state.selectedSide = [];
         },
     },
 });

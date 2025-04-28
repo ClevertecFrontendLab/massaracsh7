@@ -81,7 +81,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
                         bottom={{ base: 'auto', lg: 4, xl: 4 }}
                         left={{ sm: 2, md: 2, lg: 5, xl: 5 }}
                     >
-                        {recipe.category.slice(0, 2).map((catUrl, index) => (
+                        {[...new Set(recipe.category.slice(0, 2))].map((catUrl, index) => (
                             <Badge
                                 key={catUrl + index}
                                 variant='lime150'
