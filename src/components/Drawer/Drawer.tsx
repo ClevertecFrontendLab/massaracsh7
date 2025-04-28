@@ -15,6 +15,7 @@ import {
     Stack,
     Switch,
     Tag,
+    TagCloseButton,
     TagLabel,
     Text,
     VStack,
@@ -94,16 +95,28 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         dispatch(setSelectedMeat(filters.meatTypes));
         dispatch(setSelectedSide(filters.sideTypes));
         dispatch(toggleExcludeAllergens());
-        console.log('Selected filters:', filters);
         onClose();
     };
 
-    const anySelected =
+    const filterSelected =
         filters.categories.length ||
         filters.authors.length ||
         filters.meatTypes.length ||
         filters.sideTypes.length ||
         filters.excludeAllergens;
+
+    const removeTag = (label: string) => {
+        const meatValue = meatTypes.find((item) => item.label === label)?.value;
+        const sideValue = sideTypes.find((item) => item.label === label)?.value;
+        const value = meatValue || sideValue || label;
+        setFilters((prev) => ({
+            ...prev,
+            categories: prev.categories.filter((v) => v !== value),
+            authors: prev.authors.filter((v) => v !== value),
+            meatTypes: prev.meatTypes.filter((v) => v !== value),
+            sideTypes: prev.sideTypes.filter((v) => v !== value),
+        }));
+    };
 
     return (
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
@@ -253,12 +266,16 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         size='sm'
                                         key={tag}
                                         borderRadius='6px'
-                                        bg='white'
+                                        bg='customLime.100'
                                         border='1px solid'
                                         borderColor='customLime.400'
                                         data-test-id='filter-tag'
                                     >
-                                        <TagLabel color='customLime.600'>{tag}</TagLabel>
+                                        <TagLabel color='customLime.700'>{tag}</TagLabel>
+                                        <TagCloseButton
+                                            color='customLime.700'
+                                            onClick={() => removeTag(tag)}
+                                        />
                                     </Tag>
                                 ))}
                             </HStack>
@@ -282,11 +299,11 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         bg='black'
                         h='48px'
                         onClick={handleSearch}
-                        isDisabled={!anySelected}
+                        isDisabled={!filterSelected}
                         size='large'
                         data-test-id='find-recipe-button'
                         sx={{
-                            pointerEvents: anySelected ? 'auto' : 'none',
+                            pointerEvents: filterSelected ? 'auto' : 'none',
                         }}
                     >
                         Найти рецепт
