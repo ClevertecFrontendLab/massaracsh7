@@ -1,73 +1,102 @@
-import { Badge, Card, CardBody, Heading, Hide, HStack, Image, Text } from '@chakra-ui/react';
+import {
+    Badge,
+    Card,
+    CardBody,
+    Heading,
+    Hide,
+    HStack,
+    Image,
+    Link,
+    Text,
+    VStack,
+} from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router';
 
-import { CardSliderData } from '~/types/typesData';
+import { Recipe } from '~/types/typeRecipe';
 
+import CategoryBadge from '../CategoryBadge/CategoryBadge';
 import LikesInfo from '../LikesInfo/LikesInfo';
 
-const SliderCard = ({
-    title,
-    description,
-    category,
-    likes,
-    comments,
-    imageUrl,
-}: CardSliderData) => (
-    <Card
-        variant='basic'
-        position={{ base: 'static', sm: 'relative', md: 'relative', lg: 'static' }}
+interface SliderCardProps {
+    recipe: Recipe;
+}
+
+const SliderCard = ({ recipe }: SliderCardProps) => (
+    <Link
+        as={RouterLink}
+        to={`/${recipe.category[0]}/${recipe.subcategory[0]}/${recipe.id}`}
+        _hover={{ textDecoration: 'none' }}
     >
-        <Image
-            src={imageUrl}
-            alt={title}
-            w='100%'
-            h={{ sm: '128px', md: '128px', lg: '230px', xl: '230px' }}
-            objectFit='cover'
-            loading='lazy'
-        />
-        <CardBody
-            display='flex'
-            flexDirection='column'
-            py={{ sm: 2, md: 2, lg: 3, xl: 4 }}
-            px={{ sm: 2, md: 2, lg: 3, xl: 6 }}
+        <Card
+            variant='basic'
+            position={{
+                base: 'static',
+                sm: 'relative',
+                md: 'relative',
+                lg: 'static',
+                xl: 'static',
+            }}
         >
-            <Heading
-                variant='sliderTitle'
-                mb={2}
-                textStyle='cutText'
-                sx={{
-                    WebkitLineClamp: { base: 2, md: 2, lg: 1 },
-                }}
+            <Image
+                src={recipe.image}
+                alt={recipe.title}
+                w='100%'
+                h={{ sm: '128px', md: '128px', lg: '230px', xl: '230px' }}
+                objectFit='cover'
+                loading='lazy'
+            />
+            <CardBody
+                display='flex'
+                flexDirection='column'
+                py={{ sm: 2, md: 2, lg: 3, xl: 4 }}
+                px={{ sm: 2, md: 2, lg: 3, xl: 6 }}
             >
-                {title}
-            </Heading>
-            <Hide below='md'>
-                <Text
-                    mb='30px'
+                <Heading
+                    variant='sliderTitle'
+                    mb={2}
                     textStyle='cutText'
                     sx={{
-                        WebkitLineClamp: { base: 2, mid: 3, lg: 3, xl: 3 },
+                        WebkitLineClamp: { base: 2, md: 2, lg: 1 },
                     }}
+                    minH={{ md: 12 }}
                 >
-                    {description}
-                </Text>
-            </Hide>
-            <HStack spacing={3} justify='space-between' align='center'>
-                <Badge
-                    variant='lime150'
-                    position={{ base: 'static', sm: 'absolute', md: 'absolute', lg: 'static' }}
-                    top={{ sm: 2, md: 2 }}
-                    left={{ sm: 2, md: 2 }}
-                    p={{ sm: '0', md: '0' }}
-                >
-                    <HStack gap={{ base: 0.5, md: 0.5, lg: 2 }} px={{ sm: 1, md: 1, lg: 2, xl: 2 }}>
-                        <Image src={category.icon} alt={category.title} boxSize='16px' />
-                        <Text textTransform='none'>{category.title}</Text>
-                    </HStack>
-                </Badge>
-                <LikesInfo likes={likes} comments={comments} />
-            </HStack>
-        </CardBody>
-    </Card>
+                    {recipe.title}
+                </Heading>
+                <Hide below='md'>
+                    <Text
+                        mb='30px'
+                        textStyle='cutText'
+                        sx={{
+                            WebkitLineClamp: { base: 2, mid: 3, lg: 3, xl: 3 },
+                        }}
+                    >
+                        {recipe.description}
+                    </Text>
+                </Hide>
+                <HStack spacing={3} justify='space-between' align='center'>
+                    <VStack
+                        position='absolute'
+                        align='flex-start'
+                        top={{ base: 2, md: 2, lg: 'auto' }}
+                        bottom={{ base: 'auto', lg: 4, xl: 4 }}
+                        left={{ sm: 2, md: 2, lg: 5, xl: 5 }}
+                    >
+                        {[...new Set(recipe.category.slice(0, 2))].map((catUrl, index) => (
+                            <Badge
+                                key={catUrl + index}
+                                variant='lime150'
+                                p={{ sm: '0', md: '0' }}
+                                maxW='100%'
+                            >
+                                <CategoryBadge categoryUrl={catUrl} />
+                            </Badge>
+                        ))}
+                    </VStack>
+                    <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />
+                </HStack>
+            </CardBody>
+        </Card>
+    </Link>
 );
 
 export default SliderCard;

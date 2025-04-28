@@ -1,23 +1,176 @@
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Button, Menu, MenuButton } from '@chakra-ui/react';
+import { AddIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import {
+    Box,
+    Button,
+    Checkbox,
+    IconButton,
+    Input,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    ResponsiveValue,
+    Tag,
+    TagLabel,
+    Text,
+    useDisclosure,
+    Wrap,
+} from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-const MultipleSelect = () => (
-    <Menu>
-        <MenuButton
-            as={Button}
-            rightIcon={<ChevronDownIcon boxSize='20px' />}
-            variant='outline'
-            w='234px'
-            fontSize='16px'
-            fontWeight='400'
-            lineHeight='24px'
-            color='secondaryText'
-            py={4}
-            pr={2}
-        >
-            Выберите из списка...
-        </MenuButton>
-    </Menu>
-);
+import { allergens } from '~/data/allergens';
+import { ApplicationState } from '~/store/configure-store';
+import { setSelectedAllergens } from '~/store/filter-slice';
+
+interface MultipleSelectProps {
+    width: ResponsiveValue<string>;
+    sourse?: string;
+    isDisabled?: boolean;
+}
+
+const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
+    const dispatch = useDispatch();
+    const selected = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const [newAllergen, setNewAllergen] = useState('');
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const handleSelect = (value: string) => {
+        const updated = selected.includes(value)
+            ? selected.filter((item) => item !== value)
+            : [...selected, value];
+
+        dispatch(setSelectedAllergens(updated));
+        setTimeout(() => {
+            inputRef.current?.focus();
+        }, 0);
+    };
+
+    const handleAddCustom = () => {
+        if (newAllergen.trim() && !selected.includes(newAllergen.trim())) {
+            dispatch(setSelectedAllergens([...selected, newAllergen.trim()]));
+            setNewAllergen('');
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleAddCustom();
+        }
+    };
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        if (isOpen && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isOpen]);
+
+    return (
+        <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnSelect={false}>
+            <MenuButton
+                as={Button}
+                rightIcon={
+                    <ChevronDownIcon
+                        boxSize='20px'
+                        transition='transform 0.2s'
+                        transform={isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
+                    />
+                }
+                variant='outline'
+                w={width}
+                fontSize='16px'
+                fontWeight='400'
+                lineHeight='24px'
+                color='secondaryText'
+                borderColor='customLime.300'
+                bg='white'
+                py='10px'
+                px='10px'
+                whiteSpace='normal'
+                _hover={{ bg: 'white' }}
+                _expanded={{ bg: 'white' }}
+                height='auto'
+                isDisabled={isDisabled}
+                data-test-id={
+                    sourse === 'drawer' ? 'allergens-menu-button-filter' : 'allergens-menu-button'
+                }
+                sx={{
+                    pointerEvents: isDisabled ? 'none' : 'auto',
+                }}
+            >
+                {selected.length > 0 ? (
+                    <Wrap spacing={2}>
+                        {selected.map((item) => (
+                            <Tag
+                                size='sm'
+                                key={item}
+                                borderRadius='6px'
+                                bg='white'
+                                border='1px solid'
+                                borderColor='customLime.400'
+                            >
+                                <TagLabel color='customLime.600'>{item}</TagLabel>
+                            </Tag>
+                        ))}
+                    </Wrap>
+                ) : (
+                    <Text isTruncated>Выберите из списка аллергенов</Text>
+                )}
+            </MenuButton>
+
+            <MenuList borderRadius='6px' zIndex='11' w={width} data-test-id='allergens-menu'>
+                {allergens.map((option, index) => (
+                    <MenuItem
+                        key={option.value}
+                        p={0}
+                        bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
+                    >
+                        <Checkbox
+                            isChecked={selected.includes(option.label)}
+                            onChange={() => handleSelect(option.label)}
+                            p={2}
+                            w='100%'
+                            data-test-id={`allergen-${index}`}
+                        >
+                            {option.label}
+                        </Checkbox>
+                    </MenuItem>
+                ))}
+
+                <Box display='flex' alignItems='center' p={2}>
+                    <Input
+                        ref={inputRef}
+                        placeholder='Другой аллерген'
+                        size='md'
+                        mr={2}
+                        value={newAllergen}
+                        onChange={(e) => setNewAllergen(e.target.value)}
+                        borderColor='blackAlpha.200'
+                        focusBorderColor='blackAlpha.200'
+                        _hover={{ borderColor: 'blackAlpha.200' }}
+                        data-test-id='add-other-allergen'
+                        autoFocus={true}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <IconButton
+                        size='12px'
+                        p='4px'
+                        icon={<AddIcon boxSize='8px' />}
+                        onClick={handleAddCustom}
+                        bg='customLime.600'
+                        color='white'
+                        borderRadius='50%'
+                        aria-label='Добавить аллерген'
+                        data-test-id='add-allergen-button'
+                        isDisabled={isDisabled}
+                        sx={{ pointerEvents: isDisabled ? 'none' : 'auto' }}
+                    />
+                </Box>
+            </MenuList>
+        </Menu>
+    );
+};
 
 export default MultipleSelect;

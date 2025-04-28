@@ -1,24 +1,37 @@
-import { Box, Button, Heading, HStack } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useParams } from 'react-router';
 
-import { ArrowBlackRight } from '~/assets/icons/icons';
-import BlogList from '~/components/BlogList/BlogList';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
-import SliderList from '~/components/SliderList/SliderList';
+import TabsCategory from '~/components/TabsCategory/TabsCategory';
 import { authors } from '~/data/authors';
-import { tryDishes, veganDishes } from '~/data/cardsData';
+import { desertDishes, tryDesertDishes } from '~/data/cardsData';
 import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
 import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
 
-const Main = () => {
-    const navigate = useNavigate();
+const CategoryPage = () => {
+    const { category, subcategory } = useParams();
     const dispatch = useDispatch();
+
+    const cat = categories.find((item) => item.url === category);
+    const recipesCategories = useMemo(() => {
+        if (category && subcategory) {
+            return dishes.filter((dish) =>
+                dish.category.some(
+                    (cat, index) => cat === category && dish.subcategory[index] === subcategory,
+                ),
+            );
+        } else if (category) {
+            return dishes.filter((dish) => dish.category.includes(category));
+        }
+        return dishes;
+    }, [category, subcategory]);
+
     const selectedAllergens = useSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
@@ -35,7 +48,7 @@ const Main = () => {
 
     const filteredPopular = useMemo(
         () =>
-            dishes.filter((recipe) => {
+            recipesCategories.filter((recipe) => {
                 const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
                 const recipeTitle = recipe.title.toLowerCase();
                 const lowerSearch = searchTerm.toLowerCase();
@@ -94,9 +107,9 @@ const Main = () => {
             selectedMeat,
             selectedSide,
             searchTerm,
+            recipesCategories,
         ],
     );
-
     dispatch(
         setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
     );
@@ -113,66 +126,40 @@ const Main = () => {
                 mx='auto'
                 px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
             >
-                <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
-                    Приятного аппетита!
+                <Heading
+                    variant='pageTitle'
+                    mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
+                >
+                    {cat?.title}
                 </Heading>
+                <Box
+                    width='100%'
+                    maxW='700px'
+                    mx='auto'
+                    mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
+                >
+                    <Text textAlign='center' textStyle='descriptionText'>
+                        Интересны не только убеждённым вегетарианцам, но и тем, кто хочет
+                        попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.
+                    </Text>
+                </Box>
                 <SearchBar />
             </Box>
-            {searchTerm.length < 3 && <SliderList recipes={filteredPopular} />}
-
-            {searchTerm.length < 3 && (
-                <>
-                    <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
-                        <Heading variant='sectionTitle'>Самое сочное</Heading>
-                        <Button
-                            display={{
-                                base: 'flex',
-                                sm: 'none',
-                                md: 'none',
-                                lg: 'flex',
-                                xl: 'flex',
-                            }}
-                            data-test-id='juiciest-link'
-                            variant='limeSolid'
-                            size='large'
-                            rightIcon={<ArrowBlackRight w='14px' />}
-                            onClick={() => navigate('/the-juiciest')}
-                        >
-                            Вся подборка
-                        </Button>
-                    </HStack>
-                </>
-            )}
-
-            <RecipeList
-                recipes={filteredPopular}
-                gridVariant={searchTerm.length >= 3 ? 'low' : 'wide'}
+            <TabsCategory subcategories={cat?.items ?? []} />
+            <RecipeList recipes={filteredPopular} gridVariant='low' />
+            <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
+                <Button variant='limeSolid' size='medium'>
+                    Загрузить ещё
+                </Button>
+            </Center>
+            <KitchenSection
+                title='Десерты, выпечка'
+                description='Без них невозможно представить себе ни современную, ни традиционную  кулинарию. Пироги и печенья, блины, пончики, вареники и, конечно, хлеб - рецепты изделий из теста многообразны и невероятно популярны.'
+                veganDishes={desertDishes}
+                tryDishes={tryDesertDishes}
             />
-
-            <Button
-                display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
-                data-test-id='juiciest-link-mobile'
-                variant='limeSolid'
-                size='large'
-                mb={8}
-                mx='auto'
-                rightIcon={<ArrowBlackRight w='14px' />}
-                onClick={() => navigate('/the-juiciest')}
-            >
-                Вся подборка
-            </Button>
-
-            {searchTerm.length < 3 && <BlogList />}
-            {searchTerm.length < 3 && (
-                <KitchenSection
-                    title='Веганская кухня'
-                    description='Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.'
-                    veganDishes={veganDishes}
-                    tryDishes={tryDishes}
-                />
-            )}
         </Box>
     );
 };
 
-export default Main;
+export default CategoryPage;

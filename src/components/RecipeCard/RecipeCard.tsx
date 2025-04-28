@@ -11,48 +11,43 @@ import {
     Image,
     Show,
     Text,
+    VStack,
 } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { BookmarkHeart } from '~/assets/icons/icons';
-import { CardData } from '~/types/typesData';
+import { ApplicationState } from '~/store/configure-store';
+import { Recipe } from '~/types/typeRecipe';
+import { highlightText } from '~/utils/highlightText';
 
+import CategoryBadge from '../CategoryBadge/CategoryBadge';
 import LikesInfo from '../LikesInfo/LikesInfo';
 interface RecipeCardProps {
-    recipe: CardData;
+    recipe: Recipe;
+    index: number;
 }
 
-const RecipeCard = ({ recipe }: RecipeCardProps) => {
-    const { title, description, category, likes, comments, imageUrl, recomended } = recipe;
+const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
+    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+    const navigate = useNavigate();
     return (
         <Card
             direction='row'
             variant='basic'
             h={{ base: '128px', lg: '244px', xl: '244px' }}
             position='relative'
+            data-test-id={`food-card-${index}`}
         >
             <Image
-                src={imageUrl}
-                alt={title}
+                src={recipe.image}
+                alt={recipe.title}
                 w='100%'
                 h='100%'
                 maxW={{ base: '158px', mid: '346px', lg: '346px', xl: '346px' }}
                 objectFit='cover'
                 loading='lazy'
             />
-            <Hide below='mid'>
-                {recomended && (
-                    <Badge variant='lime150' position='absolute' bottom={5} left={6} py={1} px={2}>
-                        <HStack spacing={{ base: '0.5', md: '0.5', lg: '1', xl: '1' }} px={1}>
-                            <Image
-                                src={recomended?.imageUrl}
-                                alt={recomended?.name}
-                                boxSize='16px'
-                            />
-                            <Text textTransform='none'>{recomended?.name} рекомендует</Text>
-                        </HStack>
-                    </Badge>
-                )}
-            </Hide>
             <CardBody
                 display='flex'
                 flexDirection='column'
@@ -63,23 +58,29 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 <HStack
                     spacing={3}
                     alignItems='center'
-                    justify='space-between'
+                    justify='right'
                     mb={{ md: '1', lg: '7', xl: '7' }}
                 >
-                    <Badge
-                        variant='lime50'
-                        position={{ base: 'static', sm: 'absolute', md: 'absolute', lg: 'static' }}
-                        top={{ sm: '8px', md: '8px' }}
+                    <VStack
+                        position={{
+                            base: 'static',
+                            sm: 'absolute',
+                            md: 'absolute',
+                            lg: 'absolute',
+                            xl: 'absolute',
+                        }}
+                        top={{ sm: '8px', md: '8px', lg: '16px', xl: '16px' }}
                         left={{ sm: '8px', md: '8px' }}
-                        p={{ sm: '0', md: '0' }}
+                        align='flex-start'
                     >
-                        <HStack gap={{ base: '0.5', md: '0.5', lg: '2' }} px={1}>
-                            <Image src={category.icon} alt={category.title} boxSize='16px' />
-                            <Text textTransform='none'>{category.title}</Text>
-                        </HStack>
-                    </Badge>
+                        {[...new Set(recipe.category)].map((catUrl, index) => (
+                            <Badge key={catUrl + index} variant='lime50' p={{ sm: '0', md: '0' }}>
+                                <CategoryBadge categoryUrl={catUrl} />
+                            </Badge>
+                        ))}
+                    </VStack>
                     <Box px={1}>
-                        <LikesInfo likes={likes} comments={comments} />
+                        <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />
                     </Box>
                 </HStack>
                 <Heading
@@ -96,7 +97,8 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                     }}
                     variant='cardTitle'
                 >
-                    {title}
+                    {/* {recipe.title} */}
+                    {highlightText(recipe.title, searchTerm)}
                 </Heading>
                 <Hide below='mid'>
                     <Text
@@ -106,7 +108,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                             WebkitLineClamp: { base: 2, mid: 3, lg: 3, xl: 3 },
                         }}
                     >
-                        {description}
+                        {recipe.description}
                     </Text>
                 </Hide>
                 <HStack
@@ -131,7 +133,15 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                             fontSize='12px'
                         />
                     </Show>
-                    <Button variant='blackSolid'>Готовить</Button>
+                    <Button
+                        variant='blackSolid'
+                        data-test-id={`card-link-${index}`}
+                        onClick={() =>
+                            navigate(`/${recipe.category[0]}/${recipe.subcategory[0]}/${recipe.id}`)
+                        }
+                    >
+                        Готовить
+                    </Button>
                 </HStack>
             </CardBody>
         </Card>

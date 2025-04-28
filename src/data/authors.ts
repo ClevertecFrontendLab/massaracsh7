@@ -1,0 +1,81 @@
+import { AuthorData } from '~/types/typesAuthor';
+
+export const authors: AuthorData[] = [
+    {
+        name: 'Елена Мин',
+        username: '@elena_min',
+        imageUrl: '/images/elena_min.png',
+        numbers: 25,
+        recipesId: ['0', '1'],
+    },
+    {
+        name: 'Мирием Чонишвили',
+        username: '@miriyem_cho',
+        imageUrl: '/images/miriyem_chonishvili.png',
+        numbers: 30,
+        recipesId: ['2', '3'],
+    },
+    {
+        name: 'Елена Прекрасная',
+        username: '@elena_pretty',
+        imageUrl: '/images/elena_prekrasnaya.png',
+        numbers: 40,
+        recipesId: ['4', '5'],
+    },
+    {
+        name: 'Alex Cook',
+        username: '@alex_cook',
+        imageUrl: '/images/alex_cook.png',
+        numbers: 50,
+        recipesId: ['6', '7'],
+    },
+    {
+        name: 'Екатерина Константинопольская',
+        username: '@ekaterina_konst',
+        imageUrl: '/images/ekaterina_konstantinopolskaya.png',
+        numbers: 20,
+        recipesId: ['8', '9'],
+    },
+    {
+        name: 'Инна Высоцкая',
+        username: '@inna_vysotskaya',
+        imageUrl: '/images/inna_vysotskaya.png',
+        numbers: 15,
+        recipesId: ['10', '11'],
+    },
+    {
+        name: 'Сергей Разумов',
+        username: '@serge25',
+        imageUrl: '/images/sergey.png',
+        numbers: 125,
+        recipesId: ['0', '1', '2', '3'],
+    },
+    {
+        name: 'Анна Рогачева',
+        username: '@anna_rogacheva',
+        imageUrl: '/images/anna_rogacheva.png',
+        numbers: 12,
+        recipesId: ['12', '13'],
+    },
+    {
+        name: 'Иван Орлов',
+        username: '@ivan_orlov',
+        imageUrl: '/images/ivan_orlov.png',
+        numbers: 22,
+        recipesId: ['14', '15'],
+    },
+    {
+        name: 'Повар Ши',
+        username: '@povar_shi',
+        imageUrl: '/images/povar_shi.png',
+        numbers: 18,
+        recipesId: ['16', '17'],
+    },
+    {
+        name: 'Только новые авторы',
+        username: '@new_authors',
+        imageUrl: '/images/new_authors.png',
+        numbers: 0,
+        recipesId: [],
+    },
+];

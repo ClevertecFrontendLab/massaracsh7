@@ -14,6 +14,7 @@ function Footer() {
             zIndex={10}
             bg='#ffffd3'
             data-test-id='footer'
+            width='100vw'
         >
             <Flex as='nav' justify='space-around' align='flex-end' height='100%'>
                 <Button variant='radial'>

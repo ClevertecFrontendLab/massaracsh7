@@ -97,6 +97,23 @@ const Heading = defineStyleConfig({
                 xl: '28px',
             },
         },
+        nameTitle: {
+            fontWeight: 700,
+            fontSize: {
+                base: '16px',
+                sm: '16px',
+                md: '16px',
+                lg: '24px',
+                xl: '24px',
+            },
+            lineHeight: {
+                base: '24px',
+                sm: '24px',
+                md: '24px',
+                lg: '32px',
+                xl: '32px',
+            },
+        },
     },
 });
 
@@ -197,6 +214,9 @@ const Badge = defineStyleConfig({
         lime150: {
             bg: 'customLime.150',
         },
+        gray06: {
+            bg: 'rgba(0, 0, 0, 0.06)',
+        },
     },
 });
 
@@ -277,6 +297,7 @@ const theme = extendTheme({
                 lineHeight: '20px',
                 color: 'text',
                 bg: 'background',
+                position: 'relative',
             },
         },
     },
@@ -286,6 +307,8 @@ const theme = extendTheme({
         secondaryText: 'rgba(0, 0, 0, 0.64)',
         grayText: 'rgba(0, 0, 0, 0.48)',
         lightText: 'rgba(0, 0, 0, 0.24)',
+        darkText: 'rgba(0, 0, 0, 0.8)',
+        colorBlack: 'rgba(0, 0, 0, 0.92)',
 
         customLime: {
             50: '#ffffd3',
@@ -294,12 +317,14 @@ const theme = extendTheme({
             300: '#c4ff61',
             400: '#b1ff2e',
             600: '#2db100',
+            700: '#207e00',
             800: '#134b00',
         },
     },
     shadows: {
         base: '0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12)',
         menu: '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        main: '0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 10px 10px -5px rgba(0, 0, 0, 0.04)',
     },
     borders: {
         card: '1px solid rgba(0, 0, 0, 0.08)',
@@ -328,6 +353,12 @@ const theme = extendTheme({
             fontWeight: 600,
             fontSize: 'sm',
             lineHeight: '16px',
+            color: 'customLime.600',
+        },
+        limeMd: {
+            fontWeight: 600,
+            fontSize: 'md',
+            lineHeight: '20px',
             color: 'customLime.600',
         },
         limeLg: {
@@ -397,6 +428,42 @@ const theme = extendTheme({
                 },
                 navInactive: {
                     textStyle: 'navInactive',
+                },
+            },
+        },
+        Switch: {
+            baseStyle: {
+                track: {
+                    bg: 'blackAlpha.400',
+                    _checked: {
+                        bg: 'customLime.400',
+                    },
+                },
+                thumb: {
+                    bg: 'white',
+                },
+            },
+        },
+        Checkbox: {
+            baseStyle: {
+                control: {
+                    borderColor: 'customLime.150',
+                    outlineColor: 'transparent',
+                    _hover: {
+                        backgroundColor: 'customLime.400',
+                        borderColor: 'customLime.400',
+                    },
+                    _checked: {
+                        backgroundColor: 'customLime.400',
+                        borderColor: 'customLime.400',
+                        _hover: {
+                            backgroundColor: 'customLime.400',
+                            borderColor: 'customLime.400',
+                        },
+                    },
+                },
+                icon: {
+                    color: 'black',
                 },
             },
         },

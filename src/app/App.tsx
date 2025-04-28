@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router';
 
 import Layout from '~/layout/Layout';
+import CategoryPage from '~/pages/CategoryPage/CategoryPage';
 import JuicyPage from '~/pages/JuicyPage/JuicyPage';
 import MainPage from '~/pages/MainPage/MainPage';
-import VeganPage from '~/pages/VeganPage/VeganPage';
+import RecipePage from '~/pages/RecipePage/RecipePage';
 
 function App() {
     return (
@@ -11,9 +12,9 @@ function App() {
             <Layout>
                 <Routes>
                     <Route path='/' element={<MainPage />} />
-                    <Route path='/vegan' element={<VeganPage />} />
-                    <Route path='/vegan/*' element={<VeganPage />} />
-                    <Route path='/juicy' element={<JuicyPage />} />
+                    <Route path='/:category/:subcategory' element={<CategoryPage />} />
+                    <Route path='/:category/:subcategory/:id' element={<RecipePage />} />
+                    <Route path='/the-juiciest' element={<JuicyPage />} />
                 </Routes>
             </Layout>
         </Router>

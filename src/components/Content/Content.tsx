@@ -15,7 +15,7 @@ const Content = ({ children }: { children: React.ReactNode }) => (
             xl: '1456px',
             '2xl': '1456px',
         }}
-        mx={{ sm: 'auto', md: 'auto', mid: 'auto' }}
+        mx={{ sm: 'auto', md: 'auto', mid: 'auto', lg: 'auto', xl: 'auto' }}
         w='100%'
     >
         {children}

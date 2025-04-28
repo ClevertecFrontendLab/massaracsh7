@@ -15,14 +15,24 @@ import { NavLink, useNavigate } from 'react-router';
 import { ShevronDown } from '~/assets/icons/icons';
 import categories from '~/data/categories';
 
-const NavigationMenu = () => {
+interface NavProps {
+    handleOpen?: (isOpen: boolean) => void;
+    onClose?: () => void;
+}
+const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
     const navigate = useNavigate();
 
     const [isOpen, setIsOpen] = useState(false);
+    const handleAccordion = () => {
+        const newIsOpen = !isOpen;
+        setIsOpen(newIsOpen);
+        handleOpen?.(newIsOpen);
+    };
 
     return (
         <Accordion
-            onChange={() => setIsOpen(!isOpen)}
+            data-test-id='nav'
+            onChange={handleAccordion}
             allowToggle
             overflowY='auto'
             css={{
@@ -39,14 +49,26 @@ const NavigationMenu = () => {
                     borderRadius: '8px',
                 },
             }}
-            height='calc(100vh - 80px - 144px)'
+            height={{
+                base: 'calc(100vh - 280px)',
+                mid: 'calc(100vh - 280px)',
+                lg: 'calc(100vh - 80px - 144px)',
+                xl: 'calc(100vh - 80px - 144px)',
+            }}
             borderRadius='large'
-            boxShadow={isOpen ? 'menu' : 'none'}
+            boxShadow={{
+                base: 'none',
+                mid: isOpen ? 'menu' : 'none',
+            }}
         >
             {categories.map((category, index) => (
                 <AccordionItem key={index} border='none'>
                     <AccordionButton
-                        data-test-id={category.title === 'Веганская кухня' ? 'vegan-cuisine' : ''}
+                        data-test-id={
+                            category.title === 'Веганская кухня'
+                                ? 'vegan-cuisine'
+                                : `${category.url}`
+                        }
                         _hover={{ bg: 'customLime.50' }}
                         _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
                         height='48px'
@@ -55,8 +77,9 @@ const NavigationMenu = () => {
                         pt='4px'
                         onClick={() => {
                             if (category.items && category.items.length > 0) {
-                                const firstSub = category.items[0];
-                                navigate(`/vegan/${firstSub}`);
+                                const categorySlug = category.url;
+                                const firstSub = category.items[0].subcategory;
+                                navigate(`/${categorySlug}/${firstSub}`);
                             }
                         }}
                     >
@@ -85,14 +108,24 @@ const NavigationMenu = () => {
                                         bg: 'customLime.50',
                                         borderLeft: '1px solid transparent',
                                     }}
+                                    onClick={() => {
+                                        onClose?.();
+                                    }}
                                 >
                                     <NavLink
-                                        to={`/vegan/${item}`}
+                                        to={`/${category.url}/${item.subcategory}`}
                                         className={({ isActive }) =>
                                             `custom-nav-link${isActive ? ' active' : ''}`
                                         }
                                     >
-                                        {item}
+                                        {({ isActive }) => (
+                                            <Box
+                                                as='span'
+                                                data-test-id={`${item.subcategory}${isActive ? '-active' : ''}`}
+                                            >
+                                                {item.title}
+                                            </Box>
+                                        )}
                                     </NavLink>
                                 </ListItem>
                             ))}

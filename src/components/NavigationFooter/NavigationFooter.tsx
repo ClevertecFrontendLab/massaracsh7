@@ -9,6 +9,8 @@ const NavigationFooter = () => (
         lineHeight='short'
         direction='column'
         gap={4}
+        as='footer'
+        data-test-id='footer'
     >
         <Text fontWeight='500' color='lightText'>
             Версия программы 03.25
