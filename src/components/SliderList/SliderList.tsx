@@ -70,11 +70,13 @@ const SliderList = ({ recipes }: SliderListProps) => {
             <Swiper
                 data-test-id='carousel'
                 loop={true}
+                loopAdditionalSlides={1}
                 modules={[Navigation, Keyboard]}
                 keyboard={{ enabled: true }}
                 className='mySwiper'
                 spaceBetween={16}
                 slidesPerView={4}
+                watchSlidesProgress={true}
                 navigation={{
                     nextEl: '.next',
                     prevEl: '.prev',
