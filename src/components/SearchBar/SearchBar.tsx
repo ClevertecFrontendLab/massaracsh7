@@ -58,7 +58,7 @@ const SearchBar = () => {
     const isSearchActive = searchText.trim().length >= 3;
 
     return (
-        <Box width={{ base: '100%', sm: '328px', md: '448px', lg: '518px', xl: '518px' }} mx='auto'>
+        <Box>
             <HStack spacing={{ base: 3, sm: 3, md: 3, lg: 4 }} w='100%' mb={4}>
                 <IconButton
                     aria-label='Фильтр поиска'

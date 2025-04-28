@@ -1,4 +1,4 @@
-import '../../../node_modules/swiper/swiper.css';
+import 'swiper/swiper-bundle.css';
 
 import { Box, Heading, IconButton } from '@chakra-ui/react';
 import { Keyboard, Navigation } from 'swiper/modules';

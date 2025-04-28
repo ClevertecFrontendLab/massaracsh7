@@ -12,6 +12,7 @@ import {
     ResponsiveValue,
     Tag,
     TagLabel,
+    Text,
     useDisclosure,
     Wrap,
 } from '@chakra-ui/react';
@@ -81,12 +82,12 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                 w={width}
                 fontSize='16px'
                 fontWeight='400'
-                lineHeight='1.5'
+                lineHeight='24px'
                 color='secondaryText'
                 borderColor='customLime.300'
                 bg='white'
                 py='10px'
-                pr={2}
+                px='10px'
                 whiteSpace='normal'
                 _hover={{ bg: 'white' }}
                 _expanded={{ bg: 'white' }}
@@ -115,18 +116,11 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                         ))}
                     </Wrap>
                 ) : (
-                    'Выберите из списка аллергенов'
+                    <Text isTruncated>Выберите из списка аллергенов</Text>
                 )}
             </MenuButton>
 
-            <MenuList
-                maxH='300px'
-                overflowY='auto'
-                borderRadius='6px'
-                zIndex='11'
-                w={width}
-                data-test-id='allergens-menu'
-            >
+            <MenuList borderRadius='6px' zIndex='11' w={width} data-test-id='allergens-menu'>
                 {allergens.map((option, index) => (
                     <MenuItem
                         key={option.value}
