@@ -70,7 +70,8 @@ const SliderList = ({ recipes }: SliderListProps) => {
             <Swiper
                 data-test-id='carousel'
                 loop={true}
-                loopAdditionalSlides={1}
+                loopAdditionalSlides={4}
+                speed={100}
                 modules={[Navigation, Keyboard]}
                 keyboard={{ enabled: true }}
                 className='mySwiper'
