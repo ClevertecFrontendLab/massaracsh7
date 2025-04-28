@@ -26,6 +26,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
             mb={{ sm: '30px', md: '30px', lg: '40px', xl: '44px' }}
             w='100%'
             maxW='1360px'
+            style={{ overflow: 'visible' }}
         >
             <Heading variant='sectionTitle' mb={{ sm: 3, md: 3, lg: 6, xl: 6 }}>
                 Новые рецепты
