@@ -34,7 +34,7 @@ const RecipePage = () => {
     const author = authors[0];
     const [portions, setPortions] = useState(recipe?.portions ?? 1);
 
-    const getAdjustedCount = (ingredientCount: number, initialPortions: number) =>
+    const getNewCount = (ingredientCount: number, initialPortions: number) =>
         (ingredientCount * portions) / initialPortions;
 
     const handlePortionsChange = (value: string) => {
@@ -209,17 +209,35 @@ const RecipePage = () => {
                                 flex='1'
                                 width={{ sm: '100%', md: '117px' }}
                             >
-                                <Text color='secondaryText' mr={{ sm: 'auto' }}>
+                                <Text color='secondaryText' flex={{ sm: 2, md: 1 }}>
                                     {item.label}
                                 </Text>
                                 <Heading
                                     variant='sectionBlogTitle'
                                     fontWeight='600'
                                     color='customLime.800'
+                                    fontSize={{
+                                        base: '36px',
+                                        sm: '24px',
+                                        smPlus: '24px',
+                                        md: '36px',
+                                    }}
+                                    lineHeight={{
+                                        base: '40px',
+                                        sm: '32px',
+                                        smPlus: '32px',
+                                        md: '40px',
+                                    }}
+                                    flex={{ sm: 2, md: 1 }}
+                                    textAlign={{ sm: 'center', md: 'left' }}
                                 >
                                     {item.value}
                                 </Heading>
-                                <Text fontWeight='bold' color='rgba(0, 0, 0, 0.92)'>
+                                <Text
+                                    fontWeight='bold'
+                                    color='rgba(0, 0, 0, 0.92)'
+                                    flex={{ sm: 1, md: 1 }}
+                                >
                                     {item.unit}
                                 </Text>
                             </Stack>
@@ -258,7 +276,7 @@ const RecipePage = () => {
                         </Heading>
                         <Grid templateColumns='1fr 1fr'>
                             {recipe?.ingredients.map((ingredient, index) => {
-                                const newCount = getAdjustedCount(
+                                const newCount = getNewCount(
                                     Number(ingredient.count),
                                     recipe?.portions ?? 1,
                                 );
@@ -280,10 +298,13 @@ const RecipePage = () => {
                                             textAlign='right'
                                         >
                                             <Text color='colorBlack'>
-                                                <span data-test-id={`ingredient-quantity-${index}`}>
+                                                <span
+                                                    data-test-id={`ingredient-quantity-${index}`}
+                                                    style={{ marginRight: '4px' }}
+                                                >
                                                     {ingredient.measureUnit === 'по вкусу'
-                                                        ? ingredient.count
-                                                        : newCount.toFixed(2)}
+                                                        ? ''
+                                                        : newCount}
                                                 </span>
                                                 {ingredient.measureUnit}
                                             </Text>
