@@ -96,7 +96,17 @@ const JuicyPage = () => {
     );
     return (
         <Box>
-            <Box mb={8} borderRadius={6}>
+            <Box
+                boxShadow={
+                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
+                }
+                pb={8}
+                mb={6}
+                borderRadius='0 0 8px 8px'
+                width={{ base: '100%', sm: '100%', md: '480px', lg: '578px', xl: '898px' }}
+                mx='auto'
+                px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
+            >
                 <Heading variant='pageTitle' mb={8}>
                     Самое сочное
                 </Heading>

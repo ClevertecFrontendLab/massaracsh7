@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { meatTypes, sideTypes } from '~/data/allergens';
 import { authors } from '~/data/authors';
 import categories from '~/data/categories';
 import { ApplicationState } from '~/store/configure-store';
@@ -33,6 +34,7 @@ import {
     setSelectedSide,
     toggleExcludeAllergens,
 } from '~/store/filter-slice';
+import { MeatSide } from '~/types/typeCategory';
 
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
@@ -110,6 +112,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                 position='relative'
                 maxW={{ sm: '344px', md: '344px', lg: '463px', xl: '463px' }}
                 p={{ sm: '4', md: '4', mid: '4', lg: '8', xl: '8' }}
+                pr={{ sm: '5', md: '5', mid: '5', lg: '7', xl: '7' }}
                 data-test-id='filter-drawer'
             >
                 <HStack justify='space-between' align='center' mb={6}>
@@ -128,7 +131,25 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                     />
                 </HStack>
 
-                <DrawerBody p={0}>
+                <DrawerBody
+                    p={0}
+                    overflowX='hidden'
+                    overflowY='auto'
+                    css={{
+                        '&::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            background: 'rgba(0, 0, 0, 0.16)',
+                            borderRadius: '8px',
+                            maxHeight: '30%',
+                        },
+                        '&::-webkit-scrollbar-track': {
+                            background: 'rgba(0, 0, 0, 0.04)',
+                            borderRadius: '8px',
+                        },
+                    }}
+                >
                     <VStack align='stretch' spacing={4}>
                         <SearchableSelect
                             label='Категория'
@@ -151,11 +172,11 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    <Checkbox value='chicken'>Курица</Checkbox>
-                                    <Checkbox value='pork'>Свинина</Checkbox>
-                                    <Checkbox value='beef'>Говядина</Checkbox>
-                                    <Checkbox value='turkey'>Индейка</Checkbox>
-                                    <Checkbox value='duck'>Утка</Checkbox>
+                                    {meatTypes.map((meat: MeatSide) => (
+                                        <Checkbox key={meat.value} value={meat.value}>
+                                            {meat.label}
+                                        </Checkbox>
+                                    ))}
                                 </Stack>
                             </CheckboxGroup>
                         </Box>
@@ -168,16 +189,11 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    <Checkbox value='potatoes' data-test-id='checkbox-картошка'>
-                                        Картошка
-                                    </Checkbox>
-                                    <Checkbox value='buckwheat'>Гречка</Checkbox>
-                                    <Checkbox value='pasta'>Паста</Checkbox>
-                                    <Checkbox value='spaghetti'>Спагетти</Checkbox>
-                                    <Checkbox value='rice'>Рис</Checkbox>
-                                    <Checkbox value='cabbage'>Капуста</Checkbox>
-                                    <Checkbox value='beans'>Фасоль</Checkbox>
-                                    <Checkbox value='other vegetables'>Другие овощи</Checkbox>
+                                    {sideTypes.map((side: MeatSide) => (
+                                        <Checkbox key={side.value} value={side.value}>
+                                            {side.label}
+                                        </Checkbox>
+                                    ))}
                                 </Stack>
                             </CheckboxGroup>
                         </Box>
@@ -200,8 +216,8 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 sm: '100%',
                                 md: '100%',
                                 mid: '100%',
-                                lg: '399px',
-                                xl: '399px',
+                                lg: '390px',
+                                xl: '390px',
                             }}
                             sourse='drawer'
                             isDisabled={!filters.excludeAllergens}
@@ -213,8 +229,14 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 {[
                                     ...filters.categories,
                                     ...filters.authors,
-                                    ...filters.meatTypes,
-                                    ...filters.sideTypes,
+                                    ...filters.meatTypes.map((meat) => {
+                                        const found = meatTypes.find((item) => item.value === meat);
+                                        return found ? found.label : meat;
+                                    }),
+                                    ...filters.sideTypes.map((side) => {
+                                        const found = sideTypes.find((item) => item.value === side);
+                                        return found ? found.label : side;
+                                    }),
                                     ...(filters.excludeAllergens && allergens.length > 0
                                         ? allergens
                                         : []),
@@ -235,7 +257,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         </Box>
                     </VStack>
                 </DrawerBody>
-                <DrawerFooter justifyContent='center' gap={2} mt='20px' py='0'>
+                <DrawerFooter justifyContent='right' gap={2} mt='54px' p='0'>
                     <Button
                         variant='outline'
                         h='48px'

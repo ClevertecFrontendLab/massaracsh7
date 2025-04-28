@@ -14,3 +14,8 @@ export interface Allergen {
     value: string;
     label: string;
 }
+
+export interface MeatSide {
+    value: string;
+    label: string;
+}

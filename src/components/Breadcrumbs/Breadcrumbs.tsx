@@ -38,7 +38,7 @@ const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
                 <BreadcrumbLink
                     as={RouterLink}
                     to='/'
-                    textStyle={category ? 'navInactive' : 'navActive'}
+                    textStyle={catName ? 'navInactive' : 'navActive'}
                     onClick={() => onClose?.()}
                 >
                     Главная

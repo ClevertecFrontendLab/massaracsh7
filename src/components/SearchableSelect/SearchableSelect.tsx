@@ -51,7 +51,7 @@ export const SearchableSelect = ({
                         />
                     }
                     variant='outline'
-                    w='100%'
+                    w={{ sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }}
                     fontSize='16px'
                     fontWeight='400'
                     lineHeight='24px'
@@ -82,11 +82,9 @@ export const SearchableSelect = ({
                     )}
                 </MenuButton>
                 <MenuList
-                    maxH='300px'
-                    overflowY='auto'
                     p={0}
                     zIndex='11'
-                    w={{ sm: '308px', md: '308px', mid: '308px', lg: '399px', xl: '399px' }}
+                    w={{ sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }}
                 >
                     <VStack align='stretch' spacing={1}>
                         {options.map((option, index) => (
