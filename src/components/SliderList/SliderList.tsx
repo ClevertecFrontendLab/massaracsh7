@@ -25,7 +25,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
             position='relative'
             mb={{ sm: '30px', md: '30px', lg: '40px', xl: '44px' }}
             w='100%'
-            maxW='100%'
+            maxW='1360px'
         >
             <Heading variant='sectionTitle' mb={{ sm: 3, md: 3, lg: 6, xl: 6 }}>
                 Новые рецепты
@@ -71,7 +71,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 data-test-id='carousel'
                 loop={true}
                 loopAdditionalSlides={4}
-                speed={100}
+                speed={0}
                 modules={[Navigation, Keyboard]}
                 keyboard={{ enabled: true }}
                 className='mySwiper'
@@ -108,11 +108,11 @@ const SliderList = ({ recipes }: SliderListProps) => {
                         spaceBetween: 24,
                     },
                     1920: {
-                        slidesPerView: 4,
+                        slidesPerView: 4.2,
                         spaceBetween: 24,
                     },
                 }}
-                style={{ maxWidth: '1360px', width: '100%', margin: '0 auto' }}
+                style={{ width: '100%', margin: '0 auto' }}
             >
                 {newRecipes.map((recipe, index) => (
                     <SwiperSlide key={recipe.id} data-test-id={`carousel-card-${index}`}>
