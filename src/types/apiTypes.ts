@@ -1,8 +1,14 @@
-export interface SubCategory {
+export interface BaseSubCategory {
     title: string;
     category: string;
     rootCategoryId: string;
 }
+
+export interface CategorySub extends BaseSubCategory {
+    _id: string;
+}
+
+export type SubCategory = BaseSubCategory;
 
 export interface Category {
     _id: string;
@@ -12,6 +18,8 @@ export interface Category {
     description: string;
     subCategories: SubCategory[];
 }
+
+export type CategoryItem = Category | CategorySub;
 
 export interface NutritionValue {
     calories: number;

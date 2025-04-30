@@ -4,18 +4,19 @@ import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
 import { EndpointNames } from '../constants/endpoint-names';
 import { Tags } from '../constants/tags';
-import { catalogSlice } from '../create-api';
+import { catalogApiSlice } from '../create-api';
 
-export const recipesApiSlice = catalogSlice
+export const recipesApiSlice = catalogApiSlice
     .enhanceEndpoints({
         addTagTypes: [Tags.RECIPES],
     })
     .injectEndpoints({
         endpoints: (builder) => ({
             getRecipes: builder.query<RecipesResponse, RecipesParams>({
-                query: () => ({
+                query: (params) => ({
                     url: ApiEndpoints.RECIPES,
                     method: 'GET',
+                    params,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.GET_RECIPES,
                 }),

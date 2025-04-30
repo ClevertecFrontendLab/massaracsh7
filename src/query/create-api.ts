@@ -6,7 +6,7 @@ export const apiSlice = createApi({
     endpoints: () => ({}),
 });
 
-export const catalogSlice = createApi({
+export const catalogApiSlice = createApi({
     reducerPath: 'catalogApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://marathon-api.clevertec.ru' }),
     endpoints: () => ({}),
