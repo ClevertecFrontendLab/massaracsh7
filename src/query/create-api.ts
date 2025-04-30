@@ -5,3 +5,9 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://jsonplaceholder.typicode.com' }),
     endpoints: () => ({}),
 });
+
+export const catalogSlice = createApi({
+    reducerPath: 'catalogApi',
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://marathon-api.clevertec.ru' }),
+    endpoints: () => ({}),
+});
