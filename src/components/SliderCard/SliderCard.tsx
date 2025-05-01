@@ -1,5 +1,5 @@
 import {
-    Badge,
+    // Badge,
     Card,
     CardBody,
     Heading,
@@ -12,9 +12,10 @@ import {
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router';
 
-import { Recipe } from '~/types/typeRecipe';
+import { BASE_IMG_URL } from '~/constants';
+import { Recipe } from '~/types/apiTypes';
 
-import CategoryBadge from '../CategoryBadge/CategoryBadge';
+// import CategoryBadge from '../CategoryBadge/CategoryBadge';
 import LikesInfo from '../LikesInfo/LikesInfo';
 
 interface SliderCardProps {
@@ -24,7 +25,7 @@ interface SliderCardProps {
 const SliderCard = ({ recipe }: SliderCardProps) => (
     <Link
         as={RouterLink}
-        to={`/${recipe.category[0]}/${recipe.subcategory[0]}/${recipe.id}`}
+        // to={`/${recipe.category[0]}/${recipe.subcategory[0]}/${recipe._id}`}
         _hover={{ textDecoration: 'none' }}
     >
         <Card
@@ -38,7 +39,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
             }}
         >
             <Image
-                src={recipe.image}
+                src={`${BASE_IMG_URL}${recipe.image}`}
                 alt={recipe.title}
                 w='100%'
                 h={{ sm: '128px', md: '128px', lg: '230px', xl: '230px' }}
@@ -81,7 +82,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
                         bottom={{ base: 'auto', lg: 4, xl: 4 }}
                         left={{ sm: 2, md: 2, lg: 5, xl: 5 }}
                     >
-                        {[...new Set(recipe.category.slice(0, 2))].map((catUrl, index) => (
+                        {/* {[...new Set(recipe.category.slice(0, 2))].map((catUrl, index) => (
                             <Badge
                                 key={catUrl + index}
                                 variant='lime150'
@@ -90,7 +91,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => (
                             >
                                 <CategoryBadge categoryUrl={catUrl} />
                             </Badge>
-                        ))}
+                        ))} */}
                     </VStack>
                     <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />
                 </HStack>

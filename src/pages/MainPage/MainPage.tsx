@@ -1,5 +1,5 @@
-import { Box, Button, Heading, HStack } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -13,25 +13,55 @@ import { authors } from '~/data/authors';
 import { tryDishes, veganDishes } from '~/data/cardsData';
 import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
+import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
 
 const Main = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const selectedAllergens = useSelector(
-        (state: ApplicationState) => state.filters.selectedAllergens,
+    // const selectedAllergens = useSelector(
+    //     (state: ApplicationState) => state.filters.selectedAllergens,
+    // );
+    // const excludeAllergens = useSelector(
+    //     (state: ApplicationState) => state.filters.excludeAllergens,
+    // );
+    // const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
+    // const selectedCategories = useSelector(
+    //     (state: ApplicationState) => state.filters.selectedCategories,
+    // );
+    // const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
+    // const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
+    // const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+
+    const {
+        selectedAllergens,
+        excludeAllergens,
+        selectedAuthors,
+        selectedCategories,
+        selectedMeat,
+        selectedSide,
+        searchTerm,
+    } = useSelector((state: ApplicationState) => state.filters);
+
+    const {
+        data: sliderRecipes,
+        isLoading,
+        isError,
+    } = useGetRecipesQuery(
+        {
+            // allergens: selectedAllergens.join(','),
+            // subcategoriesIds: selectedCategories.join(','),
+            // meat: selectedMeat.join(','),
+            // garnish: selectedSide.join(','),
+            sortBy: 'createdAt',
+            sortOrder: 'desc',
+            limit: 10,
+        },
+        {
+            refetchOnMountOrArgChange: true,
+        },
     );
-    const excludeAllergens = useSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
-    );
-    const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
-    const selectedCategories = useSelector(
-        (state: ApplicationState) => state.filters.selectedCategories,
-    );
-    const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
-    const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
-    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
 
     const filteredPopular = useMemo(
         () =>
@@ -97,9 +127,19 @@ const Main = () => {
         ],
     );
 
-    dispatch(
-        setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
-    );
+    useEffect(() => {
+        dispatch(
+            setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
+        );
+    }, [dispatch, searchTerm, filteredPopular.length]);
+
+    if (isLoading) {
+        return <Text>Загрузка...</Text>;
+    }
+
+    if (isError) {
+        return <Text>Error...</Text>;
+    }
     return (
         <Box>
             <Box
@@ -118,7 +158,7 @@ const Main = () => {
                 </Heading>
                 <SearchBar />
             </Box>
-            {searchTerm.length < 3 && <SliderList recipes={filteredPopular} />}
+            {searchTerm.length < 3 && sliderRecipes && <SliderList recipes={sliderRecipes?.data} />}
 
             {searchTerm.length < 3 && (
                 <>
