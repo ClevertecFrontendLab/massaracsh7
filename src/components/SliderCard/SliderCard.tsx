@@ -102,7 +102,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => {
                                 </Badge>
                             ))}
                         </VStack>
-                        <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />
+                        <LikesInfo likes={recipe.likes} bookmarks={recipe.bookmarks} />
                     </HStack>
                 </CardBody>
             </Card>

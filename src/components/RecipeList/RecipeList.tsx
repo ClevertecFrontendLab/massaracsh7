@@ -1,6 +1,6 @@
 import { SimpleGrid } from '@chakra-ui/react';
 
-import { Recipe } from '~/types/typeRecipe';
+import { Recipe } from '~/types/apiTypes';
 
 import RecipeCard from '../RecipeCard/RecipeCard';
 
@@ -37,7 +37,7 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
             sx={gridStyles}
         >
             {recipes.map((recipe, index) => (
-                <RecipeCard key={recipe.id} recipe={recipe} index={index} />
+                <RecipeCard key={recipe._id} recipe={recipe} index={index} />
             ))}
         </SimpleGrid>
     );

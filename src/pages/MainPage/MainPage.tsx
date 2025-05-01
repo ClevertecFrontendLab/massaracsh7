@@ -63,6 +63,21 @@ const Main = () => {
         },
     );
 
+    const { data: juiciestRecipes } = useGetRecipesQuery(
+        {
+            // allergens: selectedAllergens.join(','),
+            // subcategoriesIds: selectedCategories.join(','),
+            // meat: selectedMeat.join(','),
+            // garnish: selectedSide.join(','),
+            sortBy: 'likes',
+            sortOrder: 'desc',
+            limit: 4,
+        },
+        {
+            refetchOnMountOrArgChange: true,
+        },
+    );
+
     const filteredPopular = useMemo(
         () =>
             dishes.filter((recipe) => {
@@ -183,11 +198,12 @@ const Main = () => {
                     </HStack>
                 </>
             )}
-
-            <RecipeList
-                recipes={filteredPopular}
-                gridVariant={searchTerm.length >= 3 ? 'low' : 'wide'}
-            />
+            {juiciestRecipes && (
+                <RecipeList
+                    recipes={juiciestRecipes.data}
+                    gridVariant={searchTerm.length >= 3 ? 'low' : 'wide'}
+                />
+            )}
 
             <Button
                 display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
