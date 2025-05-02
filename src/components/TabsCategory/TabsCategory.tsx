@@ -2,19 +2,23 @@ import { Box, Tab, TabList, Tabs } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import { SubcategoryItem } from '~/types/typeCategory';
+import { BaseSubCategory } from '~/types/apiTypes';
 
 interface TabCategoryProps {
-    subcategories: SubcategoryItem[];
+    subcategories: BaseSubCategory[];
 }
 
 const TabsCategory = ({ subcategories }: TabCategoryProps) => {
     const navigate = useNavigate();
     const { category, subcategory } = useParams();
+    // const { categories, subCategories } = useSelector(
+    //     (state: ApplicationState) => state.categories,
+    // );
+
     const [tabIndex, setTabIndex] = useState(0);
     useEffect(() => {
         if (!subcategory || subcategories.length === 0) return;
-        const index = subcategories.findIndex((cat) => cat.subcategory === subcategory);
+        const index = subcategories.findIndex((item) => item.category === subcategory);
 
         if (index !== -1) {
             setTabIndex(index);
@@ -23,7 +27,7 @@ const TabsCategory = ({ subcategories }: TabCategoryProps) => {
 
     const handleTabChange = (index: number) => {
         setTabIndex(index);
-        const slug = subcategories[index].subcategory;
+        const slug = subcategories[index].category;
         navigate(`/${category}/${slug}`);
     };
 
@@ -45,7 +49,7 @@ const TabsCategory = ({ subcategories }: TabCategoryProps) => {
                 >
                     {subcategories.map((category, index) => (
                         <Tab
-                            key={category.subcategory}
+                            key={category.category}
                             px={4}
                             pt={{ sm: '3px', md: '3px', lg: 4, xl: 4 }}
                             pb={2}
@@ -57,7 +61,7 @@ const TabsCategory = ({ subcategories }: TabCategoryProps) => {
                             borderBottom={tabIndex === index ? '2px solid' : '1px solid'}
                             borderColor={tabIndex === index ? 'customLime.600' : 'gray.200'}
                             _hover={{ color: 'customLime.600' }}
-                            data-test-id={`tab-${category.subcategory}-${index}`}
+                            data-test-id={`tab-${category.category}-${index}`}
                         >
                             {category.title}
                         </Tab>

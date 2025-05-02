@@ -1,36 +1,27 @@
 import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
-import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
-import { authors } from '~/data/authors';
-import { desertDishes, tryDesertDishes } from '~/data/cardsData';
-import categories from '~/data/categories';
-import { dishes } from '~/data/dishes';
+import useRandomCategory from '~/hooks/useRandomCategory';
+import { useGetRecipesByCategoryQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
-import { setHasResults } from '~/store/filter-slice';
 
 const CategoryPage = () => {
     const { category, subcategory } = useParams();
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+    const { categories, subCategories } = useSelector(
+        (state: ApplicationState) => state.categories,
+    );
 
-    const cat = categories.find((item) => item.url === category);
-    const recipesCategories = useMemo(() => {
-        if (category && subcategory) {
-            return dishes.filter((dish) =>
-                dish.category.some(
-                    (cat, index) => cat === category && dish.subcategory[index] === subcategory,
-                ),
-            );
-        } else if (category) {
-            return dishes.filter((dish) => dish.category.includes(category));
-        }
-        return dishes;
-    }, [category, subcategory]);
+    const cat = categories.find((item) => item.category === category);
+    const subCat = subCategories.find((item) => item.category === subcategory);
+
+    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
 
     const selectedAllergens = useSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
@@ -38,81 +29,94 @@ const CategoryPage = () => {
     const excludeAllergens = useSelector(
         (state: ApplicationState) => state.filters.excludeAllergens,
     );
-    const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
-    const selectedCategories = useSelector(
-        (state: ApplicationState) => state.filters.selectedCategories,
-    );
-    const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
-    const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
+    // const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
+    // const selectedCategories = useSelector(
+    //     (state: ApplicationState) => state.filters.selectedCategories,
+    // );
+    // const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
+    // const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
     const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+    const queryArgs = subCat?._id
+        ? {
+              id: subCat._id,
+          }
+        : skipToken;
 
-    const filteredPopular = useMemo(
-        () =>
-            recipesCategories.filter((recipe) => {
-                const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-                const recipeTitle = recipe.title.toLowerCase();
-                const lowerSearch = searchTerm.toLowerCase();
+    const {
+        data,
+        // isLoading,
+        // isSuccess,
+    } = useGetRecipesByCategoryQuery(queryArgs, {
+        refetchOnMountOrArgChange: true,
+    });
 
-                const passesAllergens =
-                    !excludeAllergens ||
-                    !selectedAllergens.length ||
-                    !ingredients.some((ingredient) => {
-                        const lowerIngredient = ingredient.toLowerCase();
-                        return selectedAllergens.some((allergen) => {
-                            const allergenParts = allergen
-                                .toLowerCase()
-                                .replace(/[()]/g, '')
-                                .split(/[,\s]+/);
-                            return allergenParts.some(
-                                (part) => part && lowerIngredient.includes(part),
-                            );
-                        });
-                    });
-                const passesAuthors =
-                    !selectedAuthors.length ||
-                    authors.some(
-                        (author) =>
-                            selectedAuthors.includes(author.name) &&
-                            author.recipesId.includes(recipe.id),
-                    );
+    // const filteredPopular = useMemo(
+    //     () =>
+    //         recipesCategories.filter((recipe) => {
+    //             const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
+    //             const recipeTitle = recipe.title.toLowerCase();
+    //             const lowerSearch = searchTerm.toLowerCase();
 
-                const catUrl = categories
-                    .filter((item) => selectedCategories.includes(item.title))
-                    .map((item) => item.url);
+    //             const passesAllergens =
+    //                 !excludeAllergens ||
+    //                 !selectedAllergens.length ||
+    //                 !ingredients.some((ingredient) => {
+    //                     const lowerIngredient = ingredient.toLowerCase();
+    //                     return selectedAllergens.some((allergen) => {
+    //                         const allergenParts = allergen
+    //                             .toLowerCase()
+    //                             .replace(/[()]/g, '')
+    //                             .split(/[,\s]+/);
+    //                         return allergenParts.some(
+    //                             (part) => part && lowerIngredient.includes(part),
+    //                         );
+    //                     });
+    //                 });
+    //             const passesAuthors =
+    //                 !selectedAuthors.length ||
+    //                 authors.some(
+    //                     (author) =>
+    //                         selectedAuthors.includes(author.name) &&
+    //                         author.recipesId.includes(recipe.id),
+    //                 );
 
-                const passesCategories =
-                    !selectedCategories.length ||
-                    catUrl?.some((item: string) => recipe.category?.includes(item));
+    //             const catUrl = categories
+    //                 .filter((item) => selectedCategories.includes(item.title))
+    //                 .map((item) => item.url);
 
-                const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
+    //             const passesCategories =
+    //                 !selectedCategories.length ||
+    //                 catUrl?.some((item: string) => recipe.category?.includes(item));
 
-                const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
+    //             const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
 
-                const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
+    //             const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
 
-                return (
-                    passesAllergens &&
-                    passesAuthors &&
-                    passesCategories &&
-                    passesMeat &&
-                    passesSide &&
-                    titleMatch
-                );
-            }),
-        [
-            selectedAllergens,
-            excludeAllergens,
-            selectedAuthors,
-            selectedCategories,
-            selectedMeat,
-            selectedSide,
-            searchTerm,
-            recipesCategories,
-        ],
-    );
-    dispatch(
-        setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
-    );
+    //             const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
+
+    //             return (
+    //                 passesAllergens &&
+    //                 passesAuthors &&
+    //                 passesCategories &&
+    //                 passesMeat &&
+    //                 passesSide &&
+    //                 titleMatch
+    //             );
+    //         }),
+    //     [
+    //         selectedAllergens,
+    //         excludeAllergens,
+    //         selectedAuthors,
+    //         selectedCategories,
+    //         selectedMeat,
+    //         selectedSide,
+    //         searchTerm,
+    //         recipesCategories,
+    //     ],
+    // );
+    // dispatch(
+    //     setHasResults(searchTerm.length < 3 ? null : categoryRecipes.length > 0 ? true : false),
+    // );
     return (
         <Box>
             <Box
@@ -139,24 +143,22 @@ const CategoryPage = () => {
                     mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
                 >
                     <Text textAlign='center' textStyle='descriptionText'>
-                        Интересны не только убеждённым вегетарианцам, но и тем, кто хочет
-                        попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.
+                        {cat?.description}
                     </Text>
                 </Box>
                 <SearchBar />
             </Box>
-            <TabsCategory subcategories={cat?.items ?? []} />
-            <RecipeList recipes={filteredPopular} gridVariant='low' />
+            <TabsCategory subcategories={cat?.subCategories ?? []} />
+            {data?.data && <RecipeList recipes={data?.data} gridVariant='low' />}
             <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
                 <Button variant='limeSolid' size='medium'>
                     Загрузить ещё
                 </Button>
             </Center>
             <KitchenSection
-                title='Десерты, выпечка'
-                description='Без них невозможно представить себе ни современную, ни традиционную  кулинарию. Пироги и печенья, блины, пончики, вареники и, конечно, хлеб - рецепты изделий из теста многообразны и невероятно популярны.'
-                veganDishes={desertDishes}
-                tryDishes={tryDesertDishes}
+                title={randomTitle}
+                description={randomDescription}
+                relevantRecipes={randomRecipes}
             />
         </Box>
     );
