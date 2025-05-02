@@ -28,10 +28,9 @@ import CategoryBadge from '../CategoryBadge/CategoryBadge';
 import LikesInfo from '../LikesInfo/LikesInfo';
 interface RecipeCardProps {
     recipe: Recipe;
-    index: number;
 }
 
-const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
+const RecipeCard = ({ recipe }: RecipeCardProps) => {
     const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
     const rootCategories = useGetCategory(recipe.categoriesIds);
     const subCategories = useGetSubcategory(recipe.categoriesIds);
@@ -42,7 +41,6 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
             variant='basic'
             h={{ base: '128px', lg: '244px', xl: '244px' }}
             position='relative'
-            data-test-id={`food-card-${index}`}
         >
             <Image
                 src={`${BASE_IMG_URL}${recipe.image}`}
@@ -147,7 +145,6 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                     </Show>
                     <Button
                         variant='blackSolid'
-                        data-test-id={`card-link-${index}`}
                         onClick={() =>
                             navigate(
                                 `/${rootCategories[0].category}/${subCategories[0].category}/${recipe._id}`,

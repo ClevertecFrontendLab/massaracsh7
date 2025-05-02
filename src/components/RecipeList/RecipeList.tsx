@@ -10,7 +10,6 @@ interface RecipeListProps {
 }
 
 const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
-    console.log(recipes);
     const gridStyles =
         gridVariant === 'wide'
             ? {
@@ -36,8 +35,8 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
             justifyContent='center'
             sx={gridStyles}
         >
-            {recipes.map((recipe, index) => (
-                <RecipeCard key={recipe._id} recipe={recipe} index={index} />
+            {recipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
             ))}
         </SimpleGrid>
     );
