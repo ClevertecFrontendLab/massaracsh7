@@ -1,10 +1,14 @@
-import { Badge, Card, CardBody, CardHeader, Heading, HStack, Image, Text } from '@chakra-ui/react';
+import { Card, CardBody, CardHeader, Heading, HStack, Text } from '@chakra-ui/react';
 
-import { KitchenDish } from '~/types/typesData';
+import { Recipe } from '~/types/apiTypes';
 
 import LikesInfo from '../LikesInfo/LikesInfo';
 
-const DishCard = ({ title, category, likes, comments, description }: KitchenDish) => (
+interface DishCardProps {
+    recipe: Recipe;
+}
+
+const DishCard = ({ recipe }: DishCardProps) => (
     <Card variant='basic'>
         <CardHeader
             pt={{ base: 3, md: 3, lg: 4, xl: 5 }}
@@ -18,7 +22,7 @@ const DishCard = ({ title, category, likes, comments, description }: KitchenDish
                     WebkitLineClamp: 1,
                 }}
             >
-                {title}
+                {recipe.title}
             </Heading>
         </CardHeader>
         <CardBody
@@ -34,16 +38,16 @@ const DishCard = ({ title, category, likes, comments, description }: KitchenDish
                     WebkitLineClamp: 3,
                 }}
             >
-                {description}
+                {recipe.description}
             </Text>
             <HStack alignItems='center' justify='space-between'>
-                <Badge variant='lime50'>
+                {/* <Badge variant='lime50'>
                     <HStack gap={2} px={1}>
                         <Image src={category.icon} alt={category.title} boxSize='16px' />
                         <Text textTransform='none'>{category.title}</Text>
                     </HStack>
-                </Badge>
-                <LikesInfo likes={likes} comments={comments} />
+                </Badge> */}
+                <LikesInfo likes={recipe.likes} bookmarks={recipe.bookmarks} />
             </HStack>
         </CardBody>
     </Card>

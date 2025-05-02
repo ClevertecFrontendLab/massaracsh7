@@ -1,8 +1,12 @@
-import { Button, Card, Heading, HStack, Image } from '@chakra-ui/react';
+import { Button, Card, Heading, HStack } from '@chakra-ui/react';
 
-import { TryDish } from '~/types/typesData';
+import { Recipe } from '~/types/apiTypes';
 
-const TryDishCard = ({ icon, title }: TryDish) => (
+interface TryDishProps {
+    recipe: Recipe;
+}
+
+const TryDishCard = ({ recipe }: TryDishProps) => (
     <Card
         w='100%'
         pt={2}
@@ -15,7 +19,7 @@ const TryDishCard = ({ icon, title }: TryDish) => (
     >
         <HStack justify='space-between' align='center' lineHeight='28px'>
             <HStack>
-                <Image src={icon} boxSize='24px' />
+                {/* <Image src={icon} boxSize='24px' /> */}
                 <Heading
                     variant='sliderTitle'
                     textStyle='cutText'
@@ -26,7 +30,7 @@ const TryDishCard = ({ icon, title }: TryDish) => (
                         },
                     }}
                 >
-                    {title}
+                    {recipe.title}
                 </Heading>
             </HStack>
             <Button variant='limeOutline'>Готовить</Button>

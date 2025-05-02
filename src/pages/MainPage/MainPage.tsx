@@ -10,9 +10,9 @@ import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
 import { authors } from '~/data/authors';
-import { tryDishes, veganDishes } from '~/data/cardsData';
 import categories from '~/data/categories';
 import { dishes } from '~/data/dishes';
+import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
@@ -20,19 +20,6 @@ import { setHasResults } from '~/store/filter-slice';
 const Main = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const selectedAllergens = useSelector(
-    //     (state: ApplicationState) => state.filters.selectedAllergens,
-    // );
-    // const excludeAllergens = useSelector(
-    //     (state: ApplicationState) => state.filters.excludeAllergens,
-    // );
-    // const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
-    // const selectedCategories = useSelector(
-    //     (state: ApplicationState) => state.filters.selectedCategories,
-    // );
-    // const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
-    // const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
-    // const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
 
     const {
         selectedAllergens,
@@ -55,7 +42,7 @@ const Main = () => {
             // meat: selectedMeat.join(','),
             // garnish: selectedSide.join(','),
             sortBy: 'createdAt',
-            sortOrder: 'desc',
+            sortOrder: 'asc',
             limit: 10,
         },
         {
@@ -77,6 +64,8 @@ const Main = () => {
             refetchOnMountOrArgChange: true,
         },
     );
+
+    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
 
     const filteredPopular = useMemo(
         () =>
@@ -219,12 +208,11 @@ const Main = () => {
             </Button>
 
             {searchTerm.length < 3 && <BlogList />}
-            {searchTerm.length < 3 && (
+            {searchTerm.length < 3 && randomRecipes && (
                 <KitchenSection
-                    title='Веганская кухня'
-                    description='Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.'
-                    veganDishes={veganDishes}
-                    tryDishes={tryDishes}
+                    title={randomTitle}
+                    description={randomDescription}
+                    relevantRecipes={randomRecipes}
                 />
             )}
         </Box>
