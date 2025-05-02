@@ -1,4 +1,5 @@
 import { Box, Hide, Show } from '@chakra-ui/react';
+import { Outlet } from 'react-router';
 
 import Content from '~/components/Content/Content';
 import Footer from '~/components/Footer/Footer';
@@ -7,7 +8,7 @@ import NavigationFooter from '~/components/NavigationFooter/NavigationFooter';
 import NavigationMenu from '~/components/NavigationMenu/NavigationMenu';
 import Sidebar from '~/components/Sidebar/Sidebar';
 
-const Layout = ({ children }: { children: React.ReactNode }) => (
+const Layout = () => (
     <>
         {/* <Box position='fixed' top={0} left={0} right={0} zIndex={10}> */}
         <Header />
@@ -43,7 +44,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
                 pt={{ md: '0', lg: '8', xl: '8' }}
                 pb={6}
             >
-                <Content>{children}</Content>
+                <Content>
+                    <Outlet />
+                </Content>
             </Box>
 
             <Hide below='mid'>
