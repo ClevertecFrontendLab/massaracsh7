@@ -1,9 +1,11 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Link as RouterLink, useLocation } from 'react-router';
 
-import categories from '~/data/categories';
-import { dishes } from '~/data/dishes';
+import { useGetRecipeByIdQuery } from '~/query/services/recipes';
+import { ApplicationState } from '~/store/configure-store';
+import { useAppSelector } from '~/store/hooks';
 
 interface BreadcrumbsProps {
     onClose?: () => void;
@@ -16,14 +18,14 @@ const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
     const categorySlug = pathSegments[0];
     const subcategorySlug = pathSegments[1];
     const dishSlug = pathSegments[2];
-    console.log(pathSegments);
+    const { categories } = useAppSelector((state: ApplicationState) => state.categories);
     const catName =
         categorySlug === 'the-juiciest'
             ? 'Самое сочное'
-            : categories.find((cat) => cat.url === categorySlug)?.title;
-    const category = categories.find((cat) => cat.url === categorySlug);
-    const subcategory = category?.items.find((item) => item.subcategory === subcategorySlug);
-    const dish = dishes?.find((item) => item.id === dishSlug);
+            : categories.find((cat) => cat.category === categorySlug)?.title;
+    const category = categories.find((cat) => cat.category === categorySlug);
+    const subcategory = category?.subCategories.find((item) => item.category === subcategorySlug);
+    const { data: recipe } = useGetRecipeByIdQuery(dishSlug ?? skipToken);
     return (
         <Breadcrumb
             separator={<ChevronRightIcon color='gray.800' />}
@@ -49,7 +51,7 @@ const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
                 <BreadcrumbItem isCurrentPage={!subcategory}>
                     <BreadcrumbLink
                         as={RouterLink}
-                        to={`/${categorySlug}/${category?.items[0].subcategory}`}
+                        to={`/${categorySlug}/${category?.subCategories[0].category}`}
                         textStyle={subcategory ? 'navInactive' : 'navActive'}
                         onClick={() => onClose?.()}
                     >
@@ -59,11 +61,11 @@ const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
             )}
 
             {subcategory && (
-                <BreadcrumbItem isCurrentPage={!dish}>
+                <BreadcrumbItem isCurrentPage={!dishSlug}>
                     <BreadcrumbLink
                         as={RouterLink}
                         to={`/${categorySlug}/${subcategorySlug}`}
-                        textStyle={dish ? 'navInactive' : 'navActive'}
+                        textStyle={dishSlug ? 'navInactive' : 'navActive'}
                         onClick={() => onClose?.()}
                     >
                         {subcategory.title}
@@ -71,11 +73,11 @@ const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
                 </BreadcrumbItem>
             )}
 
-            {dish ? (
+            {dishSlug && recipe && (
                 <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink textStyle='navActive'>{dish.title}</BreadcrumbLink>
+                    <BreadcrumbLink textStyle='navActive'>{recipe.title}</BreadcrumbLink>
                 </BreadcrumbItem>
-            ) : null}
+            )}
         </Breadcrumb>
     );
 };
