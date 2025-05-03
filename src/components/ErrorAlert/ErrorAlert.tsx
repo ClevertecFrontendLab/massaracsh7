@@ -1,25 +1,36 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, CloseButton } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 
-export const ErrorAlert = () => {
+import { clearAppError } from '~/store/app-slice';
+import { ApplicationState } from '~/store/configure-store';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
+
+const ErrorAlert = () => {
+    const error = useAppSelector((state: ApplicationState) => state.app.error);
+    const dispatch = useAppDispatch();
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
-    if (!isOpen) return null;
+    if (!error || !isOpen) return null;
 
     return (
-        <Alert status='error' mb={4}>
+        <Alert status='error' borderRadius='md' boxShadow='md' mt={4}>
             <AlertIcon />
             <Box>
                 <AlertTitle>Ошибка сервера</AlertTitle>
-                <AlertDescription>Попробуйте поискать снова попозже.</AlertDescription>
+                <AlertDescription>{error}</AlertDescription>
             </Box>
             <CloseButton
                 alignSelf='flex-start'
                 position='relative'
                 right={-1}
                 top={-1}
-                onClick={onClose}
+                onClick={() => {
+                    dispatch(clearAppError());
+                    onClose();
+                }}
             />
         </Alert>
     );
 };
+
+export default ErrorAlert;

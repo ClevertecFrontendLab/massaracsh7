@@ -27,6 +27,8 @@ import LikesInfo from '~/components/LikesInfo/LikesInfo';
 import SliderList from '~/components/SliderList/SliderList';
 import { authors } from '~/data/authors';
 import { useGetRecipeByIdQuery, useGetRecipesQuery } from '~/query/services/recipes';
+import { setAppError } from '~/store/app-slice';
+import { useAppDispatch } from '~/store/hooks';
 
 const RecipePage = () => {
     const { id } = useParams();
@@ -35,7 +37,7 @@ const RecipePage = () => {
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const author = authors[0];
     const [portions, setPortions] = useState(recipe?.portions ?? 1);
-
+    const dispatch = useAppDispatch();
     const getNewCount = (ingredientCount: number, initialPortions: number) =>
         (ingredientCount * portions) / initialPortions;
 
@@ -60,8 +62,9 @@ const RecipePage = () => {
     useEffect(() => {
         if (isError) {
             navigate(-1);
+            dispatch(setAppError('Попробуйти поискать снова попозже.'));
         }
-    }, [isError, navigate]);
+    }, [isError, navigate, dispatch]);
 
     if (isLoading || !recipe) {
         return <Text>Loading...</Text>;
