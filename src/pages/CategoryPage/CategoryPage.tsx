@@ -1,8 +1,9 @@
 import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 
+import { ErrorAlert } from '~/components/ErrorAlert/ErrorAlert';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
@@ -10,6 +11,7 @@ import TabsCategory from '~/components/TabsCategory/TabsCategory';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesByCategoryQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
+import { Category, SubCategory } from '~/types/apiTypes';
 
 const CategoryPage = () => {
     const { category, subcategory } = useParams();
@@ -18,8 +20,8 @@ const CategoryPage = () => {
         (state: ApplicationState) => state.categories,
     );
 
-    const cat = categories.find((item) => item.category === category);
-    const subCat = subCategories.find((item) => item.category === subcategory);
+    const cat = categories.find((item: Category) => item.category === category);
+    const subCat = subCategories.find((item: SubCategory) => item.category === subcategory);
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
 
@@ -36,6 +38,9 @@ const CategoryPage = () => {
     // const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
     // const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
     const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+    const location = useLocation();
+    const errorMessage = location.state?.error;
+    console.log(location);
     const queryArgs = subCat?._id
         ? {
               id: subCat._id,
@@ -118,49 +123,54 @@ const CategoryPage = () => {
     //     setHasResults(searchTerm.length < 3 ? null : categoryRecipes.length > 0 ? true : false),
     // );
     return (
-        <Box>
-            <Box
-                boxShadow={
-                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
-                }
-                pb={8}
-                mb={6}
-                borderRadius='0 0 8px 8px'
-                width={{ base: '100%', sm: '100%', md: '480px', lg: '578px', xl: '898px' }}
-                mx='auto'
-                px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
-            >
-                <Heading
-                    variant='pageTitle'
-                    mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
-                >
-                    {cat?.title}
-                </Heading>
+        <>
+            {errorMessage && <ErrorAlert />}
+            <Box>
                 <Box
-                    width='100%'
-                    maxW='700px'
+                    boxShadow={
+                        searchTerm || selectedAllergens.length > 0 || excludeAllergens
+                            ? 'main'
+                            : 'none'
+                    }
+                    pb={8}
+                    mb={6}
+                    borderRadius='0 0 8px 8px'
+                    width={{ base: '100%', sm: '100%', md: '480px', lg: '578px', xl: '898px' }}
                     mx='auto'
-                    mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
+                    px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
                 >
-                    <Text textAlign='center' textStyle='descriptionText'>
-                        {cat?.description}
-                    </Text>
+                    <Heading
+                        variant='pageTitle'
+                        mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
+                    >
+                        {cat?.title}
+                    </Heading>
+                    <Box
+                        width='100%'
+                        maxW='700px'
+                        mx='auto'
+                        mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
+                    >
+                        <Text textAlign='center' textStyle='descriptionText'>
+                            {cat?.description}
+                        </Text>
+                    </Box>
+                    <SearchBar />
                 </Box>
-                <SearchBar />
+                <TabsCategory subcategories={cat?.subCategories ?? []} />
+                {data?.data && <RecipeList recipes={data?.data} gridVariant='low' />}
+                <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
+                    <Button variant='limeSolid' size='medium'>
+                        Загрузить ещё
+                    </Button>
+                </Center>
+                <KitchenSection
+                    title={randomTitle}
+                    description={randomDescription}
+                    relevantRecipes={randomRecipes}
+                />
             </Box>
-            <TabsCategory subcategories={cat?.subCategories ?? []} />
-            {data?.data && <RecipeList recipes={data?.data} gridVariant='low' />}
-            <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
-                <Button variant='limeSolid' size='medium'>
-                    Загрузить ещё
-                </Button>
-            </Center>
-            <KitchenSection
-                title={randomTitle}
-                description={randomDescription}
-                relevantRecipes={randomRecipes}
-            />
-        </Box>
+        </>
     );
 };
 

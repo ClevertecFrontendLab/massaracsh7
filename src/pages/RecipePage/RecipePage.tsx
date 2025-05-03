@@ -18,19 +18,21 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useParams } from 'react-router';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
-import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
+// import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
 import LikesInfo from '~/components/LikesInfo/LikesInfo';
 import SliderList from '~/components/SliderList/SliderList';
 import { authors } from '~/data/authors';
-import { dishes } from '~/data/dishes';
+import { useGetRecipeByIdQuery, useGetRecipesQuery } from '~/query/services/recipes';
 
 const RecipePage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
 
-    const recipe = dishes.find((item) => item.id === id);
+    const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const author = authors[0];
     const [portions, setPortions] = useState(recipe?.portions ?? 1);
 
@@ -41,7 +43,29 @@ const RecipePage = () => {
         setPortions(Number(value));
     };
 
-    const filteredPopular = dishes.slice(-10);
+    const { data: sliderRecipes } = useGetRecipesQuery(
+        {
+            // allergens: selectedAllergens.join(','),
+            // subcategoriesIds: selectedCategories.join(','),
+            // meat: selectedMeat.join(','),
+            // garnish: selectedSide.join(','),
+            sortBy: 'createdAt',
+            sortOrder: 'asc',
+            limit: 10,
+        },
+        {
+            refetchOnMountOrArgChange: true,
+        },
+    );
+    useEffect(() => {
+        if (isError) {
+            navigate(-1);
+        }
+    }, [isError, navigate]);
+
+    if (isLoading || !recipe) {
+        return <Text>Loading...</Text>;
+    }
 
     return (
         <Box>
@@ -60,16 +84,16 @@ const RecipePage = () => {
                     />
                     <Flex flex='1' flexDirection='column'>
                         <HStack spacing={3} justify='space-between' align='flex-start' mb={10}>
-                            <Flex gap={2} align='center' wrap='wrap'>
+                            {/* <Flex gap={2} align='center' wrap='wrap'>
                                 {recipe?.category.map((catUrl, index) => (
                                     <Badge key={index} variant='lime50'>
                                         <CategoryBadge categoryUrl={catUrl} />
                                     </Badge>
                                 ))}
-                            </Flex>
+                            </Flex> */}
                             <LikesInfo
                                 likes={recipe?.likes}
-                                comments={recipe?.bookmarks}
+                                bookmarks={recipe?.bookmarks}
                                 size='limeMd'
                             />
                         </HStack>
@@ -187,7 +211,7 @@ const RecipePage = () => {
                             },
                             {
                                 label: 'белки',
-                                value: recipe?.nutritionValue.proteins,
+                                value: recipe?.nutritionValue.protein,
                                 unit: 'ГРАММ',
                             },
                             { label: 'жиры', value: recipe?.nutritionValue.fats, unit: 'ГРАММ' },
@@ -433,7 +457,7 @@ const RecipePage = () => {
                     </Box>
                 </VStack>
             </Box>
-            <SliderList recipes={filteredPopular} />
+            {sliderRecipes && <SliderList recipes={sliderRecipes.data} />}
         </Box>
     );
 };
