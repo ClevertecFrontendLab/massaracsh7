@@ -9,7 +9,6 @@ export type FiltersState = {
     selectedMeat: string[];
     selectedSide: string[];
     hasResults: boolean | null;
-    refetchTrigger: number; // заменено с boolean на number
 };
 
 const initialState: FiltersState = {
@@ -21,7 +20,6 @@ const initialState: FiltersState = {
     selectedMeat: [],
     selectedSide: [],
     hasResults: null,
-    refetchTrigger: 0,
 };
 
 export const filtersSlice = createSlice({
@@ -41,7 +39,6 @@ export const filtersSlice = createSlice({
             state.excludeAllergens = !state.excludeAllergens;
             if (!state.excludeAllergens) {
                 state.selectedAllergens = [];
-                state.refetchTrigger = Date.now();
             }
         },
         setSelectedAuthors(state, { payload }: PayloadAction<string[]>) {
@@ -67,9 +64,6 @@ export const filtersSlice = createSlice({
             state.selectedMeat = [];
             state.selectedSide = [];
         },
-        triggerRefetch(state) {
-            state.refetchTrigger = Date.now();
-        },
     },
 });
 
@@ -84,7 +78,6 @@ export const {
     setSelectedSide,
     setHasResults,
     resetAllFilters,
-    triggerRefetch,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

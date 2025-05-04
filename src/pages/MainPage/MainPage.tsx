@@ -1,5 +1,5 @@
 import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -10,9 +10,10 @@ import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
 import useRandomCategory from '~/hooks/useRandomCategory';
-import { useLazyGetRecipesQuery } from '~/query/services/recipes';
+import { useGetRecipesQuery } from '~/query/services/recipes';
+import { setAppError } from '~/store/app-slice';
 import { ApplicationState } from '~/store/configure-store';
-import { setHasResults, triggerRefetch } from '~/store/filter-slice';
+import { setHasResults } from '~/store/filter-slice';
 import { buildQuery } from '~/utils/buildQuery';
 
 const Main = () => {
@@ -27,17 +28,6 @@ const Main = () => {
         selectedSide,
         searchTerm,
     } = useSelector((state: ApplicationState) => state.filters);
-    const refetchTrigger = useSelector((state: ApplicationState) => state.filters.refetchTrigger);
-
-    console.log(refetchTrigger);
-
-    // const {
-    //     data: sliderRecipes,
-    //     isLoading,
-    //     isError,
-    // } = useGetRecipesQuery(sliderParams, {
-    //     refetchOnMountOrArgChange: refetchTrigger,
-    // });
 
     const sliderParams = useMemo(
         () =>
@@ -52,6 +42,16 @@ const Main = () => {
                 limit: 10,
             }),
         [selectedAllergens, selectedCategories, selectedMeat, selectedSide, searchTerm],
+    );
+
+    const defaultSliderParams = useMemo(
+        () =>
+            buildQuery({
+                sortBy: 'createdAt',
+                sortOrder: 'asc',
+                limit: 10,
+            }),
+        [],
     );
 
     const juiciestParams = useMemo(
@@ -70,61 +70,110 @@ const Main = () => {
         [selectedCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
     );
 
-    // const { data: juiciestRecipes } = useGetRecipesQuery(juiciestParams, {
-    //     refetchOnMountOrArgChange: refetchTrigger,
-    // });
+    const defaultParams = useMemo(
+        () =>
+            buildQuery({
+                sortBy: 'likes',
+                sortOrder: 'desc',
+                limit: 4,
+                page: 1,
+            }),
+        [],
+    );
 
-    const [
-        fetchSliderRecipes,
-        {
-            data: sliderRecipes,
-            // isLoading: isSliderLoading,
-            // isError: isSliderError,
-        },
-    ] = useLazyGetRecipesQuery();
+    const {
+        data: sliderRecipes,
+        isLoading,
+        isError,
+    } = useGetRecipesQuery(sliderParams, {
+        refetchOnMountOrArgChange: true,
+    });
 
-    const [
-        fetchJuiciestRecipes,
-        { data: juiciestRecipes, isLoading: isLoading, isError: isError },
-    ] = useLazyGetRecipesQuery();
+    const { data: defaultSliderRecipes } = useGetRecipesQuery(defaultSliderParams, {
+        skip: !sliderRecipes || sliderRecipes.data?.length > 0,
+    });
 
-    const handleRefetch = useCallback(() => {
-        if (refetchTrigger !== 0) {
-            fetchSliderRecipes(sliderParams);
-            fetchJuiciestRecipes(juiciestParams);
-        }
-    }, [refetchTrigger, fetchSliderRecipes, fetchJuiciestRecipes, sliderParams, juiciestParams]);
+    const { data: juiciestRecipes } = useGetRecipesQuery(juiciestParams, {
+        refetchOnMountOrArgChange: true,
+    });
 
-    useEffect(() => {
-        dispatch(triggerRefetch());
-    }, [dispatch]);
-
-    useEffect(() => {
-        handleRefetch();
-    }, [handleRefetch]);
+    const { data: defaultRecipes } = useGetRecipesQuery(defaultParams, {
+        skip: !juiciestRecipes || juiciestRecipes.data?.length > 0,
+    });
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
+    const [message, setMessage] = useState('');
+
+    const recipesToShow = useMemo(() => {
+        if (juiciestRecipes?.data && juiciestRecipes?.data?.length > 0) return juiciestRecipes.data;
+        if (searchTerm || selectedAllergens.length || selectedMeat || selectedSide) {
+            return defaultRecipes?.data || [];
+        }
+        return juiciestRecipes?.data || [];
+    }, [
+        juiciestRecipes?.data,
+        defaultRecipes?.data,
+        searchTerm,
+        selectedAllergens,
+        selectedMeat,
+        selectedSide,
+    ]);
+
+    const sliderRecipesToShow = useMemo(() => {
+        if (sliderRecipes?.data && sliderRecipes?.data?.length > 0) return sliderRecipes.data;
+        if (searchTerm || selectedAllergens.length || selectedMeat || selectedSide) {
+            return defaultSliderRecipes?.data || [];
+        }
+        return sliderRecipes?.data || [];
+    }, [
+        sliderRecipes?.data,
+        defaultSliderRecipes?.data,
+        searchTerm,
+        selectedAllergens,
+        selectedMeat,
+        selectedSide,
+    ]);
 
     useEffect(() => {
-        dispatch(
-            setHasResults(
-                searchTerm.length < 2 ? null : juiciestRecipes?.data?.length ? true : false,
-            ),
-        );
-    }, [dispatch, searchTerm, juiciestRecipes?.data.length]);
+        dispatch(setHasResults(searchTerm.length < 2 ? null : recipesToShow.length > 0));
+    }, [dispatch, searchTerm, recipesToShow]);
+
+    useEffect(() => {
+        const noFiltersOrSearch =
+            searchTerm.length < 3 &&
+            selectedAllergens.length === 0 &&
+            !selectedMeat &&
+            !selectedSide;
+
+        if (noFiltersOrSearch) {
+            setMessage('');
+            return;
+        }
+
+        if (juiciestRecipes && juiciestRecipes.data?.length === 0) {
+            setMessage('По вашему запросу ничего не найдено. Попробуйте другой запрос');
+        } else {
+            setMessage('');
+        }
+    }, [juiciestRecipes, searchTerm, selectedAllergens, selectedMeat, selectedSide]);
+
+    useEffect(() => {
+        if (isError) {
+            dispatch(setAppError('Попробуйте поискать снова попозже.'));
+        }
+    }, [isError, dispatch]);
 
     if (isLoading) {
         return <Text>Загрузка...</Text>;
     }
 
-    if (isError) {
-        return <Text>Error...</Text>;
-    }
     return (
         <Box>
             <Box
                 boxShadow={
-                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
+                    searchTerm || selectedAllergens.length > 0 || excludeAllergens || message
+                        ? 'main'
+                        : 'none'
                 }
                 pb={8}
                 mb={6}
@@ -133,15 +182,23 @@ const Main = () => {
                 mx='auto'
                 px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
             >
-                <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
-                    Приятного аппетита!
-                </Heading>
+                {message ? (
+                    <Heading mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>{message}</Heading>
+                ) : (
+                    <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
+                        Приятного аппетита!
+                    </Heading>
+                )}
                 <SearchBar />
             </Box>
-            {searchTerm.length < 2 && sliderRecipes && <SliderList recipes={sliderRecipes?.data} />}
 
-            {searchTerm.length < 2 && (
-                <>
+            {searchTerm.length < 2 && sliderRecipesToShow && (
+                <SliderList recipes={sliderRecipesToShow} />
+            )}
+
+            {searchTerm.length < 2 &&
+                juiciestRecipes?.data &&
+                juiciestRecipes?.data?.length > 0 && (
                     <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
                         <Heading variant='sectionTitle'>Самое сочное</Heading>
                         <Button
@@ -161,11 +218,11 @@ const Main = () => {
                             Вся подборка
                         </Button>
                     </HStack>
-                </>
-            )}
-            {juiciestRecipes && (
+                )}
+
+            {recipesToShow && (
                 <RecipeList
-                    recipes={juiciestRecipes.data}
+                    recipes={recipesToShow}
                     gridVariant={searchTerm.length >= 2 ? 'low' : 'wide'}
                 />
             )}

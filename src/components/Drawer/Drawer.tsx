@@ -33,7 +33,6 @@ import {
     setSelectedCategories,
     setSelectedMeat,
     setSelectedSide,
-    toggleExcludeAllergens,
 } from '~/store/filter-slice';
 import { MeatSide } from '~/types/typeCategory';
 
@@ -94,7 +93,6 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         dispatch(setSelectedCategories(filters.categories));
         dispatch(setSelectedMeat(filters.meatTypes));
         dispatch(setSelectedSide(filters.sideTypes));
-        dispatch(toggleExcludeAllergens());
         onClose();
     };
 
@@ -103,6 +101,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.authors.length ||
         filters.meatTypes.length ||
         filters.sideTypes.length ||
+        allergens.length > 0 ||
         filters.excludeAllergens;
 
     const removeTag = (label: string) => {

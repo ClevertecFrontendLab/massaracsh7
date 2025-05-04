@@ -21,7 +21,6 @@ import {
     setHasResults,
     setSearchTerm,
     toggleExcludeAllergens,
-    triggerRefetch,
 } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
@@ -54,7 +53,6 @@ const SearchBar = () => {
     const handleSearch = () => {
         if (searchText.trim().length >= 2 || excludeAllergens) {
             dispatch(setSearchTerm(searchText));
-            dispatch(triggerRefetch());
         }
     };
 
@@ -68,11 +66,9 @@ const SearchBar = () => {
         setSearchText('');
         dispatch(setSearchTerm(''));
         dispatch(setHasResults(null));
-        dispatch(triggerRefetch());
     };
 
-    const isSearchActive =
-        searchText.trim().length >= 2 || (excludeAllergens && selectedAllergens.length > 0);
+    const isSearchActive = searchText.trim().length >= 2 || selectedAllergens.length > 0;
     return (
         <Box>
             <HStack spacing={{ base: 3, sm: 3, md: 3, lg: 4 }} w='100%' mb={4}>
