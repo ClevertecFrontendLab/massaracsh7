@@ -47,6 +47,7 @@ export const recipesApiSlice = catalogApiSlice
 export const {
     useGetRecipesQuery,
     useGetRecipesByCategoryQuery,
+    useLazyGetRecipesQuery,
     useLazyGetRecipesByCategoryQuery,
     useGetRecipeByIdQuery,
 } = recipesApiSlice;

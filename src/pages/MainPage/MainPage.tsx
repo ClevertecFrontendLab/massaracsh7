@@ -1,5 +1,5 @@
 import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -10,9 +10,9 @@ import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
 import useRandomCategory from '~/hooks/useRandomCategory';
-import { useGetRecipesQuery } from '~/query/services/recipes';
+import { useLazyGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
-import { setHasResults } from '~/store/filter-slice';
+import { setHasResults, triggerRefetch } from '~/store/filter-slice';
 import { buildQuery } from '~/utils/buildQuery';
 
 const Main = () => {
@@ -27,108 +27,83 @@ const Main = () => {
         selectedSide,
         searchTerm,
     } = useSelector((state: ApplicationState) => state.filters);
+    const refetchTrigger = useSelector((state: ApplicationState) => state.filters.refetchTrigger);
 
-    const sliderParams = buildQuery({
-        selectedAllergens,
-        selectedCategories,
-        selectedMeat,
-        selectedSide,
-        searchTerm,
-        sortBy: 'createdAt',
-        sortOrder: 'asc',
-        limit: 10,
-    });
+    console.log(refetchTrigger);
 
-    const {
-        data: sliderRecipes,
-        isLoading,
-        isError,
-    } = useGetRecipesQuery(sliderParams, {
-        refetchOnMountOrArgChange: true,
-    });
+    // const {
+    //     data: sliderRecipes,
+    //     isLoading,
+    //     isError,
+    // } = useGetRecipesQuery(sliderParams, {
+    //     refetchOnMountOrArgChange: refetchTrigger,
+    // });
 
-    const juiciestParams = buildQuery({
-        selectedCategories,
-        selectedMeat,
-        selectedSide,
-        selectedAllergens,
-        searchTerm,
-        sortBy: 'likes',
-        sortOrder: 'desc',
-        limit: 4,
-        page: 1,
-    });
+    const sliderParams = useMemo(
+        () =>
+            buildQuery({
+                selectedAllergens,
+                selectedCategories,
+                selectedMeat,
+                selectedSide,
+                searchTerm,
+                sortBy: 'createdAt',
+                sortOrder: 'asc',
+                limit: 10,
+            }),
+        [selectedAllergens, selectedCategories, selectedMeat, selectedSide, searchTerm],
+    );
 
-    const { data: juiciestRecipes } = useGetRecipesQuery(juiciestParams, {
-        refetchOnMountOrArgChange: true,
-    });
+    const juiciestParams = useMemo(
+        () =>
+            buildQuery({
+                selectedCategories,
+                selectedMeat,
+                selectedSide,
+                selectedAllergens,
+                searchTerm,
+                sortBy: 'likes',
+                sortOrder: 'desc',
+                limit: 4,
+                page: 1,
+            }),
+        [selectedCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
+    );
 
-    console.log(juiciestRecipes);
+    // const { data: juiciestRecipes } = useGetRecipesQuery(juiciestParams, {
+    //     refetchOnMountOrArgChange: refetchTrigger,
+    // });
+
+    const [
+        fetchSliderRecipes,
+        {
+            data: sliderRecipes,
+            // isLoading: isSliderLoading,
+            // isError: isSliderError,
+        },
+    ] = useLazyGetRecipesQuery();
+
+    const [
+        fetchJuiciestRecipes,
+        { data: juiciestRecipes, isLoading: isLoading, isError: isError },
+    ] = useLazyGetRecipesQuery();
+
+    const handleRefetch = useCallback(() => {
+        if (refetchTrigger !== 0) {
+            fetchSliderRecipes(sliderParams);
+            fetchJuiciestRecipes(juiciestParams);
+        }
+    }, [refetchTrigger, fetchSliderRecipes, fetchJuiciestRecipes, sliderParams, juiciestParams]);
+
+    useEffect(() => {
+        dispatch(triggerRefetch());
+    }, [dispatch]);
+
+    useEffect(() => {
+        handleRefetch();
+    }, [handleRefetch]);
+
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
-
-    // const filteredPopular = useMemo(
-    //     () =>
-    //         dishes.filter((recipe) => {
-    //             const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-    //             const recipeTitle = recipe.title.toLowerCase();
-    //             const lowerSearch = searchTerm.toLowerCase();
-
-    //             const passesAllergens =
-    //                 !excludeAllergens ||
-    //                 !selectedAllergens.length ||
-    //                 !ingredients.some((ingredient) => {
-    //                     const lowerIngredient = ingredient.toLowerCase();
-    //                     return selectedAllergens.some((allergen) => {
-    //                         const allergenParts = allergen
-    //                             .toLowerCase()
-    //                             .replace(/[()]/g, '')
-    //                             .split(/[,\s]+/);
-    //                         return allergenParts.some(
-    //                             (part) => part && lowerIngredient.includes(part),
-    //                         );
-    //                     });
-    //                 });
-    //             const passesAuthors =
-    //                 !selectedAuthors.length ||
-    //                 authors.some(
-    //                     (author) =>
-    //                         selectedAuthors.includes(author.name) &&
-    //                         author.recipesId.includes(recipe.id),
-    //                 );
-
-    //             const catUrl = categories
-    //                 .filter((item) => selectedCategories.includes(item.title))
-    //                 .map((item) => item.url);
-
-    //             const passesCategories =
-    //                 !selectedCategories.length ||
-    //                 catUrl?.some((item: string) => recipe.category?.includes(item));
-
-    //             const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
-
-    //             const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
-
-    //             const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
-
-    //             return (
-    //                 passesAllergens &&
-    //                 passesAuthors &&
-    //                 passesCategories &&
-    //                 passesMeat &&
-    //                 passesSide &&
-    //                 titleMatch
-    //             );
-    //         }),
-    //     [
-    //         selectedAllergens,
-    //         excludeAllergens,
-    //         selectedAuthors,
-    //         selectedCategories,
-    //         selectedMeat,
-    //         selectedSide,
-    //         searchTerm,
-    //     ],
-    // );
 
     useEffect(() => {
         dispatch(
