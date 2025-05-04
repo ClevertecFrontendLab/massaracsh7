@@ -11,7 +11,7 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
@@ -22,15 +22,20 @@ import {
     setSearchTerm,
     toggleExcludeAllergens,
 } from '~/store/filter-slice';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
 import FilterDrawer from '../Drawer/Drawer';
 
 const SearchBar = () => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
-    const dispatch = useDispatch();
-    const excludeAllergens = useSelector(
+    const dispatch = useAppDispatch();
+    const excludeAllergens = useAppSelector(
         (state: ApplicationState) => state.filters.excludeAllergens,
+    );
+
+    const selectedAllergens = useAppSelector(
+        (state: ApplicationState) => state.filters.selectedAllergens,
     );
 
     const hasResults = useSelector((state: ApplicationState) => state.filters.hasResults);
@@ -46,7 +51,7 @@ const SearchBar = () => {
     };
 
     const handleSearch = () => {
-        if (searchText.trim().length >= 3) {
+        if (searchText.trim().length >= 2 || excludeAllergens) {
             dispatch(setSearchTerm(searchText));
         }
     };
@@ -63,9 +68,8 @@ const SearchBar = () => {
         dispatch(setHasResults(null));
     };
 
-    const isSearchActive = searchText.trim().length >= 3;
-    console.log(hasResults);
-
+    const isSearchActive =
+        searchText.trim().length >= 2 || (excludeAllergens && selectedAllergens.length > 0);
     return (
         <Box>
             <HStack spacing={{ base: 3, sm: 3, md: 3, lg: 4 }} w='100%' mb={4}>

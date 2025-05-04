@@ -1,5 +1,5 @@
 import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -9,13 +9,11 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
-import { authors } from '~/data/authors';
-import categories from '~/data/categories';
-import { dishes } from '~/data/dishes';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
+import { buildQuery } from '~/utils/buildQuery';
 
 const Main = () => {
     const navigate = useNavigate();
@@ -24,118 +22,121 @@ const Main = () => {
     const {
         selectedAllergens,
         excludeAllergens,
-        selectedAuthors,
         selectedCategories,
         selectedMeat,
         selectedSide,
         searchTerm,
     } = useSelector((state: ApplicationState) => state.filters);
 
+    const sliderParams = buildQuery({
+        selectedAllergens,
+        selectedCategories,
+        selectedMeat,
+        selectedSide,
+        searchTerm,
+        sortBy: 'createdAt',
+        sortOrder: 'asc',
+        limit: 10,
+    });
+
     const {
         data: sliderRecipes,
         isLoading,
         isError,
-    } = useGetRecipesQuery(
-        {
-            // allergens: selectedAllergens.join(','),
-            // subcategoriesIds: selectedCategories.join(','),
-            // meat: selectedMeat.join(','),
-            // garnish: selectedSide.join(','),
-            sortBy: 'createdAt',
-            sortOrder: 'asc',
-            limit: 10,
-        },
-        {
-            refetchOnMountOrArgChange: true,
-        },
-    );
+    } = useGetRecipesQuery(sliderParams, {
+        refetchOnMountOrArgChange: true,
+    });
 
-    const { data: juiciestRecipes } = useGetRecipesQuery(
-        {
-            // allergens: selectedAllergens.join(','),
-            // subcategoriesIds: selectedCategories.join(','),
-            // meat: selectedMeat.join(','),
-            // garnish: selectedSide.join(','),
-            sortBy: 'likes',
-            sortOrder: 'desc',
-            limit: 4,
-        },
-        {
-            refetchOnMountOrArgChange: true,
-        },
-    );
+    const juiciestParams = buildQuery({
+        selectedCategories,
+        selectedMeat,
+        selectedSide,
+        selectedAllergens,
+        searchTerm,
+        sortBy: 'likes',
+        sortOrder: 'desc',
+        limit: 4,
+        page: 1,
+    });
 
+    const { data: juiciestRecipes } = useGetRecipesQuery(juiciestParams, {
+        refetchOnMountOrArgChange: true,
+    });
+
+    console.log(juiciestRecipes);
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
 
-    const filteredPopular = useMemo(
-        () =>
-            dishes.filter((recipe) => {
-                const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-                const recipeTitle = recipe.title.toLowerCase();
-                const lowerSearch = searchTerm.toLowerCase();
+    // const filteredPopular = useMemo(
+    //     () =>
+    //         dishes.filter((recipe) => {
+    //             const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
+    //             const recipeTitle = recipe.title.toLowerCase();
+    //             const lowerSearch = searchTerm.toLowerCase();
 
-                const passesAllergens =
-                    !excludeAllergens ||
-                    !selectedAllergens.length ||
-                    !ingredients.some((ingredient) => {
-                        const lowerIngredient = ingredient.toLowerCase();
-                        return selectedAllergens.some((allergen) => {
-                            const allergenParts = allergen
-                                .toLowerCase()
-                                .replace(/[()]/g, '')
-                                .split(/[,\s]+/);
-                            return allergenParts.some(
-                                (part) => part && lowerIngredient.includes(part),
-                            );
-                        });
-                    });
-                const passesAuthors =
-                    !selectedAuthors.length ||
-                    authors.some(
-                        (author) =>
-                            selectedAuthors.includes(author.name) &&
-                            author.recipesId.includes(recipe.id),
-                    );
+    //             const passesAllergens =
+    //                 !excludeAllergens ||
+    //                 !selectedAllergens.length ||
+    //                 !ingredients.some((ingredient) => {
+    //                     const lowerIngredient = ingredient.toLowerCase();
+    //                     return selectedAllergens.some((allergen) => {
+    //                         const allergenParts = allergen
+    //                             .toLowerCase()
+    //                             .replace(/[()]/g, '')
+    //                             .split(/[,\s]+/);
+    //                         return allergenParts.some(
+    //                             (part) => part && lowerIngredient.includes(part),
+    //                         );
+    //                     });
+    //                 });
+    //             const passesAuthors =
+    //                 !selectedAuthors.length ||
+    //                 authors.some(
+    //                     (author) =>
+    //                         selectedAuthors.includes(author.name) &&
+    //                         author.recipesId.includes(recipe.id),
+    //                 );
 
-                const catUrl = categories
-                    .filter((item) => selectedCategories.includes(item.title))
-                    .map((item) => item.url);
+    //             const catUrl = categories
+    //                 .filter((item) => selectedCategories.includes(item.title))
+    //                 .map((item) => item.url);
 
-                const passesCategories =
-                    !selectedCategories.length ||
-                    catUrl?.some((item: string) => recipe.category?.includes(item));
+    //             const passesCategories =
+    //                 !selectedCategories.length ||
+    //                 catUrl?.some((item: string) => recipe.category?.includes(item));
 
-                const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
+    //             const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
 
-                const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
+    //             const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
 
-                const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
+    //             const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
 
-                return (
-                    passesAllergens &&
-                    passesAuthors &&
-                    passesCategories &&
-                    passesMeat &&
-                    passesSide &&
-                    titleMatch
-                );
-            }),
-        [
-            selectedAllergens,
-            excludeAllergens,
-            selectedAuthors,
-            selectedCategories,
-            selectedMeat,
-            selectedSide,
-            searchTerm,
-        ],
-    );
+    //             return (
+    //                 passesAllergens &&
+    //                 passesAuthors &&
+    //                 passesCategories &&
+    //                 passesMeat &&
+    //                 passesSide &&
+    //                 titleMatch
+    //             );
+    //         }),
+    //     [
+    //         selectedAllergens,
+    //         excludeAllergens,
+    //         selectedAuthors,
+    //         selectedCategories,
+    //         selectedMeat,
+    //         selectedSide,
+    //         searchTerm,
+    //     ],
+    // );
 
     useEffect(() => {
         dispatch(
-            setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
+            setHasResults(
+                searchTerm.length < 2 ? null : juiciestRecipes?.data?.length ? true : false,
+            ),
         );
-    }, [dispatch, searchTerm, filteredPopular.length]);
+    }, [dispatch, searchTerm, juiciestRecipes?.data.length]);
 
     if (isLoading) {
         return <Text>Загрузка...</Text>;
@@ -162,9 +163,9 @@ const Main = () => {
                 </Heading>
                 <SearchBar />
             </Box>
-            {searchTerm.length < 3 && sliderRecipes && <SliderList recipes={sliderRecipes?.data} />}
+            {searchTerm.length < 2 && sliderRecipes && <SliderList recipes={sliderRecipes?.data} />}
 
-            {searchTerm.length < 3 && (
+            {searchTerm.length < 2 && (
                 <>
                     <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
                         <Heading variant='sectionTitle'>Самое сочное</Heading>
@@ -190,7 +191,7 @@ const Main = () => {
             {juiciestRecipes && (
                 <RecipeList
                     recipes={juiciestRecipes.data}
-                    gridVariant={searchTerm.length >= 3 ? 'low' : 'wide'}
+                    gridVariant={searchTerm.length >= 2 ? 'low' : 'wide'}
                 />
             )}
 
