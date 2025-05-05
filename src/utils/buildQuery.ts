@@ -2,7 +2,7 @@ import { RecipesParams } from '~/types/apiTypes';
 
 export function buildQuery(params: {
     selectedAllergens?: string[];
-    selectedCategories?: string[];
+    selectedSubCategories?: string[];
     selectedMeat?: string[];
     selectedSide?: string[];
     searchTerm?: string;
@@ -17,8 +17,8 @@ export function buildQuery(params: {
         query.allergens = params.selectedAllergens.join(',');
     }
 
-    if (params.selectedCategories?.length) {
-        query.subcategoriesIds = params.selectedCategories.join(',');
+    if (params.selectedSubCategories?.length) {
+        query.subcategoriesIds = params.selectedSubCategories.join(',');
     }
 
     if (params.selectedMeat?.length) {

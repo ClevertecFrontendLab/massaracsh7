@@ -6,6 +6,7 @@ export type FiltersState = {
     excludeAllergens: boolean;
     selectedAuthors: string[];
     selectedCategories: string[];
+    selectedSubCategories: string[];
     selectedMeat: string[];
     selectedSide: string[];
     hasResults: boolean | null;
@@ -17,6 +18,7 @@ const initialState: FiltersState = {
     excludeAllergens: false,
     selectedAuthors: [],
     selectedCategories: [],
+    selectedSubCategories: [],
     selectedMeat: [],
     selectedSide: [],
     hasResults: null,
@@ -46,6 +48,9 @@ export const filtersSlice = createSlice({
         },
         setSelectedCategories(state, { payload }: PayloadAction<string[]>) {
             state.selectedCategories = payload;
+        },
+        setSelectedSubCategories(state, { payload }: PayloadAction<string[]>) {
+            state.selectedSubCategories = payload;
         },
         setSelectedMeat(state, { payload }: PayloadAction<string[]>) {
             state.selectedMeat = payload;
@@ -78,6 +83,7 @@ export const {
     setSelectedSide,
     setHasResults,
     resetAllFilters,
+    setSelectedSubCategories,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

@@ -7,6 +7,7 @@ import {
     Input,
     InputGroup,
     InputRightElement,
+    Spinner,
     Switch,
     Text,
 } from '@chakra-ui/react';
@@ -25,8 +26,11 @@ import {
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
 import FilterDrawer from '../Drawer/Drawer';
+interface SeachBarProps {
+    isLoader: boolean;
+}
 
-const SearchBar = () => {
+const SearchBar = ({ isLoader }: SeachBarProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
     const dispatch = useAppDispatch();
@@ -37,6 +41,7 @@ const SearchBar = () => {
     const selectedAllergens = useAppSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
+    console.log(isLoader);
 
     const hasResults = useSelector((state: ApplicationState) => state.filters.hasResults);
 
@@ -69,6 +74,17 @@ const SearchBar = () => {
     };
 
     const isSearchActive = searchText.trim().length >= 2 || selectedAllergens.length > 0;
+    if (isLoader) {
+        return (
+            <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.200'
+                color='lime.500'
+                size='xl'
+            />
+        );
+    }
     return (
         <Box>
             <HStack spacing={{ base: 3, sm: 3, md: 3, lg: 4 }} w='100%' mb={4}>

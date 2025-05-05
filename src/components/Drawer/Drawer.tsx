@@ -21,11 +21,11 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 
 import { meatTypes, sideTypes } from '~/data/allergens';
 import { authors } from '~/data/authors';
-import categories from '~/data/categories';
 import { ApplicationState } from '~/store/configure-store';
 import {
     resetAllFilters,
@@ -33,7 +33,10 @@ import {
     setSelectedCategories,
     setSelectedMeat,
     setSelectedSide,
+    setSelectedSubCategories,
 } from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
+import { Category } from '~/types/apiTypes';
 import { MeatSide } from '~/types/typeCategory';
 
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
@@ -54,7 +57,12 @@ interface FilterDrawerProps {
 
 const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     const dispatch = useDispatch();
-    const allergens = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const { category } = useParams();
+
+    const allergens = useAppSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const { categories, subCategories } = useAppSelector(
+        (state: ApplicationState) => state.categories,
+    );
 
     const [filters, setFilters] = useState<FilterData>({
         categories: [],
@@ -74,7 +82,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
             });
         }
     }, [isOpen]);
-    const categoryOptions = categories.map((item) => item.title);
+    const categoryOptions = categories.map((item: Category) => item.title);
     const authorOptions = authors.map((item) => item.name);
 
     const handleClear = () => {
@@ -89,10 +97,31 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     };
 
     const handleSearch = () => {
+        const selectedCategoryIds = categories
+            .filter((cat) => filters.categories.includes(cat.title))
+            .map((cat) => cat._id);
+
+        let selectedSubCategoryIds: string[] = [];
+
+        if (category) {
+            const matchedCategory = categories.find((cat) => cat.category === category);
+
+            if (matchedCategory) {
+                selectedSubCategoryIds = subCategories
+                    .filter((sub) => sub.rootCategoryId === matchedCategory._id)
+                    .map((sub) => sub._id);
+            }
+        } else {
+            selectedSubCategoryIds = subCategories
+                .filter((sub) => selectedCategoryIds.includes(sub.rootCategoryId))
+                .map((sub) => sub._id);
+        }
+
         dispatch(setSelectedAuthors(filters.authors));
         dispatch(setSelectedCategories(filters.categories));
         dispatch(setSelectedMeat(filters.meatTypes));
         dispatch(setSelectedSide(filters.sideTypes));
+        dispatch(setSelectedSubCategories(selectedSubCategoryIds));
         onClose();
     };
 

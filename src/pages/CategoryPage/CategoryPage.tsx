@@ -52,6 +52,8 @@ const CategoryPage = () => {
         isError,
         // isLoading,
         // isSuccess,
+
+        isFetching: isLoadingJuiciest,
     } = useGetRecipesByCategoryQuery(queryArgs, {
         refetchOnMountOrArgChange: true,
     });
@@ -158,7 +160,7 @@ const CategoryPage = () => {
                         {cat?.description}
                     </Text>
                 </Box>
-                <SearchBar />
+                <SearchBar isLoader={isLoadingJuiciest} />
             </Box>
             <TabsCategory subcategories={cat?.subCategories ?? []} />
             {data?.data && <RecipeList recipes={data?.data} gridVariant='low' />}

@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, HStack, Spinner } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -23,7 +23,7 @@ const Main = () => {
     const {
         selectedAllergens,
         excludeAllergens,
-        selectedCategories,
+        selectedSubCategories,
         selectedMeat,
         selectedSide,
         searchTerm,
@@ -33,7 +33,7 @@ const Main = () => {
         () =>
             buildQuery({
                 selectedAllergens,
-                selectedCategories,
+                selectedSubCategories,
                 selectedMeat,
                 selectedSide,
                 searchTerm,
@@ -41,7 +41,7 @@ const Main = () => {
                 sortOrder: 'asc',
                 limit: 10,
             }),
-        [selectedAllergens, selectedCategories, selectedMeat, selectedSide, searchTerm],
+        [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide, searchTerm],
     );
 
     const defaultSliderParams = useMemo(
@@ -57,7 +57,7 @@ const Main = () => {
     const juiciestParams = useMemo(
         () =>
             buildQuery({
-                selectedCategories,
+                selectedSubCategories,
                 selectedMeat,
                 selectedSide,
                 selectedAllergens,
@@ -67,7 +67,7 @@ const Main = () => {
                 limit: 4,
                 page: 1,
             }),
-        [selectedCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
+        [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
     );
 
     const defaultParams = useMemo(
@@ -81,11 +81,7 @@ const Main = () => {
         [],
     );
 
-    const {
-        data: sliderRecipes,
-        isLoading,
-        isError,
-    } = useGetRecipesQuery(sliderParams, {
+    const { data: sliderRecipes } = useGetRecipesQuery(sliderParams, {
         refetchOnMountOrArgChange: true,
     });
 
@@ -93,13 +89,20 @@ const Main = () => {
         skip: !sliderRecipes || sliderRecipes.data?.length > 0,
     });
 
-    const { data: juiciestRecipes } = useGetRecipesQuery(juiciestParams, {
+    const {
+        data: juiciestRecipes,
+        isFetching: isLoadingJuiciest,
+        isError,
+    } = useGetRecipesQuery(juiciestParams, {
         refetchOnMountOrArgChange: true,
     });
 
-    const { data: defaultRecipes } = useGetRecipesQuery(defaultParams, {
-        skip: !juiciestRecipes || juiciestRecipes.data?.length > 0,
-    });
+    const { data: defaultRecipes, isLoading: isLoadingDefault } = useGetRecipesQuery(
+        defaultParams,
+        {
+            skip: !juiciestRecipes || juiciestRecipes.data?.length > 0,
+        },
+    );
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [message, setMessage] = useState('');
@@ -163,8 +166,18 @@ const Main = () => {
         }
     }, [isError, dispatch]);
 
-    if (isLoading) {
-        return <Text>Загрузка...</Text>;
+    if (isLoadingDefault) {
+        return (
+            <Center minH='400px'>
+                <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    emptyColor='gray.200'
+                    color='lime.500'
+                    size='xl'
+                />
+            </Center>
+        );
     }
 
     return (
@@ -189,7 +202,7 @@ const Main = () => {
                         Приятного аппетита!
                     </Heading>
                 )}
-                <SearchBar />
+                <SearchBar isLoader={isLoadingJuiciest} />
             </Box>
 
             {searchTerm.length < 2 && sliderRecipesToShow && (
