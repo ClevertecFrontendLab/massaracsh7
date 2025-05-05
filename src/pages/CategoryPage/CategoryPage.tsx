@@ -9,6 +9,7 @@ import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesByCategoryQuery } from '~/query/services/recipes';
+import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { Category, Recipe, SubCategory } from '~/types/apiTypes';
@@ -18,7 +19,9 @@ const CategoryPage = () => {
     const { category, subcategory } = useParams();
     const dispatch = useAppDispatch();
 
-    const { categories, subCategories } = useAppSelector((state) => state.categories);
+    const { categories, subCategories } = useAppSelector(
+        (state: ApplicationState) => state.categories,
+    );
     const {
         selectedAllergens,
         excludeAllergens,

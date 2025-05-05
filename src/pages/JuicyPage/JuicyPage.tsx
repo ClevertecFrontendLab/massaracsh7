@@ -1,30 +1,58 @@
 import { Box, Button, Center, Heading } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
-// import { authors } from '~/data/authors';
-// import { tryDishes, veganDishes } from '~/data/cardsData';
-// import categories from '~/data/categories';
-// import { dishes } from '~/data/dishes';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
+import { useAppSelector } from '~/store/hooks';
 import { Recipe } from '~/types/apiTypes';
+import { buildQuery } from '~/utils/buildQuery';
 
 const JuicyPage = () => {
-    const selectedAllergens = useSelector(
-        (state: ApplicationState) => state.filters.selectedAllergens,
-    );
-    const excludeAllergens = useSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
-    );
-    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+    const {
+        selectedAllergens,
+        excludeAllergens,
+        selectedSubCategories,
+        selectedMeat,
+        selectedSide,
+        searchTerm,
+    } = useAppSelector((state: ApplicationState) => state.filters);
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [page, setPage] = useState(1);
     const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
+
+    const hasFilters =
+        searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
+
+    const filteredParams = useMemo(
+        () =>
+            buildQuery({
+                selectedSubCategories,
+                selectedMeat,
+                selectedSide,
+                selectedAllergens,
+                searchTerm,
+                sortBy: 'likes',
+                sortOrder: 'desc',
+                limit: 8,
+                page,
+            }),
+        [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
+    );
+    const baseParams = useMemo(
+        () =>
+            buildQuery({
+                sortBy: 'likes',
+                sortOrder: 'desc',
+                limit: 8,
+                page,
+            }),
+        [page],
+    );
+    const queryParams = hasFilters ? filteredParams : baseParams;
 
     const {
         data,
@@ -33,10 +61,7 @@ const JuicyPage = () => {
         isSuccess,
     } = useGetRecipesQuery(
         {
-            sortBy: 'likes',
-            sortOrder: 'desc',
-            limit: 8,
-            page,
+            ...queryParams,
         },
         {
             refetchOnMountOrArgChange: true,
@@ -44,10 +69,23 @@ const JuicyPage = () => {
     );
 
     useEffect(() => {
-        if (isSuccess) {
-            setJuiciestRecipes((prev) => [...prev, ...(data?.data || [])]);
+        if (isSuccess && data?.data) {
+            if (page === 1) {
+                setJuiciestRecipes(data.data);
+            } else {
+                setJuiciestRecipes((prev) => {
+                    const prevIds = new Set(prev.map((r) => r._id));
+                    const unique = data.data.filter((r) => !prevIds.has(r._id));
+                    return [...prev, ...unique];
+                });
+            }
         }
-    }, [isSuccess, data]);
+    }, [isSuccess, data, page]);
+
+    useEffect(() => {
+        setPage(1);
+        setJuiciestRecipes([]);
+    }, [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide, searchTerm]);
 
     const loadMoreRecipes = () => {
         setPage((prevPage) => prevPage + 1);

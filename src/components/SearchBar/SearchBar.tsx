@@ -131,10 +131,9 @@ const SearchBar = ({ isLoader }: SeachBarProps) => {
                                   : 'blackAlpha.200'
                         }
                         _hover={{ borderColor: 'blackAlpha.200' }}
-                        autoFocus
                         data-test-id='search-input'
                     />
-                    <InputRightElement height='100%' pr='24px' autoFocus>
+                    <InputRightElement height='100%' pr='24px'>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <IconButton
                                 aria-label='Очистить'
