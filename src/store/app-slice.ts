@@ -4,7 +4,7 @@ import { ApplicationState } from './configure-store';
 export type AppState = typeof initialState;
 
 const initialState = {
-    isLoading: false,
+    isLoading: true,
     error: '' as string | null,
 };
 export const appSlice = createSlice({

@@ -5,6 +5,8 @@ import { apiSlice, catalogApiSlice } from '~/query/create-api';
 import appReducer, { appSlice } from './app-slice';
 import categoriesReducer, { categoriesSlice } from './category-slice';
 import filtersReducer, { filtersSlice } from './filter-slice';
+import { errorMiddleware } from './middleware/errorMiddleware';
+import { loaderMiddleware } from './middleware/middleware';
 const isProduction = false;
 const rootReducer = combineReducers({
     [appSlice.name]: appReducer,
@@ -18,6 +20,10 @@ export type ApplicationState = ReturnType<typeof rootReducer>;
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(apiSlice.middleware).concat(catalogApiSlice.middleware),
+        getDefaultMiddleware()
+            .concat(apiSlice.middleware)
+            .concat(catalogApiSlice.middleware)
+            .concat(loaderMiddleware)
+            .concat(errorMiddleware),
     devTools: !isProduction,
 });

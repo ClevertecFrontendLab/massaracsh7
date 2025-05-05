@@ -1,6 +1,5 @@
-import { Box, Button, Center, Heading, HStack, Spinner } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
@@ -11,14 +10,14 @@ import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
-import { setAppError } from '~/store/app-slice';
 import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
 const Main = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const {
         selectedAllergens,
@@ -27,7 +26,7 @@ const Main = () => {
         selectedMeat,
         selectedSide,
         searchTerm,
-    } = useSelector((state: ApplicationState) => state.filters);
+    } = useAppSelector((state: ApplicationState) => state.filters);
 
     const sliderParams = useMemo(
         () =>
@@ -36,12 +35,11 @@ const Main = () => {
                 selectedSubCategories,
                 selectedMeat,
                 selectedSide,
-                searchTerm,
                 sortBy: 'createdAt',
                 sortOrder: 'asc',
                 limit: 10,
             }),
-        [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide, searchTerm],
+        [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide],
     );
 
     const defaultSliderParams = useMemo(
@@ -89,20 +87,16 @@ const Main = () => {
         skip: !sliderRecipes || sliderRecipes.data?.length > 0,
     });
 
-    const {
-        data: juiciestRecipes,
-        isFetching: isLoadingJuiciest,
-        isError,
-    } = useGetRecipesQuery(juiciestParams, {
-        refetchOnMountOrArgChange: true,
-    });
-
-    const { data: defaultRecipes, isLoading: isLoadingDefault } = useGetRecipesQuery(
-        defaultParams,
+    const { data: juiciestRecipes, isFetching: isLoadingJuiciest } = useGetRecipesQuery(
+        juiciestParams,
         {
-            skip: !juiciestRecipes || juiciestRecipes.data?.length > 0,
+            refetchOnMountOrArgChange: true,
         },
     );
+
+    const { data: defaultRecipes } = useGetRecipesQuery(defaultParams, {
+        skip: !juiciestRecipes || juiciestRecipes.data?.length > 0,
+    });
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [message, setMessage] = useState('');
@@ -138,7 +132,7 @@ const Main = () => {
     ]);
 
     useEffect(() => {
-        dispatch(setHasResults(searchTerm.length < 2 ? null : recipesToShow.length > 0));
+        dispatch(setHasResults(searchTerm.length < 3 ? null : recipesToShow.length > 0));
     }, [dispatch, searchTerm, recipesToShow]);
 
     useEffect(() => {
@@ -159,26 +153,6 @@ const Main = () => {
             setMessage('');
         }
     }, [juiciestRecipes, searchTerm, selectedAllergens, selectedMeat, selectedSide]);
-
-    useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('Попробуйте поискать снова попозже.'));
-        }
-    }, [isError, dispatch]);
-
-    if (isLoadingDefault) {
-        return (
-            <Center minH='400px'>
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='lime.500'
-                    size='xl'
-                />
-            </Center>
-        );
-    }
 
     return (
         <Box>
@@ -205,11 +179,11 @@ const Main = () => {
                 <SearchBar isLoader={isLoadingJuiciest} />
             </Box>
 
-            {searchTerm.length < 2 && sliderRecipesToShow && (
+            {searchTerm.length < 3 && sliderRecipesToShow && (
                 <SliderList recipes={sliderRecipesToShow} />
             )}
 
-            {searchTerm.length < 2 &&
+            {searchTerm.length < 3 &&
                 juiciestRecipes?.data &&
                 juiciestRecipes?.data?.length > 0 && (
                     <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>

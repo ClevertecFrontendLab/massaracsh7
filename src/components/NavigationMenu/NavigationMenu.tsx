@@ -8,7 +8,6 @@ import {
     Image,
     List,
     ListItem,
-    Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,7 +15,6 @@ import { NavLink, useNavigate } from 'react-router';
 
 import { ShevronDown } from '~/assets/icons/icons';
 import { BASE_IMG_URL } from '~/constants';
-// import categories from '~/data/categories';
 import { useGetCategoriesQuery } from '~/query/services/categories';
 import { ApplicationState } from '~/store/configure-store';
 
@@ -26,7 +24,7 @@ interface NavProps {
 }
 const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
     const navigate = useNavigate();
-    const { error, isLoading } = useGetCategoriesQuery();
+    useGetCategoriesQuery();
     const categories = useSelector((state: ApplicationState) => state.categories.categories);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -35,14 +33,6 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
         setIsOpen(newIsOpen);
         handleOpen?.(newIsOpen);
     };
-
-    if (isLoading) {
-        return <Text>Загрузка...</Text>;
-    }
-
-    if (error) {
-        return <Text>Error...</Text>;
-    }
 
     return (
         <Accordion

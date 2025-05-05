@@ -1,7 +1,6 @@
-import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Spinner, Text } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
@@ -10,133 +9,143 @@ import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesByCategoryQuery } from '~/query/services/recipes';
-import { setAppError } from '~/store/app-slice';
-import { ApplicationState } from '~/store/configure-store';
+import { setHasResults } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { Category, SubCategory } from '~/types/apiTypes';
+import { Category, Recipe, SubCategory } from '~/types/apiTypes';
+import { buildQuery } from '~/utils/buildQuery';
 
 const CategoryPage = () => {
     const { category, subcategory } = useParams();
     const dispatch = useAppDispatch();
 
-    const { categories, subCategories } = useAppSelector(
-        (state: ApplicationState) => state.categories,
-    );
+    const { categories, subCategories } = useAppSelector((state) => state.categories);
+    const {
+        selectedAllergens,
+        excludeAllergens,
+        selectedSubCategories,
+        selectedMeat,
+        selectedSide,
+        searchTerm,
+    } = useAppSelector((state) => state.filters);
+
+    const [page, setPage] = useState(1);
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [message, setMessage] = useState('');
 
     const cat = categories.find((item: Category) => item.category === category);
     const subCat = subCategories.find((item: SubCategory) => item.category === subcategory);
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
 
-    const selectedAllergens = useSelector(
-        (state: ApplicationState) => state.filters.selectedAllergens,
+    const hasFilters =
+        searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
+
+    const filteredParams = useMemo(
+        () =>
+            buildQuery({
+                selectedSubCategories,
+                selectedMeat,
+                selectedSide,
+                selectedAllergens,
+                searchTerm,
+                limit: 8,
+                page,
+            }),
+        [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
     );
-    const excludeAllergens = useSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
+    const categoryParams = useMemo(
+        () =>
+            buildQuery({
+                limit: 8,
+                page,
+            }),
+        [page],
     );
-    // const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
-    // const selectedCategories = useSelector(
-    //     (state: ApplicationState) => state.filters.selectedCategories,
-    // );
-    // const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
-    // const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
-    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
-    const queryArgs = subCat?._id
-        ? {
-              id: subCat._id,
-          }
-        : skipToken;
+    const queryParams = hasFilters ? filteredParams : categoryParams;
+
+    const shouldSkipQuery = !subCat?._id && !hasFilters;
 
     const {
-        data,
-        isError,
-        // isLoading,
-        // isSuccess,
-
-        isFetching: isLoadingJuiciest,
-    } = useGetRecipesByCategoryQuery(queryArgs, {
-        refetchOnMountOrArgChange: true,
-    });
+        data: recipeData,
+        isLoading,
+        isFetching,
+        isSuccess,
+    } = useGetRecipesByCategoryQuery(
+        shouldSkipQuery ? skipToken : { id: subCat?._id || '', ...queryParams },
+        {
+            refetchOnMountOrArgChange: true,
+        },
+    );
+    useEffect(() => {
+        if (isSuccess && recipeData?.data) {
+            setRecipes((prev) => [...prev, ...recipeData.data]);
+        }
+    }, [isSuccess, recipeData]);
 
     useEffect(() => {
-        if (isError) {
-            dispatch(setAppError('Попробуйти поискать снова попозже.'));
+        recipeData &&
+            dispatch(setHasResults(searchTerm.length < 3 ? null : recipeData?.data?.length > 0));
+    }, [dispatch, searchTerm, recipeData]);
+
+    useEffect(() => {
+        const noFiltersOrSearch = !hasFilters;
+
+        if (noFiltersOrSearch) {
+            setMessage('');
+            return;
         }
-    }, [isError, dispatch]);
 
-    // const filteredPopular = useMemo(
-    //     () =>
-    //         recipesCategories.filter((recipe) => {
-    //             const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-    //             const recipeTitle = recipe.title.toLowerCase();
-    //             const lowerSearch = searchTerm.toLowerCase();
+        if (recipeData?.data?.length === 0) {
+            setMessage('По вашему запросу ничего не найдено. Попробуйте другой запрос');
+        } else {
+            setMessage('');
+        }
+    }, [recipeData, hasFilters]);
 
-    //             const passesAllergens =
-    //                 !excludeAllergens ||
-    //                 !selectedAllergens.length ||
-    //                 !ingredients.some((ingredient) => {
-    //                     const lowerIngredient = ingredient.toLowerCase();
-    //                     return selectedAllergens.some((allergen) => {
-    //                         const allergenParts = allergen
-    //                             .toLowerCase()
-    //                             .replace(/[()]/g, '')
-    //                             .split(/[,\s]+/);
-    //                         return allergenParts.some(
-    //                             (part) => part && lowerIngredient.includes(part),
-    //                         );
-    //                     });
-    //                 });
-    //             const passesAuthors =
-    //                 !selectedAuthors.length ||
-    //                 authors.some(
-    //                     (author) =>
-    //                         selectedAuthors.includes(author.name) &&
-    //                         author.recipesId.includes(recipe.id),
-    //                 );
+    useEffect(() => {
+        setRecipes([]);
+        setPage(1);
+    }, [filteredParams, categoryParams]);
 
-    //             const catUrl = categories
-    //                 .filter((item) => selectedCategories.includes(item.title))
-    //                 .map((item) => item.url);
+    const loadMore = () => {
+        setPage((prev) => prev + 1);
+    };
 
-    //             const passesCategories =
-    //                 !selectedCategories.length ||
-    //                 catUrl?.some((item: string) => recipe.category?.includes(item));
+    const isLastPage = recipeData && recipeData?.meta?.page >= recipeData?.meta?.totalPages;
 
-    //             const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-    //             const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
+    useEffect(() => {
+        setIsFirstLoad(true);
+        setPage(1);
+        setRecipes([]);
+    }, [subCat?._id, hasFilters, searchTerm]);
 
-    //             const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
+    useEffect(() => {
+        if (isSuccess) {
+            setIsFirstLoad(false);
+            setRecipes((prev) => [...prev, ...(recipeData?.data || [])]);
+        }
+    }, [isSuccess, recipeData]);
 
-    //             return (
-    //                 passesAllergens &&
-    //                 passesAuthors &&
-    //                 passesCategories &&
-    //                 passesMeat &&
-    //                 passesSide &&
-    //                 titleMatch
-    //             );
-    //         }),
-    //     [
-    //         selectedAllergens,
-    //         excludeAllergens,
-    //         selectedAuthors,
-    //         selectedCategories,
-    //         selectedMeat,
-    //         selectedSide,
-    //         searchTerm,
-    //         recipesCategories,
-    //     ],
-    // );
-    // dispatch(
-    //     setHasResults(searchTerm.length < 3 ? null : categoryRecipes.length > 0 ? true : false),
-    // );
+    if (isLoading && isFirstLoad) {
+        return (
+            <Center minH='400px'>
+                <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    emptyColor='gray.200'
+                    color='lime.500'
+                    size='xl'
+                />
+            </Center>
+        );
+    }
+
     return (
         <Box>
             <Box
-                boxShadow={
-                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
-                }
+                boxShadow={hasFilters || excludeAllergens ? 'main' : 'none'}
                 pb={8}
                 mb={6}
                 borderRadius='0 0 8px 8px'
@@ -144,12 +153,16 @@ const CategoryPage = () => {
                 mx='auto'
                 px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
             >
-                <Heading
-                    variant='pageTitle'
-                    mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
-                >
-                    {cat?.title}
-                </Heading>
+                {message ? (
+                    <Heading mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>{message}</Heading>
+                ) : (
+                    <Heading
+                        variant='pageTitle'
+                        mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
+                    >
+                        {cat?.title}
+                    </Heading>
+                )}
                 <Box
                     width='100%'
                     maxW='700px'
@@ -160,15 +173,31 @@ const CategoryPage = () => {
                         {cat?.description}
                     </Text>
                 </Box>
-                <SearchBar isLoader={isLoadingJuiciest} />
+                <SearchBar isLoader={isFetching} />
             </Box>
+
             <TabsCategory subcategories={cat?.subCategories ?? []} />
-            {data?.data && <RecipeList recipes={data?.data} gridVariant='low' />}
+
+            {recipes && <RecipeList recipes={recipes} gridVariant='low' />}
+
             <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
-                <Button variant='limeSolid' size='medium'>
-                    Загрузить ещё
-                </Button>
+                {isFetching && page > 1 ? (
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='lime.500'
+                        size='md'
+                    />
+                ) : (
+                    !isLastPage && (
+                        <Button variant='limeSolid' size='medium' onClick={loadMore}>
+                            Загрузить ещё
+                        </Button>
+                    )
+                )}
             </Center>
+
             <KitchenSection
                 title={randomTitle}
                 description={randomDescription}

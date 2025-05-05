@@ -21,89 +21,15 @@ const JuicyPage = () => {
     const excludeAllergens = useSelector(
         (state: ApplicationState) => state.filters.excludeAllergens,
     );
-    // const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
-    // const selectedCategories = useSelector(
-    //     (state: ApplicationState) => state.filters.selectedCategories,
-    // );
-    // const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
-    // const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
     const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [page, setPage] = useState(1);
     const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
 
-    // const filteredPopular = useMemo(
-    //     () =>
-    //         dishes
-    //             .filter((recipe) => {
-    //                 const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-    //                 const recipeTitle = recipe.title.toLowerCase();
-    //                 const lowerSearch = searchTerm.toLowerCase();
-
-    //                 const passesAllergens =
-    //                     !excludeAllergens ||
-    //                     !selectedAllergens.length ||
-    //                     !ingredients.some((ingredient) => {
-    //                         const lowerIngredient = ingredient.toLowerCase();
-    //                         return selectedAllergens.some((allergen) => {
-    //                             const allergenParts = allergen
-    //                                 .toLowerCase()
-    //                                 .replace(/[()]/g, '')
-    //                                 .split(/[,\s]+/);
-    //                             return allergenParts.some(
-    //                                 (part) => part && lowerIngredient.includes(part),
-    //                             );
-    //                         });
-    //                     });
-
-    //                 const passesAuthors =
-    //                     !selectedAuthors.length ||
-    //                     authors.some(
-    //                         (author) =>
-    //                             selectedAuthors.includes(author.name) &&
-    //                             author.recipesId.includes(recipe.id),
-    //                     );
-
-    //                 const catUrl = categories
-    //                     .filter((item) => selectedCategories.includes(item.title))
-    //                     .map((item) => item.url);
-
-    //                 const passesCategories =
-    //                     !selectedCategories.length ||
-    //                     catUrl?.some((item: string) => recipe.category?.includes(item));
-
-    //                 const passesMeat =
-    //                     !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
-
-    //                 const passesSide =
-    //                     !selectedSide.length || selectedSide.includes(recipe.side || '');
-
-    //                 const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
-
-    //                 return (
-    //                     passesAllergens &&
-    //                     passesAuthors &&
-    //                     passesCategories &&
-    //                     passesMeat &&
-    //                     passesSide &&
-    //                     titleMatch
-    //                 );
-    //             })
-    //             .sort((a, b) => (b.likes || 0) - (a.likes || 0)),
-    //     [
-    //         selectedAllergens,
-    //         excludeAllergens,
-    //         selectedAuthors,
-    //         selectedCategories,
-    //         selectedMeat,
-    //         selectedSide,
-    //         searchTerm,
-    //     ],
-    // );
-
     const {
         data,
         isLoading: isLoading,
+        isFetching,
         isSuccess,
     } = useGetRecipesQuery(
         {
@@ -145,7 +71,7 @@ const JuicyPage = () => {
                 <Heading variant='pageTitle' mb={8}>
                     Самое сочное
                 </Heading>
-                <SearchBar />
+                <SearchBar isLoader={isFetching} />
             </Box>
             {juiciestRecipes && <RecipeList recipes={juiciestRecipes} gridVariant='low' />}
             <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>

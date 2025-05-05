@@ -41,7 +41,6 @@ const SearchBar = ({ isLoader }: SeachBarProps) => {
     const selectedAllergens = useAppSelector(
         (state: ApplicationState) => state.filters.selectedAllergens,
     );
-    console.log(isLoader);
 
     const hasResults = useSelector((state: ApplicationState) => state.filters.hasResults);
 
