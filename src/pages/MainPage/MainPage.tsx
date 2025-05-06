@@ -18,6 +18,8 @@ import { buildQuery } from '~/utils/buildQuery';
 const Main = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
+    const [isFilterClose, setIsFilterClose] = useState(true);
 
     const {
         selectedAllergens,
@@ -36,7 +38,7 @@ const Main = () => {
                 selectedMeat,
                 selectedSide,
                 sortBy: 'createdAt',
-                sortOrder: 'asc',
+                sortOrder: 'desc',
                 limit: 10,
             }),
         [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide],
@@ -46,7 +48,7 @@ const Main = () => {
         () =>
             buildQuery({
                 sortBy: 'createdAt',
-                sortOrder: 'asc',
+                sortOrder: 'desc',
                 limit: 10,
             }),
         [],
@@ -80,7 +82,7 @@ const Main = () => {
     );
 
     const { data: sliderRecipes } = useGetRecipesQuery(sliderParams, {
-        refetchOnMountOrArgChange: true,
+        refetchOnMountOrArgChange: isFilterClose,
     });
 
     const { data: defaultSliderRecipes } = useGetRecipesQuery(defaultSliderParams, {
@@ -90,7 +92,7 @@ const Main = () => {
     const { data: juiciestRecipes, isFetching: isLoadingJuiciest } = useGetRecipesQuery(
         juiciestParams,
         {
-            refetchOnMountOrArgChange: true,
+            refetchOnMountOrArgChange: isFilterClose,
         },
     );
 
@@ -98,7 +100,6 @@ const Main = () => {
         skip: !juiciestRecipes || juiciestRecipes.data?.length > 0,
     });
 
-    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [message, setMessage] = useState('');
 
     const recipesToShow = useMemo(() => {
@@ -176,36 +177,37 @@ const Main = () => {
                         Приятного аппетита!
                     </Heading>
                 )}
-                <SearchBar isLoader={isLoadingJuiciest} />
+                <SearchBar
+                    isLoader={isLoadingJuiciest && isFilterClose}
+                    handleFilterClose={setIsFilterClose}
+                />
             </Box>
 
             {searchTerm.length < 3 && sliderRecipesToShow && (
                 <SliderList recipes={sliderRecipesToShow} />
             )}
 
-            {searchTerm.length < 3 &&
-                juiciestRecipes?.data &&
-                juiciestRecipes?.data?.length > 0 && (
-                    <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
-                        <Heading variant='sectionTitle'>Самое сочное</Heading>
-                        <Button
-                            display={{
-                                base: 'flex',
-                                sm: 'none',
-                                md: 'none',
-                                lg: 'flex',
-                                xl: 'flex',
-                            }}
-                            data-test-id='juiciest-link'
-                            variant='limeSolid'
-                            size='large'
-                            rightIcon={<ArrowBlackRight w='14px' />}
-                            onClick={() => navigate('/the-juiciest')}
-                        >
-                            Вся подборка
-                        </Button>
-                    </HStack>
-                )}
+            {searchTerm.length < 3 && (
+                <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
+                    <Heading variant='sectionTitle'>Самое сочное</Heading>
+                    <Button
+                        display={{
+                            base: 'flex',
+                            sm: 'none',
+                            md: 'flex',
+                            lg: 'flex',
+                            xl: 'flex',
+                        }}
+                        data-test-id='juiciest-link'
+                        variant='limeSolid'
+                        size='large'
+                        rightIcon={<ArrowBlackRight w='14px' />}
+                        onClick={() => navigate('/the-juiciest')}
+                    >
+                        Вся подборка
+                    </Button>
+                </HStack>
+            )}
 
             {recipesToShow && (
                 <RecipeList
@@ -215,7 +217,7 @@ const Main = () => {
             )}
 
             <Button
-                display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
+                display={{ base: 'none', sm: 'block', md: 'none', lg: 'none', xl: 'none' }}
                 data-test-id='juiciest-link-mobile'
                 variant='limeSolid'
                 size='large'

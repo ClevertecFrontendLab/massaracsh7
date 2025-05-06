@@ -20,7 +20,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 
@@ -60,6 +60,9 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     const { category } = useParams();
 
     const allergens = useAppSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const excludeAllergens = useAppSelector(
+        (state: ApplicationState) => state.filters.excludeAllergens,
+    );
     const { categories, subCategories } = useAppSelector(
         (state: ApplicationState) => state.categories,
     );
@@ -69,19 +72,19 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         authors: [],
         meatTypes: [],
         sideTypes: [],
-        excludeAllergens: false,
+        excludeAllergens: excludeAllergens,
     });
-    useEffect(() => {
-        if (isOpen) {
-            setFilters({
-                categories: [],
-                authors: [],
-                meatTypes: [],
-                sideTypes: [],
-                excludeAllergens: false,
-            });
-        }
-    }, [isOpen]);
+    // useEffect(() => {
+    //     if (isOpen) {
+    //         setFilters({
+    //             categories: [],
+    //             authors: [],
+    //             meatTypes: [],
+    //             sideTypes: [],
+    //             excludeAllergens: false,
+    //         });
+    //     }
+    // }, [isOpen]);
     const categoryOptions = categories.map((item: Category) => item.title);
     const authorOptions = authors.map((item) => item.name);
 
@@ -130,8 +133,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.authors.length ||
         filters.meatTypes.length ||
         filters.sideTypes.length ||
-        allergens.length > 0 ||
-        filters.excludeAllergens;
+        allergens.length > 0;
 
     const removeTag = (label: string) => {
         const meatValue = meatTypes.find((item) => item.label === label)?.value;
@@ -251,12 +253,13 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                             <Switch
                                 size='md'
                                 isChecked={filters.excludeAllergens}
-                                onChange={(e) =>
+                                onChange={(e) => {
+                                    const checked = e.target.checked;
                                     setFilters((f) => ({
                                         ...f,
-                                        excludeAllergens: e.target.checked,
-                                    }))
-                                }
+                                        excludeAllergens: checked,
+                                    }));
+                                }}
                                 data-test-id='allergens-switcher-filter'
                             />
                         </HStack>

@@ -1,14 +1,14 @@
 import { Box, Button, Center, Heading, Spinner, Text } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
 import useRandomCategory from '~/hooks/useRandomCategory';
-import { useGetRecipesByCategoryQuery } from '~/query/services/recipes';
+import { useGetRecipesByCategoryQuery, useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
@@ -22,23 +22,24 @@ const CategoryPage = () => {
     const { categories, subCategories } = useAppSelector(
         (state: ApplicationState) => state.categories,
     );
-    const {
-        selectedAllergens,
-        excludeAllergens,
-        selectedSubCategories,
-        selectedMeat,
-        selectedSide,
-        searchTerm,
-    } = useAppSelector((state) => state.filters);
+    const { selectedAllergens, excludeAllergens, selectedMeat, selectedSide, searchTerm } =
+        useAppSelector((state) => state.filters);
 
     const [page, setPage] = useState(1);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [message, setMessage] = useState('');
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [isFilterClose, setIsFilterClose] = useState(true);
 
     const cat = categories.find((item: Category) => item.category === category);
     const subCat = subCategories.find((item: SubCategory) => item.category === subcategory);
-
-    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
+    const subCatIds = useMemo(
+        () =>
+            subCategories
+                .filter((item: SubCategory) => item.rootCategoryId === cat?._id)
+                .map((item) => item._id),
+        [subCategories, cat?._id],
+    );
 
     const hasFilters =
         searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
@@ -46,7 +47,7 @@ const CategoryPage = () => {
     const filteredParams = useMemo(
         () =>
             buildQuery({
-                selectedSubCategories,
+                selectedSubCategories: subCatIds,
                 selectedMeat,
                 selectedSide,
                 selectedAllergens,
@@ -54,8 +55,9 @@ const CategoryPage = () => {
                 limit: 8,
                 page,
             }),
-        [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
+        [subCatIds, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
     );
+
     const categoryParams = useMemo(
         () =>
             buildQuery({
@@ -64,59 +66,60 @@ const CategoryPage = () => {
             }),
         [page],
     );
-    const queryParams = hasFilters ? filteredParams : categoryParams;
 
-    const shouldSkipQuery = !subCat?._id && !hasFilters;
+    const shouldSkipCategoryQuery = hasFilters || !subCat?._id;
+    const shouldSkipFilterQuery = !hasFilters;
 
     const {
-        data: recipeData,
-        isLoading,
-        isFetching,
-        isSuccess,
+        data: categoryData,
+        isFetching: isFetchingCategory,
+        isSuccess: isCategorySuccess,
+        isLoading: isLoadingCategory,
     } = useGetRecipesByCategoryQuery(
-        shouldSkipQuery ? skipToken : { id: subCat?._id || '', ...queryParams },
-        {
-            refetchOnMountOrArgChange: true,
-        },
+        shouldSkipCategoryQuery ? skipToken : { id: subCat?._id || '', ...categoryParams },
+        { refetchOnMountOrArgChange: true },
     );
+
+    const {
+        data: filterData,
+        isFetching: isFetchingFilter,
+        isSuccess: isFilterSuccess,
+        isLoading: isLoadingFilter,
+    } = useGetRecipesQuery(shouldSkipFilterQuery ? skipToken : filteredParams, {
+        refetchOnMountOrArgChange: isFilterClose,
+    });
+
+    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
+
+    const activeData = hasFilters ? filterData : categoryData;
+    const isSuccess = hasFilters ? isFilterSuccess : isCategorySuccess;
+    const isFetching = hasFilters ? isFetchingFilter : isFetchingCategory;
+    const isLoading = hasFilters ? isLoadingFilter : isLoadingCategory;
+
     useEffect(() => {
-        if (isSuccess && recipeData?.data) {
-            setRecipes((prev) => [...prev, ...recipeData.data]);
+        if (isSuccess && activeData?.data) {
+            setRecipes((prev) => [...prev, ...activeData.data]);
         }
-    }, [isSuccess, recipeData]);
+    }, [isSuccess, activeData]);
 
     useEffect(() => {
-        recipeData &&
-            dispatch(setHasResults(searchTerm.length < 3 ? null : recipeData?.data?.length > 0));
-    }, [dispatch, searchTerm, recipeData]);
+        dispatch(setHasResults(searchTerm.length >= 3 ? !!activeData?.data?.length : null));
+    }, [dispatch, searchTerm, activeData]);
 
     useEffect(() => {
-        const noFiltersOrSearch = !hasFilters;
-
-        if (noFiltersOrSearch) {
+        if (!hasFilters) {
             setMessage('');
-            return;
-        }
-
-        if (recipeData?.data?.length === 0) {
+        } else if (activeData?.data?.length === 0) {
             setMessage('По вашему запросу ничего не найдено. Попробуйте другой запрос');
         } else {
             setMessage('');
         }
-    }, [recipeData, hasFilters]);
+    }, [activeData, hasFilters]);
 
     useEffect(() => {
         setRecipes([]);
         setPage(1);
     }, [filteredParams, categoryParams]);
-
-    const loadMore = () => {
-        setPage((prev) => prev + 1);
-    };
-
-    const isLastPage = recipeData && recipeData?.meta?.page >= recipeData?.meta?.totalPages;
-
-    const [isFirstLoad, setIsFirstLoad] = useState(true);
 
     useEffect(() => {
         setIsFirstLoad(true);
@@ -127,9 +130,23 @@ const CategoryPage = () => {
     useEffect(() => {
         if (isSuccess) {
             setIsFirstLoad(false);
-            setRecipes((prev) => [...prev, ...(recipeData?.data || [])]);
         }
-    }, [isSuccess, recipeData]);
+    }, [isSuccess]);
+
+    if (!cat || !subCat || subCat.rootCategoryId !== cat._id) {
+        return <Navigate to='/not-found' replace />;
+    }
+
+    const loadMore = () => setPage((prev) => prev + 1);
+    const isLastPage = activeData && activeData?.meta?.page >= activeData?.meta?.totalPages;
+
+    if (!cat || !subCat || subCat.rootCategoryId !== cat._id) {
+        return (
+            <Center minH='400px'>
+                <Text>Категория или подкатегория не найдена</Text>
+            </Center>
+        );
+    }
 
     if (isLoading && isFirstLoad) {
         return (
@@ -176,7 +193,10 @@ const CategoryPage = () => {
                         {cat?.description}
                     </Text>
                 </Box>
-                <SearchBar isLoader={isFetching} />
+                <SearchBar
+                    isLoader={isFetching && isFilterClose}
+                    handleFilterClose={setIsFilterClose}
+                />
             </Box>
 
             <TabsCategory subcategories={cat?.subCategories ?? []} />

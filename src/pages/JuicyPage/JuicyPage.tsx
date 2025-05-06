@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Spinner } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
 
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
@@ -23,6 +23,7 @@ const JuicyPage = () => {
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [page, setPage] = useState(1);
     const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
+    const [isFilterClose, setIsFilterClose] = useState(true);
 
     const hasFilters =
         searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
@@ -54,19 +55,38 @@ const JuicyPage = () => {
     );
     const queryParams = hasFilters ? filteredParams : baseParams;
 
-    const {
-        data,
-        isLoading: isLoading,
-        isFetching,
-        isSuccess,
-    } = useGetRecipesQuery(
+    const { data, isLoading, isFetching, isSuccess } = useGetRecipesQuery(
         {
             ...queryParams,
         },
         {
-            refetchOnMountOrArgChange: true,
+            refetchOnMountOrArgChange: isFilterClose,
         },
     );
+
+    useEffect(() => {
+        setPage(1);
+    }, [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide, searchTerm]);
+
+    useEffect(() => {
+        if (page === 1) {
+            setJuiciestRecipes([]);
+        }
+    }, [page]);
+
+    useEffect(() => {
+        if (page === 1 && !juiciestRecipes.length) {
+            setJuiciestRecipes([]);
+        }
+    }, [
+        page,
+        selectedAllergens,
+        selectedSubCategories,
+        selectedMeat,
+        selectedSide,
+        searchTerm,
+        juiciestRecipes,
+    ]);
 
     useEffect(() => {
         if (isSuccess && data?.data) {
@@ -82,16 +102,25 @@ const JuicyPage = () => {
         }
     }, [isSuccess, data, page]);
 
-    useEffect(() => {
-        setPage(1);
-        setJuiciestRecipes([]);
-    }, [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide, searchTerm]);
-
     const loadMoreRecipes = () => {
         setPage((prevPage) => prevPage + 1);
     };
 
     const isLastPage = data && data?.meta.page >= data?.meta.totalPages;
+    if (isLoading) {
+        return (
+            <Center minH='400px'>
+                <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    emptyColor='gray.200'
+                    color='lime.500'
+                    size='xl'
+                    data-test-id='app-loader'
+                />
+            </Center>
+        );
+    }
 
     return (
         <Box>
@@ -109,13 +138,21 @@ const JuicyPage = () => {
                 <Heading variant='pageTitle' mb={8}>
                     Самое сочное
                 </Heading>
-                <SearchBar isLoader={isFetching} />
+                <SearchBar
+                    isLoader={isFetching && isFilterClose}
+                    handleFilterClose={setIsFilterClose}
+                />
             </Box>
             {juiciestRecipes && <RecipeList recipes={juiciestRecipes} gridVariant='low' />}
             <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
                 {!isLastPage && !isLoading && (
-                    <Button variant='limeSolid' size='medium' onClick={loadMoreRecipes}>
-                        Загрузить ещё
+                    <Button
+                        variant='limeSolid'
+                        size='medium'
+                        onClick={loadMoreRecipes}
+                        data-test-id='load-more-button'
+                    >
+                        Загрузка
                     </Button>
                 )}
             </Center>

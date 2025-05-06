@@ -13,13 +13,20 @@ const ErrorAlert = () => {
     if (!error || !isOpen) return null;
 
     return (
-        <Alert status='error' borderRadius='md' boxShadow='md' mt={4}>
+        <Alert
+            status='error'
+            borderRadius='md'
+            boxShadow='md'
+            mt={4}
+            data-test-id='error-notification'
+        >
             <AlertIcon />
             <Box>
                 <AlertTitle>Ошибка сервера</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
             </Box>
             <CloseButton
+                data-test-id='close-alert-button'
                 alignSelf='flex-start'
                 position='relative'
                 right={-1}

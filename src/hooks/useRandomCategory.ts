@@ -32,16 +32,24 @@ const useRandomCategory = (activeCategoryId: string | null) => {
             setRandomTitle(randomCategory.title);
             setRandomDescription(randomCategory.description);
 
-            const random: Recipe[] = [];
+            trigger({ id: subcats[0]._id });
 
-            for (const subcat of subcats) {
-                const result = await trigger({ id: subcat._id }).unwrap();
-                random.push(...(result.data || []));
+            const collected: Recipe[] = [];
+            const seen = new Set<string>();
 
-                if (random.length >= 5) break;
+            for (const sub of subcats) {
+                const { data } = await trigger({ id: sub._id, limit: 5 }).unwrap();
+                for (const recipe of data || []) {
+                    if (!seen.has(recipe._id)) {
+                        seen.add(recipe._id);
+                        collected.push(recipe);
+                    }
+                    if (collected.length >= 5) break;
+                }
+                if (collected.length >= 5) break;
             }
 
-            setRecipes(random.slice(0, 5));
+            setRecipes(collected);
         };
 
         fetchRecipes();

@@ -1,4 +1,5 @@
 import { Box, Heading, Hide, HStack, Image, Link, Show, Text, VStack } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router';
 
 const NotFoundPage = () => (
     <>
@@ -53,11 +54,20 @@ const NotFoundPage = () => (
                         h={{ base: '108px', lg: '206px', xl: '206px' }}
                         mb={4}
                     />
-                    <Heading fontSize='24px' lineHeight='32px' fontWeight='700'>
+                    <Heading as='h1' fontSize='24px' lineHeight='32px' fontWeight='700'>
                         Упс! Такой страницы нет
                     </Heading>
                     <Text fontSize='16px' lineHeight='24px' color='secondaryText'>
-                        Можете поискать другой рецепт <Link textDecoration='underline'>здесь</Link>.
+                        Можете поискать другой рецепт{' '}
+                        <Link
+                            as={RouterLink}
+                            to='/'
+                            textDecoration='underline'
+                            data-test-id='error-page-go-home'
+                        >
+                            здесь
+                        </Link>
+                        .
                     </Text>
                 </VStack>
             </Box>

@@ -17,20 +17,16 @@ import { useSelector } from 'react-redux';
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 import { ApplicationState } from '~/store/configure-store';
-import {
-    resetAllFilters,
-    setHasResults,
-    setSearchTerm,
-    toggleExcludeAllergens,
-} from '~/store/filter-slice';
+import { setHasResults, setSearchTerm, toggleExcludeAllergens } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
 import FilterDrawer from '../Drawer/Drawer';
 interface SeachBarProps {
     isLoader: boolean;
+    handleFilterClose: (value: boolean) => void;
 }
 
-const SearchBar = ({ isLoader }: SeachBarProps) => {
+const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
     const dispatch = useAppDispatch();
@@ -43,12 +39,14 @@ const SearchBar = ({ isLoader }: SeachBarProps) => {
     );
 
     const hasResults = useSelector((state: ApplicationState) => state.filters.hasResults);
-
     const openFilterDrawer = () => {
-        dispatch(resetAllFilters());
         setFilterOpen(true);
+        handleFilterClose(false);
     };
-    const closeFilterDrawer = () => setFilterOpen(false);
+    const closeFilterDrawer = () => {
+        setFilterOpen(false);
+        handleFilterClose(true);
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(e.target.value);
@@ -72,8 +70,8 @@ const SearchBar = ({ isLoader }: SeachBarProps) => {
         dispatch(setHasResults(null));
     };
 
-    const isSearchActive = searchText.trim().length >= 2 || selectedAllergens.length > 0;
-    if (isLoader) {
+    const isSearchActive = searchText.trim().length >= 3 || selectedAllergens.length > 0;
+    if (isLoader && !isFilterOpen && !excludeAllergens) {
         return (
             <Spinner
                 thickness='4px'
@@ -81,6 +79,7 @@ const SearchBar = ({ isLoader }: SeachBarProps) => {
                 emptyColor='gray.200'
                 color='lime.500'
                 size='xl'
+                data-test-id='loader-search-block'
             />
         );
     }

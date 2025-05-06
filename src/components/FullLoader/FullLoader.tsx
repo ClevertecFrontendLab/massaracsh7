@@ -21,6 +21,7 @@ const FullLoader = () => {
                 speed='0.65s'
                 emptyColor='gray.200'
                 color='green.400'
+                data-test-id='app-loader'
             />
         </Box>
     );

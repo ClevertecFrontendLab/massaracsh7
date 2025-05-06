@@ -4,6 +4,7 @@ import {
     Box,
     Button,
     Card,
+    Center,
     Flex,
     Grid,
     Heading,
@@ -14,6 +15,7 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
+    Spinner,
     Stack,
     Text,
     VStack,
@@ -36,10 +38,17 @@ const RecipePage = () => {
 
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const author = authors[0];
-    const [portions, setPortions] = useState(recipe?.portions ?? 1);
     const dispatch = useAppDispatch();
-    const getNewCount = (ingredientCount: number, initialPortions: number) =>
-        (ingredientCount * portions) / initialPortions;
+    console.log(recipe);
+    const [portions, setPortions] = useState<number>(1);
+    const [initialPortions, setInitialPortions] = useState<number>(1);
+    useEffect(() => {
+        if (recipe?.portions) {
+            setPortions(recipe.portions);
+            setInitialPortions(recipe.portions);
+        }
+    }, [recipe?.portions]);
+    const getNewCount = (ingredientCount: number) => (ingredientCount * portions) / initialPortions;
 
     const handlePortionsChange = (value: string) => {
         setPortions(Number(value));
@@ -47,12 +56,8 @@ const RecipePage = () => {
 
     const { data: sliderRecipes } = useGetRecipesQuery(
         {
-            // allergens: selectedAllergens.join(','),
-            // subcategoriesIds: selectedCategories.join(','),
-            // meat: selectedMeat.join(','),
-            // garnish: selectedSide.join(','),
             sortBy: 'createdAt',
-            sortOrder: 'asc',
+            sortOrder: 'desc',
             limit: 10,
         },
         {
@@ -67,7 +72,17 @@ const RecipePage = () => {
     }, [isError, navigate, dispatch]);
 
     if (isLoading || !recipe) {
-        return <Text>Loading...</Text>;
+        return (
+            <Center minH='400px'>
+                <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    emptyColor='gray.200'
+                    color='lime.500'
+                    size='xl'
+                />
+            </Center>
+        );
     }
 
     return (
@@ -303,10 +318,7 @@ const RecipePage = () => {
                         </Heading>
                         <Grid templateColumns='1fr 1fr'>
                             {recipe?.ingredients.map((ingredient, index) => {
-                                const newCount = getNewCount(
-                                    Number(ingredient.count),
-                                    recipe?.portions ?? 1,
-                                );
+                                const newCount = getNewCount(Number(ingredient.count));
 
                                 return (
                                     <>

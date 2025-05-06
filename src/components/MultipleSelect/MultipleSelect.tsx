@@ -35,6 +35,14 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
     const [newAllergen, setNewAllergen] = useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (isOpen && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isOpen]);
+
     const handleSelect = (value: string) => {
         const updated = selected.includes(value)
             ? selected.filter((item) => item !== value)
@@ -47,9 +55,13 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
     };
 
     const handleAddCustom = () => {
-        if (newAllergen.trim() && !selected.includes(newAllergen.trim())) {
-            dispatch(setSelectedAllergens([...selected, newAllergen.trim()]));
+        const trimmed = newAllergen.trim();
+        if (trimmed && !selected.includes(trimmed)) {
+            dispatch(setSelectedAllergens([...selected, trimmed]));
             setNewAllergen('');
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 0);
         }
     };
 
@@ -59,13 +71,6 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
             handleAddCustom();
         }
     };
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    useEffect(() => {
-        if (isOpen && inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, [isOpen]);
 
     return (
         <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnSelect={false}>
