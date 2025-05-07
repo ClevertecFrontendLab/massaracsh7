@@ -13,30 +13,38 @@ const ErrorAlert = () => {
     if (!error || !isOpen) return null;
 
     return (
-        <Alert
-            status='error'
-            borderRadius='md'
-            boxShadow='md'
-            mt={4}
-            data-test-id='error-notification'
-        >
-            <AlertIcon />
-            <Box>
-                <AlertTitle>Ошибка сервера</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-            </Box>
-            <CloseButton
-                data-test-id='close-alert-button'
-                alignSelf='flex-start'
-                position='relative'
-                right={-1}
-                top={-1}
-                onClick={() => {
-                    dispatch(clearAppError());
-                    onClose();
-                }}
-            />
-        </Alert>
+        <Box position='fixed' bottom='80px' left='50%' transform='translateX(-50%)' zIndex={20}>
+            <Alert
+                status='error'
+                borderRadius='md'
+                boxShadow='md'
+                mb='auto'
+                mx='auto'
+                data-test-id='error-notification'
+                w='400px'
+                bg='#E53E3E'
+                color='white'
+                fontSize='16px'
+            >
+                <AlertIcon bg='#E53E3E' color='white' />
+                <Box>
+                    <AlertTitle>Ошибка сервера</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                </Box>
+                <CloseButton
+                    data-test-id='close-alert-button'
+                    alignSelf='flex-start'
+                    position='relative'
+                    right={-1}
+                    top={-1}
+                    ml='auto'
+                    onClick={() => {
+                        dispatch(clearAppError());
+                        onClose();
+                    }}
+                />
+            </Alert>
+        </Box>
     );
 };
 

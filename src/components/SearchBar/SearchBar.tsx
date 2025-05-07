@@ -9,6 +9,9 @@ import {
     InputRightElement,
     Spinner,
     Switch,
+    Tag,
+    TagCloseButton,
+    TagLabel,
     Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -186,6 +189,23 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                     )}
                 </HStack>
             </Hide>
+            <HStack wrap='wrap' spacing={2}>
+                {selectedAllergens.length > 0 &&
+                    selectedAllergens.map((tag) => (
+                        <Tag
+                            size='sm'
+                            key={tag}
+                            borderRadius='6px'
+                            bg='customLime.100'
+                            border='1px solid'
+                            borderColor='customLime.400'
+                            data-test-id='filter-tag'
+                        >
+                            <TagLabel color='customLime.700'>{tag}</TagLabel>
+                            <TagCloseButton color='customLime.700' />
+                        </Tag>
+                    ))}
+            </HStack>
             <FilterDrawer isOpen={isFilterOpen} onClose={closeFilterDrawer} />
         </Box>
     );

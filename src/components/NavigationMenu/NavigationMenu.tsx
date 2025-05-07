@@ -8,6 +8,7 @@ import {
     Image,
     List,
     ListItem,
+    Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -104,7 +105,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                                         boxSize='24px'
                                     />
                                 )}
-                                {category.title}
+                                <Text isTruncated>{category.title}</Text>
                             </Box>
                             <AccordionIcon as={ShevronDown} w='14px' h='10px' />
                         </AccordionButton>
@@ -133,7 +134,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                                                     as='span'
                                                     data-test-id={`${item.category}${isActive ? '-active' : ''}`}
                                                 >
-                                                    {item.title}
+                                                    <Text isTruncated>{item.title}</Text>
                                                 </Box>
                                             )}
                                         </NavLink>

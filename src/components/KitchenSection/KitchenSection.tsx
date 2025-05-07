@@ -8,8 +8,6 @@ import TryDishCard from '../TryDishCard/TryDishCard';
 interface KitchenSectionProps {
     title: string;
     description: string;
-    // veganDishes: KitchenDish[];
-    // tryDishes: TryDish[];
     relevantRecipes: Recipe[];
 }
 
