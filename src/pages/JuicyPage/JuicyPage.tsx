@@ -79,7 +79,7 @@ const JuicyPage = () => {
         } else {
             setJuiciestRecipes((prev) => [...prev, ...data.data]);
         }
-    }, [data?.data, page]);
+    }, [data?.data, isSuccess, page]);
 
     const isLastPage = data && data?.meta.page >= data?.meta.totalPages;
 
