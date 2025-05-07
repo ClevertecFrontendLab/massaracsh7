@@ -44,7 +44,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 bg='black'
                 color='customLime.50'
                 borderRadius='small'
-                zIndex={10}
+                zIndex={14}
                 data-test-id='carousel-back'
                 display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
             />
@@ -62,7 +62,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 bg='black'
                 color='customLime.50'
                 borderRadius='small'
-                zIndex={10}
+                zIndex={14}
                 data-test-id='carousel-forward'
                 display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
             />

@@ -147,7 +147,7 @@ const CategoryPage = () => {
                 mx='auto'
                 px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
             >
-                <Heading mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
+                <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
                     {message || cat?.title}
                 </Heading>
                 <Box

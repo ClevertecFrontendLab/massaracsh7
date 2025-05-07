@@ -14,7 +14,6 @@ interface KitchenSectionProps {
 }
 
 const KitchenSection = ({ title, description, relevantRecipes }: KitchenSectionProps) => {
-    console.log(relevantRecipes);
     const veganDishes = relevantRecipes.slice(0, 2);
     const tryDishes = relevantRecipes.slice(2, 5);
 

@@ -20,6 +20,7 @@ const JuicyPage = () => {
         selectedSide,
         searchTerm,
     } = useAppSelector((state: ApplicationState) => state.filters);
+
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [page, setPage] = useState(1);
     const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
@@ -43,6 +44,7 @@ const JuicyPage = () => {
             }),
         [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
     );
+
     const baseParams = useMemo(
         () =>
             buildQuery({
@@ -53,6 +55,7 @@ const JuicyPage = () => {
             }),
         [page],
     );
+
     const queryParams = hasFilters ? filteredParams : baseParams;
 
     const { data, isLoading, isFetching, isSuccess } = useGetRecipesQuery(
@@ -64,30 +67,22 @@ const JuicyPage = () => {
         },
     );
 
-    useEffect(() => {
-        setPage(1);
-        setJuiciestRecipes([]);
-    }, [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide, searchTerm]);
-
-    useEffect(() => {
-        if (isSuccess && data?.data) {
-            if (page === 1) {
-                setJuiciestRecipes(data.data);
-            } else {
-                setJuiciestRecipes((prev) => {
-                    const prevIds = new Set(prev.map((r) => r._id));
-                    const unique = data.data.filter((r) => !prevIds.has(r._id));
-                    return [...prev, ...unique];
-                });
-            }
-        }
-    }, [isSuccess, data, page]);
-
     const loadMoreRecipes = () => {
         setPage((prevPage) => prevPage + 1);
     };
 
+    useEffect(() => {
+        if (!isSuccess || !data?.data) return;
+
+        if (page === 1) {
+            setJuiciestRecipes(data.data);
+        } else {
+            setJuiciestRecipes((prev) => [...prev, ...data.data]);
+        }
+    }, [data?.data, page]);
+
     const isLastPage = data && data?.meta.page >= data?.meta.totalPages;
+
     if (isLoading) {
         return (
             <Center minH='400px'>
