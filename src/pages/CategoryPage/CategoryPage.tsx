@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Spinner, Text } from '@chakra-ui/react';
+import { Box, Center, Heading, Spinner, Text } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
@@ -8,11 +8,10 @@ import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
 import useRandomCategory from '~/hooks/useRandomCategory';
-import { useGetRecipesByCategoryQuery, useGetRecipesQuery } from '~/query/services/recipes';
+import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
 import { setHasResults } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { Category, Recipe, SubCategory } from '~/types/apiTypes';
 import { buildQuery } from '~/utils/buildQuery';
 
 const CategoryPage = () => {
@@ -22,27 +21,40 @@ const CategoryPage = () => {
     const { categories, subCategories } = useAppSelector(
         (state: ApplicationState) => state.categories,
     );
-    const { selectedAllergens, excludeAllergens, selectedMeat, selectedSide, searchTerm } =
-        useAppSelector((state) => state.filters);
+    const {
+        selectedAllergens,
+        excludeAllergens,
+        selectedMeat,
+        selectedSide,
+        searchTerm,
+        isSearch,
+    } = useAppSelector((state: ApplicationState) => state.filters);
 
-    const [page, setPage] = useState(1);
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [message, setMessage] = useState('');
-    const [isFirstLoad, setIsFirstLoad] = useState(true);
     const [isFilterClose, setIsFilterClose] = useState(true);
 
-    const cat = categories.find((item: Category) => item.category === category);
-    const subCat = subCategories.find((item: SubCategory) => item.category === subcategory);
+    const cat = useMemo(
+        () => categories.find((item) => item.category === category),
+        [categories, category],
+    );
+    const subCat = useMemo(
+        () => subCategories.find((item) => item.category === subcategory),
+        [subCategories, subcategory],
+    );
+
     const subCatIds = useMemo(
         () =>
             subCategories
-                .filter((item: SubCategory) => item.rootCategoryId === cat?._id)
+                .filter((item) => item.rootCategoryId === cat?._id)
                 .map((item) => item._id),
         [subCategories, cat?._id],
     );
 
     const hasFilters =
-        searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
+        searchTerm.length >= 3 ||
+        selectedAllergens.length > 0 ||
+        selectedMeat.length > 0 ||
+        selectedSide.length > 0;
 
     const filteredParams = useMemo(
         () =>
@@ -53,57 +65,46 @@ const CategoryPage = () => {
                 selectedAllergens,
                 searchTerm,
                 limit: 8,
-                page,
             }),
-        [subCatIds, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
+        [subCatIds, selectedMeat, selectedSide, selectedAllergens, searchTerm],
     );
 
     const categoryParams = useMemo(
         () =>
-            buildQuery({
-                limit: 8,
-                page,
-            }),
-        [page],
+            subCat?._id
+                ? buildQuery({
+                      selectedSubCategories: [subCat._id],
+                      limit: 8,
+                  })
+                : skipToken,
+        [subCat?._id],
     );
 
-    const shouldSkipCategoryQuery = hasFilters || !subCat?._id;
-    const shouldSkipFilterQuery = !hasFilters;
+    const filterQueryParams = useMemo(
+        () => (isSearch ? filteredParams : skipToken),
+        [isSearch, filteredParams],
+    );
 
     const {
         data: categoryData,
         isFetching: isFetchingCategory,
-        isSuccess: isCategorySuccess,
         isLoading: isLoadingCategory,
-    } = useGetRecipesByCategoryQuery(
-        shouldSkipCategoryQuery ? skipToken : { id: subCat?._id || '', ...categoryParams },
-        { refetchOnMountOrArgChange: true },
+    } = useGetRecipesQuery(categoryParams, { refetchOnMountOrArgChange: true });
+
+    const { data: filterData, isFetching: isFetchingFilter } = useGetRecipesQuery(
+        filterQueryParams,
+        {
+            refetchOnMountOrArgChange: isFilterClose,
+        },
     );
 
-    const {
-        data: filterData,
-        isFetching: isFetchingFilter,
-        isSuccess: isFilterSuccess,
-        isLoading: isLoadingFilter,
-    } = useGetRecipesQuery(shouldSkipFilterQuery ? skipToken : filteredParams, {
-        refetchOnMountOrArgChange: isFilterClose,
-    });
+    const activeData = isSearch ? filterData : categoryData;
+    const isFetching = isSearch ? isFetchingFilter : isFetchingCategory;
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
 
-    const activeData = hasFilters ? filterData : categoryData;
-    const isSuccess = hasFilters ? isFilterSuccess : isCategorySuccess;
-    const isFetching = hasFilters ? isFetchingFilter : isFetchingCategory;
-    const isLoading = hasFilters ? isLoadingFilter : isLoadingCategory;
-
     useEffect(() => {
-        if (isSuccess && activeData?.data) {
-            setRecipes((prev) => [...prev, ...activeData.data]);
-        }
-    }, [isSuccess, activeData]);
-
-    useEffect(() => {
-        dispatch(setHasResults(searchTerm.length >= 3 ? !!activeData?.data?.length : null));
+        dispatch(setHasResults(searchTerm.length < 3 ? null : !!activeData?.data?.length));
     }, [dispatch, searchTerm, activeData]);
 
     useEffect(() => {
@@ -116,39 +117,11 @@ const CategoryPage = () => {
         }
     }, [activeData, hasFilters]);
 
-    useEffect(() => {
-        setRecipes([]);
-        setPage(1);
-    }, [filteredParams, categoryParams]);
-
-    useEffect(() => {
-        setIsFirstLoad(true);
-        setPage(1);
-        setRecipes([]);
-    }, [subCat?._id, hasFilters, searchTerm]);
-
-    useEffect(() => {
-        if (isSuccess) {
-            setIsFirstLoad(false);
-        }
-    }, [isSuccess]);
-
     if (!cat || !subCat || subCat.rootCategoryId !== cat._id) {
         return <Navigate to='/not-found' replace />;
     }
 
-    const loadMore = () => setPage((prev) => prev + 1);
-    const isLastPage = activeData && activeData?.meta?.page >= activeData?.meta?.totalPages;
-
-    if (!cat || !subCat || subCat.rootCategoryId !== cat._id) {
-        return (
-            <Center minH='400px'>
-                <Text>Категория или подкатегория не найдена</Text>
-            </Center>
-        );
-    }
-
-    if (isLoading && isFirstLoad) {
+    if (isLoadingCategory) {
         return (
             <Center minH='400px'>
                 <Spinner
@@ -157,6 +130,7 @@ const CategoryPage = () => {
                     emptyColor='gray.200'
                     color='lime.500'
                     size='xl'
+                    data-test-id='app-loader'
                 />
             </Center>
         );
@@ -173,16 +147,9 @@ const CategoryPage = () => {
                 mx='auto'
                 px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
             >
-                {message ? (
-                    <Heading mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>{message}</Heading>
-                ) : (
-                    <Heading
-                        variant='pageTitle'
-                        mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
-                    >
-                        {cat?.title}
-                    </Heading>
-                )}
+                <Heading mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
+                    {message || cat?.title}
+                </Heading>
                 <Box
                     width='100%'
                     maxW='700px'
@@ -194,32 +161,14 @@ const CategoryPage = () => {
                     </Text>
                 </Box>
                 <SearchBar
-                    isLoader={isFetching && isFilterClose}
+                    isLoader={isFetching && hasFilters && isFilterClose}
                     handleFilterClose={setIsFilterClose}
                 />
             </Box>
 
             <TabsCategory subcategories={cat?.subCategories ?? []} />
 
-            {recipes && <RecipeList recipes={recipes} gridVariant='low' />}
-
-            <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
-                {isFetching && page > 1 ? (
-                    <Spinner
-                        thickness='4px'
-                        speed='0.65s'
-                        emptyColor='gray.200'
-                        color='lime.500'
-                        size='md'
-                    />
-                ) : (
-                    !isLastPage && (
-                        <Button variant='limeSolid' size='medium' onClick={loadMore}>
-                            Загрузить ещё
-                        </Button>
-                    )
-                )}
-            </Center>
+            {activeData?.data && <RecipeList recipes={activeData.data} gridVariant='low' />}
 
             <KitchenSection
                 title={randomTitle}

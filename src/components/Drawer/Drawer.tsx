@@ -29,6 +29,7 @@ import { authors } from '~/data/authors';
 import { ApplicationState } from '~/store/configure-store';
 import {
     resetAllFilters,
+    setIsSearch,
     setSelectedAuthors,
     setSelectedCategories,
     setSelectedMeat,
@@ -90,6 +91,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
 
     const handleClear = () => {
         dispatch(resetAllFilters());
+        dispatch(setIsSearch(false));
         setFilters({
             categories: [],
             authors: [],
@@ -125,6 +127,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         dispatch(setSelectedMeat(filters.meatTypes));
         dispatch(setSelectedSide(filters.sideTypes));
         dispatch(setSelectedSubCategories(selectedSubCategoryIds));
+        dispatch(setIsSearch(true));
         onClose();
     };
 

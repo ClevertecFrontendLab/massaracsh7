@@ -66,27 +66,8 @@ const JuicyPage = () => {
 
     useEffect(() => {
         setPage(1);
+        setJuiciestRecipes([]);
     }, [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide, searchTerm]);
-
-    useEffect(() => {
-        if (page === 1) {
-            setJuiciestRecipes([]);
-        }
-    }, [page]);
-
-    useEffect(() => {
-        if (page === 1 && !juiciestRecipes.length) {
-            setJuiciestRecipes([]);
-        }
-    }, [
-        page,
-        selectedAllergens,
-        selectedSubCategories,
-        selectedMeat,
-        selectedSide,
-        searchTerm,
-        juiciestRecipes,
-    ]);
 
     useEffect(() => {
         if (isSuccess && data?.data) {
@@ -139,13 +120,13 @@ const JuicyPage = () => {
                     Самое сочное
                 </Heading>
                 <SearchBar
-                    isLoader={isFetching && isFilterClose}
+                    isLoader={isFetching && page === 1 && isFilterClose}
                     handleFilterClose={setIsFilterClose}
                 />
             </Box>
             {juiciestRecipes && <RecipeList recipes={juiciestRecipes} gridVariant='low' />}
             <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
-                {!isLastPage && !isLoading && (
+                {!isLastPage && (
                     <Button
                         variant='limeSolid'
                         size='medium'

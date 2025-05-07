@@ -17,7 +17,12 @@ import { useSelector } from 'react-redux';
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
 import { ApplicationState } from '~/store/configure-store';
-import { setHasResults, setSearchTerm, toggleExcludeAllergens } from '~/store/filter-slice';
+import {
+    setHasResults,
+    setIsSearch,
+    setSearchTerm,
+    toggleExcludeAllergens,
+} from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
 import FilterDrawer from '../Drawer/Drawer';
@@ -53,8 +58,9 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
     };
 
     const handleSearch = () => {
-        if (searchText.trim().length >= 2 || excludeAllergens) {
+        if (searchText.trim().length >= 3 || excludeAllergens) {
             dispatch(setSearchTerm(searchText));
+            dispatch(setIsSearch(true));
         }
     };
 
@@ -68,6 +74,7 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
         setSearchText('');
         dispatch(setSearchTerm(''));
         dispatch(setHasResults(null));
+        dispatch(setIsSearch(false));
     };
 
     const isSearchActive = searchText.trim().length >= 3 || selectedAllergens.length > 0;

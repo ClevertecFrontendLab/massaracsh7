@@ -10,6 +10,7 @@ export type FiltersState = {
     selectedMeat: string[];
     selectedSide: string[];
     hasResults: boolean | null;
+    isSearch: boolean;
 };
 
 const initialState: FiltersState = {
@@ -22,6 +23,7 @@ const initialState: FiltersState = {
     selectedMeat: [],
     selectedSide: [],
     hasResults: null,
+    isSearch: false,
 };
 
 export const filtersSlice = createSlice({
@@ -41,6 +43,7 @@ export const filtersSlice = createSlice({
             state.excludeAllergens = !state.excludeAllergens;
             if (!state.excludeAllergens) {
                 state.selectedAllergens = [];
+                state.isSearch = false;
             }
         },
         setSelectedAuthors(state, { payload }: PayloadAction<string[]>) {
@@ -69,6 +72,9 @@ export const filtersSlice = createSlice({
             state.selectedMeat = [];
             state.selectedSide = [];
         },
+        setIsSearch(state, { payload }: PayloadAction<boolean>) {
+            state.isSearch = payload;
+        },
     },
 });
 
@@ -84,6 +90,7 @@ export const {
     setHasResults,
     resetAllFilters,
     setSelectedSubCategories,
+    setIsSearch,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

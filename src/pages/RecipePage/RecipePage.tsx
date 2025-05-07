@@ -39,7 +39,6 @@ const RecipePage = () => {
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const author = authors[0];
     const dispatch = useAppDispatch();
-    console.log(recipe);
     const [portions, setPortions] = useState<number>(1);
     const [initialPortions, setInitialPortions] = useState<number>(1);
     useEffect(() => {
@@ -55,14 +54,13 @@ const RecipePage = () => {
     };
 
     const { data: sliderRecipes } = useGetRecipesQuery(
-        {
-            sortBy: 'createdAt',
-            sortOrder: 'desc',
-            limit: 10,
-        },
-        {
-            refetchOnMountOrArgChange: true,
-        },
+        id
+            ? {
+                  sortBy: 'createdAt',
+                  sortOrder: 'desc',
+                  limit: 10,
+              }
+            : skipToken,
     );
     useEffect(() => {
         if (isError) {
@@ -71,7 +69,7 @@ const RecipePage = () => {
         }
     }, [isError, navigate, dispatch]);
 
-    if (isLoading || !recipe) {
+    if (isLoading) {
         return (
             <Center minH='400px'>
                 <Spinner
