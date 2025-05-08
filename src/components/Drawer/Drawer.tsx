@@ -49,6 +49,7 @@ import { useAppSelector } from '~/store/hooks';
 import { Category } from '~/types/apiTypes';
 import { FilterData, SelectOption } from '~/types/utilTypes';
 import { getFilterTags } from '~/utils/getFiltersLabels';
+import { getSelectedSubIds } from '~/utils/getSelectedSubIds';
 
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
@@ -89,21 +90,12 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
             .filter((cat) => filters.categories.includes(cat.title))
             .map((cat) => cat._id);
 
-        let selectedSubCategoryIds: string[] = [];
-
-        if (category) {
-            const matchedCategory = categories.find((cat) => cat.category === category);
-
-            if (matchedCategory) {
-                selectedSubCategoryIds = subCategories
-                    .filter((sub) => sub.rootCategoryId === matchedCategory._id)
-                    .map((sub) => sub._id);
-            }
-        } else {
-            selectedSubCategoryIds = subCategories
-                .filter((sub) => selectedCategoryIds.includes(sub.rootCategoryId))
-                .map((sub) => sub._id);
-        }
+        const selectedSubCategoryIds = getSelectedSubIds(
+            category,
+            categories,
+            subCategories,
+            selectedCategoryIds,
+        );
 
         dispatch(setSelectedAuthors(filters.authors));
         dispatch(setSelectedCategories(filters.categories));
