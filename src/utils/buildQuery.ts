@@ -1,16 +1,6 @@
-import { RecipesParams } from '~/types/apiTypes';
+import { BuildQueryParams, RecipesParams } from '~/types/apiTypes';
 
-export function buildQuery(params: {
-    selectedAllergens?: string[];
-    selectedSubCategories?: string[];
-    selectedMeat?: string[];
-    selectedSide?: string[];
-    searchTerm?: string;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
-    limit?: number;
-    page?: number;
-}): RecipesParams {
+export function buildQuery(params: BuildQueryParams): RecipesParams {
     const query: RecipesParams = {};
 
     if (params.selectedSubCategories?.length) {

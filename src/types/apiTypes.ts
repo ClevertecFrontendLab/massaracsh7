@@ -94,3 +94,15 @@ type OptionalCategoryParams = Partial<{
 export type RecipesByCategoryParams = {
     id: string;
 } & OptionalCategoryParams;
+
+export type BuildQueryParams = Partial<{
+    selectedAllergens: string[];
+    selectedSubCategories: string[];
+    selectedMeat: string[];
+    selectedSide: string[];
+    searchTerm: string;
+    sortBy: string;
+    sortOrder: 'asc' | 'desc';
+    limit: number;
+    page: number;
+}>;
