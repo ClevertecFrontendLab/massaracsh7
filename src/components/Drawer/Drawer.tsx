@@ -24,6 +24,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 
+import { initialFilterData } from '~/constants/filter-date';
 import {
     ALLERGEN_SWITCHER_FILTER,
     CLEAR_FILTER_BUTTON,
@@ -46,26 +47,11 @@ import {
 } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
 import { Category } from '~/types/apiTypes';
-import { SelectOption } from '~/types/utilTypes';
+import { FilterData, SelectOption } from '~/types/utilTypes';
 import { getFilterTags } from '~/utils/getFiltersLabels';
 
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
-
-interface FilterData {
-    categories: string[];
-    authors: string[];
-    meatTypes: string[];
-    sideTypes: string[];
-    excludeAllergens: boolean;
-}
-
-export const initialFilterData = {
-    categories: [],
-    authors: [],
-    meatTypes: [],
-    sideTypes: [],
-};
 
 interface FilterDrawerProps {
     isOpen: boolean;
