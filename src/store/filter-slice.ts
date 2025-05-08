@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export type FiltersState = {
+export interface FiltersState {
     searchTerm: string;
     selectedAllergens: string[];
     excludeAllergens: boolean;
@@ -11,7 +11,7 @@ export type FiltersState = {
     selectedSide: string[];
     hasResults: boolean | null;
     isSearch: boolean;
-};
+}
 
 const initialState: FiltersState = {
     searchTerm: '',

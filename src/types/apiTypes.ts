@@ -72,22 +72,25 @@ export interface RecipesResponse {
     meta: Meta;
 }
 
-export interface RecipesParams {
-    page?: number;
-    limit?: number;
-    allergens?: string;
-    searchString?: string;
-    meat?: string;
-    garnish?: string;
-    subcategoriesIds?: string;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
-}
+export type RecipesParams = Partial<{
+    page: number;
+    limit: number;
+    allergens: string;
+    searchString: string;
+    meat: string;
+    garnish: string;
+    subcategoriesIds: string;
+    sortBy: string;
+    sortOrder: 'asc' | 'desc';
+}>;
 
-export interface RecipesByCategoryParams {
+type OptionalCategoryParams = Partial<{
+    page: number;
+    limit: number;
+    allergens: string;
+    searchString: string;
+}>;
+
+export type RecipesByCategoryParams = {
     id: string;
-    page?: number;
-    limit?: number;
-    allergens?: string;
-    searchString?: string;
-}
+} & OptionalCategoryParams;
