@@ -8,7 +8,12 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
-import { BASE_LIMIT_SLIDER, MAIN_LIMIT_JUICY, MIN_SEARCH_LENGTH } from '~/constants/constants';
+import {
+    BASE_LIMIT_SLIDER,
+    ERROR_SEARCH_MESSAGE,
+    MAIN_LIMIT_JUICY,
+    MIN_SEARCH_LENGTH,
+} from '~/constants/constants';
 import { JUICIEST_LINK, JUICIEST_LINK_MOB } from '~/constants/test-ids';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
@@ -121,7 +126,7 @@ const Main = () => {
         }
 
         if (juiciestRecipes && juiciestRecipes.data?.length === 0) {
-            setMessage('По вашему запросу ничего не найдено. Попробуйте другой запрос');
+            setMessage(ERROR_SEARCH_MESSAGE);
         } else {
             setMessage('');
         }

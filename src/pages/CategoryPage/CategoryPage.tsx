@@ -8,6 +8,7 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import TabsCategory from '~/components/TabsCategory/TabsCategory';
+import { BASE_LIMIT_JUICY, ERROR_SEARCH_MESSAGE, MIN_SEARCH_LENGTH } from '~/constants/constants';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
@@ -52,7 +53,7 @@ const CategoryPage = () => {
     );
 
     const hasFilters =
-        searchTerm.length >= 3 ||
+        searchTerm.length >= MIN_SEARCH_LENGTH ||
         selectedAllergens.length > 0 ||
         selectedMeat.length > 0 ||
         selectedSide.length > 0;
@@ -65,7 +66,7 @@ const CategoryPage = () => {
                 selectedSide,
                 selectedAllergens,
                 searchTerm,
-                limit: 8,
+                limit: BASE_LIMIT_JUICY,
             }),
         [subCatIds, selectedMeat, selectedSide, selectedAllergens, searchTerm],
     );
@@ -75,7 +76,7 @@ const CategoryPage = () => {
             subCat?._id
                 ? buildQuery({
                       selectedSubCategories: [subCat._id],
-                      limit: 8,
+                      limit: BASE_LIMIT_JUICY,
                   })
                 : skipToken,
         [subCat?._id],
@@ -105,14 +106,18 @@ const CategoryPage = () => {
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
 
     useEffect(() => {
-        dispatch(setHasResults(searchTerm.length < 3 ? null : !!activeData?.data?.length));
+        dispatch(
+            setHasResults(
+                searchTerm.length < MIN_SEARCH_LENGTH ? null : !!activeData?.data?.length,
+            ),
+        );
     }, [dispatch, searchTerm, activeData]);
 
     useEffect(() => {
         if (!hasFilters) {
             setMessage('');
         } else if (activeData?.data?.length === 0) {
-            setMessage('По вашему запросу ничего не найдено. Попробуйте другой запрос');
+            setMessage(ERROR_SEARCH_MESSAGE);
         } else {
             setMessage('');
         }

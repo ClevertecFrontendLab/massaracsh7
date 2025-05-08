@@ -27,6 +27,7 @@ import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
 import CustomLoader from '~/components/CustomLoader/CustomLoader';
 import LikesInfo from '~/components/LikesInfo/LikesInfo';
 import SliderList from '~/components/SliderList/SliderList';
+import { BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/constants';
 import { DECREMENT_STEPPER, INCREMENT_STEPPER, INGREDIENT_QUANTITY } from '~/constants/test-ids';
 import { authors } from '~/data/authors';
 import useGetCategory from '~/hooks/useGetCategory';
@@ -62,14 +63,14 @@ const RecipePage = () => {
             ? {
                   sortBy: 'createdAt',
                   sortOrder: 'desc',
-                  limit: 10,
+                  limit: BASE_LIMIT_SLIDER,
               }
             : skipToken,
     );
     useEffect(() => {
         if (isError) {
             navigate(-1);
-            dispatch(setAppError('Попробуйти поискать снова попозже.'));
+            dispatch(setAppError(ERROR_APP_MESSAGE));
         }
     }, [isError, navigate, dispatch]);
 

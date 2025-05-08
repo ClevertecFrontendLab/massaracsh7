@@ -60,7 +60,7 @@ const NotFoundPage = () => (
                         Упс! Такой страницы нет
                     </Heading>
                     <Text fontSize='16px' lineHeight='24px' color='secondaryText'>
-                        Можете поискать другой рецепт{' '}
+                        Можете поискать другой рецепт
                         <Link
                             as={RouterLink}
                             to='/'
