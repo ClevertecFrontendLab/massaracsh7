@@ -20,6 +20,7 @@ const JuicyPage = () => {
         selectedMeat,
         selectedSide,
         searchTerm,
+        isSearch,
     } = useAppSelector((state: ApplicationState) => state.filters);
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
@@ -27,8 +28,8 @@ const JuicyPage = () => {
     const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
     const [isFilterClose, setIsFilterClose] = useState(true);
 
-    const hasFilters =
-        searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
+    // const hasFilters =
+    //     searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
 
     const filteredParams = useMemo(
         () =>
@@ -57,7 +58,7 @@ const JuicyPage = () => {
         [page],
     );
 
-    const queryParams = hasFilters ? filteredParams : baseParams;
+    const queryParams = isSearch ? filteredParams : baseParams;
 
     const { data, isLoading, isFetching, isSuccess } = useGetRecipesQuery(
         {

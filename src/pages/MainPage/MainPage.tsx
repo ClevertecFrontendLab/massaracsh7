@@ -28,33 +28,23 @@ const Main = () => {
         selectedMeat,
         selectedSide,
         searchTerm,
+        isSearch,
     } = useAppSelector((state: ApplicationState) => state.filters);
 
-    const sliderParams = useMemo(
-        () =>
-            buildQuery({
-                selectedAllergens,
-                selectedSubCategories,
-                selectedMeat,
-                selectedSide,
-                sortBy: 'createdAt',
-                sortOrder: 'desc',
-                limit: 10,
-            }),
-        [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide],
-    );
+    const [message, setMessage] = useState('');
 
-    const defaultSliderParams = useMemo(
+    const baseJuicyParams = useMemo(
         () =>
             buildQuery({
-                sortBy: 'createdAt',
+                sortBy: 'likes',
                 sortOrder: 'desc',
-                limit: 10,
+                limit: 4,
+                page: 1,
             }),
         [],
     );
 
-    const juiciestParams = useMemo(
+    const filteredJuicyParams = useMemo(
         () =>
             buildQuery({
                 selectedSubCategories,
@@ -70,71 +60,51 @@ const Main = () => {
         [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
     );
 
-    const defaultParams = useMemo(
-        () =>
-            buildQuery({
-                sortBy: 'likes',
-                sortOrder: 'desc',
-                limit: 4,
-                page: 1,
-            }),
-        [],
-    );
-
-    const { data: sliderRecipes } = useGetRecipesQuery(sliderParams, {
-        refetchOnMountOrArgChange: isFilterClose,
-    });
-
-    const { data: defaultSliderRecipes } = useGetRecipesQuery(defaultSliderParams, {
-        skip: !sliderRecipes || sliderRecipes.data?.length > 0,
-    });
+    const juicyParams = isSearch ? filteredJuicyParams : baseJuicyParams;
 
     const { data: juiciestRecipes, isFetching: isLoadingJuiciest } = useGetRecipesQuery(
-        juiciestParams,
+        juicyParams,
         {
             refetchOnMountOrArgChange: isFilterClose,
         },
     );
 
-    const { data: defaultRecipes } = useGetRecipesQuery(defaultParams, {
-        skip: !juiciestRecipes || juiciestRecipes.data?.length > 0,
+    const baseSliderParams = useMemo(
+        () =>
+            buildQuery({
+                sortBy: 'createdAt',
+                sortOrder: 'desc',
+                limit: 10,
+            }),
+        [],
+    );
+
+    const filteredSliderParams = useMemo(
+        () =>
+            buildQuery({
+                selectedAllergens,
+                selectedSubCategories,
+                selectedMeat,
+                selectedSide,
+                sortBy: 'createdAt',
+                sortOrder: 'desc',
+                limit: 10,
+            }),
+        [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide],
+    );
+
+    const sliderParams = isSearch ? filteredSliderParams : baseSliderParams;
+
+    const { data: sliderRecipes } = useGetRecipesQuery(sliderParams, {
+        refetchOnMountOrArgChange: isFilterClose,
     });
 
-    const [message, setMessage] = useState('');
-
-    const recipesToShow = useMemo(() => {
-        if (juiciestRecipes?.data && juiciestRecipes?.data?.length > 0) return juiciestRecipes.data;
-        if (searchTerm || selectedAllergens.length || selectedMeat || selectedSide) {
-            return defaultRecipes?.data || [];
-        }
-        return juiciestRecipes?.data || [];
-    }, [
-        juiciestRecipes?.data,
-        defaultRecipes?.data,
-        searchTerm,
-        selectedAllergens,
-        selectedMeat,
-        selectedSide,
-    ]);
-
-    const sliderRecipesToShow = useMemo(() => {
-        if (sliderRecipes?.data && sliderRecipes?.data?.length > 0) return sliderRecipes.data;
-        if (searchTerm || selectedAllergens.length || selectedMeat || selectedSide) {
-            return defaultSliderRecipes?.data || [];
-        }
-        return sliderRecipes?.data || [];
-    }, [
-        sliderRecipes?.data,
-        defaultSliderRecipes?.data,
-        searchTerm,
-        selectedAllergens,
-        selectedMeat,
-        selectedSide,
-    ]);
-
     useEffect(() => {
-        dispatch(setHasResults(searchTerm.length < 3 ? null : recipesToShow.length > 0));
-    }, [dispatch, searchTerm, recipesToShow]);
+        juiciestRecipes?.data &&
+            dispatch(
+                setHasResults(searchTerm.length < 3 ? null : juiciestRecipes?.data.length > 0),
+            );
+    }, [dispatch, searchTerm, juiciestRecipes?.data]);
 
     useEffect(() => {
         const noFiltersOrSearch =
@@ -183,8 +153,8 @@ const Main = () => {
                 />
             </Box>
 
-            {searchTerm.length < 3 && sliderRecipesToShow && (
-                <SliderList recipes={sliderRecipesToShow} />
+            {searchTerm.length < 3 && sliderRecipes?.data && (
+                <SliderList recipes={sliderRecipes?.data} />
             )}
 
             {searchTerm.length < 3 && (
@@ -209,9 +179,9 @@ const Main = () => {
                 </HStack>
             )}
 
-            {recipesToShow && (
+            {juiciestRecipes?.data && (
                 <RecipeList
-                    recipes={recipesToShow}
+                    recipes={juiciestRecipes?.data}
                     gridVariant={searchTerm.length >= 2 ? 'low' : 'wide'}
                 />
             )}
