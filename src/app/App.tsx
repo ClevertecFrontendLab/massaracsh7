@@ -7,19 +7,21 @@ import MainPage from '~/pages/MainPage/MainPage';
 import NotFoundPage from '~/pages/NotFoundPage/NotFoundPage';
 import RecipePage from '~/pages/RecipePage/RecipePage';
 
+import { ROUTES_PATH } from './routes';
+
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path='/' element={<Layout />}>
+                <Route path={ROUTES_PATH.HOME} element={<Layout />}>
                     <Route index element={<MainPage />} />
-                    <Route path='/:category/:subcategory' element={<CategoryPage />} />
-                    <Route path='/:category/:subcategory/:id' element={<RecipePage />} />
-                    <Route path='/the-juiciest' element={<JuicyPage />} />
+                    <Route path={ROUTES_PATH.CATEGORY} element={<CategoryPage />} />
+                    <Route path={ROUTES_PATH.RECIPE} element={<RecipePage />} />
+                    <Route path={ROUTES_PATH.JUICY} element={<JuicyPage />} />
                 </Route>
 
-                <Route path='/not-found' element={<NotFoundPage />} />
-                <Route path='*' element={<Navigate to='/not-found' />} />
+                <Route path={ROUTES_PATH.NOT_FOUND} element={<NotFoundPage />} />
+                <Route path='*' element={<Navigate to={ROUTES_PATH.NOT_FOUND} />} />
             </Routes>
         </Router>
     );

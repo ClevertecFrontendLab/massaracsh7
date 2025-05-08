@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux';
 
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
+import { MIN_SEARCH_LENGTH } from '~/constants/constants';
 import {
     ALLERGEN_SWITCHER,
     FILTER_BUTTON,
@@ -68,7 +69,7 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
     };
 
     const handleSearch = () => {
-        if (searchText.trim().length >= 3 || excludeAllergens) {
+        if (searchText.trim().length >= MIN_SEARCH_LENGTH || excludeAllergens) {
             dispatch(setSearchTerm(searchText));
             dispatch(setIsSearch(true));
         }
@@ -87,7 +88,8 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
         dispatch(setIsSearch(false));
     };
 
-    const isSearchActive = searchText.trim().length >= 3 || selectedAllergens.length > 0;
+    const isSearchActive =
+        searchText.trim().length >= MIN_SEARCH_LENGTH || selectedAllergens.length > 0;
     if (isLoader && !isFilterOpen && !excludeAllergens) {
         return <CustomLoader size='small' dataTestId={LOADER_SEARCH_BLOCK} />;
     }
