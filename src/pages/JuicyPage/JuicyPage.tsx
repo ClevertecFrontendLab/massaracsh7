@@ -5,6 +5,8 @@ import CustomLoader from '~/components/CustomLoader/CustomLoader';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
+import { BASE_LIMIT_JUICY } from '~/constants/constants';
+import { LOAD_MORE_BUTTON } from '~/constants/test-ids';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
@@ -28,9 +30,6 @@ const JuicyPage = () => {
     const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
     const [isFilterClose, setIsFilterClose] = useState(true);
 
-    // const hasFilters =
-    //     searchTerm.length >= 3 || selectedAllergens.length > 0 || selectedMeat || selectedSide;
-
     const filteredParams = useMemo(
         () =>
             buildQuery({
@@ -41,7 +40,7 @@ const JuicyPage = () => {
                 searchTerm,
                 sortBy: 'likes',
                 sortOrder: 'desc',
-                limit: 8,
+                limit: BASE_LIMIT_JUICY,
                 page,
             }),
         [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
@@ -52,7 +51,7 @@ const JuicyPage = () => {
             buildQuery({
                 sortBy: 'likes',
                 sortOrder: 'desc',
-                limit: 8,
+                limit: BASE_LIMIT_JUICY,
                 page,
             }),
         [page],
@@ -117,7 +116,7 @@ const JuicyPage = () => {
                         variant='limeSolid'
                         size='medium'
                         onClick={loadMoreRecipes}
-                        data-test-id='load-more-button'
+                        data-test-id={LOAD_MORE_BUTTON}
                     >
                         Загрузка
                     </Button>

@@ -1,6 +1,7 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, CloseButton } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 
+import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/constants/test-ids';
 import { clearAppError } from '~/store/app-slice';
 import { ApplicationState } from '~/store/configure-store';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
@@ -18,9 +19,8 @@ const ErrorAlert = () => {
                 status='error'
                 borderRadius='md'
                 boxShadow='md'
-                mb='auto'
                 mx='auto'
-                data-test-id='error-notification'
+                data-test-id={ERROR_NOTIFICATION}
                 w={{ base: '328px', md: '328px', lg: '400px', xl: '400px' }}
                 bg='#E53E3E'
                 color='white'
@@ -32,7 +32,7 @@ const ErrorAlert = () => {
                     <AlertDescription>{error}</AlertDescription>
                 </Box>
                 <CloseButton
-                    data-test-id='close-alert-button'
+                    data-test-id={CLOSE_ALERT_BUTTON}
                     alignSelf='flex-start'
                     position='relative'
                     right={-1}

@@ -24,6 +24,14 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 
+import {
+    ALLERGEN_SWITCHER_FILTER,
+    CLEAR_FILTER_BUTTON,
+    CLOSE_FILTER_DRAWER,
+    FILTER_DRAWER,
+    FILTER_TAG,
+    FIND_RECIPE_BUTTON,
+} from '~/constants/test-ids';
 import { meatTypes, sideTypes } from '~/data/allergens';
 import { authors } from '~/data/authors';
 import { ApplicationState } from '~/store/configure-store';
@@ -38,7 +46,8 @@ import {
 } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
 import { Category } from '~/types/apiTypes';
-import { MeatSide } from '~/types/typeCategory';
+import { SelectOption } from '~/types/utilTypes';
+import { getFilterTags } from '~/utils/getFiltersLabels';
 
 import MultipleSelect from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
@@ -50,6 +59,13 @@ interface FilterData {
     sideTypes: string[];
     excludeAllergens: boolean;
 }
+
+export const initialFilterData = {
+    categories: [],
+    authors: [],
+    meatTypes: [],
+    sideTypes: [],
+};
 
 interface FilterDrawerProps {
     isOpen: boolean;
@@ -69,36 +85,17 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     );
 
     const [filters, setFilters] = useState<FilterData>({
-        categories: [],
-        authors: [],
-        meatTypes: [],
-        sideTypes: [],
+        ...initialFilterData,
         excludeAllergens: excludeAllergens,
     });
-    // useEffect(() => {
-    //     if (isOpen) {
-    //         setFilters({
-    //             categories: [],
-    //             authors: [],
-    //             meatTypes: [],
-    //             sideTypes: [],
-    //             excludeAllergens: false,
-    //         });
-    //     }
-    // }, [isOpen]);
+
     const categoryOptions = categories.map((item: Category) => item.title);
     const authorOptions = authors.map((item) => item.name);
 
     const handleClear = () => {
         dispatch(resetAllFilters());
         dispatch(setIsSearch(false));
-        setFilters({
-            categories: [],
-            authors: [],
-            meatTypes: [],
-            sideTypes: [],
-            excludeAllergens: false,
-        });
+        setFilters({ ...initialFilterData, excludeAllergens: false });
     };
 
     const handleSearch = () => {
@@ -151,6 +148,8 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         }));
     };
 
+    const tags = getFilterTags(filters, meatTypes, sideTypes, allergens);
+
     return (
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
             <DrawerOverlay />
@@ -159,7 +158,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                 maxW={{ sm: '344px', md: '344px', lg: '463px', xl: '463px' }}
                 p={{ sm: '4', md: '4', mid: '4', lg: '8', xl: '8' }}
                 pr={{ sm: '5', md: '5', mid: '5', lg: '7', xl: '7' }}
-                data-test-id='filter-drawer'
+                data-test-id={FILTER_DRAWER}
             >
                 <HStack justify='space-between' align='center' mb={6}>
                     <DrawerHeader p={0}>Фильтр</DrawerHeader>
@@ -173,7 +172,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderRadius='full'
                         p={2}
                         _hover={{ bg: 'gray.700' }}
-                        data-test-id='close-filter-drawer'
+                        data-test-id={CLOSE_FILTER_DRAWER}
                     />
                 </HStack>
 
@@ -218,7 +217,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    {meatTypes.map((meat: MeatSide) => (
+                                    {meatTypes.map((meat: SelectOption) => (
                                         <Checkbox key={meat.value} value={meat.value}>
                                             {meat.label}
                                         </Checkbox>
@@ -235,7 +234,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    {sideTypes.map((side: MeatSide) => (
+                                    {sideTypes.map((side: SelectOption) => (
                                         <Checkbox
                                             key={side.value}
                                             value={side.value}
@@ -263,7 +262,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         excludeAllergens: checked,
                                     }));
                                 }}
-                                data-test-id='allergens-switcher-filter'
+                                data-test-id={ALLERGEN_SWITCHER_FILTER}
                             />
                         </HStack>
                         <MultipleSelect
@@ -281,21 +280,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         <Box>
                             <Text mb={2}>Выбранные фильтры:</Text>
                             <HStack wrap='wrap' spacing={2}>
-                                {[
-                                    ...filters.categories,
-                                    ...filters.authors,
-                                    ...filters.meatTypes.map((meat) => {
-                                        const found = meatTypes.find((item) => item.value === meat);
-                                        return found ? found.label : meat;
-                                    }),
-                                    ...filters.sideTypes.map((side) => {
-                                        const found = sideTypes.find((item) => item.value === side);
-                                        return found ? found.label : side;
-                                    }),
-                                    ...(filters.excludeAllergens && allergens.length > 0
-                                        ? allergens
-                                        : []),
-                                ].map((tag) => (
+                                {tags.map((tag) => (
                                     <Tag
                                         size='sm'
                                         key={tag}
@@ -303,7 +288,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         bg='customLime.100'
                                         border='1px solid'
                                         borderColor='customLime.400'
-                                        data-test-id='filter-tag'
+                                        data-test-id={FILTER_TAG}
                                     >
                                         <TagLabel color='customLime.700'>{tag}</TagLabel>
                                         <TagCloseButton
@@ -323,7 +308,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderColor='black'
                         onClick={handleClear}
                         size='large'
-                        data-test-id='clear-filter-button'
+                        data-test-id={CLEAR_FILTER_BUTTON}
                     >
                         Очистить фильтр
                     </Button>
@@ -335,7 +320,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         onClick={handleSearch}
                         isDisabled={!filterSelected}
                         size='large'
-                        data-test-id='find-recipe-button'
+                        data-test-id={FIND_RECIPE_BUTTON}
                         sx={{
                             pointerEvents: filterSelected ? 'auto' : 'none',
                         }}

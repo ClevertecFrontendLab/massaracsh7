@@ -1,6 +1,6 @@
 import { HStack, Image, Text } from '@chakra-ui/react';
 
-import { BASE_IMG_URL } from '~/constants';
+import { BASE_IMG_URL } from '~/constants/constants';
 
 interface CategoryBadgeProps {
     categoryTitle: string;

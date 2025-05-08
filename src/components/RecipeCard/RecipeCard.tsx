@@ -17,7 +17,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { BookmarkHeart } from '~/assets/icons/icons';
-import { BASE_IMG_URL } from '~/constants';
+import { BASE_IMG_URL } from '~/constants/constants';
+import { CARD_LINK, FOOD_CARD } from '~/constants/test-ids';
 import useGetCategory from '~/hooks/useGetCategory';
 import useGetSubcategory from '~/hooks/useGetSubcategory';
 import { ApplicationState } from '~/store/configure-store';
@@ -42,7 +43,7 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
             variant='basic'
             h={{ base: '128px', lg: '244px', xl: '244px' }}
             position='relative'
-            data-test-id={`food-card-${index}`}
+            data-test-id={`${FOOD_CARD}-${index}`}
         >
             <Image
                 src={`${BASE_IMG_URL}${recipe.image}`}
@@ -78,9 +79,9 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                         left={{ sm: '8px', md: '8px' }}
                         align='flex-start'
                     >
-                        {[...new Set(rootCategories)].map((item, index) => (
+                        {[...new Set(rootCategories)].map((item) => (
                             <Badge
-                                key={item._id + index}
+                                key={item._id}
                                 variant='lime50'
                                 p={{ sm: '0', md: '0' }}
                                 maxW='100%'
@@ -147,7 +148,7 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                     </Show>
                     <Button
                         variant='blackSolid'
-                        data-test-id={`card-link-${index}`}
+                        data-test-id={`${CARD_LINK}-${index}`}
                         onClick={() =>
                             navigate(
                                 `/${rootCategories[0].category}/${subCategories[0].category}/${recipe._id}`,

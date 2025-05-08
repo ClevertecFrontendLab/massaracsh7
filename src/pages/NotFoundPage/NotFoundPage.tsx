@@ -1,6 +1,8 @@
 import { Box, Heading, Hide, HStack, Image, Link, Show, Text, VStack } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router';
 
+import { ERROR_PAGE_GO_HOME } from '~/constants/test-ids';
+
 const NotFoundPage = () => (
     <>
         <Box
@@ -63,7 +65,7 @@ const NotFoundPage = () => (
                             as={RouterLink}
                             to='/'
                             textDecoration='underline'
-                            data-test-id='error-page-go-home'
+                            data-test-id={ERROR_PAGE_GO_HOME}
                         >
                             здесь
                         </Link>

@@ -19,6 +19,13 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import {
+    ADD_ALLERGEN_BUTTON,
+    ADD_OTHER_ALLERGEN,
+    ALLERGEN_BUTTON,
+    ALLERGEN_BUTTON_FILTER,
+    ALLERGEN_MENU,
+} from '~/constants/test-ids';
 import { allergens } from '~/data/allergens';
 import { ApplicationState } from '~/store/configure-store';
 import { setSelectedAllergens } from '~/store/filter-slice';
@@ -98,9 +105,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                 _expanded={{ bg: 'white' }}
                 height='auto'
                 isDisabled={isDisabled}
-                data-test-id={
-                    sourse === 'drawer' ? 'allergens-menu-button-filter' : 'allergens-menu-button'
-                }
+                data-test-id={sourse === 'drawer' ? ALLERGEN_BUTTON_FILTER : ALLERGEN_BUTTON}
                 sx={{
                     pointerEvents: isDisabled ? 'none' : 'auto',
                 }}
@@ -125,7 +130,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                 )}
             </MenuButton>
 
-            <MenuList borderRadius='6px' zIndex='11' w={width} data-test-id='allergens-menu'>
+            <MenuList borderRadius='6px' zIndex='11' w={width} data-test-id={ALLERGEN_MENU}>
                 {allergens.map((option, index) => (
                     <MenuItem
                         key={option.value}
@@ -155,7 +160,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                         borderColor='blackAlpha.200'
                         focusBorderColor='blackAlpha.200'
                         _hover={{ borderColor: 'blackAlpha.200' }}
-                        data-test-id='add-other-allergen'
+                        data-test-id={ADD_OTHER_ALLERGEN}
                         autoFocus={true}
                         onKeyDown={handleKeyDown}
                     />
@@ -168,7 +173,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                         color='white'
                         borderRadius='50%'
                         aria-label='Добавить аллерген'
-                        data-test-id='add-allergen-button'
+                        data-test-id={ADD_ALLERGEN_BUTTON}
                         isDisabled={isDisabled}
                         sx={{ pointerEvents: isDisabled ? 'none' : 'auto' }}
                     />

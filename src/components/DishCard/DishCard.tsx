@@ -1,6 +1,6 @@
 import { Badge, Card, CardBody, CardHeader, Heading, HStack, Image, Text } from '@chakra-ui/react';
 
-import { BASE_IMG_URL } from '~/constants';
+import { BASE_IMG_URL } from '~/constants/constants';
 import useGetCategory from '~/hooks/useGetCategory';
 import useGetSubcategory from '~/hooks/useGetSubcategory';
 import { Recipe } from '~/types/apiTypes';

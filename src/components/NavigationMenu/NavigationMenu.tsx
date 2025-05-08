@@ -15,7 +15,8 @@ import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
 
 import { ShevronDown } from '~/assets/icons/icons';
-import { BASE_IMG_URL } from '~/constants';
+import { BASE_IMG_URL } from '~/constants/constants';
+import { NAV, VEGAN } from '~/constants/test-ids';
 import { useGetCategoriesQuery } from '~/query/services/categories';
 import { ApplicationState } from '~/store/configure-store';
 
@@ -37,7 +38,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
 
     return (
         <Accordion
-            data-test-id='nav'
+            data-test-id={NAV}
             onChange={handleAccordion}
             allowToggle
             overflowY='auto'
@@ -73,7 +74,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                         <AccordionButton
                             data-test-id={
                                 category.title === 'Веганская кухня'
-                                    ? 'vegan-cuisine'
+                                    ? VEGAN
                                     : `${category.category}`
                             }
                             _hover={{ bg: 'customLime.50' }}

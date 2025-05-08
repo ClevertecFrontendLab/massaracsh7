@@ -19,14 +19,17 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
 import CustomLoader from '~/components/CustomLoader/CustomLoader';
-// import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
 import LikesInfo from '~/components/LikesInfo/LikesInfo';
 import SliderList from '~/components/SliderList/SliderList';
+import { DECREMENT_STEPPER, INCREMENT_STEPPER, INGREDIENT_QUANTITY } from '~/constants/test-ids';
 import { authors } from '~/data/authors';
+import useGetCategory from '~/hooks/useGetCategory';
 import { useGetRecipeByIdQuery, useGetRecipesQuery } from '~/query/services/recipes';
 import { setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -34,8 +37,10 @@ import { useAppDispatch } from '~/store/hooks';
 const RecipePage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
+    const categoryIds = recipe?.categoriesIds ?? [];
+    const rootCategories = useGetCategory(categoryIds);
+
     const author = authors[0];
     const dispatch = useAppDispatch();
     const [portions, setPortions] = useState<number>(1);
@@ -89,13 +94,17 @@ const RecipePage = () => {
                     />
                     <Flex flex='1' flexDirection='column'>
                         <HStack spacing={3} justify='space-between' align='flex-start' mb={10}>
-                            {/* <Flex gap={2} align='center' wrap='wrap'>
-                                {recipe?.category.map((catUrl, index) => (
-                                    <Badge key={index} variant='lime50'>
-                                        <CategoryBadge categoryUrl={catUrl} />
+                            <Flex gap={2} align='center' wrap='wrap'>
+                                {[...new Set(rootCategories)].map((item) => (
+                                    <Badge key={item._id} variant='lime50'>
+                                        <CategoryBadge
+                                            categoryTitle={item.title}
+                                            categoryIcon={item.icon}
+                                        />
                                     </Badge>
                                 ))}
-                            </Flex> */}
+                            </Flex>
+
                             <LikesInfo
                                 likes={recipe?.likes}
                                 bookmarks={recipe?.bookmarks}
@@ -225,9 +234,9 @@ const RecipePage = () => {
                                 value: recipe?.nutritionValue.carbohydrates,
                                 unit: 'ГРАММ',
                             },
-                        ].map((item, index) => (
+                        ].map((item) => (
                             <Stack
-                                key={index}
+                                key={item.label}
                                 p={4}
                                 flexDirection={{ sm: 'row', md: 'column' }}
                                 spacing={3}
@@ -296,8 +305,12 @@ const RecipePage = () => {
                                     >
                                         <NumberInputField />
                                         <NumberInputStepper>
-                                            <NumberIncrementStepper data-test-id='increment-stepper' />
-                                            <NumberDecrementStepper data-test-id='decrement-stepper' />
+                                            <NumberIncrementStepper
+                                                data-test-id={INCREMENT_STEPPER}
+                                            />
+                                            <NumberDecrementStepper
+                                                data-test-id={DECREMENT_STEPPER}
+                                            />
                                         </NumberInputStepper>
                                     </NumberInput>
                                 </HStack>
@@ -308,7 +321,7 @@ const RecipePage = () => {
                                 const newCount = getNewCount(Number(ingredient.count));
 
                                 return (
-                                    <>
+                                    <React.Fragment key={ingredient.title + index}>
                                         <Box
                                             py={4}
                                             px={6}
@@ -325,7 +338,7 @@ const RecipePage = () => {
                                         >
                                             <Text color='colorBlack'>
                                                 <span
-                                                    data-test-id={`ingredient-quantity-${index}`}
+                                                    data-test-id={`${INGREDIENT_QUANTITY}-${index}`}
                                                     style={{ marginRight: '4px' }}
                                                 >
                                                     {ingredient.measureUnit === 'по вкусу'
@@ -335,7 +348,7 @@ const RecipePage = () => {
                                                 {ingredient.measureUnit}
                                             </Text>
                                         </Box>
-                                    </>
+                                    </React.Fragment>
                                 );
                             })}
                         </Grid>
@@ -347,7 +360,7 @@ const RecipePage = () => {
                         </Heading>
                         <VStack spacing='18px'>
                             {recipe?.steps.map((step, index) => (
-                                <Card key={index} w='100%'>
+                                <Card key={step.stepNumber} w='100%'>
                                     <HStack gap={{ sm: 0, md: 2, lg: 4, xl: 4 }}>
                                         {step.image && (
                                             <Image

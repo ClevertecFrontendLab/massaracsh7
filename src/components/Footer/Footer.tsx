@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, Flex, Image, Text } from '@chakra-ui/react';
 
 import { SearchGlass } from '~/assets/icons/icons';
+import { FOOTER } from '~/constants/test-ids';
 
 function Footer() {
     return (
@@ -13,7 +14,7 @@ function Footer() {
             height='84px'
             zIndex={10}
             bg='#ffffd3'
-            data-test-id='footer'
+            data-test-id={FOOTER}
             width='100vw'
         >
             <Flex as='nav' justify='space-around' align='flex-end' height='100%'>

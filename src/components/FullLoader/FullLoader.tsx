@@ -1,5 +1,7 @@
 import { Box } from '@chakra-ui/react';
 
+import { APP_LOADER } from '~/constants/test-ids';
+
 import CustomLoader from '../CustomLoader/CustomLoader';
 
 const FullLoader = () => (
@@ -16,7 +18,7 @@ const FullLoader = () => (
         justifyContent='center'
         zIndex='overlay'
     >
-        <CustomLoader size='large' dataTestId='app-loader' />
+        <CustomLoader size='large' dataTestId={APP_LOADER} />
     </Box>
 );
 

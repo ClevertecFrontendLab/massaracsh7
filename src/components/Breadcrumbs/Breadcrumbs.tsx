@@ -3,9 +3,11 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Link as RouterLink, useLocation } from 'react-router';
 
+import { BREADCRUMBS } from '~/constants/test-ids';
 import { useGetRecipeByIdQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
 import { useAppSelector } from '~/store/hooks';
+import { parsePathname } from '~/utils/parsePathname';
 
 interface BreadcrumbsProps {
     onClose?: () => void;
@@ -13,11 +15,8 @@ interface BreadcrumbsProps {
 
 const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
     const location = useLocation();
-    const pathSegments = location.pathname.split('/').filter(Boolean);
+    const { categorySlug, subcategorySlug, dishSlug } = parsePathname(location.pathname);
 
-    const categorySlug = pathSegments[0];
-    const subcategorySlug = pathSegments[1];
-    const dishSlug = pathSegments[2];
     const { categories } = useAppSelector((state: ApplicationState) => state.categories);
     const catName =
         categorySlug === 'the-juiciest'
@@ -34,7 +33,7 @@ const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
             listProps={{
                 style: { flexWrap: 'wrap' },
             }}
-            data-test-id='breadcrumbs'
+            data-test-id={BREADCRUMBS}
         >
             <BreadcrumbItem isCurrentPage={!catName}>
                 <BreadcrumbLink

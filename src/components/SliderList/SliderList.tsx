@@ -5,6 +5,8 @@ import { Keyboard, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ArrowLeft, ArrowRight } from '~/assets/icons/icons';
+import { JUICIEST_SLIDER_BREAKPOINTS } from '~/constants/swiper-breakpoints';
+import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/constants/test-ids';
 import { Recipe } from '~/types/apiTypes';
 
 import SliderCard from '../SliderCard/SliderCard';
@@ -45,7 +47,7 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 color='customLime.50'
                 borderRadius='small'
                 zIndex={14}
-                data-test-id='carousel-back'
+                data-test-id={CAROUSEL_BACK}
                 display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
             />
 
@@ -63,12 +65,12 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 color='customLime.50'
                 borderRadius='small'
                 zIndex={14}
-                data-test-id='carousel-forward'
+                data-test-id={CAROUSEL_FORWARD}
                 display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
             />
 
             <Swiper
-                data-test-id='carousel'
+                data-test-id={CAROUSEL}
                 loop={true}
                 loopAdditionalSlides={4}
                 speed={0}
@@ -82,40 +84,11 @@ const SliderList = ({ recipes }: SliderListProps) => {
                     nextEl: '.next',
                     prevEl: '.prev',
                 }}
-                breakpoints={{
-                    0: {
-                        slidesPerView: 2,
-                        spaceBetween: 10,
-                    },
-                    360: {
-                        slidesPerView: 2,
-                        spaceBetween: 12,
-                    },
-                    480: {
-                        slidesPerView: 3,
-                        spaceBetween: 12,
-                    },
-                    768: {
-                        slidesPerView: 4,
-                        spaceBetween: 12,
-                    },
-                    1024: {
-                        slidesPerView: 3.2,
-                        spaceBetween: 12,
-                    },
-                    1440: {
-                        slidesPerView: 3.1,
-                        spaceBetween: 12,
-                    },
-                    1920: {
-                        slidesPerView: 4,
-                        spaceBetween: 24,
-                    },
-                }}
+                breakpoints={JUICIEST_SLIDER_BREAKPOINTS}
                 style={{ width: '100%', margin: '0 auto' }}
             >
                 {newRecipes.map((recipe, index) => (
-                    <SwiperSlide key={recipe._id} data-test-id={`carousel-card-${index}`}>
+                    <SwiperSlide key={recipe._id} data-test-id={`${CAROUSEL_CARD}-${index}`}>
                         <SliderCard recipe={recipe} />
                     </SwiperSlide>
                 ))}

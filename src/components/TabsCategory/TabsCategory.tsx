@@ -11,9 +11,6 @@ interface TabCategoryProps {
 const TabsCategory = ({ subcategories }: TabCategoryProps) => {
     const navigate = useNavigate();
     const { category, subcategory } = useParams();
-    // const { categories, subCategories } = useSelector(
-    //     (state: ApplicationState) => state.categories,
-    // );
 
     const [tabIndex, setTabIndex] = useState(0);
     useEffect(() => {

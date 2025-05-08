@@ -8,6 +8,8 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
+import { BASE_LIMIT_SLIDER, MAIN_LIMIT_JUICY, MIN_SEARCH_LENGTH } from '~/constants/constants';
+import { JUICIEST_LINK, JUICIEST_LINK_MOB } from '~/constants/test-ids';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { ApplicationState } from '~/store/configure-store';
@@ -38,7 +40,7 @@ const Main = () => {
             buildQuery({
                 sortBy: 'likes',
                 sortOrder: 'desc',
-                limit: 4,
+                limit: MAIN_LIMIT_JUICY,
                 page: 1,
             }),
         [],
@@ -54,7 +56,7 @@ const Main = () => {
                 searchTerm,
                 sortBy: 'likes',
                 sortOrder: 'desc',
-                limit: 4,
+                limit: MAIN_LIMIT_JUICY,
                 page: 1,
             }),
         [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
@@ -74,7 +76,7 @@ const Main = () => {
             buildQuery({
                 sortBy: 'createdAt',
                 sortOrder: 'desc',
-                limit: 10,
+                limit: BASE_LIMIT_SLIDER,
             }),
         [],
     );
@@ -88,7 +90,7 @@ const Main = () => {
                 selectedSide,
                 sortBy: 'createdAt',
                 sortOrder: 'desc',
-                limit: 10,
+                limit: BASE_LIMIT_SLIDER,
             }),
         [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide],
     );
@@ -108,7 +110,7 @@ const Main = () => {
 
     useEffect(() => {
         const noFiltersOrSearch =
-            searchTerm.length < 3 &&
+            searchTerm.length < MIN_SEARCH_LENGTH &&
             selectedAllergens.length === 0 &&
             !selectedMeat &&
             !selectedSide;
@@ -153,11 +155,11 @@ const Main = () => {
                 />
             </Box>
 
-            {searchTerm.length < 3 && sliderRecipes?.data && (
+            {searchTerm.length < MIN_SEARCH_LENGTH && sliderRecipes?.data && (
                 <SliderList recipes={sliderRecipes?.data} />
             )}
 
-            {searchTerm.length < 3 && (
+            {searchTerm.length < MIN_SEARCH_LENGTH && (
                 <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
                     <Heading variant='sectionTitle'>Самое сочное</Heading>
                     <Button
@@ -168,7 +170,7 @@ const Main = () => {
                             lg: 'flex',
                             xl: 'flex',
                         }}
-                        data-test-id='juiciest-link'
+                        data-test-id={JUICIEST_LINK}
                         variant='limeSolid'
                         size='large'
                         rightIcon={<ArrowBlackRight w='14px' />}
@@ -182,13 +184,13 @@ const Main = () => {
             {juiciestRecipes?.data && (
                 <RecipeList
                     recipes={juiciestRecipes?.data}
-                    gridVariant={searchTerm.length >= 2 ? 'low' : 'wide'}
+                    gridVariant={searchTerm.length >= MIN_SEARCH_LENGTH ? 'low' : 'wide'}
                 />
             )}
 
             <Button
                 display={{ base: 'none', sm: 'block', md: 'none', lg: 'none', xl: 'none' }}
-                data-test-id='juiciest-link-mobile'
+                data-test-id={JUICIEST_LINK_MOB}
                 variant='limeSolid'
                 size='large'
                 mb={8}
@@ -199,8 +201,8 @@ const Main = () => {
                 Вся подборка
             </Button>
 
-            {searchTerm.length < 3 && <BlogList />}
-            {searchTerm.length < 3 && randomRecipes && (
+            {searchTerm.length < MIN_SEARCH_LENGTH && <BlogList />}
+            {searchTerm.length < MIN_SEARCH_LENGTH && randomRecipes && (
                 <KitchenSection
                     title={randomTitle}
                     description={randomDescription}

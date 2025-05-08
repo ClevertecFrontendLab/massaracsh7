@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router';
 
-import { BASE_IMG_URL } from '~/constants';
+import { BASE_IMG_URL } from '~/constants/constants';
 import useGetCategory from '~/hooks/useGetCategory';
 import useGetSubcategory from '~/hooks/useGetSubcategory';
 import { Recipe } from '~/types/apiTypes';
