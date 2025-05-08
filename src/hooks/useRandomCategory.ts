@@ -12,12 +12,11 @@ const useRandomCategory = (activeCategoryId: string | null) => {
     const [randomTitle, setRandomTitle] = useState('');
     const [randomDescription, setRandomDescription] = useState('');
     const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-    const [trigger] = useLazyGetRecipesByCategoryQuery();
+    const [fetchRecipesByCategory] = useLazyGetRecipesByCategoryQuery();
 
     useEffect(() => {
         const fetchRecipes = async () => {
-            if (!categories.length || !subCategories.length) return;
+            if (!categories.length || !subCategories.length || !activeCategoryId) return;
 
             const otherCategories = categories.filter((cat) => cat._id !== activeCategoryId);
             if (!otherCategories.length) return;
@@ -32,28 +31,35 @@ const useRandomCategory = (activeCategoryId: string | null) => {
             setRandomTitle(randomCategory.title);
             setRandomDescription(randomCategory.description);
 
-            trigger({ id: subcats[0]._id });
-
             const collected: Recipe[] = [];
             const seen = new Set<string>();
 
-            for (const sub of subcats) {
-                const { data } = await trigger({ id: sub._id, limit: 5 }).unwrap();
-                for (const recipe of data || []) {
-                    if (!seen.has(recipe._id)) {
-                        seen.add(recipe._id);
-                        collected.push(recipe);
+            try {
+                for (const sub of subcats) {
+                    const { data } = await fetchRecipesByCategory({
+                        id: sub._id,
+                        limit: 5,
+                    }).unwrap();
+
+                    for (const recipe of data || []) {
+                        if (!seen.has(recipe._id)) {
+                            seen.add(recipe._id);
+                            collected.push(recipe);
+                        }
+                        if (collected.length >= 5) break;
                     }
+
                     if (collected.length >= 5) break;
                 }
-                if (collected.length >= 5) break;
-            }
 
-            setRecipes(collected);
+                setRecipes(collected);
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
         };
 
         fetchRecipes();
-    }, [activeCategoryId, categories, subCategories, trigger]);
+    }, [activeCategoryId, categories, subCategories, fetchRecipesByCategory]);
 
     return { randomRecipes: recipes, randomTitle, randomDescription };
 };

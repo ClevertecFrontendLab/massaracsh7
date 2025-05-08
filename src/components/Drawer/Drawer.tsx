@@ -111,7 +111,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.authors.length ||
         filters.meatTypes.length ||
         filters.sideTypes.length ||
-        allergens.length > 0;
+        !!allergens.length;
 
     const removeTag = (label: string) => {
         const meatValue = meatTypes.find((item) => item.label === label)?.value;
