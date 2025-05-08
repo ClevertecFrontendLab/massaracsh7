@@ -9,11 +9,7 @@ import { ApplicationState } from '~/store/configure-store';
 import { useAppSelector } from '~/store/hooks';
 import { parsePathname } from '~/utils/parsePathname';
 
-interface BreadcrumbsProps {
-    onClose?: () => void;
-}
-
-const Breadcrumbs = ({ onClose }: BreadcrumbsProps) => {
+const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
     const location = useLocation();
     const { categorySlug, subcategorySlug, dishSlug } = parsePathname(location.pathname);
 

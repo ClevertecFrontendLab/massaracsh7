@@ -56,9 +56,6 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
             : [...selected, value];
 
         dispatch(setSelectedAllergens(updated));
-        // setTimeout(() => {
-        //     inputRef.current?.focus();
-        // }, 0);
     };
 
     const handleAddCustom = () => {
@@ -66,9 +63,6 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
         if (trimmed && !selected.includes(trimmed)) {
             dispatch(setSelectedAllergens([...selected, trimmed]));
             setNewAllergen('');
-            // setTimeout(() => {
-            //     inputRef.current?.focus();
-            // }, 0);
         }
     };
 
