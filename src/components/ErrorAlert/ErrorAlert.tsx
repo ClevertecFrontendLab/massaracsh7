@@ -21,7 +21,7 @@ const ErrorAlert = () => {
                 mb='auto'
                 mx='auto'
                 data-test-id='error-notification'
-                w='400px'
+                w={{ base: '328px', md: '328px', lg: '400px', xl: '400px' }}
                 bg='#E53E3E'
                 color='white'
                 fontSize='16px'

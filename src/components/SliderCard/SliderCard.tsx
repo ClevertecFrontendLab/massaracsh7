@@ -31,7 +31,11 @@ const SliderCard = ({ recipe }: SliderCardProps) => {
     return (
         <Link
             as={RouterLink}
-            to={`/${rootCategories[0].category}/${subCategories[0].category}/${recipe._id}`}
+            to={
+                rootCategories?.[0]?.category && subCategories?.[0]?.category && recipe?._id
+                    ? `/${rootCategories[0].category}/${subCategories[0].category}/${recipe._id}`
+                    : '#'
+            }
             _hover={{ textDecoration: 'none' }}
         >
             <Card
@@ -63,9 +67,9 @@ const SliderCard = ({ recipe }: SliderCardProps) => {
                         mb={2}
                         textStyle='cutText'
                         sx={{
-                            WebkitLineClamp: { base: 2, md: 2, lg: 1 },
+                            WebkitLineClamp: { base: 1, sm: 2, md: 2, lg: 1, xl: 1 },
                         }}
-                        minH={{ md: 12 }}
+                        minH={{ base: '28px', sm: '48px', md: '48px', lg: '28px', xl: '28px' }}
                     >
                         {recipe.title}
                     </Heading>
@@ -76,6 +80,7 @@ const SliderCard = ({ recipe }: SliderCardProps) => {
                             sx={{
                                 WebkitLineClamp: { base: 2, mid: 3, lg: 3, xl: 3 },
                             }}
+                            minH='64px'
                         >
                             {recipe.description}
                         </Text>

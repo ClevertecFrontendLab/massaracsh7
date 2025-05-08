@@ -4,7 +4,6 @@ import {
     Box,
     Button,
     Card,
-    Center,
     Flex,
     Grid,
     Heading,
@@ -15,7 +14,6 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
-    Spinner,
     Stack,
     Text,
     VStack,
@@ -24,6 +22,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import CustomLoader from '~/components/CustomLoader/CustomLoader';
 // import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
 import LikesInfo from '~/components/LikesInfo/LikesInfo';
 import SliderList from '~/components/SliderList/SliderList';
@@ -70,17 +69,7 @@ const RecipePage = () => {
     }, [isError, navigate, dispatch]);
 
     if (isLoading) {
-        return (
-            <Center minH='400px'>
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='lime.500'
-                    size='xl'
-                />
-            </Center>
-        );
+        return <CustomLoader size='large' />;
     }
 
     return (

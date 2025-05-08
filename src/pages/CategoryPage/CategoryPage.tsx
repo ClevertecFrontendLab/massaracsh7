@@ -1,8 +1,9 @@
-import { Box, Center, Heading, Spinner, Text } from '@chakra-ui/react';
+import { Box, Heading, Text } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 
+import CustomLoader from '~/components/CustomLoader/CustomLoader';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
@@ -122,18 +123,7 @@ const CategoryPage = () => {
     }
 
     if (isLoadingCategory) {
-        return (
-            <Center minH='400px'>
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='lime.500'
-                    size='xl'
-                    data-test-id='app-loader'
-                />
-            </Center>
-        );
+        return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 
     return (

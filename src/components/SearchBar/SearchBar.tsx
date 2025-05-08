@@ -7,7 +7,6 @@ import {
     Input,
     InputGroup,
     InputRightElement,
-    Spinner,
     Switch,
     Tag,
     TagCloseButton,
@@ -28,6 +27,7 @@ import {
 } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
+import CustomLoader from '../CustomLoader/CustomLoader';
 import FilterDrawer from '../Drawer/Drawer';
 interface SeachBarProps {
     isLoader: boolean;
@@ -82,16 +82,7 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
 
     const isSearchActive = searchText.trim().length >= 3 || selectedAllergens.length > 0;
     if (isLoader && !isFilterOpen && !excludeAllergens) {
-        return (
-            <Spinner
-                thickness='4px'
-                speed='0.65s'
-                emptyColor='gray.200'
-                color='lime.500'
-                size='xl'
-                data-test-id='loader-search-block'
-            />
-        );
+        return <CustomLoader size='small' dataTestId='loader-search-block' />;
     }
     return (
         <Box>
@@ -199,7 +190,6 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                             bg='customLime.100'
                             border='1px solid'
                             borderColor='customLime.400'
-                            data-test-id='filter-tag'
                         >
                             <TagLabel color='customLime.700'>{tag}</TagLabel>
                             <TagCloseButton color='customLime.700' />

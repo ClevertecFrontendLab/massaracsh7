@@ -1,6 +1,7 @@
-import { Box, Button, Center, Heading, Spinner } from '@chakra-ui/react';
+import { Box, Button, Center, Heading } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
 
+import CustomLoader from '~/components/CustomLoader/CustomLoader';
 import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
@@ -84,18 +85,7 @@ const JuicyPage = () => {
     const isLastPage = data && data?.meta.page >= data?.meta.totalPages;
 
     if (isLoading) {
-        return (
-            <Center minH='400px'>
-                <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    emptyColor='gray.200'
-                    color='lime.500'
-                    size='xl'
-                    data-test-id='app-loader'
-                />
-            </Center>
-        );
+        return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 
     return (

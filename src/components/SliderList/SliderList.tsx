@@ -89,23 +89,23 @@ const SliderList = ({ recipes }: SliderListProps) => {
                     },
                     360: {
                         slidesPerView: 2,
-                        spaceBetween: 10,
+                        spaceBetween: 12,
                     },
                     480: {
                         slidesPerView: 3,
-                        spaceBetween: 10,
+                        spaceBetween: 12,
                     },
                     768: {
                         slidesPerView: 4,
-                        spaceBetween: 10,
+                        spaceBetween: 12,
                     },
                     1024: {
                         slidesPerView: 3.2,
-                        spaceBetween: 24,
+                        spaceBetween: 12,
                     },
                     1440: {
-                        slidesPerView: 3.5,
-                        spaceBetween: 24,
+                        slidesPerView: 3.1,
+                        spaceBetween: 12,
                     },
                     1920: {
                         slidesPerView: 4,
