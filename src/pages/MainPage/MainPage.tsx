@@ -8,37 +8,38 @@ import KitchenSection from '~/components/KitchenSection/KitchenSection';
 import RecipeList from '~/components/RecipeList/RecipeList';
 import SearchBar from '~/components/SearchBar/SearchBar';
 import SliderList from '~/components/SliderList/SliderList';
-import {
-    BASE_LIMIT_SLIDER,
-    ERROR_SEARCH_MESSAGE,
-    MAIN_LIMIT_JUICY,
-    MIN_SEARCH_LENGTH,
-} from '~/constants/constants';
+import { BASE_LIMIT_SLIDER, ERROR_SEARCH_MESSAGE, MAIN_LIMIT_JUICY } from '~/constants/constants';
 import { JUICIEST_LINK, JUICIEST_LINK_MOB } from '~/constants/test-ids';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
-import { ApplicationState } from '~/store/configure-store';
-import { setHasResults } from '~/store/filter-slice';
-import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import {
+    selectHasFiltersOrSearch,
+    selectIsExcludingAllergensWithTags,
+    selectIsSearch,
+    selectSearchTerm,
+    selectSelectedAllergens,
+    selectSelectedCategories,
+    selectSelectedMeat,
+    selectSelectedSide,
+} from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
 const Main = () => {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [isFilterClose, setIsFilterClose] = useState(true);
-
-    const {
-        selectedAllergens,
-        excludeAllergens,
-        selectedSubCategories,
-        selectedMeat,
-        selectedSide,
-        searchTerm,
-        isSearch,
-    } = useAppSelector((state: ApplicationState) => state.filters);
-
     const [message, setMessage] = useState('');
+
+    const selectedAllergens = useAppSelector(selectSelectedAllergens);
+    const selectedSubCategories = useAppSelector(selectSelectedCategories);
+    const selectedMeat = useAppSelector(selectSelectedMeat);
+    const selectedSide = useAppSelector(selectSelectedSide);
+    const searchTerm = useAppSelector(selectSearchTerm);
+    const isSearch = useAppSelector(selectIsSearch);
+
+    const isExcludingWithTags = useAppSelector(selectIsExcludingAllergensWithTags);
+    const hasFiltersOrSearch = useAppSelector(selectHasFiltersOrSearch);
 
     const baseJuicyParams = useMemo(
         () =>
@@ -106,40 +107,19 @@ const Main = () => {
         refetchOnMountOrArgChange: isFilterClose,
     });
 
-    useEffect(() => {
-        juiciestRecipes?.data &&
-            dispatch(
-                setHasResults(searchTerm.length < 3 ? null : juiciestRecipes?.data.length > 0),
-            );
-    }, [dispatch, searchTerm, juiciestRecipes?.data]);
+    const isEmptyResult = useMemo(
+        () => hasFiltersOrSearch && juiciestRecipes?.data?.length === 0,
+        [hasFiltersOrSearch, juiciestRecipes?.data],
+    );
 
     useEffect(() => {
-        const noFiltersOrSearch =
-            searchTerm.length < MIN_SEARCH_LENGTH &&
-            selectedAllergens.length === 0 &&
-            !selectedMeat &&
-            !selectedSide;
-
-        if (noFiltersOrSearch) {
-            setMessage('');
-            return;
-        }
-
-        if (juiciestRecipes && juiciestRecipes.data?.length === 0) {
-            setMessage(ERROR_SEARCH_MESSAGE);
-        } else {
-            setMessage('');
-        }
-    }, [juiciestRecipes, searchTerm, selectedAllergens, selectedMeat, selectedSide]);
+        setMessage(isEmptyResult ? ERROR_SEARCH_MESSAGE : '');
+    }, [isEmptyResult]);
 
     return (
         <Box>
             <Box
-                boxShadow={
-                    searchTerm || selectedAllergens.length > 0 || excludeAllergens || message
-                        ? 'main'
-                        : 'none'
-                }
+                boxShadow={hasFiltersOrSearch || isExcludingWithTags || message ? 'main' : 'none'}
                 pb={8}
                 mb={6}
                 borderRadius='0 0 8px 8px'
@@ -160,11 +140,11 @@ const Main = () => {
                 />
             </Box>
 
-            {searchTerm.length < MIN_SEARCH_LENGTH && sliderRecipes?.data && (
+            {!hasFiltersOrSearch && sliderRecipes?.data && (
                 <SliderList recipes={sliderRecipes?.data} />
             )}
 
-            {searchTerm.length < MIN_SEARCH_LENGTH && (
+            {!hasFiltersOrSearch && (
                 <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
                     <Heading variant='sectionTitle'>Самое сочное</Heading>
                     <Button
@@ -189,7 +169,7 @@ const Main = () => {
             {juiciestRecipes?.data && (
                 <RecipeList
                     recipes={juiciestRecipes?.data}
-                    gridVariant={searchTerm.length >= MIN_SEARCH_LENGTH ? 'low' : 'wide'}
+                    gridVariant={hasFiltersOrSearch ? 'low' : 'wide'}
                 />
             )}
 
@@ -206,8 +186,8 @@ const Main = () => {
                 Вся подборка
             </Button>
 
-            {searchTerm.length < MIN_SEARCH_LENGTH && <BlogList />}
-            {searchTerm.length < MIN_SEARCH_LENGTH && randomRecipes && (
+            {!hasFiltersOrSearch && <BlogList />}
+            {!hasFiltersOrSearch && randomRecipes && (
                 <KitchenSection
                     title={randomTitle}
                     description={randomDescription}
