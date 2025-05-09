@@ -2,7 +2,7 @@ import { Flex, HStack, IconButton, Image, Link, Text } from '@chakra-ui/react';
 
 import { FOOTER } from '~/constants/test-ids';
 
-const NavigationFooter = () => (
+export const NavigationFooter = () => (
     <Flex
         px={6}
         mt='auto'
@@ -33,5 +33,3 @@ const NavigationFooter = () => (
         </HStack>
     </Flex>
 );
-
-export default NavigationFooter;

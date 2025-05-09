@@ -25,7 +25,7 @@ interface NavProps {
     handleOpen?: (isOpen: boolean) => void;
     onClose?: () => void;
 }
-const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
+export const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
     const navigate = useNavigate();
     useGetCategoriesQuery();
     const categories = useAppSelector(selectAllCategories);
@@ -149,5 +149,3 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
         </Accordion>
     );
 };
-
-export default NavigationMenu;

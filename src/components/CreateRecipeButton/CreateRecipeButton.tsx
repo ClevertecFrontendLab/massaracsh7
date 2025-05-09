@@ -1,6 +1,6 @@
 import { Button, Center, Image, Text, VStack } from '@chakra-ui/react';
 
-const CreateRecipeButton = () => (
+export const CreateRecipeButton = () => (
     <Center w='208px' h='208px'>
         <Button variant='radial' w='208px' h='208px'>
             <VStack spacing={3} pt='10px'>
@@ -12,5 +12,3 @@ const CreateRecipeButton = () => (
         </Button>
     </Center>
 );
-
-export default CreateRecipeButton;

@@ -16,7 +16,7 @@ import {
 import { useState } from 'react';
 
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
-import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
+import { MultipleSelect } from '~/components/MultipleSelect/MultipleSelect';
 import { MIN_SEARCH_LENGTH } from '~/constants/constants';
 import {
     ALLERGEN_SWITCHER,
@@ -36,15 +36,15 @@ import {
 } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
-import CustomLoader from '../CustomLoader/CustomLoader';
-import FilterDrawer from '../Drawer/Drawer';
+import { CustomLoader } from '../CustomLoader/CustomLoader';
+import { FilterDrawer } from '../Drawer/Drawer';
 
 interface SeachBarProps {
     isLoader: boolean;
     handleFilterClose: (value: boolean) => void;
 }
 
-const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
+export const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
     const dispatch = useAppDispatch();
@@ -211,5 +211,3 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
         </Box>
     );
 };
-
-export default SearchBar;

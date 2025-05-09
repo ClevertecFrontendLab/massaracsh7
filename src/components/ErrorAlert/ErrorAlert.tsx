@@ -6,7 +6,7 @@ import { clearAppError } from '~/store/app-slice';
 import { ApplicationState } from '~/store/configure-store';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
-const ErrorAlert = () => {
+export const ErrorAlert = () => {
     const error = useAppSelector((state: ApplicationState) => state.app.error);
     const dispatch = useAppDispatch();
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
@@ -47,5 +47,3 @@ const ErrorAlert = () => {
         </Box>
     );
 };
-
-export default ErrorAlert;

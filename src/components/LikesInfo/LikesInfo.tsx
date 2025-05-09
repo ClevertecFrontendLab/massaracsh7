@@ -6,7 +6,7 @@ interface LikesAndCommentsInfoProps {
     size?: string;
 }
 
-const LikesInfo = ({ likes, bookmarks, size = 'limeSmall' }: LikesAndCommentsInfoProps) => {
+export const LikesInfo = ({ likes, bookmarks, size = 'limeSmall' }: LikesAndCommentsInfoProps) => {
     if (!likes && !bookmarks) return null;
 
     return (
@@ -26,5 +26,3 @@ const LikesInfo = ({ likes, bookmarks, size = 'limeSmall' }: LikesAndCommentsInf
         </HStack>
     );
 };
-
-export default LikesInfo;

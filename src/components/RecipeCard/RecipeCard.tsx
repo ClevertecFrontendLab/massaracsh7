@@ -18,21 +18,21 @@ import { useNavigate } from 'react-router';
 import { BookmarkHeart } from '~/assets/icons/icons';
 import { BASE_IMG_URL } from '~/constants/constants';
 import { CARD_LINK, FOOD_CARD } from '~/constants/test-ids';
-import useGetCategory from '~/hooks/useGetCategory';
-import useGetSubcategory from '~/hooks/useGetSubcategory';
+import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetSubcategory } from '~/hooks/useGetSubcategory';
 import { selectSearchTerm } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
 import { Recipe } from '~/types/apiTypes';
 import { highlightText } from '~/utils/highlightText';
 
-import CategoryBadge from '../CategoryBadge/CategoryBadge';
-import LikesInfo from '../LikesInfo/LikesInfo';
+import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
+import { LikesInfo } from '../LikesInfo/LikesInfo';
 interface RecipeCardProps {
     recipe: Recipe;
     index: number;
 }
 
-const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
+export const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
     const searchTerm = useAppSelector(selectSearchTerm);
     const rootCategories = useGetCategory(recipe.categoriesIds);
     const subCategories = useGetSubcategory(recipe.categoriesIds);
@@ -162,5 +162,3 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
         </Card>
     );
 };
-
-export default RecipeCard;

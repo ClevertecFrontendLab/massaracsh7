@@ -1,13 +1,13 @@
 import { Box, Button, Center, Heading } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
 
-import CustomLoader from '~/components/CustomLoader/CustomLoader';
-import KitchenSection from '~/components/KitchenSection/KitchenSection';
-import RecipeList from '~/components/RecipeList/RecipeList';
-import SearchBar from '~/components/SearchBar/SearchBar';
+import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
+import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
+import { RecipeList } from '~/components/RecipeList/RecipeList';
+import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { BASE_LIMIT_JUICY } from '~/constants/constants';
 import { LOAD_MORE_BUTTON } from '~/constants/test-ids';
-import useRandomCategory from '~/hooks/useRandomCategory';
+import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import {
     selectHasFiltersOrSearch,
@@ -22,7 +22,7 @@ import { useAppSelector } from '~/store/hooks';
 import { Recipe } from '~/types/apiTypes';
 import { buildQuery } from '~/utils/buildQuery';
 
-const JuicyPage = () => {
+export const JuicyPage = () => {
     const [page, setPage] = useState(1);
     const [isFilterClose, setIsFilterClose] = useState(true);
     const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
@@ -149,5 +149,3 @@ const JuicyPage = () => {
         </Box>
     );
 };
-
-export default JuicyPage;

@@ -3,14 +3,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
-import BlogList from '~/components/BlogList/BlogList';
-import KitchenSection from '~/components/KitchenSection/KitchenSection';
-import RecipeList from '~/components/RecipeList/RecipeList';
-import SearchBar from '~/components/SearchBar/SearchBar';
-import SliderList from '~/components/SliderList/SliderList';
+import { BlogList } from '~/components/BlogList/BlogList';
+import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
+import { RecipeList } from '~/components/RecipeList/RecipeList';
+import { SearchBar } from '~/components/SearchBar/SearchBar';
+import { SliderList } from '~/components/SliderList/SliderList';
 import { BASE_LIMIT_SLIDER, ERROR_SEARCH_MESSAGE, MAIN_LIMIT_JUICY } from '~/constants/constants';
 import { JUICIEST_LINK, JUICIEST_LINK_MOB } from '~/constants/test-ids';
-import useRandomCategory from '~/hooks/useRandomCategory';
+import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import {
     selectHasFiltersOrSearch,
@@ -25,7 +25,7 @@ import {
 import { useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
-const Main = () => {
+export const MainPage = () => {
     const navigate = useNavigate();
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [isFilterClose, setIsFilterClose] = useState(true);
@@ -197,5 +197,3 @@ const Main = () => {
         </Box>
     );
 };
-
-export default Main;

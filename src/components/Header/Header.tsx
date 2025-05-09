@@ -3,11 +3,11 @@ import { useState } from 'react';
 
 import { HEADER } from '~/constants/test-ids';
 
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import MobileMenu from '../MobileMenu/MobileMenu';
-import SocialList from '../SocialList/SocialList';
+import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
+import { MobileMenu } from '../MobileMenu/MobileMenu';
+import { SocialList } from '../SocialList/SocialList';
 
-const Header = () => {
+export const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
@@ -75,5 +75,3 @@ const Header = () => {
         </Box>
     );
 };
-
-export default Header;

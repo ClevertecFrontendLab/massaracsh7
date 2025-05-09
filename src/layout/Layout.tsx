@@ -1,15 +1,15 @@
 import { Box, Hide, Show } from '@chakra-ui/react';
 import { Outlet } from 'react-router';
 
-import Content from '~/components/Content/Content';
-import ErrorAlert from '~/components/ErrorAlert/ErrorAlert';
-import Footer from '~/components/Footer/Footer';
-import Header from '~/components/Header/Header';
-import NavigationFooter from '~/components/NavigationFooter/NavigationFooter';
-import NavigationMenu from '~/components/NavigationMenu/NavigationMenu';
-import Sidebar from '~/components/Sidebar/Sidebar';
+import { Content } from '~/components/Content/Content';
+import { ErrorAlert } from '~/components/ErrorAlert/ErrorAlert';
+import { Footer } from '~/components/Footer/Footer';
+import { Header } from '~/components/Header/Header';
+import { NavigationFooter } from '~/components/NavigationFooter/NavigationFooter';
+import { NavigationMenu } from '~/components/NavigationMenu/NavigationMenu';
+import { Sidebar } from '~/components/Sidebar/Sidebar';
 
-const Layout = () => (
+export const Layout = () => (
     <>
         <Header />
 
@@ -68,5 +68,3 @@ const Layout = () => (
         </Show>
     </>
 );
-
-export default Layout;

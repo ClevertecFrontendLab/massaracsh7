@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router';
 
-import FullLoader from '~/components/FullLoader/FullLoader';
-import Layout from '~/layout/Layout';
-import CategoryPage from '~/pages/CategoryPage/CategoryPage';
-import JuicyPage from '~/pages/JuicyPage/JuicyPage';
-import MainPage from '~/pages/MainPage/MainPage';
-import NotFoundPage from '~/pages/NotFoundPage/NotFoundPage';
-import RecipePage from '~/pages/RecipePage/RecipePage';
+import { FullLoader } from '~/components/FullLoader/FullLoader';
+import { Layout } from '~/layout/Layout';
+import { CategoryPage } from '~/pages/CategoryPage/CategoryPage';
+import { JuicyPage } from '~/pages/JuicyPage/JuicyPage';
+import { MainPage } from '~/pages/MainPage/MainPage';
+import { NotFoundPage } from '~/pages/NotFoundPage/NotFoundPage';
+import { RecipePage } from '~/pages/RecipePage/RecipePage';
 import { useAppSelector } from '~/store/hooks';
 
 import { ROUTES_PATH } from './routes';

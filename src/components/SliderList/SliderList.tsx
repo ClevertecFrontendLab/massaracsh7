@@ -9,13 +9,13 @@ import { JUICIEST_SLIDER_BREAKPOINTS } from '~/constants/swiper-breakpoints';
 import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/constants/test-ids';
 import { Recipe } from '~/types/apiTypes';
 
-import SliderCard from '../SliderCard/SliderCard';
+import { SliderCard } from '../SliderCard/SliderCard';
 
 interface SliderListProps {
     recipes: Recipe[];
 }
 
-const SliderList = ({ recipes }: SliderListProps) => {
+export const SliderList = ({ recipes }: SliderListProps) => {
     const newRecipes = recipes
         .slice()
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -96,5 +96,3 @@ const SliderList = ({ recipes }: SliderListProps) => {
         </Box>
     );
 };
-
-export default SliderList;

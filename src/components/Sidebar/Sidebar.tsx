@@ -1,9 +1,9 @@
 import { Box } from '@chakra-ui/react';
 
-import CreateRecipeButton from '../CreateRecipeButton/CreateRecipeButton';
-import SocialList from '../SocialList/SocialList';
+import { CreateRecipeButton } from '../CreateRecipeButton/CreateRecipeButton';
+import { SocialList } from '../SocialList/SocialList';
 
-const Sidebar = () => (
+export const Sidebar = () => (
     <aside>
         <Box
             height='calc(100vh - 80px)'
@@ -21,5 +21,3 @@ const Sidebar = () => (
         </Box>
     </aside>
 );
-
-export default Sidebar;

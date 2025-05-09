@@ -1,17 +1,13 @@
 import { Badge, Card, CardBody, CardHeader, Heading, HStack, Image, Text } from '@chakra-ui/react';
 
 import { BASE_IMG_URL } from '~/constants/constants';
-import useGetCategory from '~/hooks/useGetCategory';
-import useGetSubcategory from '~/hooks/useGetSubcategory';
+import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetSubcategory } from '~/hooks/useGetSubcategory';
 import { Recipe } from '~/types/apiTypes';
 
-import LikesInfo from '../LikesInfo/LikesInfo';
+import { LikesInfo } from '../LikesInfo/LikesInfo';
 
-interface DishCardProps {
-    recipe: Recipe;
-}
-
-const DishCard = ({ recipe }: DishCardProps) => {
+export const DishCard = ({ recipe }: { recipe: Recipe }) => {
     const category = useGetSubcategory(recipe.categoriesIds);
     const categoryUrl = useGetCategory(recipe.categoriesIds);
     return (
@@ -63,5 +59,3 @@ const DishCard = ({ recipe }: DishCardProps) => {
         </Card>
     );
 };
-
-export default DishCard;

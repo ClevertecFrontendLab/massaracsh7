@@ -2,14 +2,14 @@ import { SimpleGrid } from '@chakra-ui/react';
 
 import { Recipe } from '~/types/apiTypes';
 
-import RecipeCard from '../RecipeCard/RecipeCard';
+import { RecipeCard } from '../RecipeCard/RecipeCard';
 
 interface RecipeListProps {
     recipes: Recipe[];
     gridVariant?: 'wide' | 'low';
 }
 
-const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
+export const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
     const newRecipes = [...new Set(recipes)];
     const gridStyles =
         gridVariant === 'wide'
@@ -42,5 +42,3 @@ const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
         </SimpleGrid>
     );
 };
-
-export default RecipeList;

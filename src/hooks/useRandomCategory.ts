@@ -5,7 +5,7 @@ import { selectAllCategories, selectAllSubCategories } from '~/store/category-sl
 import { useAppSelector } from '~/store/hooks';
 import { Recipe } from '~/types/apiTypes';
 
-const useRandomCategory = (activeCategoryId: string | null) => {
+export const useRandomCategory = (activeCategoryId: string | null) => {
     const categories = useAppSelector(selectAllCategories);
     const subCategories = useAppSelector(selectAllSubCategories);
 
@@ -60,5 +60,3 @@ const useRandomCategory = (activeCategoryId: string | null) => {
 
     return { randomRecipes: recipes, randomTitle, randomDescription };
 };
-
-export default useRandomCategory;

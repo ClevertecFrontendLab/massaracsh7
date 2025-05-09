@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 
-const useGetCategory = (subCategoriesIds: string[]) => {
+export const useGetCategory = (subCategoriesIds: string[]) => {
     const categories = useSelector(selectAllCategories);
     const subCategories = useSelector(selectAllSubCategories);
     const rootCategoryIds = subCategoriesIds.map(
@@ -16,5 +16,3 @@ const useGetCategory = (subCategoriesIds: string[]) => {
 
     return categoriesSelect;
 };
-
-export default useGetCategory;

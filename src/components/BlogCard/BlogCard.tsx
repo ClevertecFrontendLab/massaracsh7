@@ -2,7 +2,7 @@ import { Avatar, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
 
 import { BlogData } from '~/types/typesData';
 
-const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
+export const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
     <Card variant='basic'>
         <CardBody
             p={{ base: '4', md: '4', lg: '4', xl: '6' }}
@@ -47,5 +47,3 @@ const BlogCard = ({ name, username, description, imageUrl }: BlogData) => (
         </CardBody>
     </Card>
 );
-
-export default BlogCard;

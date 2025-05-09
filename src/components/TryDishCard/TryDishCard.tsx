@@ -1,15 +1,15 @@
 import { Button, Card, Heading, HStack, Image } from '@chakra-ui/react';
 
 import { BASE_IMG_URL } from '~/constants/constants';
-import useGetCategory from '~/hooks/useGetCategory';
-import useGetSubcategory from '~/hooks/useGetSubcategory';
+import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetSubcategory } from '~/hooks/useGetSubcategory';
 import { Recipe } from '~/types/apiTypes';
 
 interface TryDishProps {
     recipe: Recipe;
 }
 
-const TryDishCard = ({ recipe }: TryDishProps) => {
+export const TryDishCard = ({ recipe }: TryDishProps) => {
     const category = useGetSubcategory(recipe.categoriesIds);
     const categoryUrl = useGetCategory(recipe.categoriesIds);
     return (
@@ -48,5 +48,3 @@ const TryDishCard = ({ recipe }: TryDishProps) => {
         </Card>
     );
 };
-
-export default TryDishCard;

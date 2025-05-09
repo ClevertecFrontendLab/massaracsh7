@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router';
 
 import { ERROR_PAGE_GO_HOME } from '~/constants/test-ids';
 
-const NotFoundPage = () => (
+export const NotFoundPage = () => (
     <>
         <Box
             as='header'
@@ -76,5 +76,3 @@ const NotFoundPage = () => (
         </Box>
     </>
 );
-
-export default NotFoundPage;

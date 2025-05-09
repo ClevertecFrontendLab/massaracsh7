@@ -23,19 +23,19 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import CategoryBadge from '~/components/CategoryBadge/CategoryBadge';
-import CustomLoader from '~/components/CustomLoader/CustomLoader';
-import LikesInfo from '~/components/LikesInfo/LikesInfo';
-import SliderList from '~/components/SliderList/SliderList';
+import { CategoryBadge } from '~/components/CategoryBadge/CategoryBadge';
+import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
+import { LikesInfo } from '~/components/LikesInfo/LikesInfo';
+import { SliderList } from '~/components/SliderList/SliderList';
 import { BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/constants';
 import { DECREMENT_STEPPER, INCREMENT_STEPPER, INGREDIENT_QUANTITY } from '~/constants/test-ids';
 import { authors } from '~/data/authors';
-import useGetCategory from '~/hooks/useGetCategory';
+import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetRecipeByIdQuery, useGetRecipesQuery } from '~/query/services/recipes';
 import { setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 
-const RecipePage = () => {
+export const RecipePage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
@@ -477,5 +477,3 @@ const RecipePage = () => {
         </Box>
     );
 };
-
-export default RecipePage;

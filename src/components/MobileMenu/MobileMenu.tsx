@@ -1,16 +1,16 @@
 import { Box, useDisclosure, useOutsideClick } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
+import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 import { BurgerButton } from '../BurgerButton/BurgerButton';
-import NavigationFooter from '../NavigationFooter/NavigationFooter';
-import NavigationMenu from '../NavigationMenu/NavigationMenu';
+import { NavigationFooter } from '../NavigationFooter/NavigationFooter';
+import { NavigationMenu } from '../NavigationMenu/NavigationMenu';
 
 interface MobileMenuProps {
     onOpenChange?: (isOpen: boolean) => void;
 }
 
-const MobileMenu = ({ onOpenChange }: MobileMenuProps) => {
+export const MobileMenu = ({ onOpenChange }: MobileMenuProps) => {
     const { isOpen, onToggle, onClose } = useDisclosure();
     const menuRef = useRef<HTMLDivElement>(null);
     const [isAccardeonOpen, setIsAccardeonOpen] = useState(false);
@@ -86,5 +86,3 @@ const MobileMenu = ({ onOpenChange }: MobileMenuProps) => {
         </Box>
     );
 };
-
-export default MobileMenu;

@@ -9,7 +9,7 @@ import { selectCategoryBySlug, selectSubCategoryBySlug } from '~/store/category-
 import { useAppSelector } from '~/store/hooks';
 import { parsePathname } from '~/utils/parsePathname';
 
-const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
+export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
     const location = useLocation();
     const { categorySlug, subcategorySlug, dishSlug } = parsePathname(location.pathname);
 
@@ -73,5 +73,3 @@ const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
         </Breadcrumb>
     );
 };
-
-export default Breadcrumbs;

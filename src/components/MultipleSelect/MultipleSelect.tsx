@@ -36,7 +36,7 @@ interface MultipleSelectProps {
     isDisabled?: boolean;
 }
 
-const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
+export const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
     const dispatch = useDispatch();
     const selected = useAppSelector(selectSelectedAllergens);
     const [newAllergen, setNewAllergen] = useState('');
@@ -176,5 +176,3 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
         </Menu>
     );
 };
-
-export default MultipleSelect;

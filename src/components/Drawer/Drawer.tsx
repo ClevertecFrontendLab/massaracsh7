@@ -53,7 +53,7 @@ import { FilterData, SelectOption } from '~/types/utilTypes';
 import { getFilterTags } from '~/utils/getFiltersLabels';
 import { getSelectedSubIds } from '~/utils/getSelectedSubIds';
 
-import MultipleSelect from '../MultipleSelect/MultipleSelect';
+import { MultipleSelect } from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
 
 interface FilterDrawerProps {
@@ -61,7 +61,7 @@ interface FilterDrawerProps {
     onClose: () => void;
 }
 
-const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
+export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     const dispatch = useDispatch();
     const { category } = useParams();
 
@@ -309,5 +309,3 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         </Drawer>
     );
 };
-
-export default FilterDrawer;

@@ -13,18 +13,18 @@ import {
 import { Link as RouterLink } from 'react-router';
 
 import { BASE_IMG_URL } from '~/constants/constants';
-import useGetCategory from '~/hooks/useGetCategory';
-import useGetSubcategory from '~/hooks/useGetSubcategory';
+import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetSubcategory } from '~/hooks/useGetSubcategory';
 import { Recipe } from '~/types/apiTypes';
 
-import CategoryBadge from '../CategoryBadge/CategoryBadge';
-import LikesInfo from '../LikesInfo/LikesInfo';
+import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
+import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 interface SliderCardProps {
     recipe: Recipe;
 }
 
-const SliderCard = ({ recipe }: SliderCardProps) => {
+export const SliderCard = ({ recipe }: SliderCardProps) => {
     const rootCategories = useGetCategory(recipe.categoriesIds);
     const subCategories = useGetSubcategory(recipe.categoriesIds);
 
@@ -114,5 +114,3 @@ const SliderCard = ({ recipe }: SliderCardProps) => {
         </Link>
     );
 };
-
-export default SliderCard;

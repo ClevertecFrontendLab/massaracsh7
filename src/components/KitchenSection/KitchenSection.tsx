@@ -2,8 +2,8 @@ import { Heading, SimpleGrid, Stack, Text, VStack } from '@chakra-ui/react';
 
 import { Recipe } from '~/types/apiTypes';
 
-import DishCard from '../DishCard/DishCard';
-import TryDishCard from '../TryDishCard/TryDishCard';
+import { DishCard } from '../DishCard/DishCard';
+import { TryDishCard } from '../TryDishCard/TryDishCard';
 
 interface KitchenSectionProps {
     title: string;
@@ -11,7 +11,7 @@ interface KitchenSectionProps {
     relevantRecipes: Recipe[];
 }
 
-const KitchenSection = ({ title, description, relevantRecipes }: KitchenSectionProps) => {
+export const KitchenSection = ({ title, description, relevantRecipes }: KitchenSectionProps) => {
     const veganDishes = relevantRecipes.slice(0, 2);
     const tryDishes = relevantRecipes.slice(2, 5);
 
@@ -55,5 +55,3 @@ const KitchenSection = ({ title, description, relevantRecipes }: KitchenSectionP
         </SimpleGrid>
     );
 };
-
-export default KitchenSection;

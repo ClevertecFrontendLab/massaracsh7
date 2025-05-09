@@ -3,13 +3,13 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 
-import CustomLoader from '~/components/CustomLoader/CustomLoader';
-import KitchenSection from '~/components/KitchenSection/KitchenSection';
-import RecipeList from '~/components/RecipeList/RecipeList';
-import SearchBar from '~/components/SearchBar/SearchBar';
-import TabsCategory from '~/components/TabsCategory/TabsCategory';
+import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
+import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
+import { RecipeList } from '~/components/RecipeList/RecipeList';
+import { SearchBar } from '~/components/SearchBar/SearchBar';
+import { TabsCategory } from '~/components/TabsCategory/TabsCategory';
 import { BASE_LIMIT_JUICY, ERROR_SEARCH_MESSAGE, MIN_SEARCH_LENGTH } from '~/constants/constants';
-import useRandomCategory from '~/hooks/useRandomCategory';
+import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
@@ -25,7 +25,7 @@ import {
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
-const CategoryPage = () => {
+export const CategoryPage = () => {
     const { category, subcategory } = useParams();
     const dispatch = useAppDispatch();
 
@@ -171,5 +171,3 @@ const CategoryPage = () => {
         </Box>
     );
 };
-
-export default CategoryPage;

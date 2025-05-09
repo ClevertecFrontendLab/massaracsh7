@@ -5,7 +5,7 @@ interface CustomLoaderProps {
     dataTestId?: string;
 }
 
-const CustomLoader = ({ size = 'large', dataTestId }: CustomLoaderProps) => {
+export const CustomLoader = ({ size = 'large', dataTestId }: CustomLoaderProps) => {
     const boxSize = size === 'large' ? { base: '134px', md: '134px', lg: '206px' } : '134px';
 
     const spinnerSize = size === 'large' ? { base: '24px', md: '24px', lg: '37px' } : '24px';
@@ -32,5 +32,3 @@ const CustomLoader = ({ size = 'large', dataTestId }: CustomLoaderProps) => {
         </Box>
     );
 };
-
-export default CustomLoader;

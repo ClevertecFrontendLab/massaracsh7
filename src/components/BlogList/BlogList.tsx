@@ -3,9 +3,9 @@ import { Box, Button, Center, Heading, Hide, HStack, Show, SimpleGrid } from '@c
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { blogs } from '~/data/cardsData';
 
-import BlogCard from '../BlogCard/BlogCard';
+import { BlogCard } from '../BlogCard/BlogCard';
 
-const BlogList = () => (
+export const BlogList = () => (
     <Box
         as='section'
         bg='customLime.300'
@@ -45,5 +45,3 @@ const BlogList = () => (
         </Show>
     </Box>
 );
-
-export default BlogList;

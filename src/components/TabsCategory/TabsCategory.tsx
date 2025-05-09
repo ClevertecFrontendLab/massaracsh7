@@ -8,7 +8,7 @@ interface TabCategoryProps {
     subcategories: BaseSubCategory[];
 }
 
-const TabsCategory = ({ subcategories }: TabCategoryProps) => {
+export const TabsCategory = ({ subcategories }: TabCategoryProps) => {
     const navigate = useNavigate();
     const { category, subcategory } = useParams();
 
@@ -68,5 +68,3 @@ const TabsCategory = ({ subcategories }: TabCategoryProps) => {
         </Box>
     );
 };
-
-export default TabsCategory;
