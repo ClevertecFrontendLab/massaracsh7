@@ -19,6 +19,7 @@ import { BASE_IMG_URL } from '~/constants/constants';
 import { NAV, VEGAN } from '~/constants/test-ids';
 import { useGetCategoriesQuery } from '~/query/services/categories';
 import { ApplicationState } from '~/store/configure-store';
+import { Category } from '~/types/apiTypes';
 
 interface NavProps {
     handleOpen?: (isOpen: boolean) => void;
@@ -34,6 +35,14 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
         const newIsOpen = !isOpen;
         setIsOpen(newIsOpen);
         handleOpen?.(newIsOpen);
+    };
+
+    const handleCategoryClick = (category: Category) => {
+        if (category.subCategories && category.subCategories.length > 0) {
+            const categorySlug = category.category;
+            const firstSub = category.subCategories[0].category;
+            navigate(`/${categorySlug}/${firstSub}`);
+        }
     };
 
     return (
@@ -83,13 +92,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                             pr='18px'
                             pl='10px'
                             pt='4px'
-                            onClick={() => {
-                                if (category.subCategories && category.subCategories.length > 0) {
-                                    const categorySlug = category.category;
-                                    const firstSub = category.subCategories[0].category;
-                                    navigate(`/${categorySlug}/${firstSub}`);
-                                }
-                            }}
+                            onClick={() => handleCategoryClick(category)}
                         >
                             <Box
                                 flex='1'
@@ -120,9 +123,7 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                                             bg: 'customLime.50',
                                             borderLeft: '1px solid transparent',
                                         }}
-                                        onClick={() => {
-                                            onClose?.();
-                                        }}
+                                        onClick={() => onClose?.()}
                                     >
                                         <NavLink
                                             to={`/${category.category}/${item.category}`}
