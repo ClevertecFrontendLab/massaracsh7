@@ -1,124 +1,136 @@
-import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
-import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { Box, Heading, Text } from '@chakra-ui/react';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useEffect, useMemo, useState } from 'react';
+import { Navigate, useParams } from 'react-router';
 
-import KitchenSection from '~/components/KitchenSection/KitchenSection';
-import RecipeList from '~/components/RecipeList/RecipeList';
-import SearchBar from '~/components/SearchBar/SearchBar';
-import TabsCategory from '~/components/TabsCategory/TabsCategory';
-import { authors } from '~/data/authors';
-import { desertDishes, tryDesertDishes } from '~/data/cardsData';
-import categories from '~/data/categories';
-import { dishes } from '~/data/dishes';
-import { ApplicationState } from '~/store/configure-store';
-import { setHasResults } from '~/store/filter-slice';
+import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
+import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
+import { RecipeList } from '~/components/RecipeList/RecipeList';
+import { SearchBar } from '~/components/SearchBar/SearchBar';
+import { TabsCategory } from '~/components/TabsCategory/TabsCategory';
+import { BASE_LIMIT_JUICY, ERROR_SEARCH_MESSAGE, MIN_SEARCH_LENGTH } from '~/constants/constants';
+import { useRandomCategory } from '~/hooks/useRandomCategory';
+import { useGetRecipesQuery } from '~/query/services/recipes';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
+import {
+    selectExcludeAllergens,
+    selectHasAnyFilter,
+    selectIsSearch,
+    selectSearchTerm,
+    selectSelectedAllergens,
+    selectSelectedMeat,
+    selectSelectedSide,
+    setHasResults,
+} from '~/store/filter-slice';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { buildQuery } from '~/utils/buildQuery';
 
-const CategoryPage = () => {
+export const CategoryPage = () => {
     const { category, subcategory } = useParams();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const cat = categories.find((item) => item.url === category);
-    const recipesCategories = useMemo(() => {
-        if (category && subcategory) {
-            return dishes.filter((dish) =>
-                dish.category.some(
-                    (cat, index) => cat === category && dish.subcategory[index] === subcategory,
-                ),
-            );
-        } else if (category) {
-            return dishes.filter((dish) => dish.category.includes(category));
-        }
-        return dishes;
-    }, [category, subcategory]);
+    const categories = useAppSelector(selectAllCategories);
+    const subCategories = useAppSelector(selectAllSubCategories);
 
-    const selectedAllergens = useSelector(
-        (state: ApplicationState) => state.filters.selectedAllergens,
-    );
-    const excludeAllergens = useSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
-    );
-    const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
-    const selectedCategories = useSelector(
-        (state: ApplicationState) => state.filters.selectedCategories,
-    );
-    const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
-    const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
-    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+    const selectedAllergens = useAppSelector(selectSelectedAllergens);
+    const selectedMeat = useAppSelector(selectSelectedMeat);
+    const selectedSide = useAppSelector(selectSelectedSide);
+    const searchTerm = useAppSelector(selectSearchTerm);
+    const isSearch = useAppSelector(selectIsSearch);
+    const hasFilters = useAppSelector(selectHasAnyFilter);
+    const excludeAllergens = useAppSelector(selectExcludeAllergens);
 
-    const filteredPopular = useMemo(
+    const [message, setMessage] = useState('');
+    const [isFilterClose, setIsFilterClose] = useState(true);
+
+    const cat = useMemo(
+        () => categories.find((item) => item.category === category),
+        [categories, category],
+    );
+
+    const subCat = useMemo(
+        () => subCategories.find((item) => item.category === subcategory),
+        [subCategories, subcategory],
+    );
+
+    const subCatIds = useMemo(
         () =>
-            recipesCategories.filter((recipe) => {
-                const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-                const recipeTitle = recipe.title.toLowerCase();
-                const lowerSearch = searchTerm.toLowerCase();
+            subCategories
+                .filter((item) => item.rootCategoryId === cat?._id)
+                .map((item) => item._id),
+        [subCategories, cat?._id],
+    );
 
-                const passesAllergens =
-                    !excludeAllergens ||
-                    !selectedAllergens.length ||
-                    !ingredients.some((ingredient) => {
-                        const lowerIngredient = ingredient.toLowerCase();
-                        return selectedAllergens.some((allergen) => {
-                            const allergenParts = allergen
-                                .toLowerCase()
-                                .replace(/[()]/g, '')
-                                .split(/[,\s]+/);
-                            return allergenParts.some(
-                                (part) => part && lowerIngredient.includes(part),
-                            );
-                        });
-                    });
-                const passesAuthors =
-                    !selectedAuthors.length ||
-                    authors.some(
-                        (author) =>
-                            selectedAuthors.includes(author.name) &&
-                            author.recipesId.includes(recipe.id),
-                    );
+    const baseParams = useMemo(() => {
+        if (!subCat?._id) return skipToken;
+        return buildQuery({
+            selectedSubCategories: [subCat._id],
+            limit: BASE_LIMIT_JUICY,
+        });
+    }, [subCat?._id]);
 
-                const catUrl = categories
-                    .filter((item) => selectedCategories.includes(item.title))
-                    .map((item) => item.url);
-
-                const passesCategories =
-                    !selectedCategories.length ||
-                    catUrl?.some((item: string) => recipe.category?.includes(item));
-
-                const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
-
-                const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
-
-                const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
-
-                return (
-                    passesAllergens &&
-                    passesAuthors &&
-                    passesCategories &&
-                    passesMeat &&
-                    passesSide &&
-                    titleMatch
-                );
-            }),
-        [
-            selectedAllergens,
-            excludeAllergens,
-            selectedAuthors,
-            selectedCategories,
+    const filteredParams = useMemo(() => {
+        if (!subCatIds.length) return skipToken;
+        return buildQuery({
+            selectedSubCategories: subCatIds,
             selectedMeat,
             selectedSide,
+            selectedAllergens,
             searchTerm,
-            recipesCategories,
-        ],
+            limit: BASE_LIMIT_JUICY,
+        });
+    }, [subCatIds, selectedMeat, selectedSide, selectedAllergens, searchTerm]);
+
+    const queryParams = useMemo(() => {
+        if (isSearch) return filteredParams;
+        return baseParams;
+    }, [isSearch, filteredParams, baseParams]);
+
+    const {
+        data: recipesData,
+        isFetching,
+        isLoading,
+    } = useGetRecipesQuery(queryParams, {
+        refetchOnMountOrArgChange: isFilterClose,
+    });
+
+    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
+
+    const isEmptyResult = useMemo(
+        () => hasFilters && recipesData?.data?.length === 0,
+        [hasFilters, recipesData],
     );
-    dispatch(
-        setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
-    );
+
+    useEffect(() => {
+        dispatch(
+            setHasResults(
+                searchTerm.length < MIN_SEARCH_LENGTH ? null : !!recipesData?.data?.length,
+            ),
+        );
+    }, [dispatch, searchTerm, recipesData]);
+
+    useEffect(() => {
+        if (!hasFilters) {
+            setMessage('');
+        } else if (isEmptyResult) {
+            setMessage(ERROR_SEARCH_MESSAGE);
+        } else {
+            setMessage('');
+        }
+    }, [isEmptyResult, hasFilters]);
+
+    if (!cat || !subCat || subCat.rootCategoryId !== cat._id) {
+        return <Navigate to='/not-found' replace />;
+    }
+
+    if (isLoading) {
+        return <CustomLoader size='large' dataTestId='app-loader' />;
+    }
+
     return (
         <Box>
             <Box
-                boxShadow={
-                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
-                }
+                boxShadow={hasFilters || excludeAllergens ? 'main' : 'none'}
                 pb={8}
                 mb={6}
                 borderRadius='0 0 8px 8px'
@@ -126,11 +138,8 @@ const CategoryPage = () => {
                 mx='auto'
                 px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
             >
-                <Heading
-                    variant='pageTitle'
-                    mb={{ sm: '14px', md: '14px', lg: '12px', xl: '12px' }}
-                >
-                    {cat?.title}
+                <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
+                    {message || cat?.title}
                 </Heading>
                 <Box
                     width='100%'
@@ -139,27 +148,26 @@ const CategoryPage = () => {
                     mb={{ sm: '4', md: '4', lg: '8', xl: '8' }}
                 >
                     <Text textAlign='center' textStyle='descriptionText'>
-                        Интересны не только убеждённым вегетарианцам, но и тем, кто хочет
-                        попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.
+                        {cat?.description}
                     </Text>
                 </Box>
-                <SearchBar />
+                <SearchBar
+                    isLoader={isFetching && hasFilters && isFilterClose}
+                    handleFilterClose={setIsFilterClose}
+                />
             </Box>
-            <TabsCategory subcategories={cat?.items ?? []} />
-            <RecipeList recipes={filteredPopular} gridVariant='low' />
-            <Center mb={{ sm: '8', md: '8', lg: '10', xl: '9' }}>
-                <Button variant='limeSolid' size='medium'>
-                    Загрузить ещё
-                </Button>
-            </Center>
-            <KitchenSection
-                title='Десерты, выпечка'
-                description='Без них невозможно представить себе ни современную, ни традиционную  кулинарию. Пироги и печенья, блины, пончики, вареники и, конечно, хлеб - рецепты изделий из теста многообразны и невероятно популярны.'
-                veganDishes={desertDishes}
-                tryDishes={tryDesertDishes}
-            />
+
+            <TabsCategory subcategories={cat?.subCategories ?? []} />
+
+            {recipesData?.data && <RecipeList recipes={recipesData.data} gridVariant='low' />}
+
+            {randomRecipes && (
+                <KitchenSection
+                    title={randomTitle}
+                    description={randomDescription}
+                    relevantRecipes={randomRecipes}
+                />
+            )}
         </Box>
     );
 };
-
-export default CategoryPage;

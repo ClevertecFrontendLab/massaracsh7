@@ -1,17 +1,17 @@
 import { Box, Hide, Show } from '@chakra-ui/react';
+import { Outlet } from 'react-router';
 
-import Content from '~/components/Content/Content';
-import Footer from '~/components/Footer/Footer';
-import Header from '~/components/Header/Header';
-import NavigationFooter from '~/components/NavigationFooter/NavigationFooter';
-import NavigationMenu from '~/components/NavigationMenu/NavigationMenu';
-import Sidebar from '~/components/Sidebar/Sidebar';
+import { Content } from '~/components/Content/Content';
+import { ErrorAlert } from '~/components/ErrorAlert/ErrorAlert';
+import { Footer } from '~/components/Footer/Footer';
+import { Header } from '~/components/Header/Header';
+import { NavigationFooter } from '~/components/NavigationFooter/NavigationFooter';
+import { NavigationMenu } from '~/components/NavigationMenu/NavigationMenu';
+import { Sidebar } from '~/components/Sidebar/Sidebar';
 
-const Layout = ({ children }: { children: React.ReactNode }) => (
+export const Layout = () => (
     <>
-        {/* <Box position='fixed' top={0} left={0} right={0} zIndex={10}> */}
         <Header />
-        {/* </Box> */}
 
         <Box
             pt='80px'
@@ -43,7 +43,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
                 pt={{ md: '0', lg: '8', xl: '8' }}
                 pb={6}
             >
-                <Content>{children}</Content>
+                <Content>
+                    <ErrorAlert />
+                    <Outlet />
+                </Content>
             </Box>
 
             <Hide below='mid'>
@@ -65,5 +68,3 @@ const Layout = ({ children }: { children: React.ReactNode }) => (
         </Show>
     </>
 );
-
-export default Layout;

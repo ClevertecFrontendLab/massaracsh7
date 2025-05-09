@@ -13,23 +13,29 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { BookmarkHeart } from '~/assets/icons/icons';
-import { ApplicationState } from '~/store/configure-store';
-import { Recipe } from '~/types/typeRecipe';
+import { BASE_IMG_URL } from '~/constants/constants';
+import { CARD_LINK, FOOD_CARD } from '~/constants/test-ids';
+import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetSubcategory } from '~/hooks/useGetSubcategory';
+import { selectSearchTerm } from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
+import { Recipe } from '~/types/apiTypes';
 import { highlightText } from '~/utils/highlightText';
 
-import CategoryBadge from '../CategoryBadge/CategoryBadge';
-import LikesInfo from '../LikesInfo/LikesInfo';
+import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
+import { LikesInfo } from '../LikesInfo/LikesInfo';
 interface RecipeCardProps {
     recipe: Recipe;
     index: number;
 }
 
-const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
-    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+export const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
+    const searchTerm = useAppSelector(selectSearchTerm);
+    const rootCategories = useGetCategory(recipe.categoriesIds);
+    const subCategories = useGetSubcategory(recipe.categoriesIds);
     const navigate = useNavigate();
     return (
         <Card
@@ -37,10 +43,10 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
             variant='basic'
             h={{ base: '128px', lg: '244px', xl: '244px' }}
             position='relative'
-            data-test-id={`food-card-${index}`}
+            data-test-id={`${FOOD_CARD}-${index}`}
         >
             <Image
-                src={recipe.image}
+                src={`${BASE_IMG_URL}${recipe.image}`}
                 alt={recipe.title}
                 w='100%'
                 h='100%'
@@ -73,14 +79,22 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                         left={{ sm: '8px', md: '8px' }}
                         align='flex-start'
                     >
-                        {[...new Set(recipe.category)].map((catUrl, index) => (
-                            <Badge key={catUrl + index} variant='lime50' p={{ sm: '0', md: '0' }}>
-                                <CategoryBadge categoryUrl={catUrl} />
+                        {[...new Set(rootCategories)].map((item) => (
+                            <Badge
+                                key={item._id}
+                                variant='lime50'
+                                p={{ sm: '0', md: '0' }}
+                                maxW='100%'
+                            >
+                                <CategoryBadge
+                                    categoryTitle={item.title}
+                                    categoryIcon={item.icon}
+                                />
                             </Badge>
                         ))}
                     </VStack>
                     <Box px={1}>
-                        <LikesInfo likes={recipe.likes} comments={recipe.bookmarks} />
+                        <LikesInfo likes={recipe.likes} bookmarks={recipe.bookmarks} />
                     </Box>
                 </HStack>
                 <Heading
@@ -97,7 +111,6 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                     }}
                     variant='cardTitle'
                 >
-                    {/* {recipe.title} */}
                     {highlightText(recipe.title, searchTerm)}
                 </Heading>
                 <Hide below='mid'>
@@ -135,9 +148,11 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                     </Show>
                     <Button
                         variant='blackSolid'
-                        data-test-id={`card-link-${index}`}
+                        data-test-id={`${CARD_LINK}-${index}`}
                         onClick={() =>
-                            navigate(`/${recipe.category[0]}/${recipe.subcategory[0]}/${recipe.id}`)
+                            navigate(
+                                `/${rootCategories[0].category}/${subCategories[0].category}/${recipe._id}`,
+                            )
                         }
                     >
                         Готовить
@@ -147,5 +162,3 @@ const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
         </Card>
     );
 };
-
-export default RecipeCard;

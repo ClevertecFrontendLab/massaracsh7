@@ -1,11 +1,13 @@
 import { Avatar, Box, Hide, HStack, Show, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs';
-import MobileMenu from '../MobileMenu/MobileMenu';
-import SocialList from '../SocialList/SocialList';
+import { HEADER } from '~/constants/test-ids';
 
-const Header = () => {
+import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
+import { MobileMenu } from '../MobileMenu/MobileMenu';
+import { SocialList } from '../SocialList/SocialList';
+
+export const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
@@ -14,7 +16,7 @@ const Header = () => {
             bg={isMenuOpen ? 'white' : 'customLime.50'}
             mb={isMenuOpen ? '16px' : '8px'}
             py={4}
-            data-test-id='header'
+            data-test-id={HEADER}
             w='100%'
             position='fixed'
             top={0}
@@ -73,5 +75,3 @@ const Header = () => {
         </Box>
     );
 };
-
-export default Header;

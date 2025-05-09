@@ -8,19 +8,27 @@ import {
     Image,
     List,
     ListItem,
+    Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 
 import { ShevronDown } from '~/assets/icons/icons';
-import categories from '~/data/categories';
+import { BASE_IMG_URL } from '~/constants/constants';
+import { NAV, VEGAN } from '~/constants/test-ids';
+import { useGetCategoriesQuery } from '~/query/services/categories';
+import { selectAllCategories } from '~/store/category-slice';
+import { useAppSelector } from '~/store/hooks';
+import { Category } from '~/types/apiTypes';
 
 interface NavProps {
     handleOpen?: (isOpen: boolean) => void;
     onClose?: () => void;
 }
-const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
+export const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
     const navigate = useNavigate();
+    useGetCategoriesQuery();
+    const categories = useAppSelector(selectAllCategories);
 
     const [isOpen, setIsOpen] = useState(false);
     const handleAccordion = () => {
@@ -29,9 +37,17 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
         handleOpen?.(newIsOpen);
     };
 
+    const handleCategoryClick = (category: Category) => {
+        if (category.subCategories && category.subCategories.length > 0) {
+            const categorySlug = category.category;
+            const firstSub = category.subCategories[0].category;
+            navigate(`/${categorySlug}/${firstSub}`);
+        }
+    };
+
     return (
         <Accordion
-            data-test-id='nav'
+            data-test-id={NAV}
             onChange={handleAccordion}
             allowToggle
             overflowY='auto'
@@ -61,80 +77,75 @@ const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
                 mid: isOpen ? 'menu' : 'none',
             }}
         >
-            {categories.map((category, index) => (
-                <AccordionItem key={index} border='none'>
-                    <AccordionButton
-                        data-test-id={
-                            category.title === 'Веганская кухня'
-                                ? 'vegan-cuisine'
-                                : `${category.url}`
-                        }
-                        _hover={{ bg: 'customLime.50' }}
-                        _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
-                        height='48px'
-                        pr='18px'
-                        pl='10px'
-                        pt='4px'
-                        onClick={() => {
-                            if (category.items && category.items.length > 0) {
-                                const categorySlug = category.url;
-                                const firstSub = category.items[0].subcategory;
-                                navigate(`/${categorySlug}/${firstSub}`);
+            {categories &&
+                categories.map((category, index) => (
+                    <AccordionItem key={index} border='none'>
+                        <AccordionButton
+                            data-test-id={
+                                category.title === 'Веганская кухня'
+                                    ? VEGAN
+                                    : `${category.category}`
                             }
-                        }}
-                    >
-                        <Box
-                            flex='1'
+                            _hover={{ bg: 'customLime.50' }}
+                            _expanded={{ bg: 'customLime.100', fontWeight: '700' }}
+                            height='48px'
+                            pr='18px'
                             pl='10px'
-                            display='flex'
-                            alignItems='center'
-                            gap={2}
-                            textStyle='nav'
+                            pt='4px'
+                            onClick={() => handleCategoryClick(category)}
                         >
-                            {category.icon && (
-                                <Image src={category.icon} alt={category.title} boxSize='24px' />
-                            )}
-                            {category.title}
-                        </Box>
-                        <AccordionIcon as={ShevronDown} w='14px' h='10px' />
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                        <List spacing={1.5}>
-                            {category.items.map((item, index) => (
-                                <ListItem
-                                    key={index}
-                                    padding='1px 8px 1px 24px'
-                                    _hover={{
-                                        bg: 'customLime.50',
-                                        borderLeft: '1px solid transparent',
-                                    }}
-                                    onClick={() => {
-                                        onClose?.();
-                                    }}
-                                >
-                                    <NavLink
-                                        to={`/${category.url}/${item.subcategory}`}
-                                        className={({ isActive }) =>
-                                            `custom-nav-link${isActive ? ' active' : ''}`
-                                        }
+                            <Box
+                                flex='1'
+                                pl='10px'
+                                display='flex'
+                                alignItems='center'
+                                gap={2}
+                                textStyle='nav'
+                            >
+                                {category.icon && (
+                                    <Image
+                                        src={`${BASE_IMG_URL}${category.icon}`}
+                                        alt={category.title}
+                                        boxSize='24px'
+                                    />
+                                )}
+                                <Text isTruncated>{category.title}</Text>
+                            </Box>
+                            <AccordionIcon as={ShevronDown} w='14px' h='10px' />
+                        </AccordionButton>
+                        <AccordionPanel pb={4}>
+                            <List spacing={1.5}>
+                                {category.subCategories.map((item, index) => (
+                                    <ListItem
+                                        key={index}
+                                        padding='1px 8px 1px 24px'
+                                        _hover={{
+                                            bg: 'customLime.50',
+                                            borderLeft: '1px solid transparent',
+                                        }}
+                                        onClick={() => onClose?.()}
                                     >
-                                        {({ isActive }) => (
-                                            <Box
-                                                as='span'
-                                                data-test-id={`${item.subcategory}${isActive ? '-active' : ''}`}
-                                            >
-                                                {item.title}
-                                            </Box>
-                                        )}
-                                    </NavLink>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </AccordionPanel>
-                </AccordionItem>
-            ))}
+                                        <NavLink
+                                            to={`/${category.category}/${item.category}`}
+                                            className={({ isActive }) =>
+                                                `custom-nav-link${isActive ? ' active' : ''}`
+                                            }
+                                        >
+                                            {({ isActive }) => (
+                                                <Box
+                                                    as='span'
+                                                    data-test-id={`${item.category}${isActive ? '-active' : ''}`}
+                                                >
+                                                    <Text isTruncated>{item.title}</Text>
+                                                </Box>
+                                            )}
+                                        </NavLink>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </AccordionPanel>
+                    </AccordionItem>
+                ))}
         </Accordion>
     );
 };
-
-export default NavigationMenu;

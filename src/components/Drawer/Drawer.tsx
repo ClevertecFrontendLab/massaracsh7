@@ -20,81 +20,88 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 
+import { initialFilterData } from '~/constants/filter-date';
+import {
+    ALLERGEN_SWITCHER_FILTER,
+    CLEAR_FILTER_BUTTON,
+    CLOSE_FILTER_DRAWER,
+    FILTER_DRAWER,
+    FILTER_TAG,
+    FIND_RECIPE_BUTTON,
+} from '~/constants/test-ids';
 import { meatTypes, sideTypes } from '~/data/allergens';
 import { authors } from '~/data/authors';
-import categories from '~/data/categories';
-import { ApplicationState } from '~/store/configure-store';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
     resetAllFilters,
+    selectExcludeAllergens,
+    selectSelectedAllergens,
+    setIsSearch,
     setSelectedAuthors,
     setSelectedCategories,
     setSelectedMeat,
     setSelectedSide,
-    toggleExcludeAllergens,
+    setSelectedSubCategories,
 } from '~/store/filter-slice';
-import { MeatSide } from '~/types/typeCategory';
+import { useAppSelector } from '~/store/hooks';
+import { Category } from '~/types/apiTypes';
+import { FilterData, SelectOption } from '~/types/utilTypes';
+import { getFilterTags } from '~/utils/getFiltersLabels';
+import { getSelectedSubIds } from '~/utils/getSelectedSubIds';
 
-import MultipleSelect from '../MultipleSelect/MultipleSelect';
+import { MultipleSelect } from '../MultipleSelect/MultipleSelect';
 import { SearchableSelect } from '../SearchableSelect/SearchableSelect';
-
-interface FilterData {
-    categories: string[];
-    authors: string[];
-    meatTypes: string[];
-    sideTypes: string[];
-    excludeAllergens: boolean;
-}
 
 interface FilterDrawerProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
+export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     const dispatch = useDispatch();
-    const allergens = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const { category } = useParams();
+
+    const allergens = useAppSelector(selectSelectedAllergens);
+    const excludeAllergens = useAppSelector(selectExcludeAllergens);
+    const categories = useAppSelector(selectAllCategories);
+    const subCategories = useAppSelector(selectAllSubCategories);
 
     const [filters, setFilters] = useState<FilterData>({
-        categories: [],
-        authors: [],
-        meatTypes: [],
-        sideTypes: [],
-        excludeAllergens: false,
+        ...initialFilterData,
+        excludeAllergens: excludeAllergens,
     });
-    useEffect(() => {
-        if (isOpen) {
-            setFilters({
-                categories: [],
-                authors: [],
-                meatTypes: [],
-                sideTypes: [],
-                excludeAllergens: false,
-            });
-        }
-    }, [isOpen]);
-    const categoryOptions = categories.map((item) => item.title);
+
+    const categoryOptions = categories.map((item: Category) => item.title);
     const authorOptions = authors.map((item) => item.name);
 
     const handleClear = () => {
         dispatch(resetAllFilters());
-        setFilters({
-            categories: [],
-            authors: [],
-            meatTypes: [],
-            sideTypes: [],
-            excludeAllergens: false,
-        });
+        dispatch(setIsSearch(false));
+        setFilters({ ...initialFilterData, excludeAllergens: false });
     };
 
     const handleSearch = () => {
+        const selectedCategoryIds = categories
+            .filter((cat) => filters.categories.includes(cat.title))
+            .map((cat) => cat._id);
+
+        const selectedSubCategoryIds = getSelectedSubIds(
+            category,
+            categories,
+            subCategories,
+            selectedCategoryIds,
+        );
+
         dispatch(setSelectedAuthors(filters.authors));
         dispatch(setSelectedCategories(filters.categories));
         dispatch(setSelectedMeat(filters.meatTypes));
         dispatch(setSelectedSide(filters.sideTypes));
-        dispatch(toggleExcludeAllergens());
+        dispatch(setSelectedSubCategories(selectedSubCategoryIds));
+        dispatch(setIsSearch(true));
         onClose();
     };
 
@@ -103,7 +110,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         filters.authors.length ||
         filters.meatTypes.length ||
         filters.sideTypes.length ||
-        filters.excludeAllergens;
+        !!allergens.length;
 
     const removeTag = (label: string) => {
         const meatValue = meatTypes.find((item) => item.label === label)?.value;
@@ -118,6 +125,8 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         }));
     };
 
+    const tags = getFilterTags(filters, meatTypes, sideTypes, allergens);
+
     return (
         <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
             <DrawerOverlay />
@@ -126,7 +135,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                 maxW={{ sm: '344px', md: '344px', lg: '463px', xl: '463px' }}
                 p={{ sm: '4', md: '4', mid: '4', lg: '8', xl: '8' }}
                 pr={{ sm: '5', md: '5', mid: '5', lg: '7', xl: '7' }}
-                data-test-id='filter-drawer'
+                data-test-id={FILTER_DRAWER}
             >
                 <HStack justify='space-between' align='center' mb={6}>
                     <DrawerHeader p={0}>Фильтр</DrawerHeader>
@@ -140,7 +149,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderRadius='full'
                         p={2}
                         _hover={{ bg: 'gray.700' }}
-                        data-test-id='close-filter-drawer'
+                        data-test-id={CLOSE_FILTER_DRAWER}
                     />
                 </HStack>
 
@@ -185,7 +194,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    {meatTypes.map((meat: MeatSide) => (
+                                    {meatTypes.map((meat: SelectOption) => (
                                         <Checkbox key={meat.value} value={meat.value}>
                                             {meat.label}
                                         </Checkbox>
@@ -202,7 +211,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                 }
                             >
                                 <Stack spacing={1}>
-                                    {sideTypes.map((side: MeatSide) => (
+                                    {sideTypes.map((side: SelectOption) => (
                                         <Checkbox
                                             key={side.value}
                                             value={side.value}
@@ -223,13 +232,14 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                             <Switch
                                 size='md'
                                 isChecked={filters.excludeAllergens}
-                                onChange={(e) =>
+                                onChange={(e) => {
+                                    const checked = e.target.checked;
                                     setFilters((f) => ({
                                         ...f,
-                                        excludeAllergens: e.target.checked,
-                                    }))
-                                }
-                                data-test-id='allergens-switcher-filter'
+                                        excludeAllergens: checked,
+                                    }));
+                                }}
+                                data-test-id={ALLERGEN_SWITCHER_FILTER}
                             />
                         </HStack>
                         <MultipleSelect
@@ -247,21 +257,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         <Box>
                             <Text mb={2}>Выбранные фильтры:</Text>
                             <HStack wrap='wrap' spacing={2}>
-                                {[
-                                    ...filters.categories,
-                                    ...filters.authors,
-                                    ...filters.meatTypes.map((meat) => {
-                                        const found = meatTypes.find((item) => item.value === meat);
-                                        return found ? found.label : meat;
-                                    }),
-                                    ...filters.sideTypes.map((side) => {
-                                        const found = sideTypes.find((item) => item.value === side);
-                                        return found ? found.label : side;
-                                    }),
-                                    ...(filters.excludeAllergens && allergens.length > 0
-                                        ? allergens
-                                        : []),
-                                ].map((tag) => (
+                                {tags.map((tag) => (
                                     <Tag
                                         size='sm'
                                         key={tag}
@@ -269,7 +265,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         bg='customLime.100'
                                         border='1px solid'
                                         borderColor='customLime.400'
-                                        data-test-id='filter-tag'
+                                        data-test-id={FILTER_TAG}
                                     >
                                         <TagLabel color='customLime.700'>{tag}</TagLabel>
                                         <TagCloseButton
@@ -289,7 +285,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderColor='black'
                         onClick={handleClear}
                         size='large'
-                        data-test-id='clear-filter-button'
+                        data-test-id={CLEAR_FILTER_BUTTON}
                     >
                         Очистить фильтр
                     </Button>
@@ -301,7 +297,7 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         onClick={handleSearch}
                         isDisabled={!filterSelected}
                         size='large'
-                        data-test-id='find-recipe-button'
+                        data-test-id={FIND_RECIPE_BUTTON}
                         sx={{
                             pointerEvents: filterSelected ? 'auto' : 'none',
                         }}
@@ -313,5 +309,3 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
         </Drawer>
     );
 };
-
-export default FilterDrawer;

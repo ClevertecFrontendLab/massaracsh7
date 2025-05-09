@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 
-const Content = ({ children }: { children: React.ReactNode }) => (
+export const Content = ({ children }: { children: React.ReactNode }) => (
     <Box
         as='main'
         pl={{ base: '16px', sm: '16px', md: '20px', lg: '24px', xl: '24px', '2xl': '24px' }}
@@ -21,5 +21,3 @@ const Content = ({ children }: { children: React.ReactNode }) => (
         {children}
     </Box>
 );
-
-export default Content;

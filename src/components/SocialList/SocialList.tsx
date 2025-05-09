@@ -6,7 +6,7 @@ const userData = [
     { icon: '/icons/BsEmojiHeartEyes.svg', count: 587 },
 ];
 
-const SocialList = () => (
+export const SocialList = () => (
     <Stack
         direction={{ sm: 'row', md: 'row', mid: 'column', lg: 'column', xl: 'column' }}
         spacing={{ base: 4, mid: 4, lg: 6 }}
@@ -31,5 +31,3 @@ const SocialList = () => (
         ))}
     </Stack>
 );
-
-export default SocialList;

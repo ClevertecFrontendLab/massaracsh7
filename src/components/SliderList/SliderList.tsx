@@ -5,19 +5,20 @@ import { Keyboard, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ArrowLeft, ArrowRight } from '~/assets/icons/icons';
-import { Recipe } from '~/types/typeRecipe';
+import { JUICIEST_SLIDER_BREAKPOINTS } from '~/constants/swiper-breakpoints';
+import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/constants/test-ids';
+import { Recipe } from '~/types/apiTypes';
 
-import SliderCard from '../SliderCard/SliderCard';
+import { SliderCard } from '../SliderCard/SliderCard';
 
 interface SliderListProps {
     recipes: Recipe[];
 }
 
-const SliderList = ({ recipes }: SliderListProps) => {
+export const SliderList = ({ recipes }: SliderListProps) => {
     const newRecipes = recipes
         .slice()
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 10);
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
         <Box
@@ -45,8 +46,8 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 bg='black'
                 color='customLime.50'
                 borderRadius='small'
-                zIndex={10}
-                data-test-id='carousel-back'
+                zIndex={14}
+                data-test-id={CAROUSEL_BACK}
                 display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
             />
 
@@ -63,13 +64,13 @@ const SliderList = ({ recipes }: SliderListProps) => {
                 bg='black'
                 color='customLime.50'
                 borderRadius='small'
-                zIndex={10}
-                data-test-id='carousel-forward'
+                zIndex={14}
+                data-test-id={CAROUSEL_FORWARD}
                 display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
             />
 
             <Swiper
-                data-test-id='carousel'
+                data-test-id={CAROUSEL}
                 loop={true}
                 loopAdditionalSlides={4}
                 speed={0}
@@ -83,40 +84,11 @@ const SliderList = ({ recipes }: SliderListProps) => {
                     nextEl: '.next',
                     prevEl: '.prev',
                 }}
-                breakpoints={{
-                    0: {
-                        slidesPerView: 2,
-                        spaceBetween: 10,
-                    },
-                    360: {
-                        slidesPerView: 2,
-                        spaceBetween: 10,
-                    },
-                    480: {
-                        slidesPerView: 3,
-                        spaceBetween: 10,
-                    },
-                    768: {
-                        slidesPerView: 4,
-                        spaceBetween: 10,
-                    },
-                    1024: {
-                        slidesPerView: 3.2,
-                        spaceBetween: 24,
-                    },
-                    1440: {
-                        slidesPerView: 3.5,
-                        spaceBetween: 24,
-                    },
-                    1920: {
-                        slidesPerView: 4.2,
-                        spaceBetween: 24,
-                    },
-                }}
+                breakpoints={JUICIEST_SLIDER_BREAKPOINTS}
                 style={{ width: '100%', margin: '0 auto' }}
             >
                 {newRecipes.map((recipe, index) => (
-                    <SwiperSlide key={recipe.id} data-test-id={`carousel-card-${index}`}>
+                    <SwiperSlide key={recipe._id} data-test-id={`${CAROUSEL_CARD}-${index}`}>
                         <SliderCard recipe={recipe} />
                     </SwiperSlide>
                 ))}
@@ -124,5 +96,3 @@ const SliderList = ({ recipes }: SliderListProps) => {
         </Box>
     );
 };
-
-export default SliderList;

@@ -17,11 +17,18 @@ import {
     Wrap,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import {
+    ADD_ALLERGEN_BUTTON,
+    ADD_OTHER_ALLERGEN,
+    ALLERGEN_BUTTON,
+    ALLERGEN_BUTTON_FILTER,
+    ALLERGEN_MENU,
+} from '~/constants/test-ids';
 import { allergens } from '~/data/allergens';
-import { ApplicationState } from '~/store/configure-store';
-import { setSelectedAllergens } from '~/store/filter-slice';
+import { selectSelectedAllergens, setSelectedAllergens } from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
 
 interface MultipleSelectProps {
     width: ResponsiveValue<string>;
@@ -29,11 +36,19 @@ interface MultipleSelectProps {
     isDisabled?: boolean;
 }
 
-const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
+export const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
     const dispatch = useDispatch();
-    const selected = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const selected = useAppSelector(selectSelectedAllergens);
     const [newAllergen, setNewAllergen] = useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (isOpen && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [isOpen]);
 
     const handleSelect = (value: string) => {
         const updated = selected.includes(value)
@@ -41,14 +56,12 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
             : [...selected, value];
 
         dispatch(setSelectedAllergens(updated));
-        setTimeout(() => {
-            inputRef.current?.focus();
-        }, 0);
     };
 
     const handleAddCustom = () => {
-        if (newAllergen.trim() && !selected.includes(newAllergen.trim())) {
-            dispatch(setSelectedAllergens([...selected, newAllergen.trim()]));
+        const trimmed = newAllergen.trim();
+        if (trimmed && !selected.includes(trimmed)) {
+            dispatch(setSelectedAllergens([...selected, trimmed]));
             setNewAllergen('');
         }
     };
@@ -59,13 +72,6 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
             handleAddCustom();
         }
     };
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    useEffect(() => {
-        if (isOpen && inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, [isOpen]);
 
     return (
         <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnSelect={false}>
@@ -93,9 +99,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                 _expanded={{ bg: 'white' }}
                 height='auto'
                 isDisabled={isDisabled}
-                data-test-id={
-                    sourse === 'drawer' ? 'allergens-menu-button-filter' : 'allergens-menu-button'
-                }
+                data-test-id={sourse === 'drawer' ? ALLERGEN_BUTTON_FILTER : ALLERGEN_BUTTON}
                 sx={{
                     pointerEvents: isDisabled ? 'none' : 'auto',
                 }}
@@ -120,7 +124,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                 )}
             </MenuButton>
 
-            <MenuList borderRadius='6px' zIndex='11' w={width} data-test-id='allergens-menu'>
+            <MenuList borderRadius='6px' zIndex='11' w={width} data-test-id={ALLERGEN_MENU}>
                 {allergens.map((option, index) => (
                     <MenuItem
                         key={option.value}
@@ -150,7 +154,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                         borderColor='blackAlpha.200'
                         focusBorderColor='blackAlpha.200'
                         _hover={{ borderColor: 'blackAlpha.200' }}
-                        data-test-id='add-other-allergen'
+                        data-test-id={ADD_OTHER_ALLERGEN}
                         autoFocus={true}
                         onKeyDown={handleKeyDown}
                     />
@@ -163,7 +167,7 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
                         color='white'
                         borderRadius='50%'
                         aria-label='Добавить аллерген'
-                        data-test-id='add-allergen-button'
+                        data-test-id={ADD_ALLERGEN_BUTTON}
                         isDisabled={isDisabled}
                         sx={{ pointerEvents: isDisabled ? 'none' : 'auto' }}
                     />
@@ -172,5 +176,3 @@ const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
         </Menu>
     );
 };
-
-export default MultipleSelect;

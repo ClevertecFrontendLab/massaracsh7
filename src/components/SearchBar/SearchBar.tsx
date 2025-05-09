@@ -8,46 +8,68 @@ import {
     InputGroup,
     InputRightElement,
     Switch,
+    Tag,
+    TagCloseButton,
+    TagLabel,
     Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
-import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
-import { ApplicationState } from '~/store/configure-store';
+import { MultipleSelect } from '~/components/MultipleSelect/MultipleSelect';
+import { MIN_SEARCH_LENGTH } from '~/constants/constants';
 import {
-    resetAllFilters,
+    ALLERGEN_SWITCHER,
+    FILTER_BUTTON,
+    LOADER_SEARCH_BLOCK,
+    SEARCH_BUTTON,
+    SEARCH_INPUT,
+} from '~/constants/test-ids';
+import {
+    selectExcludeAllergens,
+    selectHasResults,
+    selectSelectedAllergens,
     setHasResults,
+    setIsSearch,
     setSearchTerm,
     toggleExcludeAllergens,
 } from '~/store/filter-slice';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
-import FilterDrawer from '../Drawer/Drawer';
+import { CustomLoader } from '../CustomLoader/CustomLoader';
+import { FilterDrawer } from '../Drawer/Drawer';
 
-const SearchBar = () => {
+interface SeachBarProps {
+    isLoader: boolean;
+    handleFilterClose: (value: boolean) => void;
+}
+
+export const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
-    const dispatch = useDispatch();
-    const excludeAllergens = useSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
-    );
+    const dispatch = useAppDispatch();
 
-    const hasResults = useSelector((state: ApplicationState) => state.filters.hasResults);
+    const excludeAllergens = useAppSelector(selectExcludeAllergens);
+    const selectedAllergens = useAppSelector(selectSelectedAllergens);
+    const hasResults = useAppSelector(selectHasResults);
 
     const openFilterDrawer = () => {
-        dispatch(resetAllFilters());
         setFilterOpen(true);
+        handleFilterClose(false);
     };
-    const closeFilterDrawer = () => setFilterOpen(false);
+    const closeFilterDrawer = () => {
+        setFilterOpen(false);
+        handleFilterClose(true);
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(e.target.value);
     };
 
     const handleSearch = () => {
-        if (searchText.trim().length >= 3) {
+        if (searchText.trim().length >= MIN_SEARCH_LENGTH || excludeAllergens) {
             dispatch(setSearchTerm(searchText));
+            dispatch(setIsSearch(true));
         }
     };
 
@@ -61,10 +83,15 @@ const SearchBar = () => {
         setSearchText('');
         dispatch(setSearchTerm(''));
         dispatch(setHasResults(null));
+        dispatch(setIsSearch(false));
     };
 
-    const isSearchActive = searchText.trim().length >= 3;
-    console.log(hasResults);
+    const isSearchActive =
+        searchText.trim().length >= MIN_SEARCH_LENGTH || selectedAllergens.length > 0;
+
+    if (isLoader && !isFilterOpen && !excludeAllergens) {
+        return <CustomLoader size='small' dataTestId={LOADER_SEARCH_BLOCK} />;
+    }
 
     return (
         <Box>
@@ -78,7 +105,7 @@ const SearchBar = () => {
                     minW={{ base: 8, sm: 8, md: 8, lg: 12 }}
                     h={{ base: 8, sm: 8, md: 8, lg: 12 }}
                     onClick={openFilterDrawer}
-                    data-test-id='filter-button'
+                    data-test-id={FILTER_BUTTON}
                 />
 
                 <InputGroup w='100%'>
@@ -113,10 +140,9 @@ const SearchBar = () => {
                                   : 'blackAlpha.200'
                         }
                         _hover={{ borderColor: 'blackAlpha.200' }}
-                        autoFocus
-                        data-test-id='search-input'
+                        data-test-id={SEARCH_INPUT}
                     />
-                    <InputRightElement height='100%' pr='24px' autoFocus>
+                    <InputRightElement height='100%' pr='24px'>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <IconButton
                                 aria-label='Очистить'
@@ -136,7 +162,7 @@ const SearchBar = () => {
                                 p={2}
                                 isDisabled={!isSearchActive}
                                 onClick={handleSearch}
-                                data-test-id='search-button'
+                                data-test-id={SEARCH_BUTTON}
                                 sx={{
                                     pointerEvents: isSearchActive ? 'auto' : 'none',
                                 }}
@@ -155,7 +181,7 @@ const SearchBar = () => {
                             isChecked={excludeAllergens}
                             onChange={() => dispatch(toggleExcludeAllergens())}
                             bg='lime.400'
-                            data-test-id='allergens-switcher'
+                            data-test-id={ALLERGEN_SWITCHER}
                         />
                     </HStack>
                     {!isFilterOpen && (
@@ -163,9 +189,25 @@ const SearchBar = () => {
                     )}
                 </HStack>
             </Hide>
+
+            <HStack wrap='wrap' spacing={2}>
+                {selectedAllergens.length > 0 &&
+                    selectedAllergens.map((tag) => (
+                        <Tag
+                            size='sm'
+                            key={tag}
+                            borderRadius='6px'
+                            bg='customLime.100'
+                            border='1px solid'
+                            borderColor='customLime.400'
+                        >
+                            <TagLabel color='customLime.700'>{tag}</TagLabel>
+                            <TagCloseButton color='customLime.700' />
+                        </Tag>
+                    ))}
+            </HStack>
+
             <FilterDrawer isOpen={isFilterOpen} onClose={closeFilterDrawer} />
         </Box>
     );
 };
-
-export default SearchBar;

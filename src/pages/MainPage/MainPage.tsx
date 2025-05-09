@@ -1,111 +1,125 @@
 import { Box, Button, Heading, HStack } from '@chakra-ui/react';
-import { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
-import BlogList from '~/components/BlogList/BlogList';
-import KitchenSection from '~/components/KitchenSection/KitchenSection';
-import RecipeList from '~/components/RecipeList/RecipeList';
-import SearchBar from '~/components/SearchBar/SearchBar';
-import SliderList from '~/components/SliderList/SliderList';
-import { authors } from '~/data/authors';
-import { tryDishes, veganDishes } from '~/data/cardsData';
-import categories from '~/data/categories';
-import { dishes } from '~/data/dishes';
-import { ApplicationState } from '~/store/configure-store';
-import { setHasResults } from '~/store/filter-slice';
+import { BlogList } from '~/components/BlogList/BlogList';
+import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
+import { RecipeList } from '~/components/RecipeList/RecipeList';
+import { SearchBar } from '~/components/SearchBar/SearchBar';
+import { SliderList } from '~/components/SliderList/SliderList';
+import { BASE_LIMIT_SLIDER, ERROR_SEARCH_MESSAGE, MAIN_LIMIT_JUICY } from '~/constants/constants';
+import { JUICIEST_LINK, JUICIEST_LINK_MOB } from '~/constants/test-ids';
+import { useRandomCategory } from '~/hooks/useRandomCategory';
+import { useGetRecipesQuery } from '~/query/services/recipes';
+import {
+    selectHasFiltersOrSearch,
+    selectIsExcludingAllergensWithTags,
+    selectIsSearch,
+    selectSearchTerm,
+    selectSelectedAllergens,
+    selectSelectedCategories,
+    selectSelectedMeat,
+    selectSelectedSide,
+} from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
+import { buildQuery } from '~/utils/buildQuery';
 
-const Main = () => {
+export const MainPage = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const selectedAllergens = useSelector(
-        (state: ApplicationState) => state.filters.selectedAllergens,
-    );
-    const excludeAllergens = useSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
-    );
-    const selectedAuthors = useSelector((state: ApplicationState) => state.filters.selectedAuthors);
-    const selectedCategories = useSelector(
-        (state: ApplicationState) => state.filters.selectedCategories,
-    );
-    const selectedMeat = useSelector((state: ApplicationState) => state.filters.selectedMeat);
-    const selectedSide = useSelector((state: ApplicationState) => state.filters.selectedSide);
-    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+    const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
+    const [isFilterClose, setIsFilterClose] = useState(true);
+    const [message, setMessage] = useState('');
 
-    const filteredPopular = useMemo(
+    const selectedAllergens = useAppSelector(selectSelectedAllergens);
+    const selectedSubCategories = useAppSelector(selectSelectedCategories);
+    const selectedMeat = useAppSelector(selectSelectedMeat);
+    const selectedSide = useAppSelector(selectSelectedSide);
+    const searchTerm = useAppSelector(selectSearchTerm);
+    const isSearch = useAppSelector(selectIsSearch);
+
+    const isExcludingWithTags = useAppSelector(selectIsExcludingAllergensWithTags);
+    const hasFiltersOrSearch = useAppSelector(selectHasFiltersOrSearch);
+
+    const baseJuicyParams = useMemo(
         () =>
-            dishes.filter((recipe) => {
-                const ingredients = recipe.ingredients?.map((i) => i.title.toLowerCase()) || [];
-                const recipeTitle = recipe.title.toLowerCase();
-                const lowerSearch = searchTerm.toLowerCase();
-
-                const passesAllergens =
-                    !excludeAllergens ||
-                    !selectedAllergens.length ||
-                    !ingredients.some((ingredient) => {
-                        const lowerIngredient = ingredient.toLowerCase();
-                        return selectedAllergens.some((allergen) => {
-                            const allergenParts = allergen
-                                .toLowerCase()
-                                .replace(/[()]/g, '')
-                                .split(/[,\s]+/);
-                            return allergenParts.some(
-                                (part) => part && lowerIngredient.includes(part),
-                            );
-                        });
-                    });
-                const passesAuthors =
-                    !selectedAuthors.length ||
-                    authors.some(
-                        (author) =>
-                            selectedAuthors.includes(author.name) &&
-                            author.recipesId.includes(recipe.id),
-                    );
-
-                const catUrl = categories
-                    .filter((item) => selectedCategories.includes(item.title))
-                    .map((item) => item.url);
-
-                const passesCategories =
-                    !selectedCategories.length ||
-                    catUrl?.some((item: string) => recipe.category?.includes(item));
-
-                const passesMeat = !selectedMeat.length || selectedMeat.includes(recipe.meat || '');
-
-                const passesSide = !selectedSide.length || selectedSide.includes(recipe.side || '');
-
-                const titleMatch = !searchTerm || recipeTitle.includes(lowerSearch);
-
-                return (
-                    passesAllergens &&
-                    passesAuthors &&
-                    passesCategories &&
-                    passesMeat &&
-                    passesSide &&
-                    titleMatch
-                );
+            buildQuery({
+                sortBy: 'likes',
+                sortOrder: 'desc',
+                limit: MAIN_LIMIT_JUICY,
+                page: 1,
             }),
-        [
-            selectedAllergens,
-            excludeAllergens,
-            selectedAuthors,
-            selectedCategories,
-            selectedMeat,
-            selectedSide,
-            searchTerm,
-        ],
+        [],
     );
 
-    dispatch(
-        setHasResults(searchTerm.length < 3 ? null : filteredPopular.length > 0 ? true : false),
+    const filteredJuicyParams = useMemo(
+        () =>
+            buildQuery({
+                selectedSubCategories,
+                selectedMeat,
+                selectedSide,
+                selectedAllergens,
+                searchTerm,
+                sortBy: 'likes',
+                sortOrder: 'desc',
+                limit: MAIN_LIMIT_JUICY,
+                page: 1,
+            }),
+        [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
     );
+
+    const juicyParams = isSearch ? filteredJuicyParams : baseJuicyParams;
+
+    const { data: juiciestRecipes, isFetching: isLoadingJuiciest } = useGetRecipesQuery(
+        juicyParams,
+        {
+            refetchOnMountOrArgChange: isFilterClose,
+        },
+    );
+
+    const baseSliderParams = useMemo(
+        () =>
+            buildQuery({
+                sortBy: 'createdAt',
+                sortOrder: 'desc',
+                limit: BASE_LIMIT_SLIDER,
+            }),
+        [],
+    );
+
+    const filteredSliderParams = useMemo(
+        () =>
+            buildQuery({
+                selectedAllergens,
+                selectedSubCategories,
+                selectedMeat,
+                selectedSide,
+                sortBy: 'createdAt',
+                sortOrder: 'desc',
+                limit: BASE_LIMIT_SLIDER,
+            }),
+        [selectedAllergens, selectedSubCategories, selectedMeat, selectedSide],
+    );
+
+    const sliderParams = isSearch ? filteredSliderParams : baseSliderParams;
+
+    const { data: sliderRecipes } = useGetRecipesQuery(sliderParams, {
+        refetchOnMountOrArgChange: isFilterClose,
+    });
+
+    const isEmptyResult = useMemo(
+        () => hasFiltersOrSearch && juiciestRecipes?.data?.length === 0,
+        [hasFiltersOrSearch, juiciestRecipes?.data],
+    );
+
+    useEffect(() => {
+        setMessage(isEmptyResult ? ERROR_SEARCH_MESSAGE : '');
+    }, [isEmptyResult]);
+
     return (
         <Box>
             <Box
-                boxShadow={
-                    searchTerm || selectedAllergens.length > 0 || excludeAllergens ? 'main' : 'none'
-                }
+                boxShadow={hasFiltersOrSearch || isExcludingWithTags || message ? 'main' : 'none'}
                 pb={8}
                 mb={6}
                 borderRadius='0 0 8px 8px'
@@ -113,45 +127,55 @@ const Main = () => {
                 mx='auto'
                 px={{ base: '16px', sm: '16px', md: '16px', lg: '30px', xl: '190px' }}
             >
-                <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
-                    Приятного аппетита!
-                </Heading>
-                <SearchBar />
+                {message ? (
+                    <Heading mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>{message}</Heading>
+                ) : (
+                    <Heading variant='pageTitle' mb={{ sm: '14px', md: '14px', lg: '8', xl: '8' }}>
+                        Приятного аппетита!
+                    </Heading>
+                )}
+                <SearchBar
+                    isLoader={isLoadingJuiciest && isFilterClose}
+                    handleFilterClose={setIsFilterClose}
+                />
             </Box>
-            {searchTerm.length < 3 && <SliderList recipes={filteredPopular} />}
 
-            {searchTerm.length < 3 && (
-                <>
-                    <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
-                        <Heading variant='sectionTitle'>Самое сочное</Heading>
-                        <Button
-                            display={{
-                                base: 'flex',
-                                sm: 'none',
-                                md: 'none',
-                                lg: 'flex',
-                                xl: 'flex',
-                            }}
-                            data-test-id='juiciest-link'
-                            variant='limeSolid'
-                            size='large'
-                            rightIcon={<ArrowBlackRight w='14px' />}
-                            onClick={() => navigate('/the-juiciest')}
-                        >
-                            Вся подборка
-                        </Button>
-                    </HStack>
-                </>
+            {!hasFiltersOrSearch && sliderRecipes?.data && (
+                <SliderList recipes={sliderRecipes?.data} />
             )}
 
-            <RecipeList
-                recipes={filteredPopular}
-                gridVariant={searchTerm.length >= 3 ? 'low' : 'wide'}
-            />
+            {!hasFiltersOrSearch && (
+                <HStack justify='space-between' mb={{ base: 3, sm: 3, md: 3, lg: 4, xl: 6 }}>
+                    <Heading variant='sectionTitle'>Самое сочное</Heading>
+                    <Button
+                        display={{
+                            base: 'flex',
+                            sm: 'none',
+                            md: 'flex',
+                            lg: 'flex',
+                            xl: 'flex',
+                        }}
+                        data-test-id={JUICIEST_LINK}
+                        variant='limeSolid'
+                        size='large'
+                        rightIcon={<ArrowBlackRight w='14px' />}
+                        onClick={() => navigate('/the-juiciest')}
+                    >
+                        Вся подборка
+                    </Button>
+                </HStack>
+            )}
+
+            {juiciestRecipes?.data && (
+                <RecipeList
+                    recipes={juiciestRecipes?.data}
+                    gridVariant={hasFiltersOrSearch ? 'low' : 'wide'}
+                />
+            )}
 
             <Button
-                display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
-                data-test-id='juiciest-link-mobile'
+                display={{ base: 'none', sm: 'block', md: 'none', lg: 'none', xl: 'none' }}
+                data-test-id={JUICIEST_LINK_MOB}
                 variant='limeSolid'
                 size='large'
                 mb={8}
@@ -162,17 +186,14 @@ const Main = () => {
                 Вся подборка
             </Button>
 
-            {searchTerm.length < 3 && <BlogList />}
-            {searchTerm.length < 3 && (
+            {!hasFiltersOrSearch && <BlogList />}
+            {!hasFiltersOrSearch && randomRecipes && (
                 <KitchenSection
-                    title='Веганская кухня'
-                    description='Интересны не только убеждённым вегетарианцам, но и тем, кто хочет попробовать вегетарианскую диету и готовить вкусные вегетарианские блюда.'
-                    veganDishes={veganDishes}
-                    tryDishes={tryDishes}
+                    title={randomTitle}
+                    description={randomDescription}
+                    relevantRecipes={randomRecipes}
                 />
             )}
         </Box>
     );
 };
-
-export default Main;

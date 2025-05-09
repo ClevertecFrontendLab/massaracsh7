@@ -15,6 +15,8 @@ import {
     Wrap,
 } from '@chakra-ui/react';
 
+import { FILTER_CATEGORY, VEGAN_CHECKBOX } from '~/constants/test-ids';
+
 interface SearchableSelectProps {
     label: string;
     options: string[];
@@ -60,7 +62,7 @@ export const SearchableSelect = ({
                     pr={2}
                     _hover={{ bg: 'white' }}
                     _expanded={{ bg: 'white' }}
-                    data-test-id={label === 'Категория' ? 'filter-menu-button-категория' : ''}
+                    data-test-id={label === 'Категория' ? FILTER_CATEGORY : ''}
                 >
                     {selectedValues.length > 0 ? (
                         <Wrap spacing={2}>
@@ -100,9 +102,7 @@ export const SearchableSelect = ({
                                     p={2}
                                     w='100%'
                                     data-test-id={
-                                        option === 'Веганская кухня'
-                                            ? 'checkbox-веганская кухня'
-                                            : ''
+                                        option === 'Веганская кухня' ? VEGAN_CHECKBOX : ''
                                     }
                                 >
                                     {option}

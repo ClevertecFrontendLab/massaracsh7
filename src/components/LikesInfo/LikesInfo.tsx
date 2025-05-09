@@ -2,29 +2,27 @@ import { HStack, Image, Text } from '@chakra-ui/react';
 
 interface LikesAndCommentsInfoProps {
     likes?: number;
-    comments?: number;
+    bookmarks?: number;
     size?: string;
 }
 
-const LikesInfo = ({ likes, comments, size = 'limeSmall' }: LikesAndCommentsInfoProps) => {
-    if (!likes && !comments) return null;
+export const LikesInfo = ({ likes, bookmarks, size = 'limeSmall' }: LikesAndCommentsInfoProps) => {
+    if (!likes && !bookmarks) return null;
 
     return (
         <HStack spacing={3.5} px={1} width='100%' justify='flex-end'>
-            {likes !== undefined && likes > 0 && (
+            {bookmarks !== undefined && bookmarks > 0 && (
                 <HStack spacing={1}>
                     <Image src='/icons/BsBookmarkHeart.svg' boxSize='12px' />
-                    <Text textStyle={size}>{likes}</Text>
+                    <Text textStyle={size}>{bookmarks}</Text>
                 </HStack>
             )}
-            {comments !== undefined && comments > 0 && (
+            {likes !== undefined && likes > 0 && (
                 <HStack spacing={1}>
                     <Image src='/icons/BsEmojiHeartEyes.svg' boxSize='12px' />
-                    <Text textStyle={size}>{comments}</Text>
+                    <Text textStyle={size}>{likes}</Text>
                 </HStack>
             )}
         </HStack>
     );
 };
-
-export default LikesInfo;
