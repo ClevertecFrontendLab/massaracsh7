@@ -14,7 +14,6 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import MultipleSelect from '~/components/MultipleSelect/MultipleSelect';
@@ -26,8 +25,10 @@ import {
     SEARCH_BUTTON,
     SEARCH_INPUT,
 } from '~/constants/test-ids';
-import { ApplicationState } from '~/store/configure-store';
 import {
+    selectExcludeAllergens,
+    selectHasResults,
+    selectSelectedAllergens,
     setHasResults,
     setIsSearch,
     setSearchTerm,
@@ -37,6 +38,7 @@ import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
 import CustomLoader from '../CustomLoader/CustomLoader';
 import FilterDrawer from '../Drawer/Drawer';
+
 interface SeachBarProps {
     isLoader: boolean;
     handleFilterClose: (value: boolean) => void;
@@ -46,15 +48,11 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
     const [isFilterOpen, setFilterOpen] = useState(false);
     const [searchText, setSearchText] = useState('');
     const dispatch = useAppDispatch();
-    const excludeAllergens = useAppSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
-    );
 
-    const selectedAllergens = useAppSelector(
-        (state: ApplicationState) => state.filters.selectedAllergens,
-    );
+    const excludeAllergens = useAppSelector(selectExcludeAllergens);
+    const selectedAllergens = useAppSelector(selectSelectedAllergens);
+    const hasResults = useAppSelector(selectHasResults);
 
-    const hasResults = useSelector((state: ApplicationState) => state.filters.hasResults);
     const openFilterDrawer = () => {
         setFilterOpen(true);
         handleFilterClose(false);
@@ -90,9 +88,11 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
 
     const isSearchActive =
         searchText.trim().length >= MIN_SEARCH_LENGTH || selectedAllergens.length > 0;
+
     if (isLoader && !isFilterOpen && !excludeAllergens) {
         return <CustomLoader size='small' dataTestId={LOADER_SEARCH_BLOCK} />;
     }
+
     return (
         <Box>
             <HStack spacing={{ base: 3, sm: 3, md: 3, lg: 4 }} w='100%' mb={4}>
@@ -189,6 +189,7 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                     )}
                 </HStack>
             </Hide>
+
             <HStack wrap='wrap' spacing={2}>
                 {selectedAllergens.length > 0 &&
                     selectedAllergens.map((tag) => (
@@ -205,6 +206,7 @@ const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                         </Tag>
                     ))}
             </HStack>
+
             <FilterDrawer isOpen={isFilterOpen} onClose={closeFilterDrawer} />
         </Box>
     );

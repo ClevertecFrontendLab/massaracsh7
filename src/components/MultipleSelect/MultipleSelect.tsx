@@ -17,7 +17,7 @@ import {
     Wrap,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
     ADD_ALLERGEN_BUTTON,
@@ -27,8 +27,8 @@ import {
     ALLERGEN_MENU,
 } from '~/constants/test-ids';
 import { allergens } from '~/data/allergens';
-import { ApplicationState } from '~/store/configure-store';
-import { setSelectedAllergens } from '~/store/filter-slice';
+import { selectSelectedAllergens, setSelectedAllergens } from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
 
 interface MultipleSelectProps {
     width: ResponsiveValue<string>;
@@ -38,7 +38,7 @@ interface MultipleSelectProps {
 
 const MultipleSelect = ({ width, sourse, isDisabled }: MultipleSelectProps) => {
     const dispatch = useDispatch();
-    const selected = useSelector((state: ApplicationState) => state.filters.selectedAllergens);
+    const selected = useAppSelector(selectSelectedAllergens);
     const [newAllergen, setNewAllergen] = useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
 

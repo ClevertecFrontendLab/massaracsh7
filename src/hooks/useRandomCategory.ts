@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { useLazyGetRecipesByCategoryQuery } from '~/query/services/recipes';
-import { ApplicationState } from '~/store/configure-store';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
+import { useAppSelector } from '~/store/hooks';
 import { Recipe } from '~/types/apiTypes';
 
 const useRandomCategory = (activeCategoryId: string | null) => {
-    const categories = useSelector((state: ApplicationState) => state.categories.categories);
-    const subCategories = useSelector((state: ApplicationState) => state.categories.subCategories);
+    const categories = useAppSelector(selectAllCategories);
+    const subCategories = useAppSelector(selectAllSubCategories);
 
     const [randomTitle, setRandomTitle] = useState('');
     const [randomDescription, setRandomDescription] = useState('');

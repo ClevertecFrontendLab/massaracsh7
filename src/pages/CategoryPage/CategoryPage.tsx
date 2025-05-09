@@ -11,6 +11,7 @@ import TabsCategory from '~/components/TabsCategory/TabsCategory';
 import { BASE_LIMIT_JUICY, ERROR_SEARCH_MESSAGE, MIN_SEARCH_LENGTH } from '~/constants/constants';
 import useRandomCategory from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
     selectExcludeAllergens,
     selectHasAnyFilter,
@@ -28,7 +29,9 @@ const CategoryPage = () => {
     const { category, subcategory } = useParams();
     const dispatch = useAppDispatch();
 
-    const { categories, subCategories } = useAppSelector((state) => state.categories);
+    const categories = useAppSelector(selectAllCategories);
+    const subCategories = useAppSelector(selectAllSubCategories);
+
     const selectedAllergens = useAppSelector(selectSelectedAllergens);
     const selectedMeat = useAppSelector(selectSelectedMeat);
     const selectedSide = useAppSelector(selectSelectedSide);

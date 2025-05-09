@@ -5,7 +5,7 @@ import { Link as RouterLink, useLocation } from 'react-router';
 
 import { BREADCRUMBS } from '~/constants/test-ids';
 import { useGetRecipeByIdQuery } from '~/query/services/recipes';
-import { ApplicationState } from '~/store/configure-store';
+import { selectCategoryBySlug, selectSubCategoryBySlug } from '~/store/category-slice';
 import { useAppSelector } from '~/store/hooks';
 import { parsePathname } from '~/utils/parsePathname';
 
@@ -13,44 +13,41 @@ const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
     const location = useLocation();
     const { categorySlug, subcategorySlug, dishSlug } = parsePathname(location.pathname);
 
-    const { categories } = useAppSelector((state: ApplicationState) => state.categories);
-    const catName =
-        categorySlug === 'the-juiciest'
-            ? 'Самое сочное'
-            : categories.find((cat) => cat.category === categorySlug)?.title;
-    const category = categories.find((cat) => cat.category === categorySlug);
-    const subcategory = category?.subCategories.find((item) => item.category === subcategorySlug);
+    const category = useAppSelector(selectCategoryBySlug(categorySlug ?? ''));
+    const subcategory = useAppSelector(selectSubCategoryBySlug(subcategorySlug ?? ''));
+
+    const catTitle = categorySlug === 'the-juiciest' ? 'Самое сочное' : category?.title;
+
     const { data: recipe } = useGetRecipeByIdQuery(dishSlug ?? skipToken);
+
     return (
         <Breadcrumb
             separator={<ChevronRightIcon color='gray.800' />}
             pl={{ sm: '20px', md: '20px' }}
             pb={{ sm: '12px', md: '12px' }}
-            listProps={{
-                style: { flexWrap: 'wrap' },
-            }}
+            listProps={{ style: { flexWrap: 'wrap' } }}
             data-test-id={BREADCRUMBS}
         >
-            <BreadcrumbItem isCurrentPage={!catName}>
+            <BreadcrumbItem isCurrentPage={!catTitle}>
                 <BreadcrumbLink
                     as={RouterLink}
                     to='/'
-                    textStyle={catName ? 'navInactive' : 'navActive'}
+                    textStyle={catTitle ? 'navInactive' : 'navActive'}
                     onClick={() => onClose?.()}
                 >
                     Главная
                 </BreadcrumbLink>
             </BreadcrumbItem>
 
-            {catName && (
+            {catTitle && (
                 <BreadcrumbItem isCurrentPage={!subcategory}>
                     <BreadcrumbLink
                         as={RouterLink}
-                        to={`/${categorySlug}/${category?.subCategories[0].category}`}
+                        to={`/${categorySlug}/${category?.subCategories?.[0]?.category ?? ''}`}
                         textStyle={subcategory ? 'navInactive' : 'navActive'}
                         onClick={() => onClose?.()}
                     >
-                        {catName}
+                        {catTitle}
                     </BreadcrumbLink>
                 </BreadcrumbItem>
             )}

@@ -11,14 +11,14 @@ import {
     Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
 
 import { ShevronDown } from '~/assets/icons/icons';
 import { BASE_IMG_URL } from '~/constants/constants';
 import { NAV, VEGAN } from '~/constants/test-ids';
 import { useGetCategoriesQuery } from '~/query/services/categories';
-import { ApplicationState } from '~/store/configure-store';
+import { selectAllCategories } from '~/store/category-slice';
+import { useAppSelector } from '~/store/hooks';
 import { Category } from '~/types/apiTypes';
 
 interface NavProps {
@@ -28,7 +28,7 @@ interface NavProps {
 const NavigationMenu = ({ handleOpen, onClose }: NavProps) => {
     const navigate = useNavigate();
     useGetCategoriesQuery();
-    const categories = useSelector((state: ApplicationState) => state.categories.categories);
+    const categories = useAppSelector(selectAllCategories);
 
     const [isOpen, setIsOpen] = useState(false);
     const handleAccordion = () => {

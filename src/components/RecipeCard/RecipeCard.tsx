@@ -13,7 +13,6 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { BookmarkHeart } from '~/assets/icons/icons';
@@ -21,7 +20,8 @@ import { BASE_IMG_URL } from '~/constants/constants';
 import { CARD_LINK, FOOD_CARD } from '~/constants/test-ids';
 import useGetCategory from '~/hooks/useGetCategory';
 import useGetSubcategory from '~/hooks/useGetSubcategory';
-import { ApplicationState } from '~/store/configure-store';
+import { selectSearchTerm } from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
 import { Recipe } from '~/types/apiTypes';
 import { highlightText } from '~/utils/highlightText';
 
@@ -33,7 +33,7 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
-    const searchTerm = useSelector((state: ApplicationState) => state.filters.searchTerm);
+    const searchTerm = useAppSelector(selectSearchTerm);
     const rootCategories = useGetCategory(recipe.categoriesIds);
     const subCategories = useGetSubcategory(recipe.categoriesIds);
     const navigate = useNavigate();

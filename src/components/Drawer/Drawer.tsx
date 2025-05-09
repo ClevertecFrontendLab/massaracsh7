@@ -35,9 +35,11 @@ import {
 } from '~/constants/test-ids';
 import { meatTypes, sideTypes } from '~/data/allergens';
 import { authors } from '~/data/authors';
-import { ApplicationState } from '~/store/configure-store';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
     resetAllFilters,
+    selectExcludeAllergens,
+    selectSelectedAllergens,
     setIsSearch,
     setSelectedAuthors,
     setSelectedCategories,
@@ -63,13 +65,10 @@ const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
     const dispatch = useDispatch();
     const { category } = useParams();
 
-    const allergens = useAppSelector((state: ApplicationState) => state.filters.selectedAllergens);
-    const excludeAllergens = useAppSelector(
-        (state: ApplicationState) => state.filters.excludeAllergens,
-    );
-    const { categories, subCategories } = useAppSelector(
-        (state: ApplicationState) => state.categories,
-    );
+    const allergens = useAppSelector(selectSelectedAllergens);
+    const excludeAllergens = useAppSelector(selectExcludeAllergens);
+    const categories = useAppSelector(selectAllCategories);
+    const subCategories = useAppSelector(selectAllSubCategories);
 
     const [filters, setFilters] = useState<FilterData>({
         ...initialFilterData,

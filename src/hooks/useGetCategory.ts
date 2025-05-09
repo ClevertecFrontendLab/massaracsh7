@@ -1,12 +1,10 @@
 import { useSelector } from 'react-redux';
 
-import { ApplicationState } from '~/store/configure-store';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 
 const useGetCategory = (subCategoriesIds: string[]) => {
-    const { subCategories, categories } = useSelector(
-        (state: ApplicationState) => state.categories,
-    );
-
+    const categories = useSelector(selectAllCategories);
+    const subCategories = useSelector(selectAllSubCategories);
     const rootCategoryIds = subCategoriesIds.map(
         (subCategoryId) =>
             subCategories.find((subCategory) => subCategory._id === subCategoryId)?.rootCategoryId,
