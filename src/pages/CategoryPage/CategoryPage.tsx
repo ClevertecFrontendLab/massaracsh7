@@ -11,7 +11,9 @@ import { TabsCategory } from '~/components/TabsCategory/TabsCategory';
 import { BASE_LIMIT_JUICY, ERROR_SEARCH_MESSAGE, MIN_SEARCH_LENGTH } from '~/constants/constants';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
-import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
+import { setHasResults } from '~/store/filter-slice';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { selectAllCategories, selectAllSubCategories } from '~/store/selectors/categoriesSelectors';
 import {
     selectExcludeAllergens,
     selectHasAnyFilter,
@@ -20,9 +22,7 @@ import {
     selectSelectedAllergens,
     selectSelectedMeat,
     selectSelectedSide,
-    setHasResults,
-} from '~/store/filter-slice';
-import { useAppDispatch, useAppSelector } from '~/store/hooks';
+} from '~/store/selectors/filtersSelectors';
 import { buildQuery } from '~/utils/buildQuery';
 
 export const CategoryPage = () => {

@@ -20,8 +20,8 @@ import { BASE_IMG_URL } from '~/constants/constants';
 import { CARD_LINK, FOOD_CARD } from '~/constants/test-ids';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetSubcategory } from '~/hooks/useGetSubcategory';
-import { selectSearchTerm } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
+import { selectSearchTerm } from '~/store/selectors/filtersSelectors';
 import { Recipe } from '~/types/apiTypes';
 import { highlightText } from '~/utils/highlightText';
 

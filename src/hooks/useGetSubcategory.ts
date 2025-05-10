@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { selectAllSubCategories } from '~/store/category-slice';
+import { selectAllSubCategories } from '~/store/selectors/categoriesSelectors';
 
 export const useGetSubcategory = (subCategoryIds: string[]) => {
     const subCategories = useSelector(selectAllSubCategories);

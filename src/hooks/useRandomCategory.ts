@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { useLazyGetRecipesByCategoryQuery } from '~/query/services/recipes';
-import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import { useAppSelector } from '~/store/hooks';
+import { selectAllCategories, selectAllSubCategories } from '~/store/selectors/categoriesSelectors';
 import { Recipe } from '~/types/apiTypes';
 
 export const useRandomCategory = (activeCategoryId: string | null) => {

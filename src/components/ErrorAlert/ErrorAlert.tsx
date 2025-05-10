@@ -3,11 +3,11 @@ import { useDisclosure } from '@chakra-ui/react';
 
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/constants/test-ids';
 import { clearAppError } from '~/store/app-slice';
-import { ApplicationState } from '~/store/configure-store';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { userErrorSelector } from '~/store/selectors/appSelectors';
 
 export const ErrorAlert = () => {
-    const error = useAppSelector((state: ApplicationState) => state.app.error);
+    const error = useAppSelector(userErrorSelector);
     const dispatch = useAppDispatch();
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 

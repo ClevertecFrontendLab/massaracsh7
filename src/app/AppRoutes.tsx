@@ -8,11 +8,12 @@ import { MainPage } from '~/pages/MainPage/MainPage';
 import { NotFoundPage } from '~/pages/NotFoundPage/NotFoundPage';
 import { RecipePage } from '~/pages/RecipePage/RecipePage';
 import { useAppSelector } from '~/store/hooks';
+import { userLoadingSelector } from '~/store/selectors/appSelectors';
 
 import { ROUTES_PATH } from './routes';
 
 const AppRoutes = () => {
-    const isLoading = useAppSelector((state) => state.app.isLoading);
+    const isLoading = useAppSelector(userLoadingSelector);
     const location = useLocation();
 
     const isNotFound = location.pathname === ROUTES_PATH.NOT_FOUND;

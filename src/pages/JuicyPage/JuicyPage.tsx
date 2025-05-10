@@ -8,7 +8,8 @@ import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { BASE_LIMIT_JUICY } from '~/constants/constants';
 import { LOAD_MORE_BUTTON } from '~/constants/test-ids';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
-import { useGetRecipesQuery } from '~/query/services/recipes';
+import { useGetRecipesPagesInfiniteQuery } from '~/query/services/recipes';
+import { useAppSelector } from '~/store/hooks';
 import {
     selectHasFiltersOrSearch,
     selectIsSearch,
@@ -17,15 +18,11 @@ import {
     selectSelectedCategories,
     selectSelectedMeat,
     selectSelectedSide,
-} from '~/store/filter-slice';
-import { useAppSelector } from '~/store/hooks';
-import { Recipe } from '~/types/apiTypes';
+} from '~/store/selectors/filtersSelectors';
 import { buildQuery } from '~/utils/buildQuery';
 
 export const JuicyPage = () => {
-    const [page, setPage] = useState(1);
     const [isFilterClose, setIsFilterClose] = useState(true);
-    const [juiciestRecipes, setJuiciestRecipes] = useState<Recipe[]>([]);
     const [message, setMessage] = useState('');
 
     const selectedAllergens = useAppSelector(selectSelectedAllergens);
@@ -44,9 +41,8 @@ export const JuicyPage = () => {
                 sortBy: 'likes',
                 sortOrder: 'desc',
                 limit: BASE_LIMIT_JUICY,
-                page,
             }),
-        [page],
+        [],
     );
 
     const filteredParams = useMemo(
@@ -60,42 +56,29 @@ export const JuicyPage = () => {
                 sortBy: 'likes',
                 sortOrder: 'desc',
                 limit: BASE_LIMIT_JUICY,
-                page,
             }),
-        [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm, page],
+        [selectedSubCategories, selectedMeat, selectedSide, selectedAllergens, searchTerm],
     );
 
     const queryParams = isSearch ? filteredParams : baseParams;
 
-    const { data, isLoading, isFetching, isSuccess } = useGetRecipesQuery(queryParams, {
-        refetchOnMountOrArgChange: isFilterClose,
-    });
+    const { data, isLoading, isFetching, fetchNextPage, hasNextPage, isSuccess } =
+        useGetRecipesPagesInfiniteQuery(queryParams, {
+            refetchOnMountOrArgChange: isFilterClose,
+        });
 
-    const isLastPage = data && data?.meta?.page >= data?.meta?.totalPages;
+    const allRecipes = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
+
     const isEmptyResult = useMemo(
-        () => hasFiltersOrSearch && data?.data?.length === 0,
-        [hasFiltersOrSearch, data],
+        () => hasFiltersOrSearch && isSuccess && allRecipes.length === 0,
+        [hasFiltersOrSearch, isSuccess, allRecipes],
     );
-
-    useEffect(() => {
-        if (!isSuccess || !data?.data) return;
-
-        if (page === 1) {
-            setJuiciestRecipes(data.data);
-        } else {
-            setJuiciestRecipes((prev) => [...prev, ...data.data]);
-        }
-    }, [data?.data, isSuccess, page]);
 
     useEffect(() => {
         setMessage(isEmptyResult ? 'Ничего не найдено по вашему запросу' : '');
     }, [isEmptyResult]);
 
-    const loadMoreRecipes = () => {
-        setPage((prev) => prev + 1);
-    };
-
-    if (isLoading && page === 1) {
+    if (isLoading) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 
@@ -114,7 +97,7 @@ export const JuicyPage = () => {
                     Самое сочное
                 </Heading>
                 <SearchBar
-                    isLoader={isFetching && page === 1 && isFilterClose}
+                    isLoader={isFetching && isFilterClose}
                     handleFilterClose={setIsFilterClose}
                 />
             </Box>
@@ -123,13 +106,13 @@ export const JuicyPage = () => {
                 <Center>{message}</Center>
             ) : (
                 <>
-                    <RecipeList recipes={juiciestRecipes} gridVariant='low' />
+                    <RecipeList recipes={allRecipes} gridVariant='low' />
                     <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
-                        {!isLastPage && (
+                        {hasNextPage && (
                             <Button
                                 variant='limeSolid'
                                 size='medium'
-                                onClick={loadMoreRecipes}
+                                onClick={() => fetchNextPage()}
                                 data-test-id={LOAD_MORE_BUTTON}
                             >
                                 Загрузка

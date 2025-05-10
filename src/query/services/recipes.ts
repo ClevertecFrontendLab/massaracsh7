@@ -22,6 +22,31 @@ export const recipesApiSlice = catalogApiSlice
                 }),
                 providesTags: [Tags.RECIPES],
             }),
+
+            getRecipesPages: builder.infiniteQuery<RecipesResponse, RecipesParams, number>({
+                infiniteQueryOptions: {
+                    initialPageParam: 1,
+                    getNextPageParam: (lastPage) =>
+                        lastPage.meta.page < lastPage.meta.totalPages
+                            ? lastPage.meta.page + 1
+                            : undefined,
+                },
+                query({ queryArg, pageParam }) {
+                    return {
+                        url: ApiEndpoints.RECIPES,
+                        method: 'GET',
+                        params: {
+                            ...queryArg,
+                            page: pageParam,
+                            limit: queryArg.limit,
+                        },
+                        apiGroupName: ApiGroupNames.RECIPES,
+                        name: EndpointNames.GET_RECIPES,
+                    };
+                },
+                providesTags: [Tags.RECIPES],
+            }),
+
             getRecipesByCategory: builder.query<RecipesResponse, RecipesByCategoryParams>({
                 query: ({ id, ...params }) => ({
                     url: `${ApiEndpoints.RECIPES_BY_CATEGORY}/${id}`,
@@ -32,6 +57,7 @@ export const recipesApiSlice = catalogApiSlice
                 }),
                 providesTags: [Tags.RECIPES],
             }),
+
             getRecipeById: builder.query<Recipe, string>({
                 query: (id) => ({
                     url: `${ApiEndpoints.RECIPES}/${id}`,
@@ -42,12 +68,13 @@ export const recipesApiSlice = catalogApiSlice
                 providesTags: [Tags.RECIPES],
             }),
         }),
+        overrideExisting: false,
     });
 
 export const {
     useGetRecipesQuery,
+    useGetRecipesPagesInfiniteQuery,
     useGetRecipesByCategoryQuery,
-    useLazyGetRecipesQuery,
     useLazyGetRecipesByCategoryQuery,
     useGetRecipeByIdQuery,
 } = recipesApiSlice;

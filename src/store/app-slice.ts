@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ApplicationState } from './configure-store';
 export type AppState = typeof initialState;
 
 const initialState = {
@@ -22,8 +21,6 @@ export const appSlice = createSlice({
         },
     },
 });
-export const userLoadingSelector = (state: ApplicationState) => state.app.isLoading;
-export const userErrorSelector = (state: ApplicationState) => state.app.error;
 
 export const { setAppError, setAppLoader, clearAppError } = appSlice.actions;
 export default appSlice.reducer;

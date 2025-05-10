@@ -5,8 +5,11 @@ import { Link as RouterLink, useLocation } from 'react-router';
 
 import { BREADCRUMBS } from '~/constants/test-ids';
 import { useGetRecipeByIdQuery } from '~/query/services/recipes';
-import { selectCategoryBySlug, selectSubCategoryBySlug } from '~/store/category-slice';
 import { useAppSelector } from '~/store/hooks';
+import {
+    selectCategoryBySlug,
+    selectSubCategoryBySlug,
+} from '~/store/selectors/categoriesSelectors';
 import { parsePathname } from '~/utils/parsePathname';
 
 export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {

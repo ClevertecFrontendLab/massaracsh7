@@ -26,15 +26,17 @@ import {
     SEARCH_INPUT,
 } from '~/constants/test-ids';
 import {
-    selectExcludeAllergens,
-    selectHasResults,
-    selectSelectedAllergens,
     setHasResults,
     setIsSearch,
     setSearchTerm,
     toggleExcludeAllergens,
 } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import {
+    selectExcludeAllergens,
+    selectHasResults,
+    selectSelectedAllergens,
+} from '~/store/selectors/filtersSelectors';
 
 import { CustomLoader } from '../CustomLoader/CustomLoader';
 import { FilterDrawer } from '../Drawer/Drawer';

@@ -27,8 +27,9 @@ import {
     ALLERGEN_MENU,
 } from '~/constants/test-ids';
 import { allergens } from '~/data/allergens';
-import { selectSelectedAllergens, setSelectedAllergens } from '~/store/filter-slice';
+import { setSelectedAllergens } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
+import { selectSelectedAllergens } from '~/store/selectors/filtersSelectors';
 
 interface MultipleSelectProps {
     width: ResponsiveValue<string>;
