@@ -1,6 +1,5 @@
 import { Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
 
-import authImage from '~/assets/auth-side-image.jpg';
 import { RegistrationForm } from '~/components/RegistrationForm/RegistrationForm';
 
 export const SignInPage = () => (
@@ -28,8 +27,8 @@ export const SignInPage = () => (
 
         <Box w='50%' height='100vh' position='relative'>
             <Image
-                src={authImage}
-                alt='Вдохновляющее изображение'
+                src='/images/auth-side-image.jpg'
+                alt='изображение'
                 objectFit='cover'
                 w='100%'
                 h='100%'
