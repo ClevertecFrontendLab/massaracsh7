@@ -5,4 +5,6 @@ export enum EndpointNames {
     GET_RECIPE_BY_ID = 'getRecipeById',
     GET_CATEGORIES = 'getCategories',
     GET_CATEGORY_BY_ID = 'getCategoryById',
+    SIGN_UP = 'signup',
+    LOGIN = 'login',
 }

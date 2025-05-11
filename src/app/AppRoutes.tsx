@@ -7,6 +7,7 @@ import { JuicyPage } from '~/pages/JuicyPage/JuicyPage';
 import { MainPage } from '~/pages/MainPage/MainPage';
 import { NotFoundPage } from '~/pages/NotFoundPage/NotFoundPage';
 import { RecipePage } from '~/pages/RecipePage/RecipePage';
+import { SignInPage } from '~/pages/SignInPage/SignInPage';
 import { useAppSelector } from '~/store/hooks';
 import { userLoadingSelector } from '~/store/selectors/appSelectors';
 
@@ -28,6 +29,7 @@ const AppRoutes = () => {
                     <Route path={ROUTES_PATH.RECIPE} element={<RecipePage />} />
                     <Route path={ROUTES_PATH.JUICY} element={<JuicyPage />} />
                 </Route>
+                <Route path={ROUTES_PATH.SIGN_IN} element={<SignInPage />} />
 
                 <Route path={ROUTES_PATH.NOT_FOUND} element={<NotFoundPage />} />
                 <Route path='*' element={<Navigate to={ROUTES_PATH.NOT_FOUND} />} />
