@@ -5,21 +5,25 @@ import { recipesApiSlice } from '~/query/services/recipes';
 
 import { setAppLoader } from '../app-slice';
 
-const LOADER_ENDPOINTS = [
-    categoriesApiSlice.endpoints.getCategories.matchFulfilled,
-    recipesApiSlice.endpoints.getRecipes.matchFulfilled,
+const START_LOAD = [
+    categoriesApiSlice.endpoints.getCategories.matchPending,
+    recipesApiSlice.endpoints.getRecipes.matchPending,
 ];
 
-let loadCount = 0;
-const MAX_LOAD_COUNT = 2;
+const END_LOAD = [
+    categoriesApiSlice.endpoints.getCategories.matchFulfilled,
+    categoriesApiSlice.endpoints.getCategories.matchRejected,
+    recipesApiSlice.endpoints.getRecipes.matchFulfilled,
+    recipesApiSlice.endpoints.getRecipes.matchRejected,
+];
 
 export const loaderMiddleware: Middleware = (store) => (next) => (action) => {
-    if (LOADER_ENDPOINTS.some((matchFn) => matchFn(action))) {
-        loadCount += 1;
+    if (START_LOAD.some((match) => match(action))) {
+        store.dispatch(setAppLoader(true));
+    }
 
-        if (loadCount >= MAX_LOAD_COUNT) {
-            store.dispatch(setAppLoader(false));
-        }
+    if (END_LOAD.some((match) => match(action))) {
+        store.dispatch(setAppLoader(false));
     }
 
     return next(action);

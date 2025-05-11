@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+import { fetchBaseQueryToken } from '~/utils/fetchBaseQueryToken';
+
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://jsonplaceholder.typicode.com' }),
@@ -8,6 +10,6 @@ export const apiSlice = createApi({
 
 export const catalogApiSlice = createApi({
     reducerPath: 'catalogApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://marathon-api.clevertec.ru' }),
+    baseQuery: fetchBaseQueryToken,
     endpoints: () => ({}),
 });
