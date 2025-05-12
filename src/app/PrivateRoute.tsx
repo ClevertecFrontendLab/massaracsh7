@@ -13,7 +13,7 @@ export const PrivateRoute = ({ children }: Props) => {
     const accessToken = getAccessToken();
 
     if (!accessToken || isTokenExpired(accessToken)) {
-        return <Navigate to={ROUTES_PATH.SIGN_IN} replace />;
+        return <Navigate to={ROUTES_PATH.LOG_IN} replace />;
     }
 
     return children;

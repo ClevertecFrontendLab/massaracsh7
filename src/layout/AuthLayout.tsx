@@ -50,7 +50,6 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
                             </Tab>
                         </TabList>
                     </Tabs>
-
                     {children}
                 </Box>
 
