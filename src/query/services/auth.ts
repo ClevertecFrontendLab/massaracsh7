@@ -1,3 +1,5 @@
+import { LoginRequest, LoginResponse } from '~/types/authTypes';
+
 import { ApiEndpoints } from '../constants/api';
 import { EndpointNames } from '../constants/endpoint-names';
 import { Tags } from '../constants/tags';
@@ -31,7 +33,17 @@ export const authApiSlice = catalogApiSlice
                 }),
                 invalidatesTags: [Tags.AUTH],
             }),
+            login: builder.mutation<LoginResponse, LoginRequest>({
+                query: (body) => ({
+                    url: ApiEndpoints.LOGIN,
+                    method: 'POST',
+                    body,
+                    name: EndpointNames.LOGIN,
+                }),
+
+                invalidatesTags: [Tags.AUTH],
+            }),
         }),
     });
 
-export const { useSignupMutation } = authApiSlice;
+export const { useSignupMutation, useLoginMutation } = authApiSlice;
