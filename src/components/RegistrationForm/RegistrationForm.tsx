@@ -134,7 +134,8 @@ export const RegistrationForm = () => {
         const { confirmPassword, ...payload } = data;
 
         try {
-            await signup(payload as SignUpRequest).unwrap();
+            const result = await signup(payload as SignUpRequest).unwrap();
+            console.log(result);
         } catch (err: unknown) {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;

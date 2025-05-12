@@ -10,6 +10,7 @@ import { MainPage } from '~/pages/MainPage/MainPage';
 import { NotFoundPage } from '~/pages/NotFoundPage/NotFoundPage';
 import { RecipePage } from '~/pages/RecipePage/RecipePage';
 import { SignInPage } from '~/pages/SignInPage/SignInPage';
+import { VerificationPage } from '~/pages/VerificationPage/VerificationPage';
 import { setAppLoader } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { userLoadingSelector } from '~/store/selectors/appSelectors';
@@ -26,6 +27,9 @@ const AppRoutes = () => {
 
     useEffect(() => {
         if (ROUTES_PATH.SIGN_IN.includes(location.pathname)) {
+            dispatch(setAppLoader(false));
+        }
+        if (ROUTES_PATH.LOG_IN.includes(location.pathname)) {
             dispatch(setAppLoader(false));
         }
     }, [location.pathname, dispatch]);
@@ -50,6 +54,7 @@ const AppRoutes = () => {
 
                 <Route path={ROUTES_PATH.LOG_IN} element={<LoginPage />} />
                 <Route path={ROUTES_PATH.SIGN_IN} element={<SignInPage />} />
+                <Route path={ROUTES_PATH.VERIFICATION} element={<VerificationPage />} />
                 <Route path={ROUTES_PATH.NOT_FOUND} element={<NotFoundPage />} />
                 <Route path='*' element={<Navigate to={ROUTES_PATH.NOT_FOUND} />} />
             </Routes>

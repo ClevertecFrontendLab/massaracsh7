@@ -53,7 +53,8 @@ export const LoginForm = () => {
 
     const onSubmit = async (data: IForm) => {
         try {
-            await login(data as LoginRequest).unwrap();
+            const result = await login(data as LoginRequest).unwrap();
+            console.log(result);
         } catch (err: unknown) {
             let errorMessage = 'Произошла ошибка';
 

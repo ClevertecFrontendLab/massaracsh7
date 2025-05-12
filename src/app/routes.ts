@@ -6,4 +6,5 @@ export const ROUTES_PATH = {
     NOT_FOUND: '/not-found',
     SIGN_IN: '/signin',
     LOG_IN: '/login',
+    VERIFICATION: '/verification',
 };
