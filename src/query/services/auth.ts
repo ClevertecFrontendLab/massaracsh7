@@ -1,4 +1,7 @@
+import { FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+
 import { LoginRequest, LoginResponse } from '~/types/authTypes';
+import { saveAccessToken } from '~/utils/tokenUtils';
 
 import { ApiEndpoints } from '../constants/api';
 import { EndpointNames } from '../constants/endpoint-names';
@@ -40,6 +43,19 @@ export const authApiSlice = catalogApiSlice
                     body,
                     name: EndpointNames.LOGIN,
                 }),
+                async onQueryStarted(_, { queryFulfilled }) {
+                    queryFulfilled
+                        .then(({ meta }) => {
+                            const response = (meta as FetchBaseQueryMeta)?.response;
+                            const accessToken = response?.headers.get('Authentication-Access');
+                            if (accessToken) {
+                                saveAccessToken(accessToken);
+                            }
+                        })
+                        .catch((err) => {
+                            console.error('Login error:', err);
+                        });
+                },
 
                 invalidatesTags: [Tags.AUTH],
             }),

@@ -70,7 +70,6 @@ export const fetchBaseQueryToken: BaseQueryFn<
 
     const result = await rawBaseQuery(finalArgs, api, extraOptions);
 
-    // Глобальный logout при 401/403
     if (result.error?.status === 401 || result.error?.status === 403) {
         api.dispatch({ type: 'auth/logout' });
         removeTokens();

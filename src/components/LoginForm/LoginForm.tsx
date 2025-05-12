@@ -15,6 +15,7 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { z } from 'zod';
 
 import { useLoginMutation } from '~/query/services/auth';
@@ -33,6 +34,7 @@ export const LoginForm = () => {
     const [login, { isLoading }] = useLoginMutation();
     const dispatch = useAppDispatch();
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -53,8 +55,8 @@ export const LoginForm = () => {
 
     const onSubmit = async (data: IForm) => {
         try {
-            const result = await login(data as LoginRequest).unwrap();
-            console.log(result);
+            await login(data as LoginRequest).unwrap();
+            navigate('/');
         } catch (err: unknown) {
             let errorMessage = 'Произошла ошибка';
 
