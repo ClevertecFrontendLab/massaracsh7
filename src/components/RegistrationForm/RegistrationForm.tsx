@@ -136,11 +136,9 @@ export const RegistrationForm = () => {
         try {
             await signup(payload as SignUpRequest).unwrap();
         } catch (err: unknown) {
-            // RTK Query ошибки
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
-
-                let message = 'Неизвестная ошибка';
+                let message = 'Ошибка';
                 const data = fetchErr.data;
 
                 if (
