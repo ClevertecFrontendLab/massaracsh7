@@ -1,3 +1,4 @@
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
     Box,
     Button,
@@ -5,7 +6,10 @@ import {
     FormErrorMessage,
     FormLabel,
     HStack,
+    IconButton,
     Input,
+    InputGroup,
+    InputRightElement,
     Progress,
     VStack,
 } from '@chakra-ui/react';
@@ -65,6 +69,8 @@ type IForm = z.infer<typeof schema>;
 
 export const RegistrationForm = () => {
     const [step, setStep] = useState<1 | 2>(1);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [step1Data, setStep1Data] = useState<Pick<IForm, 'firstName' | 'lastName' | 'email'>>({
         firstName: '',
         lastName: '',
@@ -161,7 +167,7 @@ export const RegistrationForm = () => {
 
     return (
         <Box maxW='400px' mx='auto' mt='50px'>
-            <Progress mb={6} value={progress} size='sm' colorScheme='blue' />
+            <Progress mb={6} value={progress} size='sm' colorScheme='green' />
 
             <form
                 autoComplete='off'
@@ -209,17 +215,53 @@ export const RegistrationForm = () => {
 
                             <FormControl isInvalid={!!errors.password}>
                                 <FormLabel htmlFor='password'>Пароль</FormLabel>
-                                <Input id='password' type='password' {...register('password')} />
+                                <InputGroup>
+                                    <Input
+                                        id='password'
+                                        type={showPassword ? 'text' : 'password'}
+                                        {...register('password')}
+                                    />
+                                    <InputRightElement>
+                                        <IconButton
+                                            size='sm'
+                                            variant='ghost'
+                                            aria-label={
+                                                showPassword ? 'Скрыть пароль' : 'Показать пароль'
+                                            }
+                                            icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        />
+                                    </InputRightElement>
+                                </InputGroup>
                                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.confirmPassword}>
                                 <FormLabel htmlFor='confirmPassword'>Повторите пароль</FormLabel>
-                                <Input
-                                    id='confirmPassword'
-                                    type='password'
-                                    {...register('confirmPassword')}
-                                />
+                                <InputGroup>
+                                    <Input
+                                        id='confirmPassword'
+                                        type={showConfirmPassword ? 'text' : 'password'}
+                                        {...register('confirmPassword')}
+                                    />
+                                    <InputRightElement>
+                                        <IconButton
+                                            size='sm'
+                                            variant='ghost'
+                                            aria-label={
+                                                showConfirmPassword
+                                                    ? 'Скрыть пароль'
+                                                    : 'Показать пароль'
+                                            }
+                                            icon={
+                                                showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />
+                                            }
+                                            onClick={() =>
+                                                setShowConfirmPassword(!showConfirmPassword)
+                                            }
+                                        />
+                                    </InputRightElement>
+                                </InputGroup>
                                 <FormErrorMessage>
                                     {errors.confirmPassword?.message}
                                 </FormErrorMessage>

@@ -1,3 +1,4 @@
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
     Box,
     Button,
@@ -114,11 +115,10 @@ export const LoginForm = () => {
                                 <Button
                                     size='sm'
                                     variant='ghost'
-                                    onMouseDown={() => setShowPassword(true)}
-                                    onMouseUp={() => setShowPassword(false)}
-                                    onMouseLeave={() => setShowPassword(false)}
+                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
                                 >
-                                    👁
+                                    {showPassword ? <ViewOffIcon /> : <ViewIcon />}
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
