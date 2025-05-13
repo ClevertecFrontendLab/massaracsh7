@@ -70,6 +70,8 @@ export const LoginForm = () => {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
                 const status = fetchErr.status;
+                // const message = (fetchErr.data as { message?: string })?.message;
+
                 if (status === 401) {
                     dispatch(setAppError('Неверный логин или пароль.'));
                 } else if (status === 403) {

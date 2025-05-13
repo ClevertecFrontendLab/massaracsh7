@@ -14,14 +14,17 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SerializedError } from '@reduxjs/toolkit';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useSignupMutation } from '~/query/services/auth';
+import { setAppError } from '~/store/app-slice';
+import { useAppDispatch } from '~/store/hooks';
 import { SignUpRequest } from '~/types/authTypes';
+
+import { CustomModal } from '../CustomModal/CustomModal';
 
 const schema = z
     .object({
@@ -77,6 +80,22 @@ export const RegistrationForm = () => {
         email: '',
     });
 
+    const [step2Data, setStep2Data] = useState<
+        Pick<IForm, 'login' | 'password' | 'confirmPassword'>
+    >({
+        login: '',
+        password: '',
+        confirmPassword: '',
+    });
+
+    const dispatch = useAppDispatch();
+    const [modalData, setModalData] = useState<{
+        title: string;
+        description: string;
+        imageSrc?: string;
+        footerNote?: string;
+    } | null>(null);
+
     const [signup, { isLoading }] = useSignupMutation();
     const {
         register,
@@ -89,7 +108,7 @@ export const RegistrationForm = () => {
     } = useForm<IForm>({
         resolver: zodResolver(schema),
         mode: 'onChange',
-        shouldUnregister: true,
+        shouldUnregister: false,
         defaultValues: {
             firstName: '',
             lastName: '',
@@ -102,7 +121,7 @@ export const RegistrationForm = () => {
 
     const values = watch();
     const progress = useMemo(() => {
-        const keys: (keyof IForm)[] = [
+        const allFields: (keyof IForm)[] = [
             'firstName',
             'lastName',
             'email',
@@ -110,9 +129,10 @@ export const RegistrationForm = () => {
             'password',
             'confirmPassword',
         ];
-        const validCount = keys.filter((k) => values[k] && !errors[k]).length;
-        return Math.round((validCount / keys.length) * 100);
-    }, [values, errors]);
+
+        const validCount = allFields.filter((field) => values[field]).length;
+        return Math.round((validCount / allFields.length) * 100);
+    }, [values]);
 
     const onNext = async () => {
         const ok = await trigger(['firstName', 'lastName', 'email']);
@@ -121,18 +141,23 @@ export const RegistrationForm = () => {
         const [firstName, lastName, email] = getValues(['firstName', 'lastName', 'email']);
         setStep1Data({ firstName, lastName, email });
 
-        setValue('login', '');
-        setValue('password', '');
-        setValue('confirmPassword', '');
+        setValue('login', step2Data.login);
+        setValue('password', step2Data.password);
+        setValue('confirmPassword', step2Data.confirmPassword);
 
         setStep(2);
     };
 
     const onBack = () => {
+        const [login, password, confirmPassword] = getValues([
+            'login',
+            'password',
+            'confirmPassword',
+        ]);
         setValue('firstName', step1Data.firstName);
         setValue('lastName', step1Data.lastName);
         setValue('email', step1Data.email);
-
+        setStep2Data({ login, password, confirmPassword });
         setStep(1);
     };
 
@@ -142,25 +167,23 @@ export const RegistrationForm = () => {
         try {
             const result = await signup(payload as SignUpRequest).unwrap();
             console.log(result);
-        } catch (err: unknown) {
+            setModalData({
+                title: 'Остался последний шаг. Нужно верифицировать email',
+                description: `Мы отправили Вам на почту ${payload.email} ссылку для вериификации`,
+                imageSrc: '/images/modal-breakfast.png',
+                footerNote:
+                    'Не пришло письмо? Проверьте папаку Спам. По другим вопросам свяжитесь с поддержкой',
+            });
+        } catch (err) {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
-                let message = 'Ошибка';
-                const data = fetchErr.data;
-
-                if (
-                    data &&
-                    typeof data === 'object' &&
-                    'message' in data &&
-                    typeof (data as { message: unknown }).message === 'string'
-                ) {
-                    message = (data as { message: string }).message;
+                const status = fetchErr.status;
+                const message = (fetchErr.data as { message?: string })?.message;
+                if (status === 400 && message) {
+                    dispatch(setAppError(message));
+                } else if (String(status).startsWith('5')) {
+                    dispatch(setAppError('Ошибка сервера. Попробуйте немного позже'));
                 }
-
-                console.error('Ошибка запроса:', message);
-            } else {
-                const serializedErr = err as SerializedError;
-                console.error('Системная ошибка:', serializedErr.message ?? 'Неизвестная ошибка');
             }
         }
     };
@@ -229,7 +252,11 @@ export const RegistrationForm = () => {
                                                 showPassword ? 'Скрыть пароль' : 'Показать пароль'
                                             }
                                             icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                                            onClick={() => setShowPassword(!showPassword)}
+                                            onMouseDown={() => setShowPassword(true)}
+                                            onMouseUp={() => setShowPassword(false)}
+                                            onMouseLeave={() => setShowPassword(false)}
+                                            onTouchStart={() => setShowPassword(true)}
+                                            onTouchEnd={() => setShowPassword(false)}
                                         />
                                     </InputRightElement>
                                 </InputGroup>
@@ -256,9 +283,11 @@ export const RegistrationForm = () => {
                                             icon={
                                                 showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />
                                             }
-                                            onClick={() =>
-                                                setShowConfirmPassword(!showConfirmPassword)
-                                            }
+                                            onMouseDown={() => setShowConfirmPassword(true)}
+                                            onMouseUp={() => setShowConfirmPassword(false)}
+                                            onMouseLeave={() => setShowConfirmPassword(false)}
+                                            onTouchStart={() => setShowConfirmPassword(true)}
+                                            onTouchEnd={() => setShowConfirmPassword(false)}
                                         />
                                     </InputRightElement>
                                 </InputGroup>
@@ -285,6 +314,16 @@ export const RegistrationForm = () => {
                     )}
                 </VStack>
             </form>
+            {modalData && (
+                <CustomModal
+                    isOpen={true}
+                    onClose={() => setModalData(null)}
+                    title={modalData.title}
+                    description={modalData.description}
+                    imageSrc={modalData.imageSrc}
+                    footerNote={modalData.footerNote}
+                />
+            )}
         </Box>
     );
 };
