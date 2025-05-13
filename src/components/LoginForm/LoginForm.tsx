@@ -12,7 +12,6 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SerializedError } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,6 +23,8 @@ import { setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import { LoginRequest } from '~/types/authTypes';
 
+import { CustomModal } from '../CustomModal/CustomModal';
+
 const schema = z.object({
     login: z.string().nonempty('Введите логин').max(50, 'Максимальная длина 50 символов'),
     password: z.string().nonempty('Введите пароль').max(50, 'Максимальная длина 50 символов'),
@@ -34,8 +35,15 @@ type IForm = z.infer<typeof schema>;
 export const LoginForm = () => {
     const [login, { isLoading }] = useLoginMutation();
     const dispatch = useAppDispatch();
-    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [modalData, setModalData] = useState<{
+        title: string;
+        description: string;
+        imageSrc?: string;
+        onPrimaryAction?: () => void;
+    } | null>(null);
 
     const {
         register,
@@ -58,30 +66,31 @@ export const LoginForm = () => {
         try {
             await login(data as LoginRequest).unwrap();
             navigate('/');
-        } catch (err: unknown) {
-            let errorMessage = 'Произошла ошибка';
-
+        } catch (err) {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
                 const status = fetchErr.status;
-                const data = fetchErr.data as { message?: string };
-                const message = data?.message || 'Неизвестная ошибка';
-
                 if (status === 401) {
-                    errorMessage = 'Неверный логин или пароль.';
+                    dispatch(setAppError('Неверный логин или пароль.'));
                 } else if (status === 403) {
-                    errorMessage = 'Необходимо подтверждение email пользователя.';
+                    dispatch(setAppError('Необходимо подтверждение email пользователя.'));
                 } else if (String(status).startsWith('5')) {
-                    errorMessage = 'Ошибка сервера. Попробуйте ещё раз.';
-                } else {
-                    errorMessage = message;
+                    setModalData({
+                        title: 'Ошибка сервера',
+                        description: 'Что-то пошло не так. Повторите попытку позже.',
+                        imageSrc: '/images/modal-breakfast.png',
+                        onPrimaryAction: async () => {
+                            setModalData(null);
+                            try {
+                                await login(data as LoginRequest).unwrap();
+                                navigate('/');
+                            } catch {
+                                console.log('error');
+                            }
+                        },
+                    });
                 }
-            } else {
-                const serializedErr = err as SerializedError;
-                errorMessage = serializedErr.message ?? 'Неизвестная ошибка';
             }
-
-            dispatch(setAppError(errorMessage));
         }
     };
 
@@ -113,9 +122,13 @@ export const LoginForm = () => {
                             />
                             <InputRightElement>
                                 <Button
-                                    size='sm'
+                                    size='md'
                                     variant='ghost'
-                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    onMouseDown={() => setShowPassword(true)}
+                                    onMouseUp={() => setShowPassword(false)}
+                                    onMouseLeave={() => setShowPassword(false)}
+                                    onTouchStart={() => setShowPassword(true)}
+                                    onTouchEnd={() => setShowPassword(false)}
                                     aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
                                 >
                                     {showPassword ? <ViewOffIcon /> : <ViewIcon />}
@@ -138,6 +151,18 @@ export const LoginForm = () => {
                     </HStack>
                 </VStack>
             </form>
+
+            {modalData && (
+                <CustomModal
+                    isOpen={true}
+                    onClose={() => setModalData(null)}
+                    title={modalData.title}
+                    description={modalData.description}
+                    imageSrc={modalData.imageSrc}
+                    onPrimaryAction={modalData.onPrimaryAction}
+                    primaryActionText='Повторить'
+                />
+            )}
         </Box>
     );
 };

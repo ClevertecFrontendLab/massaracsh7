@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
 
+import { ErrorAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { FullLoader } from '~/components/FullLoader/FullLoader';
 import { Layout } from '~/layout/Layout';
 import { CategoryPage } from '~/pages/CategoryPage/CategoryPage';
@@ -37,6 +38,7 @@ const AppRoutes = () => {
     return (
         <>
             {isLoading && !isNotFound && <FullLoader />}
+            <ErrorAlert />
             <Routes>
                 <Route
                     path={ROUTES_PATH.HOME}

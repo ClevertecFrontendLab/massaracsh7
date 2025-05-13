@@ -2,7 +2,6 @@ import { Box, Hide, Show } from '@chakra-ui/react';
 import { Outlet } from 'react-router';
 
 import { Content } from '~/components/Content/Content';
-import { ErrorAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { Footer } from '~/components/Footer/Footer';
 import { Header } from '~/components/Header/Header';
 import { NavigationFooter } from '~/components/NavigationFooter/NavigationFooter';
@@ -44,7 +43,6 @@ export const Layout = () => (
                 pb={6}
             >
                 <Content>
-                    <ErrorAlert />
                     <Outlet />
                 </Content>
             </Box>

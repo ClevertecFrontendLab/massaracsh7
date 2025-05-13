@@ -69,14 +69,14 @@ export const fetchBaseQueryToken: BaseQueryFn<
         typeof args === 'string' ? { url: args, headers } : { ...args, headers };
 
     const result = await rawBaseQuery(finalArgs, api, extraOptions);
-
-    if (result.error?.status === 401 || result.error?.status === 403) {
-        api.dispatch({ type: 'auth/logout' });
-        removeTokens();
-        if (typeof window !== 'undefined') {
-            window.location.href = '/signin';
-        }
-    }
+    console.log(result);
+    // if (result.error?.status === 401 || result.error?.status === 403) {
+    //     api.dispatch({ type: 'auth/logout' });
+    //     removeTokens();
+    //     if (typeof window !== 'undefined') {
+    //         window.location.href = '/signin';
+    //     }
+    // }
 
     return result;
 };
