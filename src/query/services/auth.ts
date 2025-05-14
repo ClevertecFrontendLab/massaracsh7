@@ -1,6 +1,15 @@
 import { FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 
-import { LoginRequest, LoginResponse } from '~/types/authTypes';
+import {
+    ForgotPasswordRequest,
+    ForgotPasswordResponse,
+    LoginRequest,
+    LoginResponse,
+    ResetPasswordRequest,
+    ResetPasswordResponse,
+    VerifyOtpRequest,
+    VerifyOtpResponse,
+} from '~/types/authTypes';
 import { saveAccessToken } from '~/utils/tokenUtils';
 
 import { ApiEndpoints } from '../constants/api';
@@ -59,7 +68,37 @@ export const authApiSlice = catalogApiSlice
 
                 invalidatesTags: [Tags.AUTH],
             }),
+            forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordRequest>({
+                query: (body) => ({
+                    url: ApiEndpoints.FORGOT_PASSWORD,
+                    method: 'POST',
+                    body,
+                    name: EndpointNames.FORGOT_PASSWORD,
+                }),
+            }),
+            verifyOtp: builder.mutation<VerifyOtpResponse, VerifyOtpRequest>({
+                query: (body) => ({
+                    url: ApiEndpoints.VERIFY_OTP,
+                    method: 'POST',
+                    body,
+                    name: EndpointNames.VERIFY_OTP,
+                }),
+            }),
+            resetPassword: builder.mutation<ResetPasswordResponse, ResetPasswordRequest>({
+                query: (body) => ({
+                    url: ApiEndpoints.RESET_PASSWORD,
+                    method: 'POST',
+                    body,
+                    name: EndpointNames.RESET_PASSWORD,
+                }),
+            }),
         }),
     });
 
-export const { useSignupMutation, useLoginMutation } = authApiSlice;
+export const {
+    useSignupMutation,
+    useLoginMutation,
+    useForgotPasswordMutation,
+    useVerifyOtpMutation,
+    useResetPasswordMutation,
+} = authApiSlice;

@@ -48,9 +48,14 @@ export const fetchBaseQueryToken: BaseQueryFn<
     }
 
     const isPublicEndpoint = (url: string) =>
-        ['/auth/login', '/auth/signup', '/auth/check-auth'].some((endpoint) =>
-            url.includes(endpoint),
-        );
+        [
+            '/auth/login',
+            '/auth/signup',
+            '/auth/check-auth',
+            '/auth/forgot-password',
+            '/auth/reset-password',
+            '/auth/verify-otp',
+        ].some((endpoint) => url.includes(endpoint));
 
     const headers: Record<string, string> = {
         Accept: '*/*',

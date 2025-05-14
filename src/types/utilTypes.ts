@@ -15,9 +15,10 @@ export interface ModalPayload {
     title: string;
     description: string;
     imageSrc?: string;
-    onPrimaryAction?: () => void;
+    onPrimaryAction?: (email?: string | undefined) => Promise<void>;
     primaryActionText?: string;
     footerNote?: string;
+    withInput?: boolean;
 }
 
 type AlertType = 'error' | 'success' | 'warning' | 'info';
