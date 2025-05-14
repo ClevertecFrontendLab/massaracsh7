@@ -19,11 +19,9 @@ import { useNavigate } from 'react-router';
 import { z } from 'zod';
 
 import { useLoginMutation } from '~/query/services/auth';
-import { setAppError } from '~/store/app-slice';
+import { setAppError, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import { LoginRequest } from '~/types/authTypes';
-
-import { CustomModal } from '../CustomModal/CustomModal';
 
 const schema = z.object({
     login: z.string().nonempty('Введите логин').max(50, 'Максимальная длина 50 символов'),
@@ -38,13 +36,6 @@ export const LoginForm = () => {
     const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
-    const [modalData, setModalData] = useState<{
-        title: string;
-        description: string;
-        imageSrc?: string;
-        onPrimaryAction?: () => void;
-    } | null>(null);
-
     const {
         register,
         handleSubmit,
@@ -77,20 +68,21 @@ export const LoginForm = () => {
                 } else if (status === 403) {
                     dispatch(setAppError('Необходимо подтверждение email пользователя.'));
                 } else if (String(status).startsWith('5')) {
-                    setModalData({
-                        title: 'Ошибка сервера',
-                        description: 'Что-то пошло не так. Повторите попытку позже.',
-                        imageSrc: '/images/modal-breakfast.png',
-                        onPrimaryAction: async () => {
-                            setModalData(null);
-                            try {
-                                await login(data as LoginRequest).unwrap();
-                                navigate('/');
-                            } catch {
-                                console.log('error');
-                            }
-                        },
-                    });
+                    dispatch(
+                        setAppModal({
+                            title: 'Ошибка сервера',
+                            description: 'Что-то пошло не так. Повторите попытку позже.',
+                            imageSrc: '/images/modal-breakfast.png',
+                            onPrimaryAction: async () => {
+                                try {
+                                    await login(data as LoginRequest).unwrap();
+                                    navigate('/');
+                                } catch {
+                                    console.log('error');
+                                }
+                            },
+                        }),
+                    );
                 }
             }
         }
@@ -153,18 +145,6 @@ export const LoginForm = () => {
                     </HStack>
                 </VStack>
             </form>
-
-            {modalData && (
-                <CustomModal
-                    isOpen={true}
-                    onClose={() => setModalData(null)}
-                    title={modalData.title}
-                    description={modalData.description}
-                    imageSrc={modalData.imageSrc}
-                    onPrimaryAction={modalData.onPrimaryAction}
-                    primaryActionText='Повторить'
-                />
-            )}
         </Box>
     );
 };

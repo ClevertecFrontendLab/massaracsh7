@@ -2,11 +2,14 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
+import { setAppModal } from '~/store/app-slice';
+import { useAppDispatch } from '~/store/hooks';
 
 export const VerificationPage = () => {
     const [searchParams] = useSearchParams();
     const emailVerified = searchParams.get('emailVerified');
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (emailVerified === 'true') {
@@ -14,8 +17,16 @@ export const VerificationPage = () => {
             navigate(ROUTES_PATH.LOG_IN);
         } else {
             navigate(ROUTES_PATH.SIGN_IN);
+            dispatch(
+                setAppModal({
+                    title: 'Упс. Что-то пошло не так',
+                    description: `Ваша ссылка верификации не действительна. Попробуйте зарегистрироваться снова`,
+                    imageSrc: '/images/modal-breakfast.png',
+                    footerNote: 'Остались вопросы? Свяжитесь с поддержкой',
+                }),
+            );
         }
-    }, [emailVerified, navigate]);
+    }, [emailVerified, dispatch, navigate]);
 
     return (
         <>

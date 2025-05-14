@@ -20,11 +20,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useSignupMutation } from '~/query/services/auth';
-import { setAppError } from '~/store/app-slice';
+import { setAppError, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import { SignUpRequest } from '~/types/authTypes';
-
-import { CustomModal } from '../CustomModal/CustomModal';
 
 const schema = z
     .object({
@@ -89,12 +87,6 @@ export const RegistrationForm = () => {
     });
 
     const dispatch = useAppDispatch();
-    const [modalData, setModalData] = useState<{
-        title: string;
-        description: string;
-        imageSrc?: string;
-        footerNote?: string;
-    } | null>(null);
 
     const [signup, { isLoading }] = useSignupMutation();
     const {
@@ -167,13 +159,15 @@ export const RegistrationForm = () => {
         try {
             const result = await signup(payload as SignUpRequest).unwrap();
             console.log(result);
-            setModalData({
-                title: 'Остался последний шаг. Нужно верифицировать email',
-                description: `Мы отправили Вам на почту ${payload.email} ссылку для вериификации`,
-                imageSrc: '/images/modal-breakfast.png',
-                footerNote:
-                    'Не пришло письмо? Проверьте папаку Спам. По другим вопросам свяжитесь с поддержкой',
-            });
+            dispatch(
+                setAppModal({
+                    title: 'Остался последний шаг. Нужно верифицировать email',
+                    description: `Мы отправили Вам на почту ${payload.email} ссылку для вериификации`,
+                    imageSrc: '/images/modal-breakfast.png',
+                    footerNote:
+                        'Не пришло письмо? Проверьте папаку Спам. По другим вопросам свяжитесь с поддержкой',
+                }),
+            );
         } catch (err) {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
@@ -314,16 +308,6 @@ export const RegistrationForm = () => {
                     )}
                 </VStack>
             </form>
-            {modalData && (
-                <CustomModal
-                    isOpen={true}
-                    onClose={() => setModalData(null)}
-                    title={modalData.title}
-                    description={modalData.description}
-                    imageSrc={modalData.imageSrc}
-                    footerNote={modalData.footerNote}
-                />
-            )}
         </Box>
     );
 };

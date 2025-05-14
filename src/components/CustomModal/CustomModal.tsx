@@ -12,57 +12,61 @@ import {
     Text,
 } from '@chakra-ui/react';
 
-interface CustomModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    title: string;
-    description: string;
-    imageSrc?: string;
-    onPrimaryAction?: () => void;
-    primaryActionText?: string;
-    footerNote?: string;
-}
+import { clearModal } from '~/store/app-slice';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
 
-export const CustomModal = ({
-    isOpen,
-    onClose,
-    title,
-    description,
-    imageSrc,
-    onPrimaryAction,
-    primaryActionText = 'Повторить',
-    footerNote,
-}: CustomModalProps) => (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent maxW='sm' p={6} textAlign='center' position='relative'>
-            <CloseButton position='absolute' right='1rem' top='1rem' onClick={onClose} />
+export const CustomModal = () => {
+    const modal = useAppSelector((state) => state.app.modal);
+    const dispatch = useAppDispatch();
 
-            {imageSrc && (
-                <Box mb={4}>
-                    <Image src={imageSrc} alt='Modal illustration' mx='auto' />
-                </Box>
-            )}
+    if (!modal) return null;
 
-            <ModalHeader p={0} fontSize='lg' fontWeight='bold'>
-                {title}
-            </ModalHeader>
+    const {
+        title,
+        description,
+        imageSrc,
+        onPrimaryAction,
+        primaryActionText = 'Повторить',
+        footerNote,
+    } = modal;
 
-            <ModalBody p={0} mt={2}>
-                <Text fontSize='md'>{description}</Text>
-            </ModalBody>
+    return (
+        <Modal isOpen={true} onClose={() => dispatch(clearModal())} isCentered>
+            <ModalOverlay />
+            <ModalContent maxW='sm' p={6} textAlign='center' position='relative'>
+                <CloseButton
+                    position='absolute'
+                    right='1rem'
+                    top='1rem'
+                    onClick={() => dispatch(clearModal())}
+                />
 
-            <ModalFooter p={0} mt={6} display='flex' justifyContent='center'>
-                {onPrimaryAction ? (
-                    <Button colorScheme='green' onClick={onPrimaryAction}>
-                        {primaryActionText}
-                    </Button>
-                ) : (
-                    <Text fontSize='sm' color='gray.500'>
-                        {footerNote}
-                    </Text>
+                {imageSrc && (
+                    <Box mb={4}>
+                        <Image src={imageSrc} alt='Modal illustration' mx='auto' />
+                    </Box>
                 )}
-            </ModalFooter>
-        </ModalContent>
-    </Modal>
-);
+
+                <ModalHeader p={0} fontSize='lg' fontWeight='bold'>
+                    {title}
+                </ModalHeader>
+
+                <ModalBody p={0} mt={2}>
+                    <Text fontSize='md'>{description}</Text>
+                </ModalBody>
+
+                <ModalFooter p={0} mt={6} display='flex' justifyContent='center'>
+                    {onPrimaryAction ? (
+                        <Button colorScheme='green' onClick={onPrimaryAction}>
+                            {primaryActionText}
+                        </Button>
+                    ) : (
+                        <Text fontSize='sm' color='gray.500'>
+                            {footerNote}
+                        </Text>
+                    )}
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    );
+};

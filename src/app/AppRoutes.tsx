@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
 
+import { CustomModal } from '~/components/CustomModal/CustomModal';
 import { ErrorAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { FullLoader } from '~/components/FullLoader/FullLoader';
 import { Layout } from '~/layout/Layout';
@@ -21,6 +22,7 @@ import { ROUTES_PATH } from './routes';
 
 const AppRoutes = () => {
     const isLoading = useAppSelector(userLoadingSelector);
+    const modal = useAppSelector((state) => state.app.modal);
     const location = useLocation();
     const dispatch = useAppDispatch();
 
@@ -37,6 +39,7 @@ const AppRoutes = () => {
 
     return (
         <>
+            {modal && <CustomModal />}
             {isLoading && !isNotFound && <FullLoader />}
             <ErrorAlert />
             <Routes>
