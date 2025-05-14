@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
 
 import { CustomModal } from '~/components/CustomModal/CustomModal';
-import { ErrorAlert } from '~/components/ErrorAlert/ErrorAlert';
+import { AppAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { FullLoader } from '~/components/FullLoader/FullLoader';
 import { Layout } from '~/layout/Layout';
 import { CategoryPage } from '~/pages/CategoryPage/CategoryPage';
@@ -41,7 +41,7 @@ const AppRoutes = () => {
         <>
             {modal && <CustomModal />}
             {isLoading && !isNotFound && <FullLoader />}
-            <ErrorAlert />
+            <AppAlert />
             <Routes>
                 <Route
                     path={ROUTES_PATH.HOME}

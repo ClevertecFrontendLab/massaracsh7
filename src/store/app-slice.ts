@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ModalPayload } from '~/types/utilTypes';
+import { AlertPayload, ModalPayload } from '~/types/utilTypes';
 
 export type AppState = typeof initialState;
 
@@ -8,6 +8,7 @@ const initialState = {
     isLoading: true,
     error: '' as string | null,
     modal: null as ModalPayload | null,
+    alert: null as AlertPayload | null,
 };
 export const appSlice = createSlice({
     name: 'app',
@@ -28,9 +29,22 @@ export const appSlice = createSlice({
         clearModal(state) {
             state.modal = null;
         },
+        setAppAlert(state, { payload }: PayloadAction<AlertPayload>) {
+            state.alert = payload;
+        },
+        clearAppAlert(state) {
+            state.alert = null;
+        },
     },
 });
 
-export const { setAppError, setAppLoader, clearAppError, setAppModal, clearModal } =
-    appSlice.actions;
+export const {
+    setAppError,
+    setAppLoader,
+    clearAppError,
+    setAppModal,
+    clearModal,
+    setAppAlert,
+    clearAppAlert,
+} = appSlice.actions;
 export default appSlice.reducer;

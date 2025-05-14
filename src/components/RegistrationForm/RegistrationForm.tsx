@@ -20,7 +20,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useSignupMutation } from '~/query/services/auth';
-import { setAppError, setAppModal } from '~/store/app-slice';
+import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import { SignUpRequest } from '~/types/authTypes';
 
@@ -174,9 +174,20 @@ export const RegistrationForm = () => {
                 const status = fetchErr.status;
                 const message = (fetchErr.data as { message?: string })?.message;
                 if (status === 400 && message) {
-                    dispatch(setAppError(message));
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: message,
+                        }),
+                    );
                 } else if (String(status).startsWith('5')) {
-                    dispatch(setAppError('Ошибка сервера. Попробуйте немного позже'));
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: 'Ошибка сервера',
+                            message: ' Попробуйте немного позже',
+                        }),
+                    );
                 }
             }
         }

@@ -19,3 +19,11 @@ export interface ModalPayload {
     primaryActionText?: string;
     footerNote?: string;
 }
+
+type AlertType = 'error' | 'success' | 'warning' | 'info';
+
+export interface AlertPayload {
+    type: AlertType;
+    message?: string;
+    title: string;
+}

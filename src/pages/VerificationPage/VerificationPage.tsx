@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
-import { setAppModal } from '~/store/app-slice';
+import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 
 export const VerificationPage = () => {
@@ -15,6 +15,12 @@ export const VerificationPage = () => {
         if (emailVerified === 'true') {
             console.log('You are OK!');
             navigate(ROUTES_PATH.LOG_IN);
+            dispatch(
+                setAppAlert({
+                    type: 'success',
+                    title: 'Верификация прошла успешно',
+                }),
+            );
         } else {
             navigate(ROUTES_PATH.SIGN_IN);
             dispatch(

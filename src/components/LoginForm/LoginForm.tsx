@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router';
 import { z } from 'zod';
 
 import { useLoginMutation } from '~/query/services/auth';
-import { setAppError, setAppModal } from '~/store/app-slice';
+import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import { LoginRequest } from '~/types/authTypes';
 
@@ -64,9 +64,21 @@ export const LoginForm = () => {
                 // const message = (fetchErr.data as { message?: string })?.message;
 
                 if (status === 401) {
-                    dispatch(setAppError('Неверный логин или пароль.'));
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: 'Неверный логин или пароль.',
+                            message: 'Попробуйте снова',
+                        }),
+                    );
                 } else if (status === 403) {
-                    dispatch(setAppError('Необходимо подтверждение email пользователя.'));
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: 'Email не верифицирован.',
+                            message: 'Проверьте почту и перейдите по ссылке',
+                        }),
+                    );
                 } else if (String(status).startsWith('5')) {
                     dispatch(
                         setAppModal({
