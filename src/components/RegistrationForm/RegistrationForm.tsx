@@ -166,9 +166,10 @@ export const RegistrationForm = () => {
                 setAppModal({
                     title: 'Остался последний шаг. Нужно верифицировать email',
                     description: `Мы отправили Вам на почту ${payload.email} ссылку для вериификации`,
-                    imageSrc: '/images/modal-breakfast.png',
+                    imageSrc: '/images/modal-success.png',
                     footerNote:
                         'Не пришло письмо? Проверьте папаку Спам. По другим вопросам свяжитесь с поддержкой',
+                    dataId: 'sign-up-success-modal',
                 }),
             );
         } catch (err) {
@@ -198,7 +199,13 @@ export const RegistrationForm = () => {
 
     return (
         <Box maxW='400px' mx='auto' mt='50px'>
-            <Progress mb={6} value={progress} size='sm' colorScheme='green' />
+            <Progress
+                mb={6}
+                value={progress}
+                size='sm'
+                colorScheme='green'
+                data-test-id='sign-up-progress'
+            />
 
             <form
                 autoComplete='off'
@@ -210,37 +217,60 @@ export const RegistrationForm = () => {
                           }
                         : handleSubmit(onSubmit)
                 }
+                data-test-id='sign-up-form'
             >
                 <VStack spacing={4}>
                     {step === 1 ? (
                         <>
                             <FormControl isInvalid={!!errors.firstName}>
                                 <FormLabel htmlFor='firstName'>Ваше имя</FormLabel>
-                                <Input id='firstName' {...register('firstName')} />
+                                <Input
+                                    id='firstName'
+                                    {...register('firstName')}
+                                    data-test-id='first-name-input'
+                                />
                                 <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.lastName}>
                                 <FormLabel htmlFor='lastName'>Ваша фамилия</FormLabel>
-                                <Input id='lastName' {...register('lastName')} />
+                                <Input
+                                    id='lastName'
+                                    {...register('lastName')}
+                                    data-test-id='last-name-input'
+                                />
                                 <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.email}>
                                 <FormLabel htmlFor='email'>Email</FormLabel>
-                                <Input id='email' type='email' {...register('email')} />
+                                <Input
+                                    id='email'
+                                    type='email'
+                                    {...register('email')}
+                                    data-test-id='email-input'
+                                />
                                 <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
                             </FormControl>
 
-                            <Button onClick={onNext} colorScheme='green' width='full'>
-                                Далее
+                            <Button
+                                onClick={onNext}
+                                colorScheme='black'
+                                width='100%'
+                                data-test-id='submit-button'
+                            >
+                                Дальше
                             </Button>
                         </>
                     ) : (
                         <>
                             <FormControl isInvalid={!!errors.login}>
                                 <FormLabel htmlFor='login'>Логин</FormLabel>
-                                <Input id='login' {...register('login')} />
+                                <Input
+                                    id='login'
+                                    {...register('login')}
+                                    data-test-id='login-input'
+                                />
                                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                             </FormControl>
 
@@ -251,6 +281,7 @@ export const RegistrationForm = () => {
                                         id='password'
                                         type={showPassword ? 'text' : 'password'}
                                         {...register('password')}
+                                        data-test-id='password-input'
                                     />
                                     <InputRightElement>
                                         <IconButton
@@ -278,6 +309,7 @@ export const RegistrationForm = () => {
                                         id='confirmPassword'
                                         type={showConfirmPassword ? 'text' : 'password'}
                                         {...register('confirmPassword')}
+                                        data-test-id='confirm-password-input'
                                     />
                                     <InputRightElement>
                                         <IconButton
@@ -314,6 +346,7 @@ export const RegistrationForm = () => {
                                     colorScheme='blue'
                                     isLoading={isLoading}
                                     isDisabled={!isValid}
+                                    data-test-id='submit-button'
                                 >
                                     Зарегистрироваться
                                 </Button>

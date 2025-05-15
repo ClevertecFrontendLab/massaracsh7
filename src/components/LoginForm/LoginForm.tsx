@@ -96,6 +96,7 @@ export const LoginForm = () => {
                             title: 'Ошибка сервера',
                             description: 'Что-то пошло не так. Повторите попытку позже.',
                             imageSrc: '/images/modal-breakfast.png',
+                            dataId: 'sign-in-error-modal',
                             onPrimaryAction: async () => {
                                 try {
                                     await login(data as LoginRequest).unwrap();
@@ -113,7 +114,7 @@ export const LoginForm = () => {
 
     return (
         <Box maxW='400px' mx='auto' mt='50px'>
-            <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+            <form autoComplete='off' onSubmit={handleSubmit(onSubmit)} data-test-id='sign-in-form'>
                 <VStack spacing={4}>
                     <FormControl isInvalid={!!errors.login}>
                         <FormLabel htmlFor='login'>Логин</FormLabel>
@@ -125,6 +126,7 @@ export const LoginForm = () => {
                                 setValue('login', trimmed);
                                 trigger('login');
                             }}
+                            data-test-id='login-input'
                         />
                         <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                     </FormControl>
@@ -136,6 +138,7 @@ export const LoginForm = () => {
                                 id='password'
                                 type={showPassword ? 'text' : 'password'}
                                 {...register('password')}
+                                data-test-id='password-input'
                             />
                             <InputRightElement>
                                 <Button
@@ -147,6 +150,7 @@ export const LoginForm = () => {
                                     onTouchStart={() => setShowPassword(true)}
                                     onTouchEnd={() => setShowPassword(false)}
                                     aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                                    data-test-id='password-visibility-button'
                                 >
                                     {showPassword ? <ViewOffIcon /> : <ViewIcon />}
                                 </Button>
@@ -162,6 +166,7 @@ export const LoginForm = () => {
                             colorScheme='blue'
                             isLoading={isLoading}
                             isDisabled={!isValid}
+                            data-test-id='submit-button'
                         >
                             Войти
                         </Button>

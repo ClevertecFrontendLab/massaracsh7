@@ -20,6 +20,7 @@ export interface ModalPayload {
     onPrimaryAction?: () => Promise<void>;
     primaryActionText?: string;
     footerNote?: string;
+    dataId?: string;
 }
 
 type AlertType = 'error' | 'success' | 'warning' | 'info';

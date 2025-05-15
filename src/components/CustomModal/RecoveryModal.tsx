@@ -90,6 +90,12 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
         reset: '/images/modal-breakfast.png',
     };
 
+    const dataId: Record<typeof step, string> = {
+        email: 'send-email-modal',
+        code: 'verification-code-modal',
+        reset: 'reset-credentials-modal',
+    };
+
     const {
         register,
         handleSubmit,
@@ -170,13 +176,19 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent position='relative'>
-                <CloseButton position='absolute' right='1rem' top='1rem' onClick={onClose} />
+            <ModalContent position='relative' data-test-id={dataId[step]}>
+                <CloseButton
+                    position='absolute'
+                    right='1rem'
+                    top='1rem'
+                    onClick={onClose}
+                    data-test-id='close-button'
+                />
                 {imageByStep[step] && (
                     <Box mt={4} mb={2}>
                         <Image src={imageByStep[step]} alt='Modal illustration' mx='auto' />
                     </Box>
-                )}{' '}
+                )}
                 <ModalHeader>
                     {step === 'email' && 'Восстановление доступа'}
                     {step === 'code' && 'Введите код из письма'}
@@ -193,6 +205,7 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                     placeholder='Ваш e-mail'
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    data-test-id='email-input'
                                 />
                             </FormControl>
                         )}
@@ -203,7 +216,10 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                 <HStack justify='center'>
                                     <PinInput otp value={code} onChange={setCode}>
                                         {[...Array(6)].map((_, i) => (
-                                            <PinInputField key={i} />
+                                            <PinInputField
+                                                key={i}
+                                                data-test-id={`verification-code-input-${i}`}
+                                            />
                                         ))}
                                     </PinInput>
                                 </HStack>
@@ -220,13 +236,17 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                 <VStack spacing={4}>
                                     <FormControl isInvalid={!!errors.login}>
                                         <FormLabel>Логин</FormLabel>
-                                        <Input {...register('login')} />
+                                        <Input {...register('login')} data-test-id='login-input' />
                                         <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                                     </FormControl>
 
                                     <FormControl isInvalid={!!errors.password}>
                                         <FormLabel>Пароль</FormLabel>
-                                        <Input type='password' {...register('password')} />
+                                        <Input
+                                            type='password'
+                                            {...register('password')}
+                                            data-test-id='password-input'
+                                        />
                                         <FormErrorMessage>
                                             {errors.password?.message}
                                         </FormErrorMessage>
@@ -234,7 +254,11 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
 
                                     <FormControl isInvalid={!!errors.passwordConfirm}>
                                         <FormLabel>Повторите пароль</FormLabel>
-                                        <Input type='password' {...register('passwordConfirm')} />
+                                        <Input
+                                            type='password'
+                                            {...register('passwordConfirm')}
+                                            data-test-id='confirm-password-input'
+                                        />
                                         <FormErrorMessage>
                                             {errors.passwordConfirm?.message}
                                         </FormErrorMessage>
@@ -250,8 +274,12 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                 </ModalBody>
                 {step !== 'reset' && (
                     <ModalFooter justifyContent='space-between'>
-                        <Button colorScheme='green' onClick={() => handleNext()}>
-                            Далее
+                        <Button
+                            colorScheme='green'
+                            onClick={() => handleNext()}
+                            data-test-id='submit-button'
+                        >
+                            {step === 'email' ? 'Получить код' : 'Зарегистрироваться'}
                         </Button>
                     </ModalFooter>
                 )}

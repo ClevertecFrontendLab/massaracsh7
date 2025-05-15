@@ -27,8 +27,9 @@ export const VerificationPage = () => {
                 setAppModal({
                     title: 'Упс. Что-то пошло не так',
                     description: `Ваша ссылка верификации не действительна. Попробуйте зарегистрироваться снова`,
-                    imageSrc: '/images/modal-breakfast.png',
+                    imageSrc: '/images/modal-tea.png',
                     footerNote: 'Остались вопросы? Свяжитесь с поддержкой',
+                    dataId: 'email-verification-failed-modal',
                 }),
             );
         }

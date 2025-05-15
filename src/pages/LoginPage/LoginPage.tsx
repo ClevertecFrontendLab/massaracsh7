@@ -11,7 +11,11 @@ export const LoginPage = () => {
     return (
         <AuthLayout activeTab='login'>
             <LoginForm />
-            <Button variant='ghost' onClick={() => setRecoveryOpen(true)}>
+            <Button
+                variant='ghost'
+                onClick={() => setRecoveryOpen(true)}
+                data-test-id='forgot-password'
+            >
                 Забыли логин или пароль
             </Button>
 

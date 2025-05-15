@@ -28,17 +28,25 @@ export const CustomModal = () => {
         onPrimaryAction,
         primaryActionText = 'Повторить',
         footerNote,
+        dataId,
     } = modal;
 
     return (
         <Modal isOpen={true} onClose={() => dispatch(clearModal())} isCentered>
             <ModalOverlay />
-            <ModalContent maxW='sm' p={6} textAlign='center' position='relative'>
+            <ModalContent
+                maxW='sm'
+                p={6}
+                textAlign='center'
+                position='relative'
+                data-test-id={dataId}
+            >
                 <CloseButton
                     position='absolute'
                     right='1rem'
                     top='1rem'
                     onClick={() => dispatch(clearModal())}
+                    data-test-id='close-button'
                 />
 
                 {imageSrc && (
@@ -57,7 +65,11 @@ export const CustomModal = () => {
 
                 <ModalFooter p={0} mt={6} display='flex' justifyContent='center'>
                     {onPrimaryAction ? (
-                        <Button colorScheme='green' onClick={onPrimaryAction}>
+                        <Button
+                            colorScheme='green'
+                            onClick={onPrimaryAction}
+                            data-test-id='repeat-button'
+                        >
                             {primaryActionText}
                         </Button>
                     ) : (
