@@ -24,8 +24,19 @@ import { useAppDispatch } from '~/store/hooks';
 import { LoginRequest } from '~/types/authTypes';
 
 const schema = z.object({
-    login: z.string().nonempty('Введите логин').max(50, 'Максимальная длина 50 символов'),
-    password: z.string().nonempty('Введите пароль').max(50, 'Максимальная длина 50 символов'),
+    login: z
+        .string()
+        .min(5, 'Не соответствует формату')
+        .max(50, 'Максимальная длина 50 символов')
+        .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату'),
+
+    password: z
+        .string()
+        .nonempty('Введите пароль')
+        .max(50, 'Максимальная длина 50 символов')
+        .min(8, 'Пароль должен быть не короче 8 символов')
+        .regex(/[A-ZА-Я]/, 'Не соответствует формату')
+        .regex(/\d/, 'Не соответствует формату'),
 });
 
 type IForm = z.infer<typeof schema>;

@@ -11,14 +11,15 @@ export type SelectOption = {
     label: string;
 };
 
+export type InputType = 'text' | 'code';
+
 export interface ModalPayload {
     title: string;
     description: string;
     imageSrc?: string;
-    onPrimaryAction?: (email?: string | undefined) => Promise<void>;
+    onPrimaryAction?: () => Promise<void>;
     primaryActionText?: string;
     footerNote?: string;
-    withInput?: boolean;
 }
 
 type AlertType = 'error' | 'success' | 'warning' | 'info';
