@@ -26,6 +26,7 @@ import { LoginRequest } from '~/types/authTypes';
 const schema = z.object({
     login: z
         .string()
+        .nonempty('Введите логин')
         .min(5, 'Не соответствует формату')
         .max(50, 'Максимальная длина 50 символов')
         .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату'),
@@ -42,7 +43,7 @@ const schema = z.object({
 type IForm = z.infer<typeof schema>;
 
 export const LoginForm = () => {
-    const [login, { isLoading }] = useLoginMutation();
+    const [login] = useLoginMutation();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -53,7 +54,7 @@ export const LoginForm = () => {
         setValue,
         watch,
         trigger,
-        formState: { errors, isValid },
+        formState: { errors },
     } = useForm<IForm>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -86,21 +87,26 @@ export const LoginForm = () => {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: 'Email не верифицирован.',
+                            title: 'E-mail не верифицирован',
                             message: 'Проверьте почту и перейдите по ссылке',
                         }),
                     );
                 } else if (String(status).startsWith('5')) {
                     dispatch(
                         setAppModal({
-                            title: 'Ошибка сервера',
-                            description: 'Что-то пошло не так. Повторите попытку позже.',
+                            title: 'Вход не выполнен',
+                            description: 'Что-то пошло не так. Попробуйте еще раз',
                             imageSrc: '/images/modal-breakfast.png',
                             dataId: 'sign-in-error-modal',
                             onPrimaryAction: async () => {
                                 try {
                                     await login(data as LoginRequest).unwrap();
-                                    navigate('/');
+                                    // for (let i = 0; i < 10; i++) {
+                                    //     const token = getAccessToken();
+                                    //     if (token) break;
+                                    //     await new Promise((res) => setTimeout(res, 50));
+                                    // }
+                                    // navigate('/');
                                 } catch {
                                     console.log('error');
                                 }
@@ -117,7 +123,7 @@ export const LoginForm = () => {
             <form autoComplete='off' onSubmit={handleSubmit(onSubmit)} data-test-id='sign-in-form'>
                 <VStack spacing={4}>
                     <FormControl isInvalid={!!errors.login}>
-                        <FormLabel htmlFor='login'>Логин</FormLabel>
+                        <FormLabel htmlFor='login'>Логин для входа на сайт</FormLabel>
                         <Input
                             id='login'
                             {...register('login')}
@@ -126,6 +132,7 @@ export const LoginForm = () => {
                                 setValue('login', trimmed);
                                 trigger('login');
                             }}
+                            placeholder='Введите логин'
                             data-test-id='login-input'
                         />
                         <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
@@ -139,6 +146,7 @@ export const LoginForm = () => {
                                 type={showPassword ? 'text' : 'password'}
                                 {...register('password')}
                                 data-test-id='password-input'
+                                placeholder='Пароль для сайта'
                             />
                             <InputRightElement>
                                 <Button
@@ -164,8 +172,6 @@ export const LoginForm = () => {
                             type='submit'
                             flex={1}
                             colorScheme='blue'
-                            isLoading={isLoading}
-                            isDisabled={!isValid}
                             data-test-id='submit-button'
                         >
                             Войти

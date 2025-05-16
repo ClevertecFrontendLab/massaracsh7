@@ -4,6 +4,7 @@ import {
     Button,
     FormControl,
     FormErrorMessage,
+    FormHelperText,
     FormLabel,
     HStack,
     IconButton,
@@ -227,6 +228,11 @@ export const RegistrationForm = () => {
                                 <Input
                                     id='firstName'
                                     {...register('firstName')}
+                                    onBlur={() => {
+                                        const trimmed = watch('firstName').trim();
+                                        setValue('firstName', trimmed);
+                                        trigger('firstName');
+                                    }}
                                     data-test-id='first-name-input'
                                 />
                                 <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
@@ -237,6 +243,11 @@ export const RegistrationForm = () => {
                                 <Input
                                     id='lastName'
                                     {...register('lastName')}
+                                    onBlur={() => {
+                                        const trimmed = watch('lastName').trim();
+                                        setValue('lastName', trimmed);
+                                        trigger('lastName');
+                                    }}
                                     data-test-id='last-name-input'
                                 />
                                 <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
@@ -248,6 +259,11 @@ export const RegistrationForm = () => {
                                     id='email'
                                     type='email'
                                     {...register('email')}
+                                    onBlur={() => {
+                                        const trimmed = watch('email').trim();
+                                        setValue('email', trimmed);
+                                        trigger('email');
+                                    }}
                                     data-test-id='email-input'
                                 />
                                 <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
@@ -255,8 +271,8 @@ export const RegistrationForm = () => {
 
                             <Button
                                 onClick={onNext}
-                                colorScheme='black'
-                                width='100%'
+                                colorScheme='green'
+                                width='full'
                                 data-test-id='submit-button'
                             >
                                 Дальше
@@ -269,8 +285,16 @@ export const RegistrationForm = () => {
                                 <Input
                                     id='login'
                                     {...register('login')}
+                                    onBlur={() => {
+                                        const trimmed = watch('login').trim();
+                                        setValue('login', trimmed);
+                                        trigger('login');
+                                    }}
                                     data-test-id='login-input'
                                 />
+                                <FormHelperText>
+                                    Не менее 5 символов, только латиница
+                                </FormHelperText>
                                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                             </FormControl>
 
@@ -299,6 +323,9 @@ export const RegistrationForm = () => {
                                         />
                                     </InputRightElement>
                                 </InputGroup>
+                                <FormHelperText>
+                                    Не менее 8 символов, с заглавной буквой и цифрой
+                                </FormHelperText>
                                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                             </FormControl>
 

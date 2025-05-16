@@ -9,6 +9,7 @@ import {
 import { getAccessToken, isTokenExpired, removeTokens, saveAccessToken } from './tokenUtils';
 
 const API_BASE_URL = 'https://marathon-api.clevertec.ru';
+const looksLikeJwt = (token: string) => token.split('.').length === 3;
 
 const rawBaseQuery = fetchBaseQuery({
     baseUrl: API_BASE_URL,
@@ -22,7 +23,7 @@ export const fetchBaseQueryToken: BaseQueryFn<
 > = async (args, api: BaseQueryApi, extraOptions) => {
     let accessToken = getAccessToken();
 
-    if (accessToken && isTokenExpired(accessToken)) {
+    if (accessToken && looksLikeJwt(accessToken) && isTokenExpired(accessToken)) {
         const refreshResult = await rawBaseQuery(
             {
                 url: '/auth/refresh',
@@ -35,7 +36,7 @@ export const fetchBaseQueryToken: BaseQueryFn<
         if (refreshResult.error) {
             removeTokens();
             if (typeof window !== 'undefined') {
-                window.location.href = '/signin';
+                window.location.href = '/login';
             }
             return refreshResult;
         }
@@ -75,13 +76,5 @@ export const fetchBaseQueryToken: BaseQueryFn<
 
     const result = await rawBaseQuery(finalArgs, api, extraOptions);
     console.log(result);
-    // if (result.error?.status === 401 || result.error?.status === 403) {
-    //     api.dispatch({ type: 'auth/logout' });
-    //     removeTokens();
-    //     if (typeof window !== 'undefined') {
-    //         window.location.href = '/signin';
-    //     }
-    // }
-
     return result;
 };

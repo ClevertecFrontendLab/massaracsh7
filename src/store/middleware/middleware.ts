@@ -1,5 +1,6 @@
 import { Middleware } from '@reduxjs/toolkit';
 
+import { authApiSlice } from '~/query/services/auth';
 import { categoriesApiSlice } from '~/query/services/categories';
 import { recipesApiSlice } from '~/query/services/recipes';
 
@@ -8,6 +9,7 @@ import { setAppLoader } from '../app-slice';
 const START_LOAD = [
     categoriesApiSlice.endpoints.getCategories.matchPending,
     recipesApiSlice.endpoints.getRecipes.matchPending,
+    authApiSlice.endpoints.login.matchPending,
 ];
 
 const END_LOAD = [
@@ -15,6 +17,8 @@ const END_LOAD = [
     categoriesApiSlice.endpoints.getCategories.matchRejected,
     recipesApiSlice.endpoints.getRecipes.matchFulfilled,
     recipesApiSlice.endpoints.getRecipes.matchRejected,
+    authApiSlice.endpoints.login.matchFulfilled,
+    authApiSlice.endpoints.login.matchRejected,
 ];
 
 export const loaderMiddleware: Middleware = (store) => (next) => (action) => {

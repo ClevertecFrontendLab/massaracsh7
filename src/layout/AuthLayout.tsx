@@ -38,7 +38,7 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
                                 color={tabIndex === 0 ? 'blue.500' : 'gray.500'}
                                 _hover={{ color: 'blue.400' }}
                             >
-                                Вход
+                                Вход на сайт
                             </Tab>
                             <Tab
                                 fontSize='2xl'

@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { Navigate } from 'react-router';
 
-import { getAccessToken, isTokenExpired } from '~/utils/tokenUtils';
+import { getAccessToken } from '~/utils/tokenUtils';
 
 import { ROUTES_PATH } from './routes';
 
@@ -12,7 +12,7 @@ interface Props {
 export const PrivateRoute = ({ children }: Props) => {
     const accessToken = getAccessToken();
 
-    if (!accessToken || isTokenExpired(accessToken)) {
+    if (!accessToken) {
         return <Navigate to={ROUTES_PATH.LOG_IN} replace />;
     }
 
