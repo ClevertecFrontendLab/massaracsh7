@@ -13,7 +13,6 @@ export const VerificationPage = () => {
 
     useEffect(() => {
         if (emailVerified === 'true') {
-            console.log('You are OK!');
             navigate(ROUTES_PATH.LOG_IN);
             dispatch(
                 setAppAlert({
@@ -25,8 +24,8 @@ export const VerificationPage = () => {
             navigate(ROUTES_PATH.SIGN_IN);
             dispatch(
                 setAppModal({
-                    title: 'Упс. Что-то пошло не так',
-                    description: `Ваша ссылка верификации не действительна. Попробуйте зарегистрироваться снова`,
+                    title: 'Упс! Что-то пошло не так',
+                    description: `Ваша ссылка для верификации недействительна. Попробуйте зарегистрироваться снова.`,
                     imageSrc: '/images/modal-tea.png',
                     footerNote: 'Остались вопросы? Свяжитесь с поддержкой',
                     dataId: 'email-verification-failed-modal',

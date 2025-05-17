@@ -42,6 +42,7 @@ export interface VerifyOtpResponse {
 
 export interface ResetPasswordRequest {
     login: string;
+    email: string;
     password: string;
     passwordConfirm: string;
 }

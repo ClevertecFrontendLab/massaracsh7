@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { z } from 'zod';
 
 import { useSignupMutation } from '~/query/services/auth';
@@ -30,40 +31,43 @@ const schema = z
         firstName: z
             .string()
             .nonempty('Введите имя')
-            .regex(/^[А-ЯЁ][а-яё-]*$/, 'Должно начинаться с кириллицы А-Я')
-            .regex(/^[А-Яа-я-]+$/, 'Только кириллица А-Я, и "-"')
-            .max(50, 'Максимальная длина 50 символов'),
+            .max(50, 'Максимальная длина 50 символов')
+            .refine((val) => /^[А-ЯЁ]$/.test(val[0]), {
+                message: 'Должно начинаться с кириллицы А-Я',
+            })
+            .refine((val) => val.slice(1).match(/^[А-Яа-яЁё-]*$/), {
+                message: 'Только кириллица А-Я, и "-"',
+            }),
         lastName: z
             .string()
             .nonempty('Введите фамилию')
-            .regex(/^[А-ЯЁ][а-яё-]*$/, 'Должно начинаться с кириллицы А-Я')
-            .regex(/^[А-Яа-я-]+$/, 'Только кириллица А-Я, и "-"')
-            .max(50, 'Максимальная длина 50 символов'),
+            .max(50, 'Максимальная длина 50 символов')
+            .refine((val) => /^[А-ЯЁ]$/.test(val[0]), {
+                message: 'Должно начинаться с кириллицы А-Я',
+            })
+            .refine((val) => val.slice(1).match(/^[А-Яа-яЁё-]*$/), {
+                message: 'Только кириллица А-Я, и "-"',
+            }),
         email: z
             .string()
             .nonempty('Введите e-mail')
-            .email('Введите корректный e-mail')
-            .max(50, 'Максимальная длина 50 символов'),
+            .max(50, 'Максимальная длина 50 символов')
+            .email('Введите корректный e-mail'),
         login: z
             .string()
             .nonempty('Введите логин')
-            .min(5, 'Минимум 5 символов')
             .max(50, 'Максимальная длина 50 символов')
+            .min(5, 'Не соответствует формату')
             .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату'),
         password: z
             .string()
             .nonempty('Введите пароль')
             .max(50, 'Максимальная длина 50 символов')
-            .min(8, 'Пароль должен быть не короче 8 символов')
+            .min(8, 'Не соответствует формату')
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату')
             .regex(/[A-ZА-Я]/, 'Не соответствует формату')
             .regex(/\d/, 'Не соответствует формату'),
-        confirmPassword: z
-            .string()
-            .nonempty('Введите пароль')
-            .max(50, 'Максимальная длина 50 символов')
-            .min(8, 'Пароль должен быть не короче 8 символов')
-            .regex(/[A-ZА-Я]/, 'Не соответствует формату')
-            .regex(/\d/, 'Не соответствует формату'),
+        confirmPassword: z.string().nonempty('Повторите пароль'),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: 'Пароли должны совпадать',
@@ -91,8 +95,9 @@ export const RegistrationForm = () => {
     });
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
-    const [signup, { isLoading }] = useSignupMutation();
+    const [signup] = useSignupMutation();
     const {
         register,
         handleSubmit,
@@ -100,7 +105,7 @@ export const RegistrationForm = () => {
         getValues,
         setValue,
         watch,
-        formState: { errors, isValid },
+        formState: { errors },
     } = useForm<IForm>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -126,9 +131,13 @@ export const RegistrationForm = () => {
             'confirmPassword',
         ];
 
-        const validCount = allFields.filter((field) => values[field]).length;
+        const validCount = allFields.filter((field) => {
+            const val = values[field];
+            const hasError = Boolean(errors[field]);
+            return val && !hasError;
+        }).length;
         return Math.round((validCount / allFields.length) * 100);
-    }, [values]);
+    }, [values, errors]);
 
     const onNext = async () => {
         const ok = await trigger(['firstName', 'lastName', 'email']);
@@ -163,10 +172,11 @@ export const RegistrationForm = () => {
         try {
             const result = await signup(payload as SignUpRequest).unwrap();
             console.log(result);
+            navigate('/login');
             dispatch(
                 setAppModal({
-                    title: 'Остался последний шаг. Нужно верифицировать email',
-                    description: `Мы отправили Вам на почту ${payload.email} ссылку для вериификации`,
+                    title: 'Остался последний шаг. Нужно верифицировать ваш e-mail',
+                    description: `Мы отправили вам на почту ${payload.email} ссылку для верификации.`,
                     imageSrc: '/images/modal-success.png',
                     footerNote:
                         'Не пришло письмо? Проверьте папаку Спам. По другим вопросам свяжитесь с поддержкой',
@@ -370,9 +380,7 @@ export const RegistrationForm = () => {
                                 <Button
                                     type='submit'
                                     flex={1}
-                                    colorScheme='blue'
-                                    isLoading={isLoading}
-                                    isDisabled={!isValid}
+                                    colorScheme='green'
                                     data-test-id='submit-button'
                                 >
                                     Зарегистрироваться
