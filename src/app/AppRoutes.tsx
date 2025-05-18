@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router';
 
 import { CustomModal } from '~/components/CustomModal/CustomModal';
@@ -13,8 +12,7 @@ import { NotFoundPage } from '~/pages/NotFoundPage/NotFoundPage';
 import { RecipePage } from '~/pages/RecipePage/RecipePage';
 import { SignInPage } from '~/pages/SignInPage/SignInPage';
 import { VerificationPage } from '~/pages/VerificationPage/VerificationPage';
-import { setAppLoader } from '~/store/app-slice';
-import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { useAppSelector } from '~/store/hooks';
 import { userLoadingSelector } from '~/store/selectors/appSelectors';
 
 import { PrivateRoute } from './PrivateRoute';
@@ -23,25 +21,15 @@ import { ROUTES_PATH } from './routes';
 const AppRoutes = () => {
     const isLoading = useAppSelector(userLoadingSelector);
     const modal = useAppSelector((state) => state.app.modal);
+    const alert = useAppSelector((state) => state.app.alert);
     const location = useLocation();
-    const dispatch = useAppDispatch();
-
     const isNotFound = location.pathname === ROUTES_PATH.NOT_FOUND;
-
-    useEffect(() => {
-        if (ROUTES_PATH.SIGN_IN.includes(location.pathname)) {
-            dispatch(setAppLoader(false));
-        }
-        if (ROUTES_PATH.LOG_IN.includes(location.pathname)) {
-            dispatch(setAppLoader(false));
-        }
-    }, [location.pathname, dispatch]);
 
     return (
         <>
             {modal && <CustomModal />}
-            {isLoading && !isNotFound && <FullLoader />}
-            <AppAlert />
+            {!isNotFound && isLoading && <FullLoader />}
+            {alert && <AppAlert />}
             <Routes>
                 <Route
                     path={ROUTES_PATH.HOME}

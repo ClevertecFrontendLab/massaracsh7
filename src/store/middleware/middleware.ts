@@ -6,28 +6,44 @@ import { recipesApiSlice } from '~/query/services/recipes';
 
 import { setAppLoader } from '../app-slice';
 
-const START_LOAD = [
-    categoriesApiSlice.endpoints.getCategories.matchPending,
-    recipesApiSlice.endpoints.getRecipes.matchPending,
-    authApiSlice.endpoints.login.matchPending,
-];
+let loadCount = 0;
+const MAX_LOAD_COUNT = 2;
 
-const END_LOAD = [
-    categoriesApiSlice.endpoints.getCategories.matchFulfilled,
-    categoriesApiSlice.endpoints.getCategories.matchRejected,
-    recipesApiSlice.endpoints.getRecipes.matchFulfilled,
-    recipesApiSlice.endpoints.getRecipes.matchRejected,
-    authApiSlice.endpoints.login.matchFulfilled,
-    authApiSlice.endpoints.login.matchRejected,
-];
+let isInitialAppLoad = true;
 
 export const loaderMiddleware: Middleware = (store) => (next) => (action) => {
-    if (START_LOAD.some((match) => match(action))) {
+    if (
+        authApiSlice.endpoints.login.matchPending(action) ||
+        authApiSlice.endpoints.verifyOtp.matchPending(action) ||
+        authApiSlice.endpoints.resetPassword.matchPending(action)
+    ) {
         store.dispatch(setAppLoader(true));
     }
 
-    if (END_LOAD.some((match) => match(action))) {
+    if (
+        authApiSlice.endpoints.login.matchFulfilled(action) ||
+        authApiSlice.endpoints.login.matchRejected(action) ||
+        authApiSlice.endpoints.verifyOtp.matchFulfilled(action) ||
+        authApiSlice.endpoints.verifyOtp.matchRejected(action) ||
+        authApiSlice.endpoints.resetPassword.matchFulfilled(action) ||
+        authApiSlice.endpoints.resetPassword.matchRejected(action)
+    ) {
         store.dispatch(setAppLoader(false));
+    }
+
+    if (isInitialAppLoad) {
+        if (
+            categoriesApiSlice.endpoints.getCategories.matchFulfilled(action) ||
+            recipesApiSlice.endpoints.getRecipes.matchFulfilled(action)
+        ) {
+            loadCount += 1;
+
+            if (loadCount >= MAX_LOAD_COUNT) {
+                store.dispatch(setAppLoader(false));
+                isInitialAppLoad = false;
+                loadCount = 0;
+            }
+        }
     }
 
     return next(action);

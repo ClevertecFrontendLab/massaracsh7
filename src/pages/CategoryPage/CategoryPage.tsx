@@ -123,7 +123,7 @@ export const CategoryPage = () => {
         return <Navigate to='/not-found' replace />;
     }
 
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 
@@ -159,7 +159,9 @@ export const CategoryPage = () => {
 
             <TabsCategory subcategories={cat?.subCategories ?? []} />
 
-            {recipesData?.data && <RecipeList recipes={recipesData.data} gridVariant='low' />}
+            {!isLoading && !isFetching && recipesData?.data && recipesData?.data?.length > 0 && (
+                <RecipeList recipes={recipesData.data} gridVariant='low' />
+            )}
 
             {randomRecipes && (
                 <KitchenSection

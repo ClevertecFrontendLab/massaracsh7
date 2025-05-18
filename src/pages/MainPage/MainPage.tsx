@@ -151,7 +151,7 @@ export const MainPage = () => {
                         display={{
                             base: 'flex',
                             sm: 'none',
-                            md: 'flex',
+                            md: 'none',
                             lg: 'flex',
                             xl: 'flex',
                         }}
@@ -174,7 +174,7 @@ export const MainPage = () => {
             )}
 
             <Button
-                display={{ base: 'none', sm: 'block', md: 'none', lg: 'none', xl: 'none' }}
+                display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
                 data-test-id={JUICIEST_LINK_MOB}
                 variant='limeSolid'
                 size='large'

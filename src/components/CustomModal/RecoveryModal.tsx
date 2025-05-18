@@ -60,9 +60,10 @@ const resetSchema = z
             .string()
             .nonempty('Введите пароль')
             .max(50, 'Максимальная длина 50 символов')
-            .min(8, 'Пароль должен быть не короче 8 символов')
-            .regex(/[A-Z]/, 'Должна быть хотя бы одна заглавная латинская буква')
-            .regex(/\d/, 'Должна быть хотя бы одна цифра'),
+            .min(8, 'Не соответствует формату')
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату')
+            .regex(/[A-ZА-Я]/, 'Не соответствует формату')
+            .regex(/\d/, 'Не соответствует формату'),
         passwordConfirm: z.string().nonempty('Повторите пароль'),
     })
     .refine((d) => d.password === d.passwordConfirm, {
@@ -107,9 +108,13 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
 
     const {
         register: regReset,
-        handleSubmit: submitReset,
+        // handleSubmit: submitReset,
+        getValues,
+        setValue: setResetValue,
         formState: { errors: errReset },
         reset: resetResetForm,
+        watch: watchReset,
+        trigger: triggerReset,
     } = useForm<ResetForm>({
         resolver: zodResolver(resetSchema),
         mode: 'onChange',
@@ -162,12 +167,12 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
         }
     };
 
-    const onSubmitCode = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const submitCode = async (value: string) => {
         setGeneralError(undefined);
         setTitleError('');
         try {
-            await verifyOtp({ email: emailValue, otpToken: code }).unwrap();
+            await verifyOtp({ email: emailValue, otpToken: value }).unwrap();
+            setResetValue('email', emailValue);
             setStep('reset');
         } catch (err) {
             const e = err as FetchBaseQueryError;
@@ -187,22 +192,53 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
         }
     };
 
+    const onSubmitCode = (e: React.FormEvent) => {
+        e.preventDefault();
+        submitCode(code);
+    };
+
+    // const onSubmitCode = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     setGeneralError(undefined);
+    //     setTitleError('');
+    //     try {
+    //         await verifyOtp({ email: emailValue, otpToken: code }).unwrap();
+    //         setStep('reset');
+    //     } catch (err) {
+    //         const e = err as FetchBaseQueryError;
+    //         console.log(e);
+    //         if (e.status === 403) {
+    //             setTitleError('Неверный код.');
+    //         } else if (typeof e.status === 'number' && e.status >= 500) {
+    //             dispatch(
+    //                 setAppAlert({
+    //                     type: 'error',
+    //                     title: 'Ошибка сервера',
+    //                     message: 'Попробуйте немного позже',
+    //                 }),
+    //             );
+    //         }
+    //         setCode('');
+    //     }
+    // };
+
     const onSubmitReset = async (data: ResetForm) => {
         try {
             await resetPassword({
+                email: data.email,
                 login: data.login,
-                email: emailValue,
                 password: data.password,
                 passwordConfirm: data.passwordConfirm,
             }).unwrap();
             dispatch(
                 setAppAlert({
                     type: 'success',
-                    title: 'Успешно',
-                    message: 'Пароль сброшен. Войдите в систему.',
+                    title: 'Восстановление данных успешно',
+                    message: '',
                 }),
             );
-            handleClose();
+            // handleClose();
+            onClose();
             navigate('/login');
         } catch (err) {
             const e = err as FetchBaseQueryError;
@@ -215,7 +251,7 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                     }),
                 );
             }
-            resetResetForm();
+            // resetResetForm();
         }
     };
 
@@ -249,7 +285,7 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                         'Для восстановления входа введите ваш e-mail, куда можно отправить уникальный код'}
                     {step === 'code' &&
                         `Мы отправили вам на e-mail ${emailValue} шестизначный код. Введите его ниже.`}
-                    {step === 'reset' && 'Придумайте новый пароль'}
+                    {step === 'reset' && 'Восстановление аккаунта'}
                 </ModalHeader>
                 <ModalBody>
                     <VStack spacing={4} align='stretch'>
@@ -283,11 +319,19 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                         )}
 
                         {step === 'code' && (
-                            <form onSubmit={onSubmitCode} style={{ width: '100%' }}>
+                            <form onSubmit={onSubmitCode}>
                                 <FormControl isInvalid={!!generalError}>
                                     <FormLabel>Код</FormLabel>
                                     <HStack>
-                                        <PinInput otp value={code} onChange={setCode}>
+                                        <PinInput
+                                            otp
+                                            value={code}
+                                            onChange={setCode}
+                                            onComplete={(value) => {
+                                                setCode(value);
+                                                submitCode(value);
+                                            }}
+                                        >
                                             {[...Array(6)].map((_, i) => (
                                                 <PinInputField
                                                     key={i}
@@ -297,25 +341,39 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                             ))}
                                         </PinInput>
                                     </HStack>
-                                    <FormErrorMessage>{generalError}</FormErrorMessage>
+                                    <Button
+                                        mt={4}
+                                        type='submit'
+                                        colorScheme='green'
+                                        w='full'
+                                        data-test-id='submit-code'
+                                    >
+                                        Подтвердить
+                                    </Button>
                                 </FormControl>
-                                <Button
-                                    mt={4}
-                                    type='submit'
-                                    colorScheme='green'
-                                    w='full'
-                                    data-test-id='submit-code'
-                                >
-                                    Подтвердить
-                                </Button>
                             </form>
                         )}
 
                         {step === 'reset' && (
-                            <form onSubmit={submitReset(onSubmitReset)} style={{ width: '100%' }}>
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const values = getValues();
+                                    onSubmitReset(values);
+                                }}
+                                style={{ width: '100%' }}
+                            >
                                 <FormControl isInvalid={!!errReset.login}>
-                                    <FormLabel>Логин</FormLabel>
-                                    <Input {...regReset('login')} data-test-id='reset-login' />
+                                    <FormLabel>Введите логин</FormLabel>
+                                    <Input
+                                        {...regReset('login')}
+                                        onBlur={() => {
+                                            const trimmed = watchReset('login').trim();
+                                            setResetValue('login', trimmed);
+                                            triggerReset('login');
+                                        }}
+                                        data-test-id='login-input'
+                                    />
                                     <FormErrorMessage>{errReset.login?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errReset.password}>
@@ -323,7 +381,7 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                     <Input
                                         type='password'
                                         {...regReset('password')}
-                                        data-test-id='reset-password'
+                                        data-test-id='password-input'
                                     />
                                     <FormErrorMessage>
                                         {errReset.password?.message}
@@ -334,7 +392,7 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                     <Input
                                         type='password'
                                         {...regReset('passwordConfirm')}
-                                        data-test-id='reset-password-confirm'
+                                        data-test-id='confirm-password-input'
                                     />
                                     <FormErrorMessage>
                                         {errReset.passwordConfirm?.message}
@@ -345,7 +403,7 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                     type='submit'
                                     colorScheme='green'
                                     w='full'
-                                    data-test-id='submit-reset'
+                                    data-test-id='submit-button'
                                 >
                                     Сохранить
                                 </Button>

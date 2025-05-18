@@ -1,6 +1,9 @@
 import { Box, Flex, HStack, Image, Tab, TabList, Tabs, Text } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+
+import { setAppLoader } from '~/store/app-slice';
+import { useAppDispatch } from '~/store/hooks';
 
 interface AuthLayoutProps {
     children: ReactNode;
@@ -10,7 +13,11 @@ interface AuthLayoutProps {
 export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
     const navigate = useNavigate();
     const tabIndex = activeTab === 'login' ? 0 : 1;
+    const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        dispatch(setAppLoader(false));
+    }, [dispatch]);
     return (
         <Flex height='100vh' overflow='hidden'>
             <Flex

@@ -16,7 +16,7 @@ export const FullLoader = () => (
         display='flex'
         alignItems='center'
         justifyContent='center'
-        zIndex='overlay'
+        zIndex='1500'
     >
         <CustomLoader size='large' dataTestId={APP_LOADER} />
     </Box>

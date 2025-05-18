@@ -1,5 +1,5 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, CloseButton } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/constants/test-ids';
 import { clearAppAlert } from '~/store/app-slice';
@@ -9,17 +9,36 @@ export const AppAlert = () => {
     const alert = useAppSelector((state) => state.app.alert);
     const dispatch = useAppDispatch();
 
+    const [isOpen, setIsOpen] = useState(!!alert);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const closedManuallyRef = useRef(false);
+
     useEffect(() => {
-        if (!alert) return;
+        if (alert === null) return;
+        closedManuallyRef.current = false;
+        setIsOpen(true);
 
-        const timer = setTimeout(() => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+
+        timerRef.current = setTimeout(() => {
             dispatch(clearAppAlert());
-        }, 30000);
+            setIsOpen(false);
+        }, 15000);
 
-        return () => clearTimeout(timer);
+        return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
     }, [alert, dispatch]);
 
-    if (!alert) return null;
+    const handleClose = () => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = null;
+        closedManuallyRef.current = true;
+        setIsOpen(false);
+        dispatch(clearAppAlert());
+    };
+
+    if (!alert || !isOpen) return null;
 
     const { type, title, message } = alert;
 
@@ -55,7 +74,7 @@ export const AppAlert = () => {
                     right={-1}
                     top={-1}
                     ml='auto'
-                    onClick={() => dispatch(clearAppAlert())}
+                    onClick={handleClose}
                 />
             </Alert>
         </Box>
