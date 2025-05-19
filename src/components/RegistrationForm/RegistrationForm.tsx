@@ -1,104 +1,26 @@
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import {
-    Box,
-    Button,
-    FormControl,
-    FormErrorMessage,
-    FormHelperText,
-    FormLabel,
-    Heading,
-    HStack,
-    IconButton,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Progress,
-    VStack,
-} from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { z } from 'zod';
 
 import { useSignupMutation } from '~/query/services/auth';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import { SignUpRequest } from '~/types/authTypes';
 
-const schema = z
-    .object({
-        firstName: z
-            .string()
-            .nonempty('Введите имя')
-            .max(50, 'Максимальная длина 50 символов')
-            .refine((val) => /^[А-ЯЁ]$/.test(val[0]), {
-                message: 'Должно начинаться с кириллицы А-Я',
-            })
-            .refine((val) => val.slice(1).match(/^[А-Яа-яЁё-]*$/), {
-                message: 'Только кириллица А-Я, и "-"',
-            }),
-        lastName: z
-            .string()
-            .nonempty('Введите фамилию')
-            .max(50, 'Максимальная длина 50 символов')
-            .refine((val) => /^[А-ЯЁ]$/.test(val[0]), {
-                message: 'Должно начинаться с кириллицы А-Я',
-            })
-            .refine((val) => val.slice(1).match(/^[А-Яа-яЁё-]*$/), {
-                message: 'Только кириллица А-Я, и "-"',
-            }),
-        email: z
-            .string()
-            .nonempty('Введите e-mail')
-            .max(50, 'Максимальная длина 50 символов')
-            .email('Введите корректный e-mail'),
-        login: z
-            .string()
-            .nonempty('Введите логин')
-            .max(50, 'Максимальная длина 50 символов')
-            .min(5, 'Не соответствует формату')
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату'),
-        password: z
-            .string()
-            .nonempty('Введите пароль')
-            .max(50, 'Максимальная длина 50 символов')
-            .min(8, 'Не соответствует формату')
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату')
-            .regex(/[A-ZА-Я]/, 'Не соответствует формату')
-            .regex(/\d/, 'Не соответствует формату'),
-        confirmPassword: z.string().nonempty('Повторите пароль'),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-        message: 'Пароли должны совпадать',
-        path: ['confirmPassword'],
-    });
-
-type IForm = z.infer<typeof schema>;
+import { RegistrationFormData, registrationSchema } from './registrationSchema';
+import { Step1Form } from './Step1Form';
+import { Step2Form } from './Step2Form';
+import { StepProgress } from './StepProgress';
 
 export const RegistrationForm = () => {
     const [step, setStep] = useState<1 | 2>(1);
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    // const [step1Data, setStep1Data] = useState<Pick<IForm, 'firstName' | 'lastName' | 'email'>>({
-    //     firstName: '',
-    //     lastName: '',
-    //     email: '',
-    // });
-
-    // const [step2Data, setStep2Data] = useState<
-    //     Pick<IForm, 'login' | 'password' | 'confirmPassword'>
-    // >({
-    //     login: '',
-    //     password: '',
-    //     confirmPassword: '',
-    // });
-
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
     const [signup] = useSignupMutation();
+
     const {
         register,
         handleSubmit,
@@ -106,8 +28,8 @@ export const RegistrationForm = () => {
         setValue,
         watch,
         formState: { errors },
-    } = useForm<IForm>({
-        resolver: zodResolver(schema),
+    } = useForm<RegistrationFormData>({
+        resolver: zodResolver(registrationSchema),
         mode: 'onChange',
         shouldUnregister: false,
         defaultValues: {
@@ -122,7 +44,7 @@ export const RegistrationForm = () => {
 
     const values = watch();
     const progress = useMemo(() => {
-        const allFields: (keyof IForm)[] = [
+        const all: (keyof RegistrationFormData)[] = [
             'firstName',
             'lastName',
             'email',
@@ -130,48 +52,20 @@ export const RegistrationForm = () => {
             'password',
             'confirmPassword',
         ];
-
-        const validCount = allFields.filter((field) => {
-            const val = values[field];
-            const hasError = Boolean(errors[field]);
-            return val && !hasError;
-        }).length;
-        return Math.round((validCount / allFields.length) * 100);
+        const valid = all.filter((f) => values[f] && !errors[f]).length;
+        return Math.round((valid / all.length) * 100);
     }, [values, errors]);
 
     const onNext = async () => {
-        const ok = await trigger(['firstName', 'lastName', 'email']);
-        if (!ok) return;
-
-        // const [firstName, lastName, email] = getValues(['firstName', 'lastName', 'email']);
-        // setStep1Data({ firstName, lastName, email });
-
-        // setValue('login', step2Data.login);
-        // setValue('password', step2Data.password);
-        // setValue('confirmPassword', step2Data.confirmPassword);
-
-        setStep(2);
+        if (await trigger(['firstName', 'lastName', 'email'])) {
+            setStep(2);
+        }
     };
 
-    // const onBack = () => {
-    //     const [login, password, confirmPassword] = getValues([
-    //         'login',
-    //         'password',
-    //         'confirmPassword',
-    //     ]);
-    //     setValue('firstName', step1Data.firstName);
-    //     setValue('lastName', step1Data.lastName);
-    //     setValue('email', step1Data.email);
-    //     setStep2Data({ login, password, confirmPassword });
-    //     setStep(1);
-    // };
-
-    const onSubmit: SubmitHandler<IForm> = async (data) => {
+    const onSubmit: SubmitHandler<RegistrationFormData> = async (data) => {
         const { confirmPassword, ...payload } = data;
-
         try {
-            const result = await signup(payload as SignUpRequest).unwrap();
-            console.log(result);
+            await signup(payload as SignUpRequest).unwrap();
             navigate('/login');
             dispatch(
                 setAppModal({
@@ -187,20 +81,15 @@ export const RegistrationForm = () => {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
                 const status = fetchErr.status;
-                const message = (fetchErr.data as { message?: string })?.message;
-                if (status === 400 && message) {
-                    dispatch(
-                        setAppAlert({
-                            type: 'error',
-                            title: message,
-                        }),
-                    );
+                const msg = (fetchErr.data as { message?: string })?.message;
+                if (status === 400 && msg) {
+                    dispatch(setAppAlert({ type: 'error', title: msg }));
                 } else if (String(status).startsWith('5')) {
                     dispatch(
                         setAppAlert({
                             type: 'error',
                             title: 'Ошибка сервера',
-                            message: ' Попробуйте немного позже',
+                            message: 'Попробуйте немного позже',
                         }),
                     );
                 }
@@ -210,18 +99,7 @@ export const RegistrationForm = () => {
 
     return (
         <Box maxW='400px' mx='auto' mt='50px'>
-            <Heading as='h3' fontSize='16px' lineHeight='24px' w='full' textAlign='left'>
-                {step === 1 ? 'Шаг 1: Личная информация' : 'Шаг 2: Логин и пароль'}
-            </Heading>
-            <Progress
-                mb={6}
-                value={progress}
-                size='sm'
-                hasStripe
-                colorScheme='customLime'
-                bgColor='blackAlpha.100'
-                data-test-id='sign-up-progress'
-            />
+            <StepProgress step={step} progress={progress} />
 
             <form
                 autoComplete='off'
@@ -235,170 +113,25 @@ export const RegistrationForm = () => {
                 }
                 data-test-id='sign-up-form'
             >
-                <VStack spacing={6}>
-                    {step === 1 ? (
-                        <>
-                            <FormControl isInvalid={!!errors.firstName}>
-                                <FormLabel htmlFor='firstName'>Ваше имя</FormLabel>
-                                <Input
-                                    id='firstName'
-                                    {...register('firstName')}
-                                    onBlur={() => {
-                                        const trimmed = watch('firstName').trim();
-                                        setValue('firstName', trimmed);
-                                        trigger('firstName');
-                                    }}
-                                    variant='sign'
-                                    data-test-id='first-name-input'
-                                />
-                                <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={!!errors.lastName}>
-                                <FormLabel htmlFor='lastName'>Ваша фамилия</FormLabel>
-                                <Input
-                                    id='lastName'
-                                    {...register('lastName')}
-                                    onBlur={() => {
-                                        const trimmed = watch('lastName').trim();
-                                        setValue('lastName', trimmed);
-                                        trigger('lastName');
-                                    }}
-                                    variant='sign'
-                                    data-test-id='last-name-input'
-                                />
-                                <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={!!errors.email}>
-                                <FormLabel htmlFor='email'>Email</FormLabel>
-                                <Input
-                                    id='email'
-                                    type='email'
-                                    {...register('email')}
-                                    onBlur={() => {
-                                        const trimmed = watch('email').trim();
-                                        setValue('email', trimmed);
-                                        trigger('email');
-                                    }}
-                                    variant='sign'
-                                    data-test-id='email-input'
-                                />
-                                <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <Button
-                                onClick={onNext}
-                                variant='darkWhite'
-                                width='full'
-                                data-test-id='submit-button'
-                                mt={6}
-                            >
-                                Дальше
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <FormControl isInvalid={!!errors.login}>
-                                <FormLabel htmlFor='login'>Логин</FormLabel>
-                                <Input
-                                    id='login'
-                                    {...register('login')}
-                                    onBlur={() => {
-                                        const trimmed = watch('login').trim();
-                                        setValue('login', trimmed);
-                                        trigger('login');
-                                    }}
-                                    variant='sign'
-                                    data-test-id='login-input'
-                                />
-                                <FormHelperText>
-                                    Не менее 5 символов, только латиница
-                                </FormHelperText>
-                                <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={!!errors.password}>
-                                <FormLabel htmlFor='password'>Пароль</FormLabel>
-                                <InputGroup>
-                                    <Input
-                                        id='password'
-                                        type={showPassword ? 'text' : 'password'}
-                                        {...register('password')}
-                                        variant='sign'
-                                        data-test-id='password-input'
-                                    />
-                                    <InputRightElement>
-                                        <IconButton
-                                            size='sm'
-                                            variant='ghost'
-                                            aria-label={
-                                                showPassword ? 'Скрыть пароль' : 'Показать пароль'
-                                            }
-                                            icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                                            onMouseDown={() => setShowPassword(true)}
-                                            onMouseUp={() => setShowPassword(false)}
-                                            onMouseLeave={() => setShowPassword(false)}
-                                            onTouchStart={() => setShowPassword(true)}
-                                            onTouchEnd={() => setShowPassword(false)}
-                                        />
-                                    </InputRightElement>
-                                </InputGroup>
-                                <FormHelperText>
-                                    Не менее 8 символов, с заглавной буквой и цифрой
-                                </FormHelperText>
-                                <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={!!errors.confirmPassword}>
-                                <FormLabel htmlFor='confirmPassword'>Повторите пароль</FormLabel>
-                                <InputGroup>
-                                    <Input
-                                        id='confirmPassword'
-                                        type={showConfirmPassword ? 'text' : 'password'}
-                                        {...register('confirmPassword')}
-                                        variant='sign'
-                                        data-test-id='confirm-password-input'
-                                    />
-                                    <InputRightElement>
-                                        <IconButton
-                                            size='sm'
-                                            variant='ghost'
-                                            aria-label={
-                                                showConfirmPassword
-                                                    ? 'Скрыть пароль'
-                                                    : 'Показать пароль'
-                                            }
-                                            icon={
-                                                showConfirmPassword ? <ViewOffIcon /> : <ViewIcon />
-                                            }
-                                            onMouseDown={() => setShowConfirmPassword(true)}
-                                            onMouseUp={() => setShowConfirmPassword(false)}
-                                            onMouseLeave={() => setShowConfirmPassword(false)}
-                                            onTouchStart={() => setShowConfirmPassword(true)}
-                                            onTouchEnd={() => setShowConfirmPassword(false)}
-                                        />
-                                    </InputRightElement>
-                                </InputGroup>
-                                <FormErrorMessage>
-                                    {errors.confirmPassword?.message}
-                                </FormErrorMessage>
-                            </FormControl>
-
-                            <HStack width='full' spacing={4}>
-                                <Button
-                                    type='submit'
-                                    flex={1}
-                                    variant='darkWhite'
-                                    data-test-id='submit-button'
-                                    mt={6}
-                                >
-                                    Зарегистрироваться
-                                </Button>
-                            </HStack>
-                        </>
-                    )}
-                </VStack>
+                {step === 1 ? (
+                    <Step1Form
+                        register={register}
+                        errors={errors}
+                        trigger={trigger}
+                        setValue={setValue}
+                        watch={watch}
+                        onNext={onNext}
+                    />
+                ) : (
+                    <Step2Form
+                        register={register}
+                        errors={errors}
+                        trigger={trigger}
+                        setValue={setValue}
+                        watch={watch}
+                        onSubmit={handleSubmit(onSubmit)}
+                    />
+                )}
             </form>
         </Box>
     );

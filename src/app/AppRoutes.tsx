@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router';
 
-import { CustomModal } from '~/components/CustomModal/CustomModal';
 import { AppAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { FullLoader } from '~/components/FullLoader/FullLoader';
+import { CustomModal } from '~/components/Modal/CustomModal';
 import { Layout } from '~/layout/Layout';
 import { CategoryPage } from '~/pages/CategoryPage/CategoryPage';
 import { JuicyPage } from '~/pages/JuicyPage/JuicyPage';

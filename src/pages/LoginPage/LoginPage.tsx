@@ -1,8 +1,8 @@
 import { Button } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import { RecoveryModal } from '~/components/CustomModal/RecoveryModal';
 import { LoginForm } from '~/components/LoginForm/LoginForm';
+import { RecoveryModal } from '~/components/Modal/RecoveryModal';
 import { AuthLayout } from '~/layout/AuthLayout';
 
 export const LoginPage = () => {
