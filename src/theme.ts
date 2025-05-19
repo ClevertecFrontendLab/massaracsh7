@@ -1,8 +1,15 @@
 import { cardAnatomy } from '@chakra-ui/anatomy';
+import { modalAnatomy as parts } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers, defineStyleConfig, extendTheme } from '@chakra-ui/react';
-const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
-    cardAnatomy.keys,
-);
+const {
+    definePartsStyle: defineCardPartsStyle,
+    defineMultiStyleConfig: defineCardMultiStyleConfig,
+} = createMultiStyleConfigHelpers(cardAnatomy.keys);
+
+const {
+    definePartsStyle: defineModalPartsStyle,
+    defineMultiStyleConfig: defineModalMultiStyleConfig,
+} = createMultiStyleConfigHelpers(parts.keys);
 
 const Heading = defineStyleConfig({
     defaultProps: {
@@ -117,6 +124,29 @@ const Heading = defineStyleConfig({
     },
 });
 
+const Input = defineStyleConfig({
+    variants: {
+        sign: {
+            field: {
+                bgColor: 'white',
+                border: '1px solid',
+                borderColor: 'customLime.150',
+                color: 'customLime.800',
+                _focus: {
+                    borderColor: 'customLime.700',
+                },
+                _placeholder: {
+                    color: 'customLime.800',
+                },
+                _invalid: {
+                    borderColor: 'red.500',
+                    boxShadow: '0 0 0 1px red.500',
+                },
+            },
+        },
+    },
+});
+
 export const Button = defineStyleConfig({
     baseStyle: {
         borderRadius: 'small',
@@ -142,6 +172,21 @@ export const Button = defineStyleConfig({
             py: { base: '1', md: '1', lg: '2', xl: '6px' },
             minW: { base: '70px', md: '70px', lg: '70px', xl: '87px' },
             h: { base: '8', sm: '8', md: '8', lg: '8', xl: '8' },
+        },
+        darkWhite: {
+            bgColor: 'blackAlpha.900',
+            color: 'white',
+            _hover: {
+                bgColor: 'blackAlpha.800',
+                _disabled: {
+                    opacity: 0.8,
+                    bgColor: 'blackAlpha.800',
+                },
+            },
+            _disabled: {
+                opacity: 0.8,
+                bgColor: 'blackAlpha.800',
+            },
         },
         whiteOutline: {
             bg: 'white',
@@ -220,7 +265,35 @@ const Badge = defineStyleConfig({
     },
 });
 
-const cardBaseStyle = definePartsStyle({
+const baseStyle = defineModalPartsStyle({
+    dialog: {
+        textAlign: 'center',
+        position: 'relative',
+        maxWidth: { base: '316px', mid: '400px' },
+        py: 8,
+        px: 2,
+    },
+    overlay: {
+        backdropFilter: 'blur(2px)',
+    },
+    header: {
+        textAlign: 'center',
+        flexDirection: 'column',
+        maxWidth: '312px',
+    },
+    footer: {
+        justifyContent: 'center',
+        color: 'blackAlpha.600',
+        fontSize: '12px',
+        lineHeight: '16px',
+    },
+});
+
+export const modalTheme = defineModalMultiStyleConfig({
+    baseStyle,
+});
+
+const cardBaseStyle = defineCardPartsStyle({
     container: {
         borderRadius: 'medium',
         border: '1px solid rgba(0, 0, 0, 0.08)',
@@ -234,7 +307,7 @@ const cardBaseStyle = definePartsStyle({
 });
 
 const cardVariants = {
-    basic: definePartsStyle({
+    basic: defineCardPartsStyle({
         container: {
             boxShadow: 'none',
             _hover: {
@@ -246,7 +319,7 @@ const cardVariants = {
     }),
 };
 
-const cardTheme = defineMultiStyleConfig({
+const cardTheme = defineCardMultiStyleConfig({
     baseStyle: cardBaseStyle,
     variants: cardVariants,
     defaultProps: {
@@ -311,14 +384,15 @@ const theme = extendTheme({
         colorBlack: 'rgba(0, 0, 0, 0.92)',
 
         customLime: {
-            50: '#ffffd3',
-            100: '#eaffc7',
-            150: '#d7ff94',
-            300: '#c4ff61',
-            400: '#b1ff2e',
-            600: '#2db100',
-            700: '#207e00',
-            800: '#134b00',
+            50: '#FFFFD3',
+            100: '#EAFFC7',
+            150: '#D7FF94',
+            300: '#C4FF61',
+            400: '#B1FF2E',
+            500: '#B1FF2E',
+            600: '#2DB100',
+            700: '#207E00',
+            800: '#134B00',
         },
     },
     shadows: {
@@ -399,6 +473,8 @@ const theme = extendTheme({
         Button,
         Badge,
         Card: cardTheme,
+        Modal: modalTheme,
+        Input,
         Link: {
             baseStyle: {
                 textDecoration: 'none',

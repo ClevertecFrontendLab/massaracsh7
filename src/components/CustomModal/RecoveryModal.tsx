@@ -4,18 +4,21 @@ import {
     CloseButton,
     FormControl,
     FormErrorMessage,
+    FormHelperText,
     FormLabel,
+    Heading,
     HStack,
     Image,
     Input,
     Modal,
     ModalBody,
     ModalContent,
+    ModalFooter,
     ModalHeader,
     ModalOverlay,
     PinInput,
     PinInputField,
-    Text,
+    Stack,
     VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -78,7 +81,6 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
     const [step, setStep] = useState<Step>('email');
     const [emailValue, setEmailValue] = useState('');
     const [code, setCode] = useState('');
-    const [generalError, setGeneralError] = useState<string>();
     const [titleError, setTitleError] = useState<string>();
     const [forgotPassword] = useForgotPasswordMutation();
     const [verifyOtp] = useVerifyOtpMutation();
@@ -88,8 +90,8 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
 
     const imageByStep: Record<typeof step, string | undefined> = {
         email: '/images/modal-breakfast.png',
-        code: '/images/modal-breakfast.png',
-        reset: '/images/tea.png',
+        code: '/images/modal-parcel.png',
+        reset: '',
     };
 
     const {
@@ -131,13 +133,12 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
         resetResetForm();
         setEmailValue('');
         setCode('');
-        setGeneralError(undefined);
         setStep('email');
         onClose();
     };
 
     const onSubmitEmail = async (data: EmailForm) => {
-        setGeneralError(undefined);
+        setTitleError('');
         try {
             await forgotPassword({ email: data.email }).unwrap();
             setEmailValue(data.email);
@@ -168,7 +169,6 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
     };
 
     const submitCode = async (value: string) => {
-        setGeneralError(undefined);
         setTitleError('');
         try {
             await verifyOtp({ email: emailValue, otpToken: value }).unwrap();
@@ -197,31 +197,6 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
         submitCode(code);
     };
 
-    // const onSubmitCode = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     setGeneralError(undefined);
-    //     setTitleError('');
-    //     try {
-    //         await verifyOtp({ email: emailValue, otpToken: code }).unwrap();
-    //         setStep('reset');
-    //     } catch (err) {
-    //         const e = err as FetchBaseQueryError;
-    //         console.log(e);
-    //         if (e.status === 403) {
-    //             setTitleError('Неверный код.');
-    //         } else if (typeof e.status === 'number' && e.status >= 500) {
-    //             dispatch(
-    //                 setAppAlert({
-    //                     type: 'error',
-    //                     title: 'Ошибка сервера',
-    //                     message: 'Попробуйте немного позже',
-    //                 }),
-    //             );
-    //         }
-    //         setCode('');
-    //     }
-    // };
-
     const onSubmitReset = async (data: ResetForm) => {
         try {
             await resetPassword({
@@ -237,7 +212,6 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                     message: '',
                 }),
             );
-            // handleClose();
             onClose();
             navigate('/login');
         } catch (err) {
@@ -251,7 +225,6 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                     }),
                 );
             }
-            // resetResetForm();
         }
     };
 
@@ -272,29 +245,52 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                     right='1rem'
                     top='1rem'
                     onClick={handleClose}
+                    border='1px solid black'
+                    borderRadius='50%'
                     data-test-id='close-button'
+                    w={6}
+                    h={6}
                 />
-                {imageByStep[step] && (
-                    <Box mt={4} mb={2}>
-                        <Image src={imageByStep[step]} alt='Modal' mx='auto' />
-                    </Box>
-                )}
-                <ModalHeader>
-                    {titleError}
-                    {step === 'email' &&
-                        'Для восстановления входа введите ваш e-mail, куда можно отправить уникальный код'}
-                    {step === 'code' &&
-                        `Мы отправили вам на e-mail ${emailValue} шестизначный код. Введите его ниже.`}
-                    {step === 'reset' && 'Восстановление аккаунта'}
-                </ModalHeader>
+                <Stack align='center' gap={8}>
+                    {imageByStep[step] && (
+                        <Box>
+                            <Image
+                                src={imageByStep[step]}
+                                alt='Modal'
+                                mx='auto'
+                                boxSize={{ base: '108px', md: '206px' }}
+                            />
+                        </Box>
+                    )}
+                    <ModalHeader
+                        fontSize={step === 'reset' ? '24px' : '16px'}
+                        lineHeight={step === 'reset' ? '32px' : '24px'}
+                        fontWeight={step === 'reset' ? '700' : 'normal'}
+                    >
+                        {!!titleError && (
+                            <Heading
+                                fontSize='24px'
+                                lineHeight='32px'
+                                fontWeight='700'
+                                textAlign='center'
+                                mb={2}
+                            >
+                                {titleError}
+                            </Heading>
+                        )}
+                        {step === 'email' &&
+                            'Для восстановления входа введите ваш e-mail, куда можно отправить уникальный код'}
+                        {step === 'code' &&
+                            `Мы отправили вам на e-mail ${emailValue} шестизначный код. Введите его ниже.`}
+                        {step === 'reset' && 'Восстановление аккаунта'}
+                    </ModalHeader>
+                </Stack>
                 <ModalBody>
                     <VStack spacing={4} align='stretch'>
-                        {generalError && <Text color='red.500'>{generalError}</Text>}
-
                         {step === 'email' && (
                             <form onSubmit={submitEmail(onSubmitEmail)} style={{ width: '100%' }}>
                                 <FormControl isInvalid={!!errEmail.email}>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>Ваш email</FormLabel>
                                     <Input
                                         {...regEmail('email')}
                                         onBlur={() => {
@@ -303,13 +299,15 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                             trigger('email');
                                         }}
                                         data-test-id='email-input'
+                                        placeholder='email'
+                                        variant='sign'
                                     />
                                     <FormErrorMessage>{errEmail.email?.message}</FormErrorMessage>
                                 </FormControl>
                                 <Button
                                     mt={4}
                                     type='submit'
-                                    colorScheme='green'
+                                    variant='darkWhite'
                                     w='full'
                                     data-test-id='submit-button'
                                 >
@@ -320,9 +318,8 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
 
                         {step === 'code' && (
                             <form onSubmit={onSubmitCode}>
-                                <FormControl isInvalid={!!generalError}>
-                                    <FormLabel>Код</FormLabel>
-                                    <HStack>
+                                <FormControl isInvalid={!!titleError}>
+                                    <HStack w='100%' mb={6} justifyContent='center'>
                                         <PinInput
                                             otp
                                             value={code}
@@ -337,6 +334,8 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                                     key={i}
                                                     data-test-id={`verification-code-input-${i + 1}`}
                                                     borderColor={titleError ? 'red.500' : undefined}
+                                                    _placeholder={{ color: 'custimLime.800' }}
+                                                    color='customLime.800'
                                                 />
                                             ))}
                                         </PinInput>
@@ -344,7 +343,7 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                     <Button
                                         mt={4}
                                         type='submit'
-                                        colorScheme='green'
+                                        variant='darkWhite'
                                         w='full'
                                         data-test-id='submit-code'
                                     >
@@ -363,54 +362,69 @@ export const RecoveryModal = ({ isOpen, onClose }: RecoveryModalProps) => {
                                 }}
                                 style={{ width: '100%' }}
                             >
-                                <FormControl isInvalid={!!errReset.login}>
-                                    <FormLabel>Введите логин</FormLabel>
-                                    <Input
-                                        {...regReset('login')}
-                                        onBlur={() => {
-                                            const trimmed = watchReset('login').trim();
-                                            setResetValue('login', trimmed);
-                                            triggerReset('login');
-                                        }}
-                                        data-test-id='login-input'
-                                    />
-                                    <FormErrorMessage>{errReset.login?.message}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl isInvalid={!!errReset.password}>
-                                    <FormLabel>Пароль</FormLabel>
-                                    <Input
-                                        type='password'
-                                        {...regReset('password')}
-                                        data-test-id='password-input'
-                                    />
-                                    <FormErrorMessage>
-                                        {errReset.password?.message}
-                                    </FormErrorMessage>
-                                </FormControl>
-                                <FormControl isInvalid={!!errReset.passwordConfirm}>
-                                    <FormLabel>Повторите пароль</FormLabel>
-                                    <Input
-                                        type='password'
-                                        {...regReset('passwordConfirm')}
-                                        data-test-id='confirm-password-input'
-                                    />
-                                    <FormErrorMessage>
-                                        {errReset.passwordConfirm?.message}
-                                    </FormErrorMessage>
-                                </FormControl>
-                                <Button
-                                    mt={4}
-                                    type='submit'
-                                    colorScheme='green'
-                                    w='full'
-                                    data-test-id='submit-button'
-                                >
-                                    Сохранить
-                                </Button>
+                                <VStack spacing={6}>
+                                    <FormControl isInvalid={!!errReset.login}>
+                                        <FormLabel>Введите логин</FormLabel>
+                                        <Input
+                                            {...regReset('login')}
+                                            onBlur={() => {
+                                                const trimmed = watchReset('login').trim();
+                                                setResetValue('login', trimmed);
+                                                triggerReset('login');
+                                            }}
+                                            variant='sign'
+                                            data-test-id='login-input'
+                                        />
+                                        <FormHelperText mt={1}>
+                                            Не менее 5 символов, только латиница
+                                        </FormHelperText>
+                                        <FormErrorMessage mt={1}>
+                                            {errReset.login?.message}
+                                        </FormErrorMessage>
+                                    </FormControl>
+                                    <FormControl isInvalid={!!errReset.password}>
+                                        <FormLabel>Пароль</FormLabel>
+                                        <Input
+                                            type='password'
+                                            {...regReset('password')}
+                                            data-test-id='password-input'
+                                            variant='sign'
+                                        />
+                                        <FormHelperText mt={1}>
+                                            Не менее 8 символов, с заглавной буквой и цифрой
+                                        </FormHelperText>
+                                        <FormErrorMessage mt={1}>
+                                            {errReset.password?.message}
+                                        </FormErrorMessage>
+                                    </FormControl>
+                                    <FormControl isInvalid={!!errReset.passwordConfirm}>
+                                        <FormLabel>Повторите пароль</FormLabel>
+                                        <Input
+                                            type='password'
+                                            {...regReset('passwordConfirm')}
+                                            data-test-id='confirm-password-input'
+                                            variant='sign'
+                                        />
+                                        <FormErrorMessage mt={1}>
+                                            {errReset.passwordConfirm?.message}
+                                        </FormErrorMessage>
+                                    </FormControl>
+
+                                    <Button
+                                        mt={2}
+                                        type='submit'
+                                        variant='darkWhite'
+                                        w='full'
+                                        data-test-id='submit-button'
+                                    >
+                                        Зарегистрироваться
+                                    </Button>
+                                </VStack>
                             </form>
                         )}
                     </VStack>
                 </ModalBody>
+                <ModalFooter>Не пришло письмо? Проверьте папку Спам.</ModalFooter>
             </ModalContent>
         </Modal>
     );

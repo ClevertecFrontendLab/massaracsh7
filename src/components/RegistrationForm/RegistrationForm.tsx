@@ -6,6 +6,7 @@ import {
     FormErrorMessage,
     FormHelperText,
     FormLabel,
+    Heading,
     HStack,
     IconButton,
     Input,
@@ -80,19 +81,19 @@ export const RegistrationForm = () => {
     const [step, setStep] = useState<1 | 2>(1);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [step1Data, setStep1Data] = useState<Pick<IForm, 'firstName' | 'lastName' | 'email'>>({
-        firstName: '',
-        lastName: '',
-        email: '',
-    });
+    // const [step1Data, setStep1Data] = useState<Pick<IForm, 'firstName' | 'lastName' | 'email'>>({
+    //     firstName: '',
+    //     lastName: '',
+    //     email: '',
+    // });
 
-    const [step2Data, setStep2Data] = useState<
-        Pick<IForm, 'login' | 'password' | 'confirmPassword'>
-    >({
-        login: '',
-        password: '',
-        confirmPassword: '',
-    });
+    // const [step2Data, setStep2Data] = useState<
+    //     Pick<IForm, 'login' | 'password' | 'confirmPassword'>
+    // >({
+    //     login: '',
+    //     password: '',
+    //     confirmPassword: '',
+    // });
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -102,7 +103,6 @@ export const RegistrationForm = () => {
         register,
         handleSubmit,
         trigger,
-        getValues,
         setValue,
         watch,
         formState: { errors },
@@ -143,28 +143,28 @@ export const RegistrationForm = () => {
         const ok = await trigger(['firstName', 'lastName', 'email']);
         if (!ok) return;
 
-        const [firstName, lastName, email] = getValues(['firstName', 'lastName', 'email']);
-        setStep1Data({ firstName, lastName, email });
+        // const [firstName, lastName, email] = getValues(['firstName', 'lastName', 'email']);
+        // setStep1Data({ firstName, lastName, email });
 
-        setValue('login', step2Data.login);
-        setValue('password', step2Data.password);
-        setValue('confirmPassword', step2Data.confirmPassword);
+        // setValue('login', step2Data.login);
+        // setValue('password', step2Data.password);
+        // setValue('confirmPassword', step2Data.confirmPassword);
 
         setStep(2);
     };
 
-    const onBack = () => {
-        const [login, password, confirmPassword] = getValues([
-            'login',
-            'password',
-            'confirmPassword',
-        ]);
-        setValue('firstName', step1Data.firstName);
-        setValue('lastName', step1Data.lastName);
-        setValue('email', step1Data.email);
-        setStep2Data({ login, password, confirmPassword });
-        setStep(1);
-    };
+    // const onBack = () => {
+    //     const [login, password, confirmPassword] = getValues([
+    //         'login',
+    //         'password',
+    //         'confirmPassword',
+    //     ]);
+    //     setValue('firstName', step1Data.firstName);
+    //     setValue('lastName', step1Data.lastName);
+    //     setValue('email', step1Data.email);
+    //     setStep2Data({ login, password, confirmPassword });
+    //     setStep(1);
+    // };
 
     const onSubmit: SubmitHandler<IForm> = async (data) => {
         const { confirmPassword, ...payload } = data;
@@ -177,7 +177,7 @@ export const RegistrationForm = () => {
                 setAppModal({
                     title: 'Остался последний шаг. Нужно верифицировать ваш e-mail',
                     description: `Мы отправили вам на почту ${payload.email} ссылку для верификации.`,
-                    imageSrc: '/images/modal-success.png',
+                    imageSrc: '/images/modal-dance.png',
                     footerNote:
                         'Не пришло письмо? Проверьте папаку Спам. По другим вопросам свяжитесь с поддержкой',
                     dataId: 'sign-up-success-modal',
@@ -210,11 +210,16 @@ export const RegistrationForm = () => {
 
     return (
         <Box maxW='400px' mx='auto' mt='50px'>
+            <Heading as='h3' fontSize='16px' lineHeight='24px' w='full' textAlign='left'>
+                {step === 1 ? 'Шаг 1: Личная информация' : 'Шаг 2: Логин и пароль'}
+            </Heading>
             <Progress
                 mb={6}
                 value={progress}
                 size='sm'
-                colorScheme='green'
+                hasStripe
+                colorScheme='customLime'
+                bgColor='blackAlpha.100'
                 data-test-id='sign-up-progress'
             />
 
@@ -230,7 +235,7 @@ export const RegistrationForm = () => {
                 }
                 data-test-id='sign-up-form'
             >
-                <VStack spacing={4}>
+                <VStack spacing={6}>
                     {step === 1 ? (
                         <>
                             <FormControl isInvalid={!!errors.firstName}>
@@ -243,6 +248,7 @@ export const RegistrationForm = () => {
                                         setValue('firstName', trimmed);
                                         trigger('firstName');
                                     }}
+                                    variant='sign'
                                     data-test-id='first-name-input'
                                 />
                                 <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
@@ -258,6 +264,7 @@ export const RegistrationForm = () => {
                                         setValue('lastName', trimmed);
                                         trigger('lastName');
                                     }}
+                                    variant='sign'
                                     data-test-id='last-name-input'
                                 />
                                 <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
@@ -274,6 +281,7 @@ export const RegistrationForm = () => {
                                         setValue('email', trimmed);
                                         trigger('email');
                                     }}
+                                    variant='sign'
                                     data-test-id='email-input'
                                 />
                                 <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
@@ -281,9 +289,10 @@ export const RegistrationForm = () => {
 
                             <Button
                                 onClick={onNext}
-                                colorScheme='green'
+                                variant='darkWhite'
                                 width='full'
                                 data-test-id='submit-button'
+                                mt={6}
                             >
                                 Дальше
                             </Button>
@@ -300,6 +309,7 @@ export const RegistrationForm = () => {
                                         setValue('login', trimmed);
                                         trigger('login');
                                     }}
+                                    variant='sign'
                                     data-test-id='login-input'
                                 />
                                 <FormHelperText>
@@ -315,6 +325,7 @@ export const RegistrationForm = () => {
                                         id='password'
                                         type={showPassword ? 'text' : 'password'}
                                         {...register('password')}
+                                        variant='sign'
                                         data-test-id='password-input'
                                     />
                                     <InputRightElement>
@@ -346,6 +357,7 @@ export const RegistrationForm = () => {
                                         id='confirmPassword'
                                         type={showConfirmPassword ? 'text' : 'password'}
                                         {...register('confirmPassword')}
+                                        variant='sign'
                                         data-test-id='confirm-password-input'
                                     />
                                     <InputRightElement>
@@ -374,14 +386,12 @@ export const RegistrationForm = () => {
                             </FormControl>
 
                             <HStack width='full' spacing={4}>
-                                <Button onClick={onBack} flex={1}>
-                                    Назад
-                                </Button>
                                 <Button
                                     type='submit'
                                     flex={1}
-                                    colorScheme='green'
+                                    variant='darkWhite'
                                     data-test-id='submit-button'
+                                    mt={6}
                                 >
                                     Зарегистрироваться
                                 </Button>

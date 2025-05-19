@@ -7,10 +7,13 @@ const ignoredEndpointNames = ['login', 'forgotPassword', 'verifyOtp', 'resetPass
 
 export const errorMiddleware: Middleware = () => (next) => (action) => {
     if (isRejectedWithValue(action)) {
+        const state = store.getState();
         const endpointName = (action as { meta?: { arg?: { endpointName?: string } } })?.meta?.arg
             ?.endpointName;
 
-        if (endpointName && !ignoredEndpointNames.includes(endpointName)) {
+        const alertIsAlreadyShown = !!state.app.alert;
+
+        if (endpointName && !ignoredEndpointNames.includes(endpointName) && !alertIsAlreadyShown) {
             store.dispatch(
                 setAppAlert({
                     type: 'error',

@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     CloseButton,
+    Heading,
     Image,
     Modal,
     ModalBody,
@@ -34,29 +35,34 @@ export const CustomModal = () => {
     return (
         <Modal isOpen={true} onClose={() => dispatch(clearModal())} isCentered>
             <ModalOverlay />
-            <ModalContent
-                maxW='sm'
-                p={6}
-                textAlign='center'
-                position='relative'
-                data-test-id={dataId}
-            >
+            <ModalContent data-test-id={dataId}>
                 <CloseButton
                     position='absolute'
                     right='1rem'
                     top='1rem'
                     onClick={() => dispatch(clearModal())}
                     data-test-id='close-button'
+                    border='1px solid black'
+                    borderRadius='50%'
+                    w={6}
+                    h={6}
                 />
 
                 {imageSrc && (
                     <Box mb={4}>
-                        <Image src={imageSrc} alt='Modal illustration' mx='auto' />
+                        <Image
+                            src={imageSrc}
+                            alt='Modal illustration'
+                            mx='auto'
+                            boxSize={{ base: '108px', md: '206px' }}
+                        />
                     </Box>
                 )}
 
-                <ModalHeader p={0} fontSize='lg' fontWeight='bold'>
-                    {title}
+                <ModalHeader>
+                    <Heading fontSize='24px' lineHeight='32px' fontWeight='700' mb={2}>
+                        {title}
+                    </Heading>
                 </ModalHeader>
 
                 <ModalBody p={0} mt={2}>
@@ -64,16 +70,17 @@ export const CustomModal = () => {
                 </ModalBody>
 
                 <ModalFooter p={0} mt={6} display='flex' justifyContent='center'>
-                    {onPrimaryAction ? (
+                    {onPrimaryAction && (
                         <Button
-                            colorScheme='green'
+                            variant='darkWhite'
                             onClick={onPrimaryAction}
                             data-test-id='repeat-button'
                         >
                             {primaryActionText}
                         </Button>
-                    ) : (
-                        <Text fontSize='sm' color='gray.500'>
+                    )}
+                    {footerNote && (
+                        <Text fontSize='12px' lineHeight='16px'>
                             {footerNote}
                         </Text>
                     )}

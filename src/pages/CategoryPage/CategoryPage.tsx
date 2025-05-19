@@ -159,9 +159,7 @@ export const CategoryPage = () => {
 
             <TabsCategory subcategories={cat?.subCategories ?? []} />
 
-            {!isLoading && !isFetching && recipesData?.data && recipesData?.data?.length > 0 && (
-                <RecipeList recipes={recipesData.data} gridVariant='low' />
-            )}
+            {recipesData?.data && <RecipeList recipes={recipesData.data} gridVariant='low' />}
 
             {randomRecipes && (
                 <KitchenSection

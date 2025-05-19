@@ -1,5 +1,5 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, CloseButton } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/constants/test-ids';
 import { clearAppAlert } from '~/store/app-slice';
@@ -9,44 +9,25 @@ export const AppAlert = () => {
     const alert = useAppSelector((state) => state.app.alert);
     const dispatch = useAppDispatch();
 
-    const [isOpen, setIsOpen] = useState(!!alert);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const closedManuallyRef = useRef(false);
-
     useEffect(() => {
-        if (alert === null) return;
-        closedManuallyRef.current = false;
-        setIsOpen(true);
+        if (alert) {
+            const timer = setTimeout(() => {
+                dispatch(clearAppAlert());
+            }, 15000);
 
-        if (timerRef.current) clearTimeout(timerRef.current);
-
-        timerRef.current = setTimeout(() => {
-            dispatch(clearAppAlert());
-            setIsOpen(false);
-        }, 15000);
-
-        return () => {
-            if (timerRef.current) clearTimeout(timerRef.current);
-        };
+            return () => clearTimeout(timer);
+        }
     }, [alert, dispatch]);
 
-    const handleClose = () => {
-        if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = null;
-        closedManuallyRef.current = true;
-        setIsOpen(false);
-        dispatch(clearAppAlert());
-    };
+    if (!alert) return null;
 
-    if (!alert || !isOpen) return null;
+    const onCloseAlert = () => dispatch(clearAppAlert());
 
     const { type, title, message } = alert;
 
     const bgMap: Record<typeof type, string> = {
         error: '#E53E3E',
         success: '#38A169',
-        warning: '#D69E2E',
-        info: '#3182CE',
     };
 
     return (
@@ -74,7 +55,7 @@ export const AppAlert = () => {
                     right={-1}
                     top={-1}
                     ml='auto'
-                    onClick={handleClose}
+                    onClick={onCloseAlert}
                 />
             </Alert>
         </Box>

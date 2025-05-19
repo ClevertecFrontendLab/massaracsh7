@@ -1,4 +1,16 @@
-import { Box, Flex, HStack, Image, Tab, TabList, Tabs, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Center,
+    Flex,
+    Hide,
+    HStack,
+    Image,
+    Tab,
+    TabList,
+    Tabs,
+    Text,
+    useBreakpointValue,
+} from '@chakra-ui/react';
 import { ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -10,73 +22,101 @@ interface AuthLayoutProps {
     activeTab: 'login' | 'register';
 }
 
+const tabs = [
+    { label: 'Вход на сайт', path: '/login' },
+    { label: 'Регистрация', path: '/signin' },
+];
+
 export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
     const navigate = useNavigate();
     const tabIndex = activeTab === 'login' ? 0 : 1;
     const dispatch = useAppDispatch();
 
+    const logoSrc = useBreakpointValue({
+        base: '/images/logo-auth-mini.png',
+        md: '/images/logo-auth.png',
+    });
+
     useEffect(() => {
         dispatch(setAppLoader(false));
     }, [dispatch]);
-    return (
-        <Flex height='100vh' overflow='hidden'>
-            <Flex
-                w='50%'
-                direction='column'
-                justify='space-between'
-                px={{ base: 6, md: 12 }}
-                py={8}
-                bg='white'
-            >
-                <Box>
-                    <Tabs
-                        index={tabIndex}
-                        onChange={(index) => {
-                            if (index === 0) navigate('/login');
-                            else navigate('/signin');
-                        }}
-                        variant='unstyled'
-                        mb={6}
-                    >
-                        <TabList>
-                            <Tab
-                                fontSize='2xl'
-                                fontWeight='bold'
-                                color={tabIndex === 0 ? 'blue.500' : 'gray.500'}
-                                _hover={{ color: 'blue.400' }}
-                            >
-                                Вход на сайт
-                            </Tab>
-                            <Tab
-                                fontSize='2xl'
-                                fontWeight='bold'
-                                color={tabIndex === 1 ? 'blue.500' : 'gray.500'}
-                                _hover={{ color: 'blue.400' }}
-                            >
-                                Регистрация
-                            </Tab>
-                        </TabList>
-                    </Tabs>
-                    {children}
-                </Box>
 
-                <HStack justify='space-between' fontSize='sm' color='gray.500'>
-                    <Text>Все права защищены, ученический файл, ©Клевер Технолоджи, 2025</Text>
-                    <Text textDecoration='line-through'>
-                        Лучший сервис для ваших кулинарных побед
-                    </Text>
-                </HStack>
+    return (
+        <Box pos='relative' w='100%'>
+            <Flex minHeight='100dvh' w='100%'>
+                <Center flex={1} pb='75px' bgGradient='linear(to-bl, #EAFFC7, #29813F 170%)'>
+                    <Box py={12} maxW={{ base: 387, md: 493 }} w='full' px={4}>
+                        <Center mb={{ base: 16, md: 20 }}>
+                            <Image src={logoSrc} alt='Логотип' />
+                        </Center>
+
+                        <Tabs
+                            variant='unstyled'
+                            size='lg'
+                            mb={10}
+                            isFitted
+                            index={tabIndex}
+                            onChange={(index) => navigate(tabs[index].path)}
+                        >
+                            <TabList w='100%'>
+                                {tabs.map((tab, index) => (
+                                    <Tab
+                                        key={tab.path}
+                                        w='50%'
+                                        cursor='pointer'
+                                        px={6}
+                                        py={3}
+                                        _selected={{
+                                            color: 'customLime.600',
+                                            borderBottom: '2px solid',
+                                            borderColor: 'customLime.600',
+                                        }}
+                                        color={
+                                            tabIndex === index ? 'customLime.600' : 'customLime.800'
+                                        }
+                                        borderBottom={
+                                            tabIndex === index ? '2px solid' : '1px solid'
+                                        }
+                                        borderColor={
+                                            tabIndex === index ? 'customLime.600' : 'blackAlpha.200'
+                                        }
+                                    >
+                                        <Text variant='name-text'>{tab.label}</Text>
+                                    </Tab>
+                                ))}
+                            </TabList>
+                        </Tabs>
+
+                        {children}
+                    </Box>
+                </Center>
+
+                <Hide below='mid'>
+                    <Box
+                        maxW='50.5%'
+                        w='full'
+                        bgImage='/images/auth-side-image.jpg'
+                        bgRepeat='no-repeat'
+                        bgPosition='50% 50%'
+                        bgSize='cover'
+                    />
+                </Hide>
             </Flex>
 
-            <Box w='50%' height='100vh' position='relative'>
-                <Image
-                    src='/images/auth-side-image.jpg'
-                    alt='изображение'
-                    objectFit='cover'
-                    w='100%'
-                    h='100%'
-                />
+            <Box as='footer' p={{ base: 4, sm: 6 }} pos='absolute' bottom={0} w='full'>
+                <HStack spacing={4} justify='space-between'>
+                    <Box>
+                        <Text fontSize='sm' fontWeight='600'>
+                            Все права защищены, ученический файл, ©Клевер Технолоджи, 2025
+                        </Text>
+                    </Box>
+                    <Box display={{ base: 'none', lg: 'block' }}>
+                        <Text fontSize='sm' fontWeight='600'>
+                            Лучший сервис для ваших кулинарных побед
+                        </Text>
+                    </Box>
+                </HStack>
             </Box>
-        </Flex>
+        </Box>
     );
 };

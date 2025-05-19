@@ -74,8 +74,6 @@ export const LoginForm = () => {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
                 const status = fetchErr.status;
-                // const message = (fetchErr.data as { message?: string })?.message;
-
                 if (status === 401) {
                     dispatch(
                         setAppAlert({
@@ -102,14 +100,8 @@ export const LoginForm = () => {
                             onPrimaryAction: async () => {
                                 try {
                                     await login(data as LoginRequest).unwrap();
-                                    // for (let i = 0; i < 10; i++) {
-                                    //     const token = getAccessToken();
-                                    //     if (token) break;
-                                    //     await new Promise((res) => setTimeout(res, 50));
-                                    // }
-                                    // navigate('/');
                                 } catch {
-                                    console.log('error');
+                                    console.log('Sign in error');
                                 }
                             },
                         }),
@@ -122,7 +114,7 @@ export const LoginForm = () => {
     return (
         <Box maxW='400px' mx='auto' mt='50px'>
             <form autoComplete='off' onSubmit={handleSubmit(onSubmit)} data-test-id='sign-in-form'>
-                <VStack spacing={4}>
+                <VStack spacing={6}>
                     <FormControl isInvalid={!!errors.login}>
                         <FormLabel htmlFor='login'>Логин для входа на сайт</FormLabel>
                         <Input
@@ -133,6 +125,7 @@ export const LoginForm = () => {
                                 setValue('login', trimmed);
                                 trigger('login');
                             }}
+                            variant='sign'
                             placeholder='Введите логин'
                             data-test-id='login-input'
                         />
@@ -172,8 +165,9 @@ export const LoginForm = () => {
                         <Button
                             type='submit'
                             flex={1}
-                            colorScheme='blue'
+                            variant='darkWhite'
                             data-test-id='submit-button'
+                            mt={6}
                         >
                             Войти
                         </Button>

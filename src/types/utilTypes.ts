@@ -23,7 +23,7 @@ export interface ModalPayload {
     dataId?: string;
 }
 
-type AlertType = 'error' | 'success' | 'warning' | 'info';
+type AlertType = 'error' | 'success';
 
 export interface AlertPayload {
     type: AlertType;
