@@ -11,6 +11,7 @@ import {
     SUCCESS_SIGNUP_TITLE,
 } from '~/constants/api-results';
 import { FOOTER_SIGNUP_MESSAGE } from '~/constants/constants';
+import { SIGN_UP_FORM, SIGN_UP_SUCCESS_MODAL } from '~/constants/test-ids';
 import { useSignupMutation } from '~/query/services/auth';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -79,7 +80,7 @@ export const RegistrationForm = () => {
                     description: `Мы отправили вам на почту ${payload.email} ссылку для верификации.`,
                     imageSrc: '/images/modal-dance.png',
                     footerNote: FOOTER_SIGNUP_MESSAGE,
-                    dataId: 'sign-up-success-modal',
+                    dataId: SIGN_UP_SUCCESS_MODAL,
                 }),
             );
         } catch (err) {
@@ -116,7 +117,7 @@ export const RegistrationForm = () => {
                           }
                         : handleSubmit(onSubmit)
                 }
-                data-test-id='sign-up-form'
+                data-test-id={SIGN_UP_FORM}
             >
                 {step === 1 ? (
                     <Step1Form

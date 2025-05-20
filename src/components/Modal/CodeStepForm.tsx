@@ -1,5 +1,7 @@
 import { Button, FormControl, HStack, PinInput, PinInputField, VStack } from '@chakra-ui/react';
 
+import { SUBMIT_CODE, VERIFICATION_CODE_INPUT } from '~/constants/test-ids';
+
 interface CodeStepFormProps {
     code: string;
     setCode: (val: string) => void;
@@ -22,7 +24,7 @@ export const CodeStepForm = ({ code, setCode, titleError, submitCode }: CodeStep
                             {[...Array(6)].map((_, i) => (
                                 <PinInputField
                                     key={i}
-                                    data-test-id={`verification-code-input-${i + 1}`}
+                                    data-test-id={`${VERIFICATION_CODE_INPUT}-${i + 1}`}
                                     borderColor={titleError ? 'red.500' : undefined}
                                     _placeholder={{ color: 'customLime.800' }}
                                     color='customLime.800'
@@ -36,7 +38,7 @@ export const CodeStepForm = ({ code, setCode, titleError, submitCode }: CodeStep
                         type='submit'
                         variant='darkWhite'
                         w='full'
-                        data-test-id='submit-code'
+                        data-test-id={SUBMIT_CODE}
                     >
                         Подтвердить
                     </Button>

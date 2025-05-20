@@ -8,6 +8,7 @@ import {
     SUCCESS_VERIFICATION_TITLE,
 } from '~/constants/api-results';
 import { FOOTER_MODAL_MESSAGE } from '~/constants/constants';
+import { EMAIL_VERIFICATION_FAILED_MODAL } from '~/constants/test-ids';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 
@@ -34,7 +35,7 @@ export const VerificationPage = () => {
                     description: ERROR_VERIFICATION_MESSAGE,
                     imageSrc: '/images/modal-tea.png',
                     footerNote: FOOTER_MODAL_MESSAGE,
-                    dataId: 'email-verification-failed-modal',
+                    dataId: EMAIL_VERIFICATION_FAILED_MODAL,
                 }),
             );
         }

@@ -7,6 +7,13 @@ import type {
     UseFormWatch,
 } from 'react-hook-form';
 
+import {
+    EMAIL_INPUT,
+    FIRST_NAME_INPUT,
+    LAST_NAME_INPUT,
+    SUBMIT_BUTTON,
+} from '~/constants/test-ids';
+
 import { RegistrationFormData } from './registrationSchema';
 
 interface Step1FormProps {
@@ -38,7 +45,7 @@ export const Step1Form = ({
                     trigger('firstName');
                 }}
                 variant='sign'
-                data-test-id='first-name-input'
+                data-test-id={FIRST_NAME_INPUT}
             />
             <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
         </FormControl>
@@ -54,7 +61,7 @@ export const Step1Form = ({
                     trigger('lastName');
                 }}
                 variant='sign'
-                data-test-id='last-name-input'
+                data-test-id={LAST_NAME_INPUT}
             />
             <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
         </FormControl>
@@ -71,7 +78,7 @@ export const Step1Form = ({
                     trigger('email');
                 }}
                 variant='sign'
-                data-test-id='email-input'
+                data-test-id={EMAIL_INPUT}
             />
             <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>
@@ -80,7 +87,7 @@ export const Step1Form = ({
             onClick={onNext}
             variant='darkWhite'
             width='full'
-            data-test-id='submit-button'
+            data-test-id={SUBMIT_BUTTON}
             mt={6}
         >
             Дальше

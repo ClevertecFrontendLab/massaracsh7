@@ -39,3 +39,32 @@ export const LOAD_MORE_BUTTON = 'load-more-button';
 export const DECREMENT_STEPPER = 'decrement-stepper';
 export const INCREMENT_STEPPER = 'increment-stepper';
 export const INGREDIENT_QUANTITY = 'ingredient-quantity';
+
+export const SIGN_IN_FORM = 'sign-in-form';
+export const LOGIN_INPUT = 'login-input';
+export const PASSWORD_INPUT = 'password-input';
+export const PASSWORD_VISIBILITY_BUTTON = 'password-visibility-button';
+export const SUBMIT_BUTTON = 'submit-button';
+export const SUBMIT_CODE = 'submit-code';
+export const FORGOT_PASSWORD = 'forgot-password';
+
+export const SIGN_IN_ERROR_MODAL = 'sign-in-error-modal';
+export const CLOSE_BUTTON = 'close-button';
+export const REPEAT_BUTTON = 'repeat-button';
+
+export const SIGN_UP_PROGRESS = 'sign-up-progress';
+export const SIGN_UP_FORM = 'sign-up-form';
+export const FIRST_NAME_INPUT = 'first-name-input';
+export const LAST_NAME_INPUT = 'last-name-input';
+export const EMAIL_INPUT = 'email-input';
+export const CONFIRM_PASSWORD_INPUT = 'confirm-password-input';
+
+export const SIGN_UP_SUCCESS_MODAL = 'sign-up-success-modal';
+
+export const EMAIL_VERIFICATION_FAILED_MODAL = 'email-verification-failed-modal';
+
+export const SEND_EMAIL_MODAL = 'send-email-modal';
+export const VERIFICATION_CODE_MODAL = 'verification-code-modal';
+export const VERIFICATION_CODE_INPUT = 'verification-code-input';
+
+export const RESET_CREDENTIALS_MODAL = 'reset-credentials-modal';

@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { LoginForm } from '~/components/LoginForm/LoginForm';
 import { RecoveryModal } from '~/components/Modal/RecoveryModal';
+import { FORGOT_PASSWORD } from '~/constants/test-ids';
 import { AuthLayout } from '~/layout/AuthLayout';
 
 export const LoginPage = () => {
@@ -14,7 +15,7 @@ export const LoginPage = () => {
             <Button
                 variant='ghost'
                 onClick={() => setRecoveryOpen(true)}
-                data-test-id='forgot-password'
+                data-test-id={FORGOT_PASSWORD}
             >
                 Забыли логин или пароль
             </Button>

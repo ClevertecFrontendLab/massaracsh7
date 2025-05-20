@@ -21,6 +21,13 @@ import type {
     UseFormWatch,
 } from 'react-hook-form';
 
+import {
+    CONFIRM_PASSWORD_INPUT,
+    LOGIN_INPUT,
+    PASSWORD_INPUT,
+    SUBMIT_BUTTON,
+} from '~/constants/test-ids';
+
 import { RegistrationFormData } from './registrationSchema';
 
 interface Step2FormProps {
@@ -56,7 +63,7 @@ export const Step2Form = ({
                         trigger('login');
                     }}
                     variant='sign'
-                    data-test-id='login-input'
+                    data-test-id={LOGIN_INPUT}
                 />
                 <FormHelperText>Не менее 5 символов, только латиница</FormHelperText>
                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
@@ -70,7 +77,7 @@ export const Step2Form = ({
                         type={showPwd ? 'text' : 'password'}
                         {...register('password')}
                         variant='sign'
-                        data-test-id='password-input'
+                        data-test-id={PASSWORD_INPUT}
                     />
                     <InputRightElement>
                         <IconButton
@@ -98,7 +105,7 @@ export const Step2Form = ({
                         type={showConfirm ? 'text' : 'password'}
                         {...register('confirmPassword')}
                         variant='sign'
-                        data-test-id='confirm-password-input'
+                        data-test-id={CONFIRM_PASSWORD_INPUT}
                     />
                     <InputRightElement>
                         <IconButton
@@ -122,7 +129,7 @@ export const Step2Form = ({
                     type='submit'
                     flex={1}
                     variant='darkWhite'
-                    data-test-id='submit-button'
+                    data-test-id={SUBMIT_BUTTON}
                     mt={6}
                     onClick={onSubmit}
                 >

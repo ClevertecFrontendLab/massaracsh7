@@ -17,6 +17,12 @@ import type {
 } from 'react-hook-form';
 
 import {
+    CONFIRM_PASSWORD_INPUT,
+    LOGIN_INPUT,
+    PASSWORD_INPUT,
+    SUBMIT_BUTTON,
+} from '~/constants/test-ids';
+import {
     CONFIRM_PASSWORD_NONEMPTY,
     LOGIN_HELPER,
     PASSWORD_HELPER,
@@ -62,7 +68,7 @@ export const ResetStepForm = ({
                         trigger('login');
                     }}
                     variant='sign'
-                    data-test-id='login-input'
+                    data-test-id={LOGIN_INPUT}
                 />
                 <FormHelperText>{LOGIN_HELPER}</FormHelperText>
                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
@@ -73,7 +79,7 @@ export const ResetStepForm = ({
                 <Input
                     type='password'
                     {...register('password')}
-                    data-test-id='password-input'
+                    data-test-id={PASSWORD_INPUT}
                     variant='sign'
                 />
                 <FormHelperText>{PASSWORD_HELPER}</FormHelperText>
@@ -85,13 +91,13 @@ export const ResetStepForm = ({
                 <Input
                     type='password'
                     {...register('passwordConfirm')}
-                    data-test-id='confirm-password-input'
+                    data-test-id={CONFIRM_PASSWORD_INPUT}
                     variant='sign'
                 />
                 <FormErrorMessage>{errors.passwordConfirm?.message}</FormErrorMessage>
             </FormControl>
 
-            <Button type='submit' variant='darkWhite' w='full' data-test-id='submit-button'>
+            <Button type='submit' variant='darkWhite' w='full' data-test-id={SUBMIT_BUTTON}>
                 Зарегистрироваться
             </Button>
         </VStack>

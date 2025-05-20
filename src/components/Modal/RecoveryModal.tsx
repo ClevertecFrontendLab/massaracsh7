@@ -21,6 +21,12 @@ import {
 } from '~/constants/api-results';
 import { FOOTER_RECOVERY_MESSAGE } from '~/constants/constants';
 import {
+    CLOSE_BUTTON,
+    RESET_CREDENTIALS_MODAL,
+    SEND_EMAIL_MODAL,
+    VERIFICATION_CODE_MODAL,
+} from '~/constants/test-ids';
+import {
     useForgotPasswordMutation,
     useResetPasswordMutation,
     useVerifyOtpMutation,
@@ -168,10 +174,10 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <ModalContent
                 data-test-id={
                     step === 'email'
-                        ? 'send-email-modal'
+                        ? SEND_EMAIL_MODAL
                         : step === 'code'
-                          ? 'verification-code-modal'
-                          : 'reset-credentials-modal'
+                          ? VERIFICATION_CODE_MODAL
+                          : RESET_CREDENTIALS_MODAL
                 }
             >
                 <CloseButton
@@ -181,7 +187,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     onClick={handleClose}
                     border='1px solid black'
                     borderRadius='50%'
-                    data-test-id='close-button'
+                    data-test-id={CLOSE_BUTTON}
                     w={6}
                     h={6}
                 />

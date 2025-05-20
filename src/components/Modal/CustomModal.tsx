@@ -13,6 +13,7 @@ import {
     Text,
 } from '@chakra-ui/react';
 
+import { CLOSE_BUTTON, REPEAT_BUTTON } from '~/constants/test-ids';
 import { clearModal } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { userModalSelector } from '~/store/selectors/appSelectors';
@@ -42,7 +43,7 @@ export const CustomModal = () => {
                     right='1rem'
                     top='1rem'
                     onClick={() => dispatch(clearModal())}
-                    data-test-id='close-button'
+                    data-test-id={CLOSE_BUTTON}
                     border='1px solid black'
                     borderRadius='50%'
                     w={6}
@@ -75,7 +76,7 @@ export const CustomModal = () => {
                         <Button
                             variant='darkWhite'
                             onClick={onPrimaryAction}
-                            data-test-id='repeat-button'
+                            data-test-id={REPEAT_BUTTON}
                         >
                             {primaryActionText}
                         </Button>
