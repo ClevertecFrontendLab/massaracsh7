@@ -37,14 +37,13 @@ const AppRoutes = () => {
             {alert && <AppAlert />}
             <Routes>
                 <Route
-                    path={ROUTES_PATH.HOME}
                     element={
                         <PrivateRoute>
                             <Layout />
                         </PrivateRoute>
                     }
                 >
-                    <Route index element={<MainPage />} />
+                    <Route path={ROUTES_PATH.HOME} element={<MainPage />} />
                     <Route path={ROUTES_PATH.CATEGORY} element={<CategoryPage />} />
                     <Route path={ROUTES_PATH.RECIPE} element={<RecipePage />} />
                     <Route path={ROUTES_PATH.JUICY} element={<JuicyPage />} />

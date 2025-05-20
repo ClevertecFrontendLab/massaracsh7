@@ -65,7 +65,9 @@ export const Step2Form = ({
                     variant='sign'
                     data-test-id={LOGIN_INPUT}
                 />
-                <FormHelperText>Не менее 5 символов, только латиница</FormHelperText>
+                <FormHelperText justifyContent='left'>
+                    Не менее 5 символов, только латиница
+                </FormHelperText>
                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
             </FormControl>
 
@@ -93,7 +95,9 @@ export const Step2Form = ({
                         />
                     </InputRightElement>
                 </InputGroup>
-                <FormHelperText>Не менее 8 символов, с заглавной буквой и цифрой</FormHelperText>
+                <FormHelperText justifyContent='left'>
+                    Не менее 8 символов, с заглавной буквой и цифрой
+                </FormHelperText>
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 

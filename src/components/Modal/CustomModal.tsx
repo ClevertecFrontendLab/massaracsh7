@@ -10,6 +10,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Stack,
     Text,
 } from '@chakra-ui/react';
 
@@ -49,24 +50,24 @@ export const CustomModal = () => {
                     w={6}
                     h={6}
                 />
+                <Stack align='center' gap={8}>
+                    {imageSrc && (
+                        <Box mb={4}>
+                            <Image
+                                src={imageSrc}
+                                alt='Modal illustration'
+                                mx='auto'
+                                boxSize={{ base: '108px', md: '206px' }}
+                            />
+                        </Box>
+                    )}
 
-                {imageSrc && (
-                    <Box mb={4}>
-                        <Image
-                            src={imageSrc}
-                            alt='Modal illustration'
-                            mx='auto'
-                            boxSize={{ base: '108px', md: '206px' }}
-                        />
-                    </Box>
-                )}
-
-                <ModalHeader>
-                    <Heading fontSize='24px' lineHeight='32px' fontWeight='700' mb={2}>
-                        {title}
-                    </Heading>
-                </ModalHeader>
-
+                    <ModalHeader>
+                        <Heading fontSize='24px' lineHeight='32px' fontWeight='700' mb={2}>
+                            {title}
+                        </Heading>
+                    </ModalHeader>
+                </Stack>
                 <ModalBody p={0} mt={2}>
                     <Text fontSize='md'>{description}</Text>
                 </ModalBody>

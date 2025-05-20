@@ -25,6 +25,7 @@ import {
     ERROR_LOGIN_TITLE,
     ERROR_LOGIN_TITLE_500,
 } from '~/constants/api-results';
+import { LOGIN_INPUT, PASSWORD_INPUT } from '~/constants/test-ids';
 import { useLoginMutation } from '~/query/services/auth';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -116,7 +117,7 @@ export const LoginForm = () => {
                             }}
                             variant='sign'
                             placeholder='Введите логин'
-                            data-test-id='login-input'
+                            data-test-id={LOGIN_INPUT}
                         />
                         <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                     </FormControl>
@@ -128,7 +129,8 @@ export const LoginForm = () => {
                                 id='password'
                                 type={showPassword ? 'text' : 'password'}
                                 {...register('password')}
-                                data-test-id='password-input'
+                                data-test-id={PASSWORD_INPUT}
+                                variant='sign'
                                 placeholder='Пароль для сайта'
                             />
                             <InputRightElement>
