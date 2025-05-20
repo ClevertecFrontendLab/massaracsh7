@@ -38,7 +38,7 @@ export const fetchBaseQueryToken: BaseQueryFn<
         if (refreshResult.error) {
             removeTokens();
             if (typeof window !== 'undefined') {
-                window.location.href = '/login';
+                window.location.href = `${import.meta.env.BASE_URL}login`;
             }
             return refreshResult;
         }

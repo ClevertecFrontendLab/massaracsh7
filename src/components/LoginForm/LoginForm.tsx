@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
+import modalBreakfast from '~/assets/images/modal-breakfast.png';
 import {
     ERROR_EMAIL_MESSAGE,
     ERROR_EMAIL_TITLE,
@@ -86,7 +87,7 @@ export const LoginForm = () => {
                         setAppModal({
                             title: ERROR_LOGIN_TITLE_500,
                             description: ERROR_LOGIN_MESSAGE_500,
-                            imageSrc: '/images/modal-breakfast.png',
+                            imageSrc: modalBreakfast,
                             dataId: 'sign-in-error-modal',
                             onPrimaryAction: async () => {
                                 try {

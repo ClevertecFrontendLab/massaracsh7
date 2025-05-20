@@ -16,10 +16,6 @@ interface SliderListProps {
 }
 
 export const SliderList = ({ recipes }: SliderListProps) => (
-    // const newRecipes = recipes
-    //     .slice()
-    //     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
     <Box
         as='section'
         position='relative'

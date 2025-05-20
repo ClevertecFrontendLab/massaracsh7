@@ -1,5 +1,6 @@
 import { Flex, HStack, IconButton, Image, Link, Text } from '@chakra-ui/react';
 
+import leftIcon from '~/assets/icons/left-icon.svg';
 import { FOOTER } from '~/constants/test-ids';
 
 export const NavigationFooter = () => (
@@ -25,7 +26,7 @@ export const NavigationFooter = () => (
         <HStack spacing={1.5} align='center'>
             <IconButton
                 aria-label='Выйти'
-                icon={<Image src='./icons/left-icon.svg' alt='Exit' boxSize='12px' />}
+                icon={<Image src={leftIcon} alt='Exit' boxSize='12px' />}
                 variant='ghost'
                 size='sm'
             />

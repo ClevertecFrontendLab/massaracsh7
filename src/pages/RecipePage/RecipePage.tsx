@@ -23,6 +23,11 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import BsAlarm from '~/assets/icons/BsAlarm.svg';
+import BsBookmarkHeart from '~/assets/icons/BsBookmarkHeart.svg';
+import BsEmojiHeartEyes from '~/assets/icons/BsEmojiHeartEyes.svg';
+import followIcon from '~/assets/icons/followIcon.svg';
+import people from '~/assets/icons/people.svg';
 import { CategoryBadge } from '~/components/CategoryBadge/CategoryBadge';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { LikesInfo } from '~/components/LikesInfo/LikesInfo';
@@ -133,7 +138,7 @@ export const RecipePage = () => {
                                     py='2px'
                                     px={{ sm: 1, md: 1, lg: 2, xl: 2 }}
                                 >
-                                    <Image src='/icons/BsAlarm.svg' alt='alarm' boxSize='16px' />
+                                    <Image src={BsAlarm} alt='alarm' boxSize='16px' />
                                     <Text textTransform='lowercase'>{recipe?.time}</Text>
                                 </HStack>
                             </Badge>
@@ -141,7 +146,7 @@ export const RecipePage = () => {
                                 <Button
                                     leftIcon={
                                         <Image
-                                            src='/icons/BsEmojiHeartEyes.svg'
+                                            src={BsEmojiHeartEyes}
                                             boxSize={{ base: '14px', lg: '14px', xl: '16px' }}
                                         />
                                     }
@@ -172,7 +177,7 @@ export const RecipePage = () => {
                                 <Button
                                     leftIcon={
                                         <Image
-                                            src='/icons/BsBookmarkHeart.svg'
+                                            src={BsBookmarkHeart}
                                             boxSize={{ base: '14px', lg: '14px', xl: '16px' }}
                                         />
                                     }
@@ -448,11 +453,7 @@ export const RecipePage = () => {
                                     lineHeight='16px'
                                     px={2}
                                     leftIcon={
-                                        <Image
-                                            src='/icons/followIcon.svg'
-                                            alt='Подписаться'
-                                            boxSize='12px'
-                                        />
+                                        <Image src={followIcon} alt='Подписаться' boxSize='12px' />
                                     }
                                 >
                                     Подписаться
@@ -465,7 +466,7 @@ export const RecipePage = () => {
                             >
                                 <Text>Автор рецепта</Text>
                                 <HStack py={1} px={1.5}>
-                                    <Image src='/icons/people.svg' alt='numbers' boxSize='12px' />
+                                    <Image src={people} alt='numbers' boxSize='12px' />
                                     <Text textStyle='limeSmall'>{author.numbers}</Text>
                                 </HStack>
                             </VStack>

@@ -1,6 +1,8 @@
 import { Avatar, Box, Button, Flex, Image, Text } from '@chakra-ui/react';
 
+import house from '~/assets/icons/house.svg';
 import { SearchGlass } from '~/assets/icons/icons';
+import penNout from '~/assets/icons/pen-nout.svg';
 import { FOOTER } from '~/constants/test-ids';
 
 export const Footer = () => (
@@ -19,7 +21,7 @@ export const Footer = () => (
         <Flex as='nav' justify='space-around' align='flex-end' height='100%'>
             <Button variant='radial'>
                 <Flex align='center' justify='center' boxSize='40px' bg='text' borderRadius='full'>
-                    <Image src='./icons/house.svg' alt='Главная' boxSize='16px' />
+                    <Image src={house} alt='Главная' boxSize='16px' />
                 </Flex>
                 <Text textStyle='miniText'>Главная</Text>
             </Button>
@@ -30,7 +32,7 @@ export const Footer = () => (
             </Button>
 
             <Button variant='radial'>
-                <Image src='./icons/pen-nout.svg' alt='Записать' boxSize='24px' mb='4px' />
+                <Image src={penNout} alt='Записать' boxSize='24px' mb='4px' />
                 <Text textStyle='miniText'>Записать</Text>
             </Button>
 

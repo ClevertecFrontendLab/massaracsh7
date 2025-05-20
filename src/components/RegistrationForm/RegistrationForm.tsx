@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
+import modaldance from '~/assets/images/modal-dance.png';
 import {
     ERROR_SERVER_MESSAGE,
     ERROR_SERVER_TITLE,
@@ -79,7 +80,7 @@ export const RegistrationForm = () => {
                 setAppModal({
                     title: SUCCESS_SIGNUP_TITLE,
                     description: `Мы отправили вам на почту ${payload.email} ссылку для верификации.`,
-                    imageSrc: './images/modal-dance.png',
+                    imageSrc: modaldance,
                     footerNote: FOOTER_SIGNUP_MESSAGE,
                     dataId: SIGN_UP_SUCCESS_MODAL,
                 }),

@@ -1,5 +1,7 @@
-import { Box, Heading, Image, ModalHeader, Stack } from '@chakra-ui/react';
+import { Heading, Image, ModalHeader, Stack } from '@chakra-ui/react';
 
+import modalBreakfast from '~/assets/images/modal-breakfast.png';
+import modalParcel from '~/assets/images/modal-parcel.png';
 import { STEP_CODE_MESSAGE, STEP_RESET_MESSAGE } from '~/constants/constants';
 
 interface ModalHeaderContentProps {
@@ -9,22 +11,20 @@ interface ModalHeaderContentProps {
 }
 
 const imageByStep: Record<ModalHeaderContentProps['step'], string | undefined> = {
-    email: '/images/modal-breakfast.png',
-    code: '/images/modal-parcel.png',
+    email: modalBreakfast,
+    code: modalParcel,
     reset: undefined,
 };
 
 export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeaderContentProps) => (
     <Stack align='center' gap={8}>
         {imageByStep[step] && (
-            <Box>
-                <Image
-                    src={imageByStep[step]}
-                    alt='Modal'
-                    mx='auto'
-                    boxSize={{ base: '108px', md: '206px' }}
-                />
-            </Box>
+            <Image
+                src={imageByStep[step]}
+                alt='Modal'
+                mx='auto'
+                boxSize={{ base: '108px', mid: '206px' }}
+            />
         )}
 
         <ModalHeader

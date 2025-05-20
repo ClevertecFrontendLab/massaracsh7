@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     CloseButton,
     Heading,
@@ -52,14 +51,12 @@ export const CustomModal = () => {
                 />
                 <Stack align='center' gap={8}>
                     {imageSrc && (
-                        <Box mb={4}>
-                            <Image
-                                src={imageSrc}
-                                alt='Modal illustration'
-                                mx='auto'
-                                boxSize={{ base: '108px', md: '206px' }}
-                            />
-                        </Box>
+                        <Image
+                            src={imageSrc}
+                            alt='Modal illustration'
+                            mx='auto'
+                            boxSize={{ base: '108px', xl: '206px' }}
+                        />
                     )}
 
                     <ModalHeader>

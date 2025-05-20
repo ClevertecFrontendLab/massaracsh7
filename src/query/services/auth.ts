@@ -60,9 +60,9 @@ export const authApiSlice = catalogApiSlice
                             if (accessToken) {
                                 saveAccessToken(accessToken);
                             }
-                            if (typeof window !== 'undefined') {
-                                window.location.href = '/';
-                            }
+                            // if (typeof window !== 'undefined') {
+                            //     window.location.href = '/';
+                            // }
                         })
                         .catch((err) => {
                             console.error('Login error:', err);

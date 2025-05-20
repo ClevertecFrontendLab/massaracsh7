@@ -269,7 +269,8 @@ const baseStyle = defineModalPartsStyle({
     dialog: {
         textAlign: 'center',
         position: 'relative',
-        maxWidth: { base: '316px', mid: '400px' },
+        w: { base: '316px', mid: '396px', lg: '396px', xl: '396px' },
+        borderRadius: '16px',
         py: 8,
         px: 2,
     },
@@ -279,7 +280,6 @@ const baseStyle = defineModalPartsStyle({
     header: {
         textAlign: 'center',
         flexDirection: 'column',
-        maxWidth: '312px',
     },
     footer: {
         justifyContent: 'center',

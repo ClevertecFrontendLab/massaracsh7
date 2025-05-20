@@ -1,6 +1,9 @@
 import { Box, Heading, Hide, HStack, Image, Link, Show, Text, VStack } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router';
 
+import notFoundImg from '~/assets/images/404.png';
+import logo from '~/assets/logo.png';
+import logoMini from '~/assets/logo-mini.png';
 import { ERROR_PAGE_GO_HOME } from '~/constants/test-ids';
 
 export const NotFoundPage = () => (
@@ -24,10 +27,10 @@ export const NotFoundPage = () => (
             >
                 <HStack align='center'>
                     <Hide below='smPlus'>
-                        <Box as='img' src='/logo.png' alt='Logo' h='32px' />
+                        <Box as='img' src={logo} alt='Logo' h='32px' />
                     </Hide>
                     <Show below='smPlus'>
-                        <Box as='img' src='/logo-mini.png' alt='Logo' h='32px' />
+                        <Box as='img' src={logoMini} alt='Logo' h='32px' />
                     </Show>
                 </HStack>
             </Box>
@@ -51,7 +54,7 @@ export const NotFoundPage = () => (
             >
                 <VStack textAlign='center' spacing={4}>
                     <Image
-                        src='/images/404.png'
+                        src={notFoundImg}
                         w={{ base: '108px', lg: '206px', xl: '206px' }}
                         h={{ base: '108px', lg: '206px', xl: '206px' }}
                         mb={4}

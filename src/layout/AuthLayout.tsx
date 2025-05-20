@@ -14,6 +14,10 @@ import {
 import { ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
+import bgImg from '~/assets/images/auth-side-image.jpg';
+import logo from '~/assets/logo.png';
+import logoMini from '~/assets/logo-mini.png';
 import { setAppLoader } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 
@@ -23,8 +27,8 @@ interface AuthLayoutProps {
 }
 
 const tabs = [
-    { label: 'Вход на сайт', path: '/login' },
-    { label: 'Регистрация', path: '/signin' },
+    { label: 'Вход на сайт', path: ROUTES_PATH.LOG_IN },
+    { label: 'Регистрация', path: ROUTES_PATH.SIGN_IN },
 ];
 
 export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
@@ -33,8 +37,8 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
     const dispatch = useAppDispatch();
 
     const logoSrc = useBreakpointValue({
-        base: './images/logo-auth-mini.png',
-        md: './images/logo-auth.png',
+        base: logoMini,
+        md: logo,
     });
 
     useEffect(() => {
@@ -95,7 +99,7 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
                     <Box
                         maxW='50.5%'
                         w='full'
-                        bgImage='./images/auth-side-image.jpg'
+                        bgImage={bgImg}
                         bgRepeat='no-repeat'
                         bgPosition='50% 50%'
                         bgSize='cover'
