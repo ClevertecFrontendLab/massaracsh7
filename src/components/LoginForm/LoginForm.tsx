@@ -17,6 +17,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import {
+    ERROR_EMAIL_MESSAGE,
+    ERROR_EMAIL_TITLE,
+    ERROR_LOGIN_MESSAGE,
+    ERROR_LOGIN_MESSAGE_500,
+    ERROR_LOGIN_TITLE,
+    ERROR_LOGIN_TITLE_500,
+} from '~/constants/api-results';
 import { useLoginMutation } from '~/query/services/auth';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -59,30 +67,30 @@ export const LoginForm = () => {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: 'Неверный логин или пароль.',
-                            message: 'Попробуйте снова',
+                            title: ERROR_LOGIN_TITLE,
+                            message: ERROR_LOGIN_MESSAGE,
                         }),
                     );
                 } else if (status === 403) {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: 'E-mail не верифицирован',
-                            message: 'Проверьте почту и перейдите по ссылке',
+                            title: ERROR_EMAIL_TITLE,
+                            message: ERROR_EMAIL_MESSAGE,
                         }),
                     );
                 } else if (String(status).startsWith('5')) {
                     dispatch(
                         setAppModal({
-                            title: 'Вход не выполнен',
-                            description: 'Что-то пошло не так. Попробуйте еще раз',
+                            title: ERROR_LOGIN_TITLE_500,
+                            description: ERROR_LOGIN_MESSAGE_500,
                             imageSrc: '/images/modal-breakfast.png',
                             dataId: 'sign-in-error-modal',
                             onPrimaryAction: async () => {
                                 try {
                                     await login(data as LoginRequest).unwrap();
                                 } catch {
-                                    console.log('Sign in error');
+                                    console.log('Вход не выполнен');
                                 }
                             },
                         }),

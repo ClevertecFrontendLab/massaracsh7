@@ -2,6 +2,12 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
+import {
+    ERROR_VERIFICATION_MESSAGE,
+    ERROR_VERIFICATION_TITLE,
+    SUCCESS_VERIFICATION_TITLE,
+} from '~/constants/api-results';
+import { FOOTER_MODAL_MESSAGE } from '~/constants/constants';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 
@@ -17,26 +23,22 @@ export const VerificationPage = () => {
             dispatch(
                 setAppAlert({
                     type: 'success',
-                    title: 'Верификация прошла успешно',
+                    title: SUCCESS_VERIFICATION_TITLE,
                 }),
             );
         } else {
             navigate(ROUTES_PATH.SIGN_IN);
             dispatch(
                 setAppModal({
-                    title: 'Упс! Что-то пошло не так',
-                    description: `Ваша ссылка для верификации недействительна. Попробуйте зарегистрироваться снова.`,
+                    title: ERROR_VERIFICATION_TITLE,
+                    description: ERROR_VERIFICATION_MESSAGE,
                     imageSrc: '/images/modal-tea.png',
-                    footerNote: 'Остались вопросы? Свяжитесь с поддержкой',
+                    footerNote: FOOTER_MODAL_MESSAGE,
                     dataId: 'email-verification-failed-modal',
                 }),
             );
         }
     }, [emailVerified, dispatch, navigate]);
 
-    return (
-        <>
-            <p>Error registration</p>
-        </>
-    );
+    return <></>;
 };

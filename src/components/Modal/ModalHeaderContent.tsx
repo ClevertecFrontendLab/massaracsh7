@@ -1,5 +1,7 @@
 import { Box, Heading, Image, ModalHeader, Stack } from '@chakra-ui/react';
 
+import { STEP_CODE_MESSAGE, STEP_RESET_MESSAGE } from '~/constants/constants';
+
 interface ModalHeaderContentProps {
     step: 'email' | 'code' | 'reset';
     emailValue: string;
@@ -44,11 +46,10 @@ export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeader
                 </Heading>
             )}
 
-            {step === 'email' &&
-                'Для восстановления входа введите ваш e-mail, куда можно отправить уникальный код'}
+            {step === 'email' && STEP_CODE_MESSAGE}
             {step === 'code' &&
                 `Мы отправили вам на e-mail ${emailValue} шестизначный код. Введите его ниже.`}
-            {step === 'reset' && 'Восстановление аккаунта'}
+            {step === 'reset' && STEP_RESET_MESSAGE}
         </ModalHeader>
     </Stack>
 );

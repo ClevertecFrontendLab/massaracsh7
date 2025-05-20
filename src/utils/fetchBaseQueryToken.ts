@@ -6,9 +6,11 @@ import {
     FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 
+import { PUBLIC_ENDPOINTS } from '~/constants/constant-arrays';
+import { API_BASE_URL } from '~/constants/constants';
+
 import { getAccessToken, isTokenExpired, removeTokens, saveAccessToken } from './tokenUtils';
 
-const API_BASE_URL = 'https://marathon-api.clevertec.ru';
 const looksLikeJwt = (token: string) => token.split('.').length === 3;
 
 const rawBaseQuery = fetchBaseQuery({
@@ -49,14 +51,7 @@ export const fetchBaseQueryToken: BaseQueryFn<
     }
 
     const isPublicEndpoint = (url: string) =>
-        [
-            '/auth/login',
-            '/auth/signup',
-            '/auth/check-auth',
-            '/auth/forgot-password',
-            '/auth/reset-password',
-            '/auth/verify-otp',
-        ].some((endpoint) => url.includes(endpoint));
+        PUBLIC_ENDPOINTS.some((endpoint) => url.includes(endpoint));
 
     const headers: Record<string, string> = {
         Accept: '*/*',
@@ -75,6 +70,5 @@ export const fetchBaseQueryToken: BaseQueryFn<
         typeof args === 'string' ? { url: args, headers } : { ...args, headers };
 
     const result = await rawBaseQuery(finalArgs, api, extraOptions);
-    console.log(result);
     return result;
 };

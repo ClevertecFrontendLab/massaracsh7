@@ -1,50 +1,61 @@
 import { z } from 'zod';
 
+import {
+    ALPHABET_ERROR,
+    CAPITAL_ERROR,
+    CONFIRM_PASSWORD_ERROR,
+    CONFIRM_PASSWORD_NONEMPTY,
+    EMAIL_ERROR,
+    EMAIL_NONEMPTY,
+    FIRSTNAME_NONEMPTY,
+    FORMAT_ERROR,
+    LASTNAME_NONEMPTY,
+    LOGIN_NONEMPTY,
+    MAXLENGTH_ERROR,
+    PASSWORD_NONEMPTY,
+} from '~/constants/validation-messages';
+
 export const registrationSchema = z
     .object({
         firstName: z
             .string()
-            .nonempty('Введите имя')
-            .max(50, 'Максимальная длина 50 символов')
+            .nonempty(FIRSTNAME_NONEMPTY)
+            .max(50, MAXLENGTH_ERROR)
             .refine((val) => /^[А-ЯЁ]$/.test(val[0]), {
-                message: 'Должно начинаться с кириллицы А-Я',
+                message: CAPITAL_ERROR,
             })
             .refine((val) => val.slice(1).match(/^[А-Яа-яЁё-]*$/), {
-                message: 'Только кириллица А-Я, и "-"',
+                message: ALPHABET_ERROR,
             }),
         lastName: z
             .string()
-            .nonempty('Введите фамилию')
-            .max(50, 'Максимальная длина 50 символов')
+            .nonempty(LASTNAME_NONEMPTY)
+            .max(50, MAXLENGTH_ERROR)
             .refine((val) => /^[А-ЯЁ]$/.test(val[0]), {
-                message: 'Должно начинаться с кириллицы А-Я',
+                message: CAPITAL_ERROR,
             })
             .refine((val) => val.slice(1).match(/^[А-Яа-яЁё-]*$/), {
-                message: 'Только кириллица А-Я, и "-"',
+                message: ALPHABET_ERROR,
             }),
-        email: z
-            .string()
-            .nonempty('Введите e-mail')
-            .max(50, 'Максимальная длина 50 символов')
-            .email('Введите корректный e-mail'),
+        email: z.string().nonempty(EMAIL_NONEMPTY).max(50, MAXLENGTH_ERROR).email(EMAIL_ERROR),
         login: z
             .string()
-            .nonempty('Введите логин')
-            .max(50, 'Максимальная длина 50 символов')
-            .min(5, 'Не соответствует формату')
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату'),
+            .nonempty(LOGIN_NONEMPTY)
+            .max(50, MAXLENGTH_ERROR)
+            .min(5, FORMAT_ERROR)
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, FORMAT_ERROR),
         password: z
             .string()
-            .nonempty('Введите пароль')
-            .max(50, 'Максимальная длина 50 символов')
-            .min(8, 'Не соответствует формату')
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату')
-            .regex(/[A-ZА-Я]/, 'Не соответствует формату')
-            .regex(/\d/, 'Не соответствует формату'),
-        confirmPassword: z.string().nonempty('Повторите пароль'),
+            .nonempty(PASSWORD_NONEMPTY)
+            .max(50, MAXLENGTH_ERROR)
+            .min(8, FORMAT_ERROR)
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, FORMAT_ERROR)
+            .regex(/[A-ZА-Я]/, FORMAT_ERROR)
+            .regex(/\d/, FORMAT_ERROR),
+        confirmPassword: z.string().nonempty(CONFIRM_PASSWORD_NONEMPTY),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: 'Пароли должны совпадать',
+        message: CONFIRM_PASSWORD_ERROR,
         path: ['confirmPassword'],
     });
 

@@ -16,6 +16,12 @@ import type {
     UseFormWatch,
 } from 'react-hook-form';
 
+import {
+    CONFIRM_PASSWORD_NONEMPTY,
+    LOGIN_HELPER,
+    PASSWORD_HELPER,
+} from '~/constants/validation-messages';
+
 import type { ResetFormData } from './recoverySchema';
 
 interface ResetStepFormProps {
@@ -58,7 +64,7 @@ export const ResetStepForm = ({
                     variant='sign'
                     data-test-id='login-input'
                 />
-                <FormHelperText>Не менее 5 символов, только латиница</FormHelperText>
+                <FormHelperText>{LOGIN_HELPER}</FormHelperText>
                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
             </FormControl>
 
@@ -70,12 +76,12 @@ export const ResetStepForm = ({
                     data-test-id='password-input'
                     variant='sign'
                 />
-                <FormHelperText>Не менее 8 символов, с заглавной буквой и цифрой</FormHelperText>
+                <FormHelperText>{PASSWORD_HELPER}</FormHelperText>
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.passwordConfirm}>
-                <FormLabel>Повторите пароль</FormLabel>
+                <FormLabel>{CONFIRM_PASSWORD_NONEMPTY}</FormLabel>
                 <Input
                     type='password'
                     {...register('passwordConfirm')}

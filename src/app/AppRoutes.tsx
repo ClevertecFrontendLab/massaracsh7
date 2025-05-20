@@ -13,15 +13,20 @@ import { RecipePage } from '~/pages/RecipePage/RecipePage';
 import { SignInPage } from '~/pages/SignInPage/SignInPage';
 import { VerificationPage } from '~/pages/VerificationPage/VerificationPage';
 import { useAppSelector } from '~/store/hooks';
-import { userLoadingSelector } from '~/store/selectors/appSelectors';
+import {
+    userAlertSelector,
+    userLoadingSelector,
+    userModalSelector,
+} from '~/store/selectors/appSelectors';
 
 import { PrivateRoute } from './PrivateRoute';
 import { ROUTES_PATH } from './routes';
 
 const AppRoutes = () => {
     const isLoading = useAppSelector(userLoadingSelector);
-    const modal = useAppSelector((state) => state.app.modal);
-    const alert = useAppSelector((state) => state.app.alert);
+    const modal = useAppSelector(userModalSelector);
+    const alert = useAppSelector(userAlertSelector);
+
     const location = useLocation();
     const isNotFound = location.pathname === ROUTES_PATH.NOT_FOUND;
 

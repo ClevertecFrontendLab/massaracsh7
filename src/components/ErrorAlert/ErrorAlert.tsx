@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/constants/test-ids';
 import { clearAppAlert } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { userAlertSelector } from '~/store/selectors/appSelectors';
 
 export const AppAlert = () => {
-    const alert = useAppSelector((state) => state.app.alert);
+    const alert = useAppSelector(userAlertSelector);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

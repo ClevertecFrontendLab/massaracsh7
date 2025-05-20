@@ -1,11 +1,17 @@
 import { z } from 'zod';
 
+import {
+    CONFIRM_PASSWORD_ERROR,
+    CONFIRM_PASSWORD_NONEMPTY,
+    EMAIL_ERROR,
+    EMAIL_NONEMPTY,
+    FORMAT_ERROR,
+    MAXLENGTH_ERROR,
+    PASSWORD_NONEMPTY,
+} from '~/constants/validation-messages';
+
 export const emailSchema = z.object({
-    email: z
-        .string()
-        .nonempty('Введите e-mail')
-        .max(50, 'Максимальная длина 50 символов')
-        .email('Введите корректный e-mail'),
+    email: z.string().nonempty(EMAIL_NONEMPTY).max(50, MAXLENGTH_ERROR).email(EMAIL_ERROR),
 });
 
 export const resetSchema = z
@@ -13,21 +19,21 @@ export const resetSchema = z
         email: z.string(),
         login: z
             .string()
-            .min(5, 'Не соответствует формату')
-            .max(50, 'Максимальная длина 50 символов')
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату'),
+            .min(5, FORMAT_ERROR)
+            .max(50, MAXLENGTH_ERROR)
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, FORMAT_ERROR),
         password: z
             .string()
-            .nonempty('Введите пароль')
-            .max(50, 'Максимальная длина 50 символов')
-            .min(8, 'Не соответствует формату')
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, 'Не соответствует формату')
-            .regex(/[A-ZА-Я]/, 'Не соответствует формату')
-            .regex(/\d/, 'Не соответствует формату'),
-        passwordConfirm: z.string().nonempty('Повторите пароль'),
+            .nonempty(PASSWORD_NONEMPTY)
+            .max(50, MAXLENGTH_ERROR)
+            .min(8, FORMAT_ERROR)
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, FORMAT_ERROR)
+            .regex(/[A-ZА-Я]/, FORMAT_ERROR)
+            .regex(/\d/, FORMAT_ERROR),
+        passwordConfirm: z.string().nonempty(CONFIRM_PASSWORD_NONEMPTY),
     })
     .refine((data) => data.password === data.passwordConfirm, {
-        message: 'Пароли должны совпадать',
+        message: CONFIRM_PASSWORD_ERROR,
         path: ['passwordConfirm'],
     });
 

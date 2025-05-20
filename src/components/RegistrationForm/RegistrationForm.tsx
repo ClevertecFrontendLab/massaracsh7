@@ -5,6 +5,12 @@ import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import {
+    ERROR_SERVER_MESSAGE,
+    ERROR_SERVER_TITLE,
+    SUCCESS_SIGNUP_TITLE,
+} from '~/constants/api-results';
+import { FOOTER_SIGNUP_MESSAGE } from '~/constants/constants';
 import { useSignupMutation } from '~/query/services/auth';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -69,11 +75,10 @@ export const RegistrationForm = () => {
             navigate('/login');
             dispatch(
                 setAppModal({
-                    title: 'Остался последний шаг. Нужно верифицировать ваш e-mail',
+                    title: SUCCESS_SIGNUP_TITLE,
                     description: `Мы отправили вам на почту ${payload.email} ссылку для верификации.`,
                     imageSrc: '/images/modal-dance.png',
-                    footerNote:
-                        'Не пришло письмо? Проверьте папаку Спам. По другим вопросам свяжитесь с поддержкой',
+                    footerNote: FOOTER_SIGNUP_MESSAGE,
                     dataId: 'sign-up-success-modal',
                 }),
             );
@@ -88,8 +93,8 @@ export const RegistrationForm = () => {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: 'Ошибка сервера',
-                            message: 'Попробуйте немного позже',
+                            title: ERROR_SERVER_TITLE,
+                            message: ERROR_SERVER_MESSAGE,
                         }),
                     );
                 }

@@ -15,9 +15,10 @@ import {
 
 import { clearModal } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { userModalSelector } from '~/store/selectors/appSelectors';
 
 export const CustomModal = () => {
-    const modal = useAppSelector((state) => state.app.modal);
+    const modal = useAppSelector(userModalSelector);
     const dispatch = useAppDispatch();
 
     if (!modal) return null;

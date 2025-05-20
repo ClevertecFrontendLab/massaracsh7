@@ -14,6 +14,13 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import {
+    ERROR_EMAILRESET_MESSAGE,
+    ERROR_EMAILRESET_TITLE,
+    ERROR_SERVER_MESSAGE,
+    ERROR_SERVER_TITLE,
+} from '~/constants/api-results';
+import { FOOTER_RECOVERY_MESSAGE } from '~/constants/constants';
+import {
     useForgotPasswordMutation,
     useResetPasswordMutation,
     useVerifyOtpMutation,
@@ -90,17 +97,16 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Такого e-mail нет',
-                        message:
-                            'Попробуйте другой e-mail или проверьте правильность его написания',
+                        title: ERROR_EMAILRESET_TITLE,
+                        message: ERROR_EMAILRESET_MESSAGE,
                     }),
                 );
             } else if (e.status && String(e.status).startsWith('5')) {
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Ошибка сервера',
-                        message: 'Попробуйте немного позже',
+                        title: ERROR_SERVER_TITLE,
+                        message: ERROR_SERVER_MESSAGE,
                     }),
                 );
             }
@@ -121,8 +127,8 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Ошибка сервера',
-                        message: 'Попробуйте немного позже',
+                        title: ERROR_SERVER_TITLE,
+                        message: ERROR_SERVER_MESSAGE,
                     }),
                 );
             }
@@ -148,8 +154,8 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Ошибка сервера',
-                        message: 'Попробуйте немного позже',
+                        title: ERROR_SERVER_TITLE,
+                        message: ERROR_SERVER_MESSAGE,
                     }),
                 );
             }
@@ -216,7 +222,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     </Stack>
                 </ModalBody>
 
-                <ModalFooter>Не пришло письмо? Проверьте папку Спам.</ModalFooter>
+                <ModalFooter>{FOOTER_RECOVERY_MESSAGE}</ModalFooter>
             </ModalContent>
         </Modal>
     );
