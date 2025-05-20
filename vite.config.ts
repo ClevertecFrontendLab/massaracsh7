@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    base: command === 'build' ? '/massaracsh7/' : '/'
     plugins: [react()],
     server: {
         host: true,
