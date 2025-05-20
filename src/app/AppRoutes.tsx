@@ -37,13 +37,14 @@ const AppRoutes = () => {
             {alert && <AppAlert />}
             <Routes>
                 <Route
+                    path={ROUTES_PATH.HOME}
                     element={
                         <PrivateRoute>
                             <Layout />
                         </PrivateRoute>
                     }
                 >
-                    <Route path={ROUTES_PATH.HOME} element={<MainPage />} />
+                    <Route index element={<MainPage />} />
                     <Route path={ROUTES_PATH.CATEGORY} element={<CategoryPage />} />
                     <Route path={ROUTES_PATH.RECIPE} element={<RecipePage />} />
                     <Route path={ROUTES_PATH.JUICY} element={<JuicyPage />} />
@@ -53,7 +54,7 @@ const AppRoutes = () => {
                 <Route path={ROUTES_PATH.SIGN_IN} element={<SignInPage />} />
                 <Route path={ROUTES_PATH.VERIFICATION} element={<VerificationPage />} />
                 <Route path={ROUTES_PATH.NOT_FOUND} element={<NotFoundPage />} />
-                <Route path='*' element={<Navigate to={ROUTES_PATH.NOT_FOUND} />} />
+                <Route path='*' element={<Navigate to={ROUTES_PATH.NOT_FOUND} replace />} />
             </Routes>
         </>
     );
