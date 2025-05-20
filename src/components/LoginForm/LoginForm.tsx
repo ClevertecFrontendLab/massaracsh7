@@ -59,7 +59,7 @@ export const LoginForm = () => {
     const onSubmit = async (data: LoginFormData) => {
         try {
             await login(data as LoginRequest).unwrap();
-            navigate('/');
+            navigate(`${import.meta.env.BASE_URL}`);
         } catch (err) {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
@@ -85,7 +85,7 @@ export const LoginForm = () => {
                         setAppModal({
                             title: ERROR_LOGIN_TITLE_500,
                             description: ERROR_LOGIN_MESSAGE_500,
-                            imageSrc: '/images/modal-breakfast.png',
+                            imageSrc: './images/modal-breakfast.png',
                             dataId: 'sign-in-error-modal',
                             onPrimaryAction: async () => {
                                 try {

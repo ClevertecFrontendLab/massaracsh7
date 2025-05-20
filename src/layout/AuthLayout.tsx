@@ -33,8 +33,8 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
     const dispatch = useAppDispatch();
 
     const logoSrc = useBreakpointValue({
-        base: '/images/logo-auth-mini.png',
-        md: '/images/logo-auth.png',
+        base: './images/logo-auth-mini.png',
+        md: './images/logo-auth.png',
     });
 
     useEffect(() => {
@@ -95,7 +95,7 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
                     <Box
                         maxW='50.5%'
                         w='full'
-                        bgImage='/images/auth-side-image.jpg'
+                        bgImage='./images/auth-side-image.jpg'
                         bgRepeat='no-repeat'
                         bgPosition='50% 50%'
                         bgSize='cover'

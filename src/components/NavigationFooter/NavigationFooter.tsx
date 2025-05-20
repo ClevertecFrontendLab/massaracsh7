@@ -25,7 +25,7 @@ export const NavigationFooter = () => (
         <HStack spacing={1.5} align='center'>
             <IconButton
                 aria-label='Выйти'
-                icon={<Image src='/icons/left-icon.svg' alt='Exit' boxSize='12px' />}
+                icon={<Image src='./icons/left-icon.svg' alt='Exit' boxSize='12px' />}
                 variant='ghost'
                 size='sm'
             />

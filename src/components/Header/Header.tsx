@@ -33,10 +33,10 @@ export const Header = () => {
                 <HStack justify='space-between' align='center'>
                     <HStack spacing={32} align='center'>
                         <Hide below='smPlus'>
-                            <Box as='img' src='/logo.png' alt='Logo' h='32px' />
+                            <Box as='img' src='./logo.png' alt='Logo' h='32px' />
                         </Hide>
                         <Show below='smPlus'>
-                            <Box as='img' src='/logo-mini.png' alt='Logo' h='32px' />
+                            <Box as='img' src='./logo-mini.png' alt='Logo' h='32px' />
                         </Show>
 
                         <Hide below='mid'>
@@ -47,7 +47,7 @@ export const Header = () => {
                         <HStack spacing={3} px={6} align='center'>
                             <Avatar
                                 name='Екатерина Константинопольская'
-                                src='/avatar.png'
+                                src='./avatar.png'
                                 w='48px'
                             />
                             <Box>

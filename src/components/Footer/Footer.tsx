@@ -19,7 +19,7 @@ export const Footer = () => (
         <Flex as='nav' justify='space-around' align='flex-end' height='100%'>
             <Button variant='radial'>
                 <Flex align='center' justify='center' boxSize='40px' bg='text' borderRadius='full'>
-                    <Image src='/icons/house.svg' alt='Главная' boxSize='16px' />
+                    <Image src='./icons/house.svg' alt='Главная' boxSize='16px' />
                 </Flex>
                 <Text textStyle='miniText'>Главная</Text>
             </Button>
@@ -30,14 +30,14 @@ export const Footer = () => (
             </Button>
 
             <Button variant='radial'>
-                <Image src='/icons/pen-nout.svg' alt='Записать' boxSize='24px' mb='4px' />
+                <Image src='./icons/pen-nout.svg' alt='Записать' boxSize='24px' mb='4px' />
                 <Text textStyle='miniText'>Записать</Text>
             </Button>
 
             <Button variant='radial'>
                 <Avatar
                     name='Екатерина Константинопольская'
-                    src='/avatar.png'
+                    src='./avatar.png'
                     w='40px'
                     h='40px'
                     mb='4px'
