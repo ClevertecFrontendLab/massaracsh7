@@ -2,8 +2,8 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
-    base: command === 'build' ? '/massaracsh7/' : '/'
+export default defineConfig(({ command }) => ({
+    base: command === 'build' ? '/massaracsh7/' : '/',
     plugins: [react()],
     server: {
         host: true,
@@ -15,4 +15,4 @@ export default defineConfig({
             '@public': resolve(__dirname, 'public'),
         },
     },
-});
+}));
