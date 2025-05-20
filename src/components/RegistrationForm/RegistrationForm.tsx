@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import {
     ERROR_SERVER_MESSAGE,
     ERROR_SERVER_TITLE,
@@ -73,7 +74,7 @@ export const RegistrationForm = () => {
         const { confirmPassword, ...payload } = data;
         try {
             await signup(payload as SignUpRequest).unwrap();
-            navigate('/login');
+            navigate(ROUTES_PATH.LOG_IN);
             dispatch(
                 setAppModal({
                     title: SUCCESS_SIGNUP_TITLE,

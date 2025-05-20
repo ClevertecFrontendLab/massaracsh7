@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import {
     ERROR_EMAIL_MESSAGE,
     ERROR_EMAIL_TITLE,
@@ -59,7 +60,7 @@ export const LoginForm = () => {
     const onSubmit = async (data: LoginFormData) => {
         try {
             await login(data as LoginRequest).unwrap();
-            navigate(`${import.meta.env.BASE_URL}`);
+            navigate(ROUTES_PATH.HOME);
         } catch (err) {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
@@ -85,7 +86,7 @@ export const LoginForm = () => {
                         setAppModal({
                             title: ERROR_LOGIN_TITLE_500,
                             description: ERROR_LOGIN_MESSAGE_500,
-                            imageSrc: './images/modal-breakfast.png',
+                            imageSrc: '/images/modal-breakfast.png',
                             dataId: 'sign-in-error-modal',
                             onPrimaryAction: async () => {
                                 try {
