@@ -132,6 +132,9 @@ const Input = defineStyleConfig({
                 border: '1px solid',
                 borderColor: 'customLime.150',
                 color: 'customLime.800',
+                fontSize: '18px',
+                lineHeight: '18px',
+                height: '48px',
                 _focus: {
                     borderColor: 'customLime.700',
                 },
@@ -176,6 +179,9 @@ export const Button = defineStyleConfig({
         darkWhite: {
             bgColor: 'blackAlpha.900',
             color: 'white',
+            fontSize: '18px',
+            lineHieght: '28px',
+            height: '48px',
             _hover: {
                 bgColor: 'blackAlpha.800',
                 _disabled: {
@@ -406,19 +412,19 @@ const theme = extendTheme({
     },
     textStyles: {
         nav: {
-            fontSize: 'lg',
+            fontSize: '16px',
             lineHeight: '24px',
             fontWeight: '400',
             color: 'text',
         },
         navActive: {
-            fontSize: 'lg',
+            fontSize: '16px',
             lineHeight: '24px',
             fontWeight: '700',
             color: 'text',
         },
         navInactive: {
-            fontSize: 'lg',
+            fontSize: '16px',
             lineHeight: '24px',
             fontWeight: '400',
             color: 'secondaryText',
@@ -465,6 +471,12 @@ const theme = extendTheme({
             textOverflow: 'ellipsis',
             webkitHyphens: 'auto',
             hyphens: 'auto',
+        },
+        helperText: {
+            textAlign: 'left',
+            color: 'secondaryText',
+            fontSize: '12px',
+            fontWeight: '16px',
         },
     },
 

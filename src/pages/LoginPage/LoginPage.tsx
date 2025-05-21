@@ -16,6 +16,16 @@ export const LoginPage = () => {
                 variant='ghost'
                 onClick={() => setRecoveryOpen(true)}
                 data-test-id={FORGOT_PASSWORD}
+                mx='auto'
+                mt='8px'
+                sx={{
+                    _focus: { boxShadow: 'none' },
+                    _focusVisible: { boxShadow: 'none' },
+                    _hover: { boxShadow: 'none' },
+                }}
+                fontSize='16px'
+                lineHeight='24px'
+                fontWeight='600'
             >
                 Забыли логин или пароль
             </Button>

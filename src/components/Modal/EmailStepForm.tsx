@@ -40,9 +40,11 @@ export const EmailStepForm = ({
         }}
         style={{ width: '100%' }}
     >
-        <VStack spacing={4} align='stretch'>
+        <VStack spacing={6} align='stretch'>
             <FormControl isInvalid={!!errors.email}>
-                <FormLabel>Ваш email</FormLabel>
+                <FormLabel fontSize='16px' mb={1}>
+                    Ваш email
+                </FormLabel>
                 <Input
                     {...register('email')}
                     onBlur={() => {
@@ -56,7 +58,7 @@ export const EmailStepForm = ({
                 <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
 
-            <Button mt={2} type='submit' variant='darkWhite' w='full' data-test-id={SUBMIT_BUTTON}>
+            <Button type='submit' variant='darkWhite' w='full' data-test-id={SUBMIT_BUTTON}>
                 Получить код
             </Button>
         </VStack>

@@ -53,7 +53,9 @@ export const Step2Form = ({
     return (
         <VStack spacing={6}>
             <FormControl isInvalid={!!errors.login}>
-                <FormLabel htmlFor='login'>Логин</FormLabel>
+                <FormLabel htmlFor='login' textStyle='nav' fontSize='16px'>
+                    Логин
+                </FormLabel>
                 <Input
                     id='login'
                     {...register('login')}
@@ -65,14 +67,16 @@ export const Step2Form = ({
                     variant='sign'
                     data-test-id={LOGIN_INPUT}
                 />
-                <FormHelperText justifyContent='left'>
+                <FormHelperText textAlign='left'>
                     Не менее 5 символов, только латиница
                 </FormHelperText>
                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.password}>
-                <FormLabel htmlFor='password'>Пароль</FormLabel>
+                <FormLabel htmlFor='password' textStyle='nav' fontSize='16px'>
+                    Пароль
+                </FormLabel>
                 <InputGroup>
                     <Input
                         id='password'
@@ -86,23 +90,32 @@ export const Step2Form = ({
                             size='sm'
                             variant='ghost'
                             aria-label={showPwd ? 'Скрыть пароль' : 'Показать пароль'}
-                            icon={showPwd ? <ViewOffIcon /> : <ViewIcon />}
+                            icon={
+                                showPwd ? (
+                                    <ViewOffIcon boxSize='18px' />
+                                ) : (
+                                    <ViewIcon boxSize='18px' />
+                                )
+                            }
                             onMouseDown={() => setShowPwd(true)}
                             onMouseUp={() => setShowPwd(false)}
                             onMouseLeave={() => setShowPwd(false)}
                             onTouchStart={() => setShowPwd(true)}
                             onTouchEnd={() => setShowPwd(false)}
+                            pt={3}
                         />
                     </InputRightElement>
                 </InputGroup>
-                <FormHelperText justifyContent='left'>
+                <FormHelperText textAlign='left'>
                     Не менее 8 символов, с заглавной буквой и цифрой
                 </FormHelperText>
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.confirmPassword}>
-                <FormLabel htmlFor='confirmPassword'>Повторите пароль</FormLabel>
+                <FormLabel htmlFor='confirmPassword' textStyle='nav' fontSize='16px'>
+                    Повторите пароль
+                </FormLabel>
                 <InputGroup>
                     <Input
                         id='confirmPassword'
@@ -116,12 +129,19 @@ export const Step2Form = ({
                             size='sm'
                             variant='ghost'
                             aria-label={showConfirm ? 'Скрыть пароль' : 'Показать пароль'}
-                            icon={showConfirm ? <ViewOffIcon /> : <ViewIcon />}
+                            icon={
+                                showConfirm ? (
+                                    <ViewOffIcon boxSize='18px' />
+                                ) : (
+                                    <ViewIcon boxSize='18px' />
+                                )
+                            }
                             onMouseDown={() => setShowConfirm(true)}
                             onMouseUp={() => setShowConfirm(false)}
                             onMouseLeave={() => setShowConfirm(false)}
                             onTouchStart={() => setShowConfirm(true)}
                             onTouchEnd={() => setShowConfirm(false)}
+                            pt={3}
                         />
                     </InputRightElement>
                 </InputGroup>

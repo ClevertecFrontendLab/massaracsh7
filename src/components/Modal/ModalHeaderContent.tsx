@@ -17,13 +17,14 @@ const imageByStep: Record<ModalHeaderContentProps['step'], string | undefined> =
 };
 
 export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeaderContentProps) => (
-    <Stack align='center' gap={8}>
+    <Stack align='center'>
         {imageByStep[step] && (
             <Image
                 src={imageByStep[step]}
                 alt='Modal'
                 mx='auto'
-                boxSize={{ base: '108px', mid: '206px' }}
+                mb={8}
+                boxSize={{ sm: '108px', md: '108px', mid: '206px', lg: '206px', xl: '206px' }}
             />
         )}
 
@@ -33,6 +34,7 @@ export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeader
             fontWeight={step === 'reset' ? '700' : 'normal'}
             textAlign='center'
             px={6}
+            mb={4}
         >
             {titleError && (
                 <Heading

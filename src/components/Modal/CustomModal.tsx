@@ -40,8 +40,8 @@ export const CustomModal = () => {
             <ModalContent data-test-id={dataId}>
                 <CloseButton
                     position='absolute'
-                    right='1rem'
-                    top='1rem'
+                    right={6}
+                    top={6}
                     onClick={() => dispatch(clearModal())}
                     data-test-id={CLOSE_BUTTON}
                     border='1px solid black'

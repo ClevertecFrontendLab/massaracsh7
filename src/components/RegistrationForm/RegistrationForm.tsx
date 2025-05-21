@@ -106,7 +106,7 @@ export const RegistrationForm = () => {
     };
 
     return (
-        <Box maxW='400px' mx='auto' mt='50px'>
+        <Box mx='auto'>
             <StepProgress step={step} progress={progress} />
 
             <form

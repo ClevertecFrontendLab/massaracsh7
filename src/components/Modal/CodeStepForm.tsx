@@ -1,6 +1,6 @@
-import { Button, FormControl, HStack, PinInput, PinInputField, VStack } from '@chakra-ui/react';
+import { FormControl, HStack, PinInput, PinInputField, VStack } from '@chakra-ui/react';
 
-import { SUBMIT_CODE, VERIFICATION_CODE_INPUT } from '~/constants/test-ids';
+import { VERIFICATION_CODE_INPUT } from '~/constants/test-ids';
 
 interface CodeStepFormProps {
     code: string;
@@ -32,16 +32,6 @@ export const CodeStepForm = ({ code, setCode, titleError, submitCode }: CodeStep
                             ))}
                         </PinInput>
                     </HStack>
-
-                    <Button
-                        mt={2}
-                        type='submit'
-                        variant='darkWhite'
-                        w='full'
-                        data-test-id={SUBMIT_CODE}
-                    >
-                        Подтвердить
-                    </Button>
                 </VStack>
             </FormControl>
         </form>

@@ -104,11 +104,13 @@ export const LoginForm = () => {
     };
 
     return (
-        <Box maxW='400px' mx='auto' mt='50px'>
+        <Box mx='auto'>
             <form autoComplete='off' onSubmit={handleSubmit(onSubmit)} data-test-id='sign-in-form'>
-                <VStack spacing={6}>
+                <VStack spacing={5}>
                     <FormControl isInvalid={!!errors.login}>
-                        <FormLabel htmlFor='login'>Логин для входа на сайт</FormLabel>
+                        <FormLabel htmlFor='login' textStyle='nav' fontSize='16px'>
+                            Логин для входа на сайт
+                        </FormLabel>
                         <Input
                             id='login'
                             {...register('login')}
@@ -125,7 +127,9 @@ export const LoginForm = () => {
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.password}>
-                        <FormLabel htmlFor='password'>Пароль</FormLabel>
+                        <FormLabel htmlFor='password' textStyle='nav' fontSize='16px'>
+                            Пароль
+                        </FormLabel>
                         <InputGroup>
                             <Input
                                 id='password'
@@ -146,21 +150,25 @@ export const LoginForm = () => {
                                     onTouchEnd={() => setShowPassword(false)}
                                     aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
                                     data-test-id='password-visibility-button'
+                                    pt={3}
                                 >
-                                    {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                    {showPassword ? (
+                                        <ViewOffIcon boxSize='18px' />
+                                    ) : (
+                                        <ViewIcon boxSize='18px' />
+                                    )}
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
                         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                     </FormControl>
 
-                    <HStack width='full'>
+                    <HStack width='full' mt='88px'>
                         <Button
                             type='submit'
                             flex={1}
                             variant='darkWhite'
                             data-test-id='submit-button'
-                            mt={6}
                         >
                             Войти
                         </Button>

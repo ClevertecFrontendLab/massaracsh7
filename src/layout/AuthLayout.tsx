@@ -16,8 +16,8 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import bgImg from '~/assets/images/auth-side-image.jpg';
-import logo from '~/assets/logo.png';
-import logoMini from '~/assets/logo-mini.png';
+import logo from '~/assets/images/logo-auth.png';
+import logoMini from '~/assets/images/logo-auth-mini.png';
 import { setAppLoader } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 
@@ -38,7 +38,7 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
 
     const logoSrc = useBreakpointValue({
         base: logoMini,
-        md: logo,
+        mid: logo,
     });
 
     useEffect(() => {
@@ -48,9 +48,13 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
     return (
         <Box pos='relative' w='100%'>
             <Flex minHeight='100dvh' w='100%'>
-                <Center flex={1} pb='75px' bgGradient='linear(to-bl, #EAFFC7, #29813F 170%)'>
-                    <Box py={12} maxW={{ base: 387, md: 493 }} w='full' px={4}>
-                        <Center mb={{ base: 16, md: 20 }}>
+                <Center flex={1} bgGradient='linear(to-bl, #EAFFC7, #29813F 170%)'>
+                    <Box
+                        maxW={{ sm: '328px', md: '355px', lg: '451px', xl: '461px' }}
+                        w='full'
+                        textAlign='center'
+                    >
+                        <Center mb={{ sm: '40px', md: '56px', lg: '80px', xl: '80px' }}>
                             <Image src={logoSrc} alt='Логотип' />
                         </Center>
 
@@ -62,30 +66,35 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
                             index={tabIndex}
                             onChange={(index) => navigate(tabs[index].path)}
                         >
-                            <TabList w='100%'>
-                                {tabs.map((tab, index) => (
+                            <TabList w='100%' borderBottom='2px solid' borderColor='blackAlpha.200'>
+                                {tabs.map((tab) => (
                                     <Tab
                                         key={tab.path}
                                         w='50%'
                                         cursor='pointer'
                                         px={6}
                                         py={3}
-                                        _selected={{
-                                            color: 'customLime.600',
-                                            borderBottom: '2px solid',
-                                            borderColor: 'customLime.600',
+                                        fontWeight='500'
+                                        fontSize={{
+                                            base: '16px',
+                                            md: '16px',
+                                            lg: '18px',
+                                            xl: '18px',
                                         }}
-                                        color={
-                                            tabIndex === index ? 'customLime.600' : 'customLime.800'
-                                        }
-                                        borderBottom={
-                                            tabIndex === index ? '2px solid' : '1px solid'
-                                        }
-                                        borderColor={
-                                            tabIndex === index ? 'customLime.600' : 'blackAlpha.200'
-                                        }
+                                        lineHeight={{
+                                            base: '24px',
+                                            md: '24px',
+                                            lg: '28px',
+                                            xl: '28px',
+                                        }}
+                                        color='customLime.800'
+                                        _selected={{
+                                            color: 'customLime.700',
+                                            borderBottom: '2px solid',
+                                            borderColor: 'customLime.700',
+                                        }}
                                     >
-                                        <Text variant='name-text'>{tab.label}</Text>
+                                        {tab.label}
                                     </Tab>
                                 ))}
                             </TabList>

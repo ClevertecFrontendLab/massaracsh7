@@ -35,7 +35,9 @@ export const Step1Form = ({
 }: Step1FormProps) => (
     <VStack spacing={6}>
         <FormControl isInvalid={!!errors.firstName}>
-            <FormLabel htmlFor='firstName'>Ваше имя</FormLabel>
+            <FormLabel htmlFor='firstName' textStyle='nav' fontSize='16px'>
+                Ваше имя
+            </FormLabel>
             <Input
                 id='firstName'
                 {...register('firstName')}
@@ -51,7 +53,9 @@ export const Step1Form = ({
         </FormControl>
 
         <FormControl isInvalid={!!errors.lastName}>
-            <FormLabel htmlFor='lastName'>Ваша фамилия</FormLabel>
+            <FormLabel htmlFor='lastName' textStyle='nav' fontSize='16px'>
+                Ваша фамилия
+            </FormLabel>
             <Input
                 id='lastName'
                 {...register('lastName')}
@@ -67,7 +71,9 @@ export const Step1Form = ({
         </FormControl>
 
         <FormControl isInvalid={!!errors.email}>
-            <FormLabel htmlFor='email'>Email</FormLabel>
+            <FormLabel htmlFor='email' textStyle='nav' fontSize='16px'>
+                Email
+            </FormLabel>
             <Input
                 id='email'
                 type='email'
