@@ -53,6 +53,7 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
                         maxW={{ sm: '328px', md: '355px', lg: '451px', xl: '461px' }}
                         w='full'
                         textAlign='center'
+                        pb='60px'
                     >
                         <Center mb={{ sm: '40px', md: '56px', lg: '80px', xl: '80px' }}>
                             <Image src={logoSrc} alt='Логотип' />

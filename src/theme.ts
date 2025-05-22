@@ -177,17 +177,13 @@ export const Button = defineStyleConfig({
             h: { base: '8', sm: '8', md: '8', lg: '8', xl: '8' },
         },
         darkWhite: {
-            bgColor: 'blackAlpha.900',
+            bg: 'blackAlpha.900',
             color: 'white',
             fontSize: '18px',
-            lineHieght: '28px',
+            lineHeight: '28px',
             height: '48px',
             _hover: {
                 bgColor: 'blackAlpha.800',
-                _disabled: {
-                    opacity: 0.8,
-                    bgColor: 'blackAlpha.800',
-                },
             },
             _disabled: {
                 opacity: 0.8,

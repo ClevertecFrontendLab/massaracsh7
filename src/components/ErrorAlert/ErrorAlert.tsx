@@ -14,7 +14,7 @@ export const AppAlert = () => {
         if (alert) {
             const timer = setTimeout(() => {
                 dispatch(clearAppAlert());
-            }, 15000);
+            }, 30000);
 
             return () => clearTimeout(timer);
         }
