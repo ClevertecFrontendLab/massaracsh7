@@ -48,6 +48,7 @@ export const Step1Form = ({
                 }}
                 variant='sign'
                 data-test-id={FIRST_NAME_INPUT}
+                placeholder='Имя'
             />
             <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
         </FormControl>
@@ -66,6 +67,7 @@ export const Step1Form = ({
                 }}
                 variant='sign'
                 data-test-id={LAST_NAME_INPUT}
+                placeholder='Фамилия'
             />
             <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
         </FormControl>
@@ -85,6 +87,7 @@ export const Step1Form = ({
                 }}
                 variant='sign'
                 data-test-id={EMAIL_INPUT}
+                placeholder='email'
             />
             <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         </FormControl>

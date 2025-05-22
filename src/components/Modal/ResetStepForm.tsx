@@ -62,10 +62,10 @@ export const ResetStepForm = ({
             }}
             style={{ width: '100%' }}
         >
-            <VStack spacing={6}>
+            <VStack spacing={5}>
                 <FormControl isInvalid={!!errors.login}>
                     <FormLabel textStyle='nav' fontSize='16px'>
-                        Введите логин
+                        Логин для входа на сайт
                     </FormLabel>
                     <Input
                         {...register('login')}
@@ -76,8 +76,11 @@ export const ResetStepForm = ({
                         }}
                         variant='sign'
                         data-test-id={LOGIN_INPUT}
+                        placeholder='Логин'
                     />
-                    <FormHelperText>{LOGIN_HELPER}</FormHelperText>
+                    <FormHelperText mt={0} textAlign='left'>
+                        {LOGIN_HELPER}
+                    </FormHelperText>
                     <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                 </FormControl>
 
@@ -92,6 +95,7 @@ export const ResetStepForm = ({
                             {...register('password')}
                             variant='sign'
                             data-test-id={PASSWORD_INPUT}
+                            placeholder='Пароль'
                         />
                         <InputRightElement>
                             <IconButton
@@ -114,7 +118,9 @@ export const ResetStepForm = ({
                             />
                         </InputRightElement>
                     </InputGroup>
-                    <FormHelperText>{PASSWORD_HELPER}</FormHelperText>
+                    <FormHelperText mt={0} textAlign='left'>
+                        {PASSWORD_HELPER}
+                    </FormHelperText>
                     <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                 </FormControl>
 
@@ -129,6 +135,7 @@ export const ResetStepForm = ({
                             {...register('passwordConfirm')}
                             variant='sign'
                             data-test-id={CONFIRM_PASSWORD_INPUT}
+                            placeholder='Пароль'
                         />
                         <InputRightElement>
                             <IconButton

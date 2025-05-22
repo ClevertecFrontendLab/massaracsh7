@@ -18,8 +18,8 @@ export const CodeStepForm = ({ code, setCode, titleError, submitCode }: CodeStep
     return (
         <form onSubmit={onSubmit}>
             <FormControl isInvalid={!!titleError}>
-                <VStack spacing={6}>
-                    <HStack w='100%' mb={6} justifyContent='center'>
+                <VStack>
+                    <HStack w='100%' justifyContent='center'>
                         <PinInput otp value={code} onChange={setCode} onComplete={submitCode}>
                             {[...Array(6)].map((_, i) => (
                                 <PinInputField

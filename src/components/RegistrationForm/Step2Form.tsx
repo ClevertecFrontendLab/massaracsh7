@@ -27,6 +27,7 @@ import {
     PASSWORD_INPUT,
     SUBMIT_BUTTON,
 } from '~/constants/test-ids';
+import { LOGIN_HELPER, PASSWORD_HELPER } from '~/constants/validation-messages';
 
 import { RegistrationFormData } from './registrationSchema';
 
@@ -54,7 +55,7 @@ export const Step2Form = ({
         <VStack spacing={6}>
             <FormControl isInvalid={!!errors.login}>
                 <FormLabel htmlFor='login' textStyle='nav' fontSize='16px'>
-                    Логин
+                    Логин для входа на сайт
                 </FormLabel>
                 <Input
                     id='login'
@@ -66,9 +67,10 @@ export const Step2Form = ({
                     }}
                     variant='sign'
                     data-test-id={LOGIN_INPUT}
+                    placeholder='Логин'
                 />
-                <FormHelperText textAlign='left'>
-                    Не менее 5 символов, только латиница
+                <FormHelperText mt={0} textAlign='left'>
+                    {LOGIN_HELPER}
                 </FormHelperText>
                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
             </FormControl>
@@ -84,6 +86,7 @@ export const Step2Form = ({
                         {...register('password')}
                         variant='sign'
                         data-test-id={PASSWORD_INPUT}
+                        placeholder='Пароль'
                     />
                     <InputRightElement>
                         <IconButton
@@ -106,8 +109,8 @@ export const Step2Form = ({
                         />
                     </InputRightElement>
                 </InputGroup>
-                <FormHelperText textAlign='left'>
-                    Не менее 8 символов, с заглавной буквой и цифрой
+                <FormHelperText mt={0} textAlign='left'>
+                    {PASSWORD_HELPER}
                 </FormHelperText>
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
@@ -123,6 +126,7 @@ export const Step2Form = ({
                         {...register('confirmPassword')}
                         variant='sign'
                         data-test-id={CONFIRM_PASSWORD_INPUT}
+                        placeholder='Пароль'
                     />
                     <InputRightElement>
                         <IconButton

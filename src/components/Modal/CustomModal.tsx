@@ -60,16 +60,18 @@ export const CustomModal = () => {
                     )}
 
                     <ModalHeader>
-                        <Heading fontSize='24px' lineHeight='32px' fontWeight='700' mb={2}>
+                        <Heading fontSize='24px' lineHeight='32px' fontWeight='700' mb={2} p={0}>
                             {title}
                         </Heading>
                     </ModalHeader>
                 </Stack>
                 <ModalBody p={0} mt={2}>
-                    <Text fontSize='md'>{description}</Text>
+                    <Text fontSize='16px' lineHeight='24px' px={{ sm: 6, md: 6, lg: 12, xl: 12 }}>
+                        {description}
+                    </Text>
                 </ModalBody>
 
-                <ModalFooter p={0} mt={6} display='flex' justifyContent='center'>
+                <ModalFooter p={0} mt={8} display='flex' justifyContent='center'>
                     {onPrimaryAction && (
                         <Button
                             variant='darkWhite'
@@ -80,7 +82,11 @@ export const CustomModal = () => {
                         </Button>
                     )}
                     {footerNote && (
-                        <Text fontSize='12px' lineHeight='16px'>
+                        <Text
+                            fontSize='12px'
+                            lineHeight='16px'
+                            px={{ sm: 16, md: 16, lg: 8, xl: 8 }}
+                        >
                             {footerNote}
                         </Text>
                     )}

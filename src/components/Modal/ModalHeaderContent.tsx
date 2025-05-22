@@ -17,14 +17,14 @@ const imageByStep: Record<ModalHeaderContentProps['step'], string | undefined> =
 };
 
 export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeaderContentProps) => (
-    <Stack align='center'>
+    <Stack align='center' gap={8}>
         {imageByStep[step] && (
             <Image
                 src={imageByStep[step]}
                 alt='Modal'
                 mx='auto'
-                mb={8}
                 boxSize={{ sm: '108px', md: '108px', mid: '206px', lg: '206px', xl: '206px' }}
+                objectFit='contain'
             />
         )}
 
@@ -33,8 +33,9 @@ export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeader
             lineHeight={step === 'reset' ? '32px' : '24px'}
             fontWeight={step === 'reset' ? '700' : 'normal'}
             textAlign='center'
-            px={6}
-            mb={4}
+            mb={2}
+            p={0}
+            px={{ sm: 8, md: 8, lg: 6, xl: 6 }}
         >
             {titleError && (
                 <Heading
@@ -51,7 +52,18 @@ export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeader
             {step === 'email' && STEP_CODE_MESSAGE}
             {step === 'code' &&
                 `Мы отправили вам на e-mail ${emailValue} шестизначный код. Введите его ниже.`}
-            {step === 'reset' && STEP_RESET_MESSAGE}
+            {step === 'reset' && (
+                <Heading
+                    fontSize='24px'
+                    lineHeight='32px'
+                    fontWeight='700'
+                    textAlign='center'
+                    mb={2}
+                    px={8}
+                >
+                    {STEP_RESET_MESSAGE}
+                </Heading>
+            )}
         </ModalHeader>
     </Stack>
 );

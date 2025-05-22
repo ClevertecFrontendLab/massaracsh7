@@ -191,10 +191,8 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     w={6}
                     h={6}
                 />
-
                 <ModalHeaderContent step={step} emailValue={emailValue} titleError={titleError} />
-
-                <ModalBody>
+                <ModalBody mb={0} pb={0}>
                     <Stack align='stretch' spacing={4}>
                         {step === 'email' && (
                             <EmailStepForm
@@ -227,8 +225,11 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                         )}
                     </Stack>
                 </ModalBody>
-
-                <ModalFooter>{FOOTER_RECOVERY_MESSAGE}</ModalFooter>
+                {(step === 'email' || step === 'code') && (
+                    <ModalFooter p={0} px={{ sm: 16, md: 16, lg: 0, xl: 0 }} mt={6}>
+                        {FOOTER_RECOVERY_MESSAGE}
+                    </ModalFooter>
+                )}{' '}
             </ModalContent>
         </Modal>
     );
