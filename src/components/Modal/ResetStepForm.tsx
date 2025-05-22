@@ -65,7 +65,7 @@ export const ResetStepForm = ({
             <VStack spacing={5}>
                 <FormControl isInvalid={!!errors.login}>
                     <FormLabel textStyle='nav' fontSize='16px'>
-                        Логин для входа на сайт
+                        Введите логин
                     </FormLabel>
                     <Input
                         {...register('login')}
