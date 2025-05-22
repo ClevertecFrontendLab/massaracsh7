@@ -24,6 +24,7 @@ export const VerificationPage = () => {
             dispatch(
                 setAppAlert({
                     type: 'success',
+                    sourse: 'auth',
                     title: SUCCESS_VERIFICATION_TITLE,
                 }),
             );

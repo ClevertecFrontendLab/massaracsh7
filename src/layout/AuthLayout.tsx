@@ -18,8 +18,10 @@ import { ROUTES_PATH } from '~/app/routes';
 import bgImg from '~/assets/images/auth-side-image.jpg';
 import logo from '~/assets/images/logo-auth.png';
 import logoMini from '~/assets/images/logo-auth-mini.png';
+import { AppAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { setAppLoader } from '~/store/app-slice';
-import { useAppDispatch } from '~/store/hooks';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { userAlertSelector } from '~/store/selectors/appSelectors';
 
 interface AuthLayoutProps {
     children: ReactNode;
@@ -35,6 +37,7 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
     const navigate = useNavigate();
     const tabIndex = activeTab === 'login' ? 0 : 1;
     const dispatch = useAppDispatch();
+    const alert = useAppSelector(userAlertSelector);
 
     const logoSrc = useBreakpointValue({
         base: logoMini,
@@ -49,6 +52,7 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
         <Box pos='relative' w='100%'>
             <Flex minHeight='100dvh' w='100%'>
                 <Center flex={1} bgGradient='linear(to-bl, #EAFFC7, #29813F 170%)'>
+                    {alert && alert.sourse === 'auth' && <AppAlert />}
                     <Box
                         maxW={{ sm: '328px', md: '355px', lg: '451px', xl: '461px' }}
                         w='full'

@@ -104,6 +104,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     setAppAlert({
                         type: 'error',
                         title: ERROR_EMAILRESET_TITLE,
+                        sourse: 'global',
                         message: ERROR_EMAILRESET_MESSAGE,
                     }),
                 );
@@ -112,6 +113,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     setAppAlert({
                         type: 'error',
                         title: ERROR_SERVER_TITLE,
+                        sourse: 'global',
                         message: ERROR_SERVER_MESSAGE,
                     }),
                 );
@@ -134,6 +136,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     setAppAlert({
                         type: 'error',
                         title: ERROR_SERVER_TITLE,
+                        sourse: 'global',
                         message: ERROR_SERVER_MESSAGE,
                     }),
                 );
@@ -149,6 +152,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 setAppAlert({
                     type: 'success',
                     title: 'Восстановление данных успешно',
+                    sourse: 'global',
                     message: '',
                 }),
             );
@@ -161,6 +165,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     setAppAlert({
                         type: 'error',
                         title: ERROR_SERVER_TITLE,
+                        sourse: 'global',
                         message: ERROR_SERVER_MESSAGE,
                     }),
                 );

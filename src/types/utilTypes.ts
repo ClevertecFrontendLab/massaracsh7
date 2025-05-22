@@ -24,9 +24,11 @@ export interface ModalPayload {
 }
 
 type AlertType = 'error' | 'success';
+type AlertSourse = 'global' | 'auth';
 
 export interface AlertPayload {
     type: AlertType;
     message?: string;
     title: string;
+    sourse?: AlertSourse;
 }

@@ -34,6 +34,38 @@ export const CustomModal = () => {
         dataId,
     } = modal;
 
+    const renderDescription = () => {
+        if (typeof description !== 'string') {
+            return (
+                <Text fontSize='16px' lineHeight='24px' px={{ sm: 6, md: 6, lg: 12, xl: 12 }}>
+                    {description}
+                </Text>
+            );
+        }
+
+        const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/;
+        const match = description.match(emailRegex);
+
+        if (!match) {
+            return (
+                <Text fontSize='16px' lineHeight='24px' px={{ sm: 6, md: 6, lg: 12, xl: 12 }}>
+                    {description}
+                </Text>
+            );
+        }
+
+        const email = match[0];
+        const [before, after] = description.split(email);
+
+        return (
+            <Text fontSize='16px' lineHeight='24px' px={{ sm: 6, md: 6, lg: 12, xl: 12 }}>
+                {before}
+                <Text fontWeight='bold'>{email}</Text>
+                {after}
+            </Text>
+        );
+    };
+
     return (
         <Modal isOpen={true} onClose={() => dispatch(clearModal())} isCentered>
             <ModalOverlay />
@@ -58,17 +90,15 @@ export const CustomModal = () => {
                             boxSize={{ base: '108px', xl: '206px' }}
                         />
                     )}
-
                     <ModalHeader>
                         <Heading fontSize='24px' lineHeight='32px' fontWeight='700' mb={2} p={0}>
                             {title}
                         </Heading>
                     </ModalHeader>
                 </Stack>
+
                 <ModalBody p={0} mt={2}>
-                    <Text fontSize='16px' lineHeight='24px' px={{ sm: 6, md: 6, lg: 12, xl: 12 }}>
-                        {description}
-                    </Text>
+                    {renderDescription()}
                 </ModalBody>
 
                 <ModalFooter p={0} mt={8} display='flex' justifyContent='center'>

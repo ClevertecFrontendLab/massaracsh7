@@ -34,7 +34,7 @@ const AppRoutes = () => {
         <>
             {modal && <CustomModal />}
             {!isNotFound && isLoading && <FullLoader />}
-            {alert && <AppAlert />}
+            {alert && alert.sourse === 'global' && <AppAlert />}
             <Routes>
                 <Route
                     path={ROUTES_PATH.HOME}

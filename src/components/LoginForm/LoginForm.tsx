@@ -71,6 +71,7 @@ export const LoginForm = () => {
                         setAppAlert({
                             type: 'error',
                             title: ERROR_LOGIN_TITLE,
+                            sourse: 'auth',
                             message: ERROR_LOGIN_MESSAGE,
                         }),
                     );
@@ -79,6 +80,7 @@ export const LoginForm = () => {
                         setAppAlert({
                             type: 'error',
                             title: ERROR_EMAIL_TITLE,
+                            sourse: 'auth',
                             message: ERROR_EMAIL_MESSAGE,
                         }),
                     );

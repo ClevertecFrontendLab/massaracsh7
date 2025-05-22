@@ -50,8 +50,21 @@ export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeader
             )}
 
             {step === 'email' && STEP_CODE_MESSAGE}
-            {step === 'code' &&
-                `Мы отправили вам на e-mail ${emailValue} шестизначный код. Введите его ниже.`}
+            {step === 'code' && (
+                <Heading
+                    fontSize='16px'
+                    lineHeight='24px'
+                    fontWeight='normal'
+                    textAlign='center'
+                    mb={2}
+                >
+                    Мы отправили вам на e-mail
+                    <Heading as='span' fontWeight='600' display='inline'>
+                        {emailValue}
+                    </Heading>
+                    шестизначный код. Введите его ниже.
+                </Heading>
+            )}
             {step === 'reset' && (
                 <Heading
                     fontSize='24px'

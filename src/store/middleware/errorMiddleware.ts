@@ -18,6 +18,7 @@ export const errorMiddleware: Middleware = () => (next) => (action) => {
                 setAppAlert({
                     type: 'error',
                     title: 'Ошибка сервера',
+                    sourse: 'global',
                     message: 'Попробуйте поискать снова попозже',
                 }),
             );
