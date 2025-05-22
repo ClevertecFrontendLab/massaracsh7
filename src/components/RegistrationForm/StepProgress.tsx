@@ -1,6 +1,6 @@
 import { Heading, Progress } from '@chakra-ui/react';
 
-import { SIGN_UP_PROGRESS } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface StepProgressProps {
     step: 1 | 2;
@@ -26,7 +26,7 @@ export const StepProgress = ({ step, progress }: StepProgressProps) => (
             hasStripe
             colorScheme='customLime'
             bgColor='blackAlpha.100'
-            data-test-id={SIGN_UP_PROGRESS}
+            data-test-id={TEST_IDS.SIGN_UP_PROGRESS}
         />
     </>
 );

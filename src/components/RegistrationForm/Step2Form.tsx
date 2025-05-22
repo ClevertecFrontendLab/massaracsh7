@@ -21,13 +21,8 @@ import type {
     UseFormWatch,
 } from 'react-hook-form';
 
-import {
-    CONFIRM_PASSWORD_INPUT,
-    LOGIN_INPUT,
-    PASSWORD_INPUT,
-    SUBMIT_BUTTON,
-} from '~/constants/test-ids';
-import { LOGIN_HELPER, PASSWORD_HELPER } from '~/constants/validation-messages';
+import { TEST_IDS } from '~/constants/test-ids';
+import { VALIDATION_MESSAGES } from '~/constants/validation-messages';
 
 import { RegistrationFormData } from './registrationSchema';
 
@@ -66,11 +61,11 @@ export const Step2Form = ({
                         trigger('login');
                     }}
                     variant='sign'
-                    data-test-id={LOGIN_INPUT}
+                    data-test-id={TEST_IDS.LOGIN_INPUT}
                     placeholder='Логин'
                 />
                 <FormHelperText mt={0} textAlign='left'>
-                    {LOGIN_HELPER}
+                    {VALIDATION_MESSAGES.LOGIN_HELPER}
                 </FormHelperText>
                 <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
             </FormControl>
@@ -85,7 +80,7 @@ export const Step2Form = ({
                         type={showPwd ? 'text' : 'password'}
                         {...register('password')}
                         variant='sign'
-                        data-test-id={PASSWORD_INPUT}
+                        data-test-id={TEST_IDS.PASSWORD_INPUT}
                         placeholder='Пароль'
                     />
                     <InputRightElement>
@@ -110,7 +105,7 @@ export const Step2Form = ({
                     </InputRightElement>
                 </InputGroup>
                 <FormHelperText mt={0} textAlign='left'>
-                    {PASSWORD_HELPER}
+                    {VALIDATION_MESSAGES.PASSWORD_HELPER}
                 </FormHelperText>
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
@@ -125,7 +120,7 @@ export const Step2Form = ({
                         type={showConfirm ? 'text' : 'password'}
                         {...register('confirmPassword')}
                         variant='sign'
-                        data-test-id={CONFIRM_PASSWORD_INPUT}
+                        data-test-id={TEST_IDS.CONFIRM_PASSWORD_INPUT}
                         placeholder='Пароль'
                     />
                     <InputRightElement>
@@ -157,7 +152,7 @@ export const Step2Form = ({
                     type='submit'
                     flex={1}
                     variant='darkWhite'
-                    data-test-id={SUBMIT_BUTTON}
+                    data-test-id={TEST_IDS.SUBMIT_BUTTON}
                     mt={6}
                     onClick={onSubmit}
                 >

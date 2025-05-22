@@ -7,13 +7,9 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import modaldance from '~/assets/images/modal-dance.png';
-import {
-    ERROR_SERVER_MESSAGE,
-    ERROR_SERVER_TITLE,
-    SUCCESS_SIGNUP_TITLE,
-} from '~/constants/api-results';
+import { API_RESULTS } from '~/constants/api-results';
 import { FOOTER_SIGNUP_MESSAGE } from '~/constants/constants';
-import { SIGN_UP_FORM, SIGN_UP_SUCCESS_MODAL } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useSignupMutation } from '~/query/services/auth';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -78,11 +74,11 @@ export const RegistrationForm = () => {
             navigate(ROUTES_PATH.LOG_IN);
             dispatch(
                 setAppModal({
-                    title: SUCCESS_SIGNUP_TITLE,
+                    title: API_RESULTS.SUCCESS_SIGNUP_TITLE,
                     description: `Мы отправили вам на почту ${payload.email} ссылку для верификации.`,
                     imageSrc: modaldance,
                     footerNote: FOOTER_SIGNUP_MESSAGE,
-                    dataId: SIGN_UP_SUCCESS_MODAL,
+                    dataId: TEST_IDS.SIGN_UP_SUCCESS_MODAL,
                 }),
             );
         } catch (err) {
@@ -102,9 +98,9 @@ export const RegistrationForm = () => {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: ERROR_SERVER_TITLE,
+                            title: API_RESULTS.ERROR_SERVER_TITLE,
                             sourse: 'auth',
-                            message: ERROR_SERVER_MESSAGE,
+                            message: API_RESULTS.ERROR_SERVER_MESSAGE,
                         }),
                     );
                 }
@@ -126,7 +122,7 @@ export const RegistrationForm = () => {
                           }
                         : handleSubmit(onSubmit)
                 }
-                data-test-id={SIGN_UP_FORM}
+                data-test-id={TEST_IDS.SIGN_UP_FORM}
             >
                 {step === 1 ? (
                     <Step1Form

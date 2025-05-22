@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Link as RouterLink, useLocation } from 'react-router';
 
-import { BREADCRUMBS } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useGetRecipeByIdQuery } from '~/query/services/recipes';
 import { useAppSelector } from '~/store/hooks';
 import {
@@ -29,7 +29,7 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
             pl={{ sm: '20px', md: '20px' }}
             pb={{ sm: '12px', md: '12px' }}
             listProps={{ style: { flexWrap: 'wrap' } }}
-            data-test-id={BREADCRUMBS}
+            data-test-id={TEST_IDS.BREADCRUMBS}
         >
             <BreadcrumbItem isCurrentPage={!catTitle}>
                 <BreadcrumbLink

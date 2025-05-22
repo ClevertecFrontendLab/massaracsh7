@@ -1,7 +1,7 @@
 import { Flex, HStack, IconButton, Image, Link, Text } from '@chakra-ui/react';
 
 import leftIcon from '~/assets/icons/left-icon.svg';
-import { FOOTER } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 
 export const NavigationFooter = () => (
     <Flex
@@ -13,7 +13,7 @@ export const NavigationFooter = () => (
         direction='column'
         gap={4}
         as='footer'
-        data-test-id={FOOTER}
+        data-test-id={TEST_IDS.FOOTER}
     >
         <Text fontWeight='500' color='lightText'>
             Версия программы 03.25

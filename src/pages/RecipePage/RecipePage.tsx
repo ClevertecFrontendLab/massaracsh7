@@ -33,7 +33,7 @@ import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { LikesInfo } from '~/components/LikesInfo/LikesInfo';
 import { SliderList } from '~/components/SliderList/SliderList';
 import { BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/constants';
-import { DECREMENT_STEPPER, INCREMENT_STEPPER, INGREDIENT_QUANTITY } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { authors } from '~/data/authors';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetRecipeByIdQuery, useGetRecipesQuery } from '~/query/services/recipes';
@@ -312,10 +312,10 @@ export const RecipePage = () => {
                                         <NumberInputField />
                                         <NumberInputStepper>
                                             <NumberIncrementStepper
-                                                data-test-id={INCREMENT_STEPPER}
+                                                data-test-id={TEST_IDS.INCREMENT_STEPPER}
                                             />
                                             <NumberDecrementStepper
-                                                data-test-id={DECREMENT_STEPPER}
+                                                data-test-id={TEST_IDS.DECREMENT_STEPPER}
                                             />
                                         </NumberInputStepper>
                                     </NumberInput>
@@ -344,7 +344,7 @@ export const RecipePage = () => {
                                         >
                                             <Text color='colorBlack'>
                                                 <span
-                                                    data-test-id={`${INGREDIENT_QUANTITY}-${index}`}
+                                                    data-test-id={`${TEST_IDS.INGREDIENT_QUANTITY}-${index}`}
                                                     style={{ marginRight: '4px' }}
                                                 >
                                                     {ingredient.measureUnit === 'по вкусу'

@@ -6,7 +6,7 @@ import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
 import { RecipeList } from '~/components/RecipeList/RecipeList';
 import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { BASE_LIMIT_JUICY } from '~/constants/constants';
-import { LOAD_MORE_BUTTON } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesPagesInfiniteQuery } from '~/query/services/recipes';
 import { useAppSelector } from '~/store/hooks';
@@ -113,7 +113,7 @@ export const JuicyPage = () => {
                                 variant='limeSolid'
                                 size='medium'
                                 onClick={() => fetchNextPage()}
-                                data-test-id={LOAD_MORE_BUTTON}
+                                data-test-id={TEST_IDS.LOAD_MORE_BUTTON}
                             >
                                 Загрузка
                             </Button>

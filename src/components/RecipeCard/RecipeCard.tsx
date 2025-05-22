@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router';
 
 import { BookmarkHeart } from '~/assets/icons/icons';
 import { BASE_IMG_URL } from '~/constants/constants';
-import { CARD_LINK, FOOD_CARD } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetSubcategory } from '~/hooks/useGetSubcategory';
 import { useAppSelector } from '~/store/hooks';
@@ -43,7 +43,7 @@ export const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
             variant='basic'
             h={{ base: '128px', lg: '244px', xl: '244px' }}
             position='relative'
-            data-test-id={`${FOOD_CARD}-${index}`}
+            data-test-id={`${TEST_IDS.FOOD_CARD}-${index}`}
         >
             <Image
                 src={`${BASE_IMG_URL}${recipe.image}`}
@@ -148,7 +148,7 @@ export const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                     </Show>
                     <Button
                         variant='blackSolid'
-                        data-test-id={`${CARD_LINK}-${index}`}
+                        data-test-id={`${TEST_IDS.CARD_LINK}-${index}`}
                         onClick={() =>
                             navigate(
                                 `/${rootCategories[0].category}/${subCategories[0].category}/${recipe._id}`,

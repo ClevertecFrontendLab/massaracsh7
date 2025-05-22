@@ -19,15 +19,8 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import modalBreakfast from '~/assets/images/modal-breakfast.png';
-import {
-    ERROR_EMAIL_MESSAGE,
-    ERROR_EMAIL_TITLE,
-    ERROR_LOGIN_MESSAGE,
-    ERROR_LOGIN_MESSAGE_500,
-    ERROR_LOGIN_TITLE,
-    ERROR_LOGIN_TITLE_500,
-} from '~/constants/api-results';
-import { LOGIN_INPUT, PASSWORD_INPUT } from '~/constants/test-ids';
+import { API_RESULTS } from '~/constants/api-results';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useLoginMutation } from '~/query/services/auth';
 import { setAppAlert, setAppModal } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -70,25 +63,25 @@ export const LoginForm = () => {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: ERROR_LOGIN_TITLE,
+                            title: API_RESULTS.ERROR_LOGIN_TITLE,
                             sourse: 'auth',
-                            message: ERROR_LOGIN_MESSAGE,
+                            message: API_RESULTS.ERROR_LOGIN_MESSAGE,
                         }),
                     );
                 } else if (status === 403) {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: ERROR_EMAIL_TITLE,
+                            title: API_RESULTS.ERROR_EMAIL_TITLE,
                             sourse: 'auth',
-                            message: ERROR_EMAIL_MESSAGE,
+                            message: API_RESULTS.ERROR_EMAIL_MESSAGE,
                         }),
                     );
                 } else if (String(status).startsWith('5')) {
                     dispatch(
                         setAppModal({
-                            title: ERROR_LOGIN_TITLE_500,
-                            description: ERROR_LOGIN_MESSAGE_500,
+                            title: API_RESULTS.ERROR_LOGIN_TITLE_500,
+                            description: API_RESULTS.ERROR_LOGIN_MESSAGE_500,
                             imageSrc: modalBreakfast,
                             dataId: 'sign-in-error-modal',
                             onPrimaryAction: async () => {
@@ -123,7 +116,7 @@ export const LoginForm = () => {
                             }}
                             variant='sign'
                             placeholder='Введите логин'
-                            data-test-id={LOGIN_INPUT}
+                            data-test-id={TEST_IDS.LOGIN_INPUT}
                         />
                         <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                     </FormControl>
@@ -137,7 +130,7 @@ export const LoginForm = () => {
                                 id='password'
                                 type={showPassword ? 'text' : 'password'}
                                 {...register('password')}
-                                data-test-id={PASSWORD_INPUT}
+                                data-test-id={TEST_IDS.PASSWORD_INPUT}
                                 variant='sign'
                                 placeholder='Пароль для сайта'
                             />

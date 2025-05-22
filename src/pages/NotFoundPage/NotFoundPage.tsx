@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router';
 import notFoundImg from '~/assets/images/404.png';
 import logo from '~/assets/logo.png';
 import logoMini from '~/assets/logo-mini.png';
-import { ERROR_PAGE_GO_HOME } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 
 export const NotFoundPage = () => (
     <>
@@ -68,7 +68,7 @@ export const NotFoundPage = () => (
                             as={RouterLink}
                             to='/'
                             textDecoration='underline'
-                            data-test-id={ERROR_PAGE_GO_HOME}
+                            data-test-id={TEST_IDS.ERROR_PAGE_GO_HOME}
                         >
                             здесь
                         </Link>

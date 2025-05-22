@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 
 import { emailRegex } from '~/constants/regex-constants';
-import { CLOSE_BUTTON, REPEAT_BUTTON } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { clearModal } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { userModalSelector } from '~/store/selectors/appSelectors';
@@ -86,7 +86,7 @@ export const CustomModal = () => {
                     right={6}
                     top={6}
                     onClick={() => dispatch(clearModal())}
-                    data-test-id={CLOSE_BUTTON}
+                    data-test-id={TEST_IDS.CLOSE_BUTTON}
                     border='1px solid black'
                     borderRadius='50%'
                     w={6}
@@ -122,7 +122,7 @@ export const CustomModal = () => {
                         <Button
                             variant='darkWhite'
                             onClick={onPrimaryAction}
-                            data-test-id={REPEAT_BUTTON}
+                            data-test-id={TEST_IDS.REPEAT_BUTTON}
                         >
                             {primaryActionText}
                         </Button>

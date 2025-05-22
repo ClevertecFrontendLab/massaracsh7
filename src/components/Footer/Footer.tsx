@@ -3,7 +3,7 @@ import { Avatar, Box, Button, Flex, Image, Text } from '@chakra-ui/react';
 import house from '~/assets/icons/house.svg';
 import { SearchGlass } from '~/assets/icons/icons';
 import penNout from '~/assets/icons/pen-nout.svg';
-import { FOOTER } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 
 export const Footer = () => (
     <Box
@@ -15,7 +15,7 @@ export const Footer = () => (
         height='84px'
         zIndex={10}
         bg='#ffffd3'
-        data-test-id={FOOTER}
+        data-test-id={TEST_IDS.FOOTER}
         width='100vw'
     >
         <Flex as='nav' justify='space-around' align='flex-end' height='100%'>

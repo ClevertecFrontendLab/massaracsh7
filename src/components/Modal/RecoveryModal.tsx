@@ -14,19 +14,9 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
-import {
-    ERROR_EMAILRESET_MESSAGE,
-    ERROR_EMAILRESET_TITLE,
-    ERROR_SERVER_MESSAGE,
-    ERROR_SERVER_TITLE,
-} from '~/constants/api-results';
+import { API_RESULTS } from '~/constants/api-results';
 import { FOOTER_RECOVERY_MESSAGE } from '~/constants/constants';
-import {
-    CLOSE_BUTTON,
-    RESET_CREDENTIALS_MODAL,
-    SEND_EMAIL_MODAL,
-    VERIFICATION_CODE_MODAL,
-} from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import {
     useForgotPasswordMutation,
     useResetPasswordMutation,
@@ -109,18 +99,18 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: ERROR_EMAILRESET_TITLE,
+                        title: API_RESULTS.ERROR_EMAILRESET_TITLE,
                         sourse: 'global',
-                        message: ERROR_EMAILRESET_MESSAGE,
+                        message: API_RESULTS.ERROR_EMAILRESET_MESSAGE,
                     }),
                 );
             } else if (e.status && String(e.status).startsWith('5')) {
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: ERROR_SERVER_TITLE,
+                        title: API_RESULTS.ERROR_SERVER_TITLE,
                         sourse: 'global',
-                        message: ERROR_SERVER_MESSAGE,
+                        message: API_RESULTS.ERROR_SERVER_MESSAGE,
                     }),
                 );
             }
@@ -141,9 +131,9 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: ERROR_SERVER_TITLE,
+                        title: API_RESULTS.ERROR_SERVER_TITLE,
                         sourse: 'global',
-                        message: ERROR_SERVER_MESSAGE,
+                        message: API_RESULTS.ERROR_SERVER_MESSAGE,
                     }),
                 );
             }
@@ -170,9 +160,9 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: ERROR_SERVER_TITLE,
+                        title: API_RESULTS.ERROR_SERVER_TITLE,
                         sourse: 'global',
-                        message: ERROR_SERVER_MESSAGE,
+                        message: API_RESULTS.ERROR_SERVER_MESSAGE,
                     }),
                 );
             }
@@ -185,10 +175,10 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <ModalContent
                 data-test-id={
                     isEmailStep
-                        ? SEND_EMAIL_MODAL
+                        ? TEST_IDS.SEND_EMAIL_MODAL
                         : isCodeStep
-                          ? VERIFICATION_CODE_MODAL
-                          : RESET_CREDENTIALS_MODAL
+                          ? TEST_IDS.VERIFICATION_CODE_MODAL
+                          : TEST_IDS.RESET_CREDENTIALS_MODAL
                 }
             >
                 <CloseButton
@@ -198,7 +188,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                     onClick={handleClose}
                     border='1px solid black'
                     borderRadius='50%'
-                    data-test-id={CLOSE_BUTTON}
+                    data-test-id={TEST_IDS.CLOSE_BUTTON}
                     w={6}
                     h={6}
                 />

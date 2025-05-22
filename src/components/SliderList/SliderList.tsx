@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ArrowLeft, ArrowRight } from '~/assets/icons/icons';
 import { JUICIEST_SLIDER_BREAKPOINTS } from '~/constants/swiper-breakpoints';
-import { CAROUSEL, CAROUSEL_BACK, CAROUSEL_CARD, CAROUSEL_FORWARD } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { Recipe } from '~/types/apiTypes';
 
 import { SliderCard } from '../SliderCard/SliderCard';
@@ -42,7 +42,7 @@ export const SliderList = ({ recipes }: SliderListProps) => (
             color='customLime.50'
             borderRadius='small'
             zIndex={14}
-            data-test-id={CAROUSEL_BACK}
+            data-test-id={TEST_IDS.CAROUSEL_BACK}
             display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
         />
 
@@ -60,12 +60,12 @@ export const SliderList = ({ recipes }: SliderListProps) => (
             color='customLime.50'
             borderRadius='small'
             zIndex={14}
-            data-test-id={CAROUSEL_FORWARD}
+            data-test-id={TEST_IDS.CAROUSEL_FORWARD}
             display={{ base: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
         />
 
         <Swiper
-            data-test-id={CAROUSEL}
+            data-test-id={TEST_IDS.CAROUSEL}
             loop={true}
             loopAdditionalSlides={4}
             speed={0}
@@ -83,7 +83,7 @@ export const SliderList = ({ recipes }: SliderListProps) => (
             style={{ width: '100%', margin: '0 auto' }}
         >
             {recipes.map((recipe, index) => (
-                <SwiperSlide key={recipe._id} data-test-id={`${CAROUSEL_CARD}-${index}`}>
+                <SwiperSlide key={recipe._id} data-test-id={`${TEST_IDS.CAROUSEL_CARD}-${index}`}>
                     <SliderCard recipe={recipe} />
                 </SwiperSlide>
             ))}

@@ -7,7 +7,7 @@ import type {
     UseFormWatch,
 } from 'react-hook-form';
 
-import { EMAIL_INPUT, SUBMIT_BUTTON } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 
 import type { EmailFormData } from './recoverySchema';
 
@@ -51,14 +51,19 @@ export const EmailStepForm = ({
                         const trimmed = watch().email.trim();
                         setValue('email', trimmed, { shouldValidate: true });
                     }}
-                    data-test-id={EMAIL_INPUT}
+                    data-test-id={TEST_IDS.EMAIL_INPUT}
                     placeholder='email'
                     variant='sign'
                 />
                 <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
 
-            <Button type='submit' variant='darkWhite' w='full' data-test-id={SUBMIT_BUTTON}>
+            <Button
+                type='submit'
+                variant='darkWhite'
+                w='full'
+                data-test-id={TEST_IDS.SUBMIT_BUTTON}
+            >
                 Получить код
             </Button>
         </VStack>

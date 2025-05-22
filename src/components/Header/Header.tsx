@@ -4,7 +4,7 @@ import { useState } from 'react';
 import avatar from '~/assets/avatar.png';
 import logo from '~/assets/logo.png';
 import logoMini from '~/assets/logo-mini.png';
-import { HEADER } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 
 import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 import { MobileMenu } from '../MobileMenu/MobileMenu';
@@ -19,7 +19,7 @@ export const Header = () => {
             bg={isMenuOpen ? 'white' : 'customLime.50'}
             mb={isMenuOpen ? '16px' : '8px'}
             py={4}
-            data-test-id={HEADER}
+            data-test-id={TEST_IDS.HEADER}
             w='100%'
             position='fixed'
             top={0}

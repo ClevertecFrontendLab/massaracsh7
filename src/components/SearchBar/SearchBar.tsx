@@ -18,13 +18,7 @@ import { useState } from 'react';
 import { FilterIcon, SearchGlass } from '~/assets/icons/icons';
 import { MultipleSelect } from '~/components/MultipleSelect/MultipleSelect';
 import { MIN_SEARCH_LENGTH } from '~/constants/constants';
-import {
-    ALLERGEN_SWITCHER,
-    FILTER_BUTTON,
-    LOADER_SEARCH_BLOCK,
-    SEARCH_BUTTON,
-    SEARCH_INPUT,
-} from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import {
     setHasResults,
     setIsSearch,
@@ -92,7 +86,7 @@ export const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
         searchText.trim().length >= MIN_SEARCH_LENGTH || selectedAllergens.length > 0;
 
     if (isLoader && !isFilterOpen && !excludeAllergens) {
-        return <CustomLoader size='small' dataTestId={LOADER_SEARCH_BLOCK} />;
+        return <CustomLoader size='small' dataTestId={TEST_IDS.LOADER_SEARCH_BLOCK} />;
     }
 
     return (
@@ -107,7 +101,7 @@ export const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                     minW={{ base: 8, sm: 8, md: 8, lg: 12 }}
                     h={{ base: 8, sm: 8, md: 8, lg: 12 }}
                     onClick={openFilterDrawer}
-                    data-test-id={FILTER_BUTTON}
+                    data-test-id={TEST_IDS.FILTER_BUTTON}
                 />
 
                 <InputGroup w='100%'>
@@ -142,7 +136,7 @@ export const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                                   : 'blackAlpha.200'
                         }
                         _hover={{ borderColor: 'blackAlpha.200' }}
-                        data-test-id={SEARCH_INPUT}
+                        data-test-id={TEST_IDS.SEARCH_INPUT}
                     />
                     <InputRightElement height='100%' pr='24px'>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -164,7 +158,7 @@ export const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                                 p={2}
                                 isDisabled={!isSearchActive}
                                 onClick={handleSearch}
-                                data-test-id={SEARCH_BUTTON}
+                                data-test-id={TEST_IDS.SEARCH_BUTTON}
                                 sx={{
                                     pointerEvents: isSearchActive ? 'auto' : 'none',
                                 }}
@@ -183,7 +177,7 @@ export const SearchBar = ({ isLoader, handleFilterClose }: SeachBarProps) => {
                             isChecked={excludeAllergens}
                             onChange={() => dispatch(toggleExcludeAllergens())}
                             bg='lime.400'
-                            data-test-id={ALLERGEN_SWITCHER}
+                            data-test-id={TEST_IDS.ALLERGEN_SWITCHER}
                         />
                     </HStack>
                     {!isFilterOpen && (
