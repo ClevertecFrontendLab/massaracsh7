@@ -5,6 +5,7 @@ import { TEST_IDS } from '~/constants/test-ids';
 import { clearAppAlert } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { userAlertSelector } from '~/store/selectors/appSelectors';
+import { bgMap } from '~/types/utilTypes';
 
 export const AppAlert = () => {
     const alert = useAppSelector(userAlertSelector);
@@ -25,11 +26,6 @@ export const AppAlert = () => {
     const onCloseAlert = () => dispatch(clearAppAlert());
 
     const { type, title, message } = alert;
-
-    const bgMap: Record<typeof type, string> = {
-        error: '#E53E3E',
-        success: '#38A169',
-    };
 
     return (
         <Box

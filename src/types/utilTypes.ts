@@ -32,3 +32,8 @@ export interface AlertPayload {
     title: string;
     sourse?: AlertSourse;
 }
+
+export const bgMap: Record<AlertType, string> = {
+    error: '#E53E3E',
+    success: '#38A169',
+};
