@@ -92,7 +92,7 @@ export const CustomModal = () => {
                     w={6}
                     h={6}
                 />
-                <Stack align='center' gap={8}>
+                <Stack align='center' gap={6}>
                     {imageSrc && (
                         <Image
                             src={imageSrc}
@@ -108,7 +108,7 @@ export const CustomModal = () => {
                             objectFit='contain'
                         />
                     )}
-                    <ModalHeader p={0} mb={2}>
+                    <ModalHeader p={0} mb={2} px={{ sm: 8, md: 8, lg: 6, xl: 6 }}>
                         <Heading fontSize='24px' lineHeight='32px' fontWeight='700' p={0}>
                             {title}
                         </Heading>
