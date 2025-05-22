@@ -86,6 +86,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
         resetResetForm();
         setEmailValue('');
         setCode('');
+        setTitleError('');
         setStep('email');
         onClose();
     };

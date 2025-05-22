@@ -32,7 +32,13 @@ export const AppAlert = () => {
     };
 
     return (
-        <Box position='fixed' bottom='80px' left='50%' transform='translateX(-50%)' zIndex={1600}>
+        <Box
+            position='absolute'
+            bottom='80px'
+            left='50%'
+            transform='translateX(-50%)'
+            zIndex={1600}
+        >
             <Alert
                 status={type}
                 borderRadius='md'

@@ -51,8 +51,13 @@ export const AuthLayout = ({ children, activeTab }: AuthLayoutProps) => {
     return (
         <Box pos='relative' w='100%'>
             <Flex minHeight='100dvh' w='100%'>
-                <Center flex={1} bgGradient='linear(to-bl, #EAFFC7, #29813F 170%)'>
+                <Center
+                    flex={1}
+                    bgGradient='linear(to-bl, #EAFFC7, #29813F 170%)'
+                    position='relative'
+                >
                     {alert && alert.sourse === 'auth' && <AppAlert />}
+
                     <Box
                         maxW={{ sm: '328px', md: '355px', lg: '451px', xl: '461px' }}
                         w='full'

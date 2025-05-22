@@ -9,7 +9,14 @@ interface StepProgressProps {
 
 export const StepProgress = ({ step, progress }: StepProgressProps) => (
     <>
-        <Heading as='h3' fontSize='16px' lineHeight='24px' w='full' textAlign='left'>
+        <Heading
+            as='h3'
+            fontSize='16px'
+            lineHeight='24px'
+            fontWeight='400'
+            w='full'
+            textAlign='left'
+        >
             {step === 1 ? 'Шаг 1: Личная информация' : 'Шаг 2: Логин и пароль'}
         </Heading>
         <Progress

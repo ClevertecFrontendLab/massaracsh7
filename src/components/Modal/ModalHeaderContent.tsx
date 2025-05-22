@@ -59,9 +59,7 @@ export const ModalHeaderContent = ({ step, emailValue, titleError }: ModalHeader
                     mb={2}
                 >
                     Мы отправили вам на e-mail
-                    <Heading as='span' fontWeight='600' display='inline'>
-                        {emailValue}
-                    </Heading>
+                    <Heading fontWeight='600'>{emailValue}</Heading>
                     шестизначный код. Введите его ниже.
                 </Heading>
             )}

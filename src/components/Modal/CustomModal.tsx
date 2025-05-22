@@ -37,7 +37,12 @@ export const CustomModal = () => {
     const renderDescription = () => {
         if (typeof description !== 'string') {
             return (
-                <Text fontSize='16px' lineHeight='24px' px={{ sm: 6, md: 6, lg: 12, xl: 12 }}>
+                <Text
+                    whiteSpace='pre-line'
+                    fontSize='16px'
+                    lineHeight='24px'
+                    px={{ sm: 6, md: 6, lg: 12, xl: 12 }}
+                >
                     {description}
                 </Text>
             );
@@ -48,7 +53,13 @@ export const CustomModal = () => {
 
         if (!match) {
             return (
-                <Text fontSize='16px' lineHeight='24px' px={{ sm: 6, md: 6, lg: 12, xl: 12 }}>
+                <Text
+                    color='blackAlpha.700'
+                    whiteSpace='pre-line'
+                    fontSize='16px'
+                    lineHeight='24px'
+                    px={{ sm: 6, md: 6, lg: 12, xl: 12 }}
+                >
                     {description}
                 </Text>
             );
@@ -87,19 +98,24 @@ export const CustomModal = () => {
                             src={imageSrc}
                             alt='Modal illustration'
                             mx='auto'
-                            boxSize={{ base: '108px', xl: '206px' }}
+                            boxSize={{
+                                sm: '108px',
+                                md: '108px',
+                                mid: '206px',
+                                lg: '206px',
+                                xl: '206px',
+                            }}
+                            objectFit='contain'
                         />
                     )}
-                    <ModalHeader>
-                        <Heading fontSize='24px' lineHeight='32px' fontWeight='700' mb={2} p={0}>
+                    <ModalHeader p={0} mb={2}>
+                        <Heading fontSize='24px' lineHeight='32px' fontWeight='700' p={0}>
                             {title}
                         </Heading>
                     </ModalHeader>
                 </Stack>
 
-                <ModalBody p={0} mt={2}>
-                    {renderDescription()}
-                </ModalBody>
+                <ModalBody p={0}>{renderDescription()}</ModalBody>
 
                 <ModalFooter p={0} mt={8} display='flex' justifyContent='center'>
                     {onPrimaryAction && (

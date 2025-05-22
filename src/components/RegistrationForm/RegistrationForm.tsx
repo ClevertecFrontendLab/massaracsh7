@@ -91,12 +91,19 @@ export const RegistrationForm = () => {
                 const status = fetchErr.status;
                 const msg = (fetchErr.data as { message?: string })?.message;
                 if (status === 400 && msg) {
-                    dispatch(setAppAlert({ type: 'error', title: msg }));
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            sourse: 'auth',
+                            title: msg,
+                        }),
+                    );
                 } else if (String(status).startsWith('5')) {
                     dispatch(
                         setAppAlert({
                             type: 'error',
                             title: ERROR_SERVER_TITLE,
+                            sourse: 'auth',
                             message: ERROR_SERVER_MESSAGE,
                         }),
                     );

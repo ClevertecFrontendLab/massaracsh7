@@ -10,7 +10,7 @@ export const ERROR_LOGIN_MESSAGE = 'Попробуйте снова';
 export const ERROR_EMAIL_TITLE = 'E-mail не верифицирован';
 export const ERROR_EMAIL_MESSAGE = 'Проверьте почту и перейдите по ссылке';
 export const ERROR_LOGIN_TITLE_500 = 'Вход не выполнен';
-export const ERROR_LOGIN_MESSAGE_500 = 'Что-то пошло не так. Попробуйте еще раз';
+export const ERROR_LOGIN_MESSAGE_500 = 'Что-то пошло не так.\nПопробуйте еще раз';
 
 export const ERROR_SERVER_TITLE = 'Ошибка сервера';
 export const ERROR_SERVER_MESSAGE = 'Попробуйте немного позже';
