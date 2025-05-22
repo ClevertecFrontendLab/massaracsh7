@@ -13,6 +13,7 @@ import {
     Text,
 } from '@chakra-ui/react';
 
+import { emailRegex } from '~/constants/regex-constants';
 import { CLOSE_BUTTON, REPEAT_BUTTON } from '~/constants/test-ids';
 import { clearModal } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
@@ -48,7 +49,6 @@ export const CustomModal = () => {
             );
         }
 
-        const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/;
         const match = description.match(emailRegex);
 
         if (!match) {

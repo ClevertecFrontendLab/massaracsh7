@@ -124,7 +124,7 @@ export const CategoryPage = () => {
         return <Navigate to='/not-found' replace />;
     }
 
-    if (isLoading || isFetching) {
+    if (isLoading) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 

@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import {
     ERROR_EMAILRESET_MESSAGE,
     ERROR_EMAILRESET_TITLE,
@@ -33,6 +34,7 @@ import {
 } from '~/query/services/auth';
 import { setAppAlert } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
+import { isServerError } from '~/utils/isServerError';
 
 import { CodeStepForm } from './CodeStepForm';
 import { EmailStepForm } from './EmailStepForm';
@@ -53,6 +55,9 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
     const [resetPassword] = useResetPasswordMutation();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const isEmailStep = step === 'email';
+    const isCodeStep = step === 'code';
+    const isResetStep = step === 'reset';
 
     const {
         register: regEmail,
@@ -132,7 +137,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             const e = err as FetchBaseQueryError;
             if (e.status === 403) {
                 setTitleError('Неверный код.');
-            } else if (e.status && String(e.status).startsWith('5')) {
+            } else if (isServerError(e)) {
                 dispatch(
                     setAppAlert({
                         type: 'error',
@@ -158,10 +163,10 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 }),
             );
             handleClose();
-            navigate('/login');
+            navigate(ROUTES_PATH.LOG_IN);
         } catch (err) {
             const e = err as FetchBaseQueryError;
-            if (e.status && String(e.status).startsWith('5')) {
+            if (isServerError(e)) {
                 dispatch(
                     setAppAlert({
                         type: 'error',
@@ -179,9 +184,9 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <ModalOverlay />
             <ModalContent
                 data-test-id={
-                    step === 'email'
+                    isEmailStep
                         ? SEND_EMAIL_MODAL
-                        : step === 'code'
+                        : isCodeStep
                           ? VERIFICATION_CODE_MODAL
                           : RESET_CREDENTIALS_MODAL
                 }
@@ -200,7 +205,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 <ModalHeaderContent step={step} emailValue={emailValue} titleError={titleError} />
                 <ModalBody mb={0} pb={0}>
                     <Stack align='stretch' spacing={4}>
-                        {step === 'email' && (
+                        {isEmailStep && (
                             <EmailStepForm
                                 register={regEmail}
                                 errors={errEmail}
@@ -210,7 +215,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                                 onSubmitEmail={onSubmitEmail}
                             />
                         )}
-                        {step === 'code' && (
+                        {isCodeStep && (
                             <CodeStepForm
                                 code={code}
                                 setCode={setCode}
@@ -218,7 +223,7 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                                 submitCode={submitCode}
                             />
                         )}
-                        {step === 'reset' && (
+                        {isResetStep && (
                             <ResetStepForm
                                 register={regReset}
                                 errors={errReset}
@@ -231,11 +236,11 @@ export const RecoveryModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                         )}
                     </Stack>
                 </ModalBody>
-                {(step === 'email' || step === 'code') && (
+                {(isEmailStep || isCodeStep) && (
                     <ModalFooter p={0} px={{ sm: 16, md: 16, lg: 0, xl: 0 }} mt={6}>
                         {FOOTER_RECOVERY_MESSAGE}
                     </ModalFooter>
-                )}{' '}
+                )}
             </ModalContent>
         </Modal>
     );

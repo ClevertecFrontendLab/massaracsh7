@@ -3,11 +3,11 @@ import { HStack, Image, Text } from '@chakra-ui/react';
 import BsBookmarkHeart from '~/assets/icons/BsBookmarkHeart.svg';
 import BsEmojiHeartEyes from '~/assets/icons/BsEmojiHeartEyes.svg';
 
-interface LikesAndCommentsInfoProps {
+type LikesAndCommentsInfoProps = {
     likes?: number;
     bookmarks?: number;
     size?: string;
-}
+};
 
 export const LikesInfo = ({ likes, bookmarks, size = 'limeSmall' }: LikesAndCommentsInfoProps) => {
     if (!likes && !bookmarks) return null;
