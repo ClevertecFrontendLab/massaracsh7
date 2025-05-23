@@ -21,9 +21,8 @@ import { useDispatch } from 'react-redux';
 
 import { TEST_IDS } from '~/constants/test-ids';
 import { allergens } from '~/data/allergens';
-import { setSelectedAllergens } from '~/store/filter-slice';
+import { selectSelectedAllergens, setSelectedAllergens } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
-import { selectSelectedAllergens } from '~/store/selectors/filtersSelectors';
 
 interface MultipleSelectProps {
     width: ResponsiveValue<string>;

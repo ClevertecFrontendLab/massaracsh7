@@ -3,12 +3,8 @@ import { BrowserRouter as Router, useLocation } from 'react-router';
 import { AppAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { FullLoader } from '~/components/FullLoader/FullLoader';
 import { CustomModal } from '~/components/Modal/CustomModal';
+import { userAlertSelector, userLoadingSelector, userModalSelector } from '~/store/app-slice';
 import { useAppSelector } from '~/store/hooks';
-import {
-    userAlertSelector,
-    userLoadingSelector,
-    userModalSelector,
-} from '~/store/selectors/appSelectors';
 
 import AppRoutes from './AppRoutes';
 import { ROUTES_PATH } from './routes';

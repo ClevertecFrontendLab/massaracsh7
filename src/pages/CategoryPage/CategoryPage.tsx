@@ -11,9 +11,7 @@ import { TabsCategory } from '~/components/TabsCategory/TabsCategory';
 import { BASE_LIMIT_JUICY, ERROR_SEARCH_MESSAGE, MIN_SEARCH_LENGTH } from '~/constants/constants';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
-import { setHasResults } from '~/store/filter-slice';
-import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { selectAllCategories, selectAllSubCategories } from '~/store/selectors/categoriesSelectors';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
     selectExcludeAllergens,
     selectHasAnyFilter,
@@ -22,7 +20,9 @@ import {
     selectSelectedAllergens,
     selectSelectedMeat,
     selectSelectedSide,
-} from '~/store/selectors/filtersSelectors';
+    setHasResults,
+} from '~/store/filter-slice';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
 export const CategoryPage = () => {
@@ -124,7 +124,7 @@ export const CategoryPage = () => {
         return <Navigate to='/not-found' replace />;
     }
 
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 
@@ -160,7 +160,7 @@ export const CategoryPage = () => {
 
             <TabsCategory subcategories={cat?.subCategories ?? []} />
 
-            {!isLoading && !isFetching && recipesData?.data && recipesData?.data?.length > 0 && (
+            {recipesData?.data && recipesData?.data?.length > 0 && (
                 <RecipeList recipes={recipesData.data} gridVariant='low' />
             )}
 

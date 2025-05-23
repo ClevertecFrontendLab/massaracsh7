@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 
 import { TEST_IDS } from '~/constants/test-ids';
 import { clearAppAlert } from '~/store/app-slice';
+import { userAlertSelector } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { userAlertSelector } from '~/store/selectors/appSelectors';
 import { bgMap } from '~/types/utilTypes';
 
 export const AppAlert = () => {

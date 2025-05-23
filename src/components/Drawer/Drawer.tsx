@@ -28,6 +28,7 @@ import { initialFilterData } from '~/constants/filter-date';
 import { TEST_IDS } from '~/constants/test-ids';
 import { meatTypes, sideTypes } from '~/data/allergens';
 import { authors } from '~/data/authors';
+import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
     resetAllFilters,
     setIsSearch,
@@ -37,12 +38,8 @@ import {
     setSelectedSide,
     setSelectedSubCategories,
 } from '~/store/filter-slice';
+import { selectExcludeAllergens, selectSelectedAllergens } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
-import { selectAllCategories, selectAllSubCategories } from '~/store/selectors/categoriesSelectors';
-import {
-    selectExcludeAllergens,
-    selectSelectedAllergens,
-} from '~/store/selectors/filtersSelectors';
 import { Category } from '~/types/apiTypes';
 import { FilterData, SelectOption } from '~/types/utilTypes';
 import { getFilterTags } from '~/utils/getFiltersLabels';

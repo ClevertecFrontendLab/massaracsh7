@@ -20,17 +20,15 @@ import { MultipleSelect } from '~/components/MultipleSelect/MultipleSelect';
 import { MIN_SEARCH_LENGTH } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import {
+    selectExcludeAllergens,
+    selectHasResults,
+    selectSelectedAllergens,
     setHasResults,
     setIsSearch,
     setSearchTerm,
     toggleExcludeAllergens,
 } from '~/store/filter-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import {
-    selectExcludeAllergens,
-    selectHasResults,
-    selectSelectedAllergens,
-} from '~/store/selectors/filtersSelectors';
 
 import { CustomLoader } from '../CustomLoader/CustomLoader';
 import { FilterDrawer } from '../Drawer/Drawer';

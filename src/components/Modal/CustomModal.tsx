@@ -16,8 +16,8 @@ import {
 import { emailRegex } from '~/constants/regex-constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { clearModal } from '~/store/app-slice';
+import { userModalSelector } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { userModalSelector } from '~/store/selectors/appSelectors';
 
 export const CustomModal = () => {
     const modal = useAppSelector(userModalSelector);

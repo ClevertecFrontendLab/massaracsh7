@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { MIN_SEARCH_LENGTH } from '~/constants/constants';
 
 export interface FiltersState {
     searchTerm: string;
@@ -69,12 +71,25 @@ export const filtersSlice = createSlice({
             state.excludeAllergens = false;
             state.selectedAuthors = [];
             state.selectedCategories = [];
+            state.selectedSubCategories = [];
             state.selectedMeat = [];
             state.selectedSide = [];
         },
         setIsSearch(state, { payload }: PayloadAction<boolean>) {
             state.isSearch = payload;
         },
+    },
+    selectors: {
+        selectSearchTerm: (state) => state.searchTerm,
+        selectSelectedAllergens: (state) => state.selectedAllergens,
+        selectExcludeAllergens: (state) => state.excludeAllergens,
+        selectSelectedAuthors: (state) => state.selectedAuthors,
+        selectSelectedCategories: (state) => state.selectedCategories,
+        selectSelectedSubCategories: (state) => state.selectedSubCategories,
+        selectSelectedMeat: (state) => state.selectedMeat,
+        selectSelectedSide: (state) => state.selectedSide,
+        selectHasResults: (state) => state.hasResults,
+        selectIsSearch: (state) => state.isSearch,
     },
 });
 
@@ -85,12 +100,72 @@ export const {
     toggleExcludeAllergens,
     setSelectedAuthors,
     setSelectedCategories,
+    setSelectedSubCategories,
     setSelectedMeat,
     setSelectedSide,
     setHasResults,
     resetAllFilters,
-    setSelectedSubCategories,
     setIsSearch,
 } = filtersSlice.actions;
+
+export const {
+    selectSearchTerm,
+    selectSelectedAllergens,
+    selectExcludeAllergens,
+    selectSelectedAuthors,
+    selectSelectedCategories,
+    selectSelectedSubCategories,
+    selectSelectedMeat,
+    selectSelectedSide,
+    selectHasResults,
+    selectIsSearch,
+} = filtersSlice.selectors;
+
+export const selectTotalFilterCount = createSelector(
+    [
+        selectSelectedAllergens,
+        selectSelectedAuthors,
+        selectSelectedCategories,
+        selectSelectedSubCategories,
+        selectSelectedMeat,
+        selectSelectedSide,
+    ],
+    (allergens, authors, categories, subCategories, meat, side) =>
+        allergens.length +
+        authors.length +
+        categories.length +
+        subCategories.length +
+        meat.length +
+        side.length,
+);
+
+export const selectHasAnyFilter = createSelector([selectTotalFilterCount], (count) => count > 0);
+
+export const selectIsExcludingAllergensWithTags = createSelector(
+    [selectExcludeAllergens, selectSelectedAllergens],
+    (exclude, allergens) => exclude && allergens.length > 0,
+);
+
+export const selectFilterTags = createSelector(
+    [
+        selectSelectedCategories,
+        selectSelectedAuthors,
+        selectSelectedMeat,
+        selectSelectedSide,
+        selectSelectedAllergens,
+    ],
+    (categories, authors, meat, side, allergens) => [
+        ...categories,
+        ...authors,
+        ...meat,
+        ...side,
+        ...allergens,
+    ],
+);
+
+export const selectHasFiltersOrSearch = createSelector(
+    [selectHasAnyFilter, selectSearchTerm],
+    (hasFilters, searchTerm) => hasFilters || searchTerm.length >= MIN_SEARCH_LENGTH,
+);
 
 export default filtersSlice.reducer;

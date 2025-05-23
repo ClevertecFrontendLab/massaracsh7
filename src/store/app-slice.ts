@@ -2,14 +2,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AlertPayload, ModalPayload } from '~/types/utilTypes';
 
-export type AppState = typeof initialState;
+export interface AppState {
+    isLoading: boolean;
+    error: string | null;
+    modal: ModalPayload | null;
+    alert: AlertPayload | null;
+}
 
-const initialState = {
+const initialState: AppState = {
     isLoading: true,
-    error: '' as string | null,
-    modal: null as ModalPayload | null,
-    alert: null as AlertPayload | null,
+    error: null,
+    modal: null,
+    alert: null,
 };
+
 export const appSlice = createSlice({
     name: 'app',
     initialState,
@@ -36,6 +42,12 @@ export const appSlice = createSlice({
             state.alert = null;
         },
     },
+    selectors: {
+        userLoadingSelector: (state) => state.isLoading,
+        userErrorSelector: (state) => state.error,
+        userAlertSelector: (state) => state.alert,
+        userModalSelector: (state) => state.modal,
+    },
 });
 
 export const {
@@ -47,4 +59,6 @@ export const {
     setAppAlert,
     clearAppAlert,
 } = appSlice.actions;
+export const { userLoadingSelector, userErrorSelector, userAlertSelector, userModalSelector } =
+    appSlice.selectors;
 export default appSlice.reducer;

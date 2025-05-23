@@ -12,7 +12,6 @@ import { BASE_LIMIT_SLIDER, ERROR_SEARCH_MESSAGE, MAIN_LIMIT_JUICY } from '~/con
 import { TEST_IDS } from '~/constants/test-ids';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
-import { useAppSelector } from '~/store/hooks';
 import {
     selectHasFiltersOrSearch,
     selectIsExcludingAllergensWithTags,
@@ -22,7 +21,8 @@ import {
     selectSelectedCategories,
     selectSelectedMeat,
     selectSelectedSide,
-} from '~/store/selectors/filtersSelectors';
+} from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
 export const MainPage = () => {

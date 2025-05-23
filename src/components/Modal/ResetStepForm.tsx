@@ -21,13 +21,8 @@ import type {
     UseFormWatch,
 } from 'react-hook-form';
 
-import {
-    CONFIRM_PASSWORD_INPUT,
-    LOGIN_INPUT,
-    PASSWORD_INPUT,
-    SUBMIT_BUTTON,
-} from '~/constants/test-ids';
-import { LOGIN_HELPER, PASSWORD_HELPER } from '~/constants/validation-messages';
+import { TEST_IDS } from '~/constants/test-ids';
+import { VALIDATION_MESSAGES } from '~/constants/validation-messages';
 
 import type { ResetFormData } from './recoverySchema';
 
@@ -75,11 +70,11 @@ export const ResetStepForm = ({
                             trigger('login');
                         }}
                         variant='sign'
-                        data-test-id={LOGIN_INPUT}
+                        data-test-id={TEST_IDS.LOGIN_INPUT}
                         placeholder='Логин'
                     />
                     <FormHelperText mt={0} textAlign='left'>
-                        {LOGIN_HELPER}
+                        {VALIDATION_MESSAGES.LOGIN_HELPER}
                     </FormHelperText>
                     <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
                 </FormControl>
@@ -94,7 +89,7 @@ export const ResetStepForm = ({
                             type={showPwd ? 'text' : 'password'}
                             {...register('password')}
                             variant='sign'
-                            data-test-id={PASSWORD_INPUT}
+                            data-test-id={TEST_IDS.PASSWORD_INPUT}
                             placeholder='Пароль'
                         />
                         <InputRightElement>
@@ -119,7 +114,7 @@ export const ResetStepForm = ({
                         </InputRightElement>
                     </InputGroup>
                     <FormHelperText mt={0} textAlign='left'>
-                        {PASSWORD_HELPER}
+                        {VALIDATION_MESSAGES.PASSWORD_HELPER}
                     </FormHelperText>
                     <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                 </FormControl>
@@ -134,7 +129,7 @@ export const ResetStepForm = ({
                             type={showConfirm ? 'text' : 'password'}
                             {...register('passwordConfirm')}
                             variant='sign'
-                            data-test-id={CONFIRM_PASSWORD_INPUT}
+                            data-test-id={TEST_IDS.CONFIRM_PASSWORD_INPUT}
                             placeholder='Пароль'
                         />
                         <InputRightElement>
@@ -161,7 +156,12 @@ export const ResetStepForm = ({
                     <FormErrorMessage>{errors.passwordConfirm?.message}</FormErrorMessage>
                 </FormControl>
 
-                <Button type='submit' variant='darkWhite' w='full' data-test-id={SUBMIT_BUTTON}>
+                <Button
+                    type='submit'
+                    variant='darkWhite'
+                    w='full'
+                    data-test-id={TEST_IDS.SUBMIT_BUTTON}
+                >
                     Зарегистрироваться
                 </Button>
             </VStack>

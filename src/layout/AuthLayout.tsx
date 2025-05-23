@@ -19,9 +19,8 @@ import bgImg from '~/assets/images/auth-side-image.jpg';
 import logo from '~/assets/images/logo-auth.png';
 import logoMini from '~/assets/images/logo-auth-mini.png';
 import { AppAlert } from '~/components/ErrorAlert/ErrorAlert';
-import { setAppLoader } from '~/store/app-slice';
+import { setAppLoader, userAlertSelector } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { userAlertSelector } from '~/store/selectors/appSelectors';
 
 interface AuthLayoutProps {
     children: ReactNode;

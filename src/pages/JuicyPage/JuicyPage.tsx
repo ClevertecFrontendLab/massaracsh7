@@ -9,7 +9,6 @@ import { BASE_LIMIT_JUICY } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesPagesInfiniteQuery } from '~/query/services/recipes';
-import { useAppSelector } from '~/store/hooks';
 import {
     selectHasFiltersOrSearch,
     selectIsSearch,
@@ -18,7 +17,8 @@ import {
     selectSelectedCategories,
     selectSelectedMeat,
     selectSelectedSide,
-} from '~/store/selectors/filtersSelectors';
+} from '~/store/filter-slice';
+import { useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
 export const JuicyPage = () => {
@@ -112,7 +112,7 @@ export const JuicyPage = () => {
                             <Button
                                 variant='limeSolid'
                                 size='medium'
-                                onClick={() => fetchNextPage()}
+                                onClick={fetchNextPage}
                                 data-test-id={TEST_IDS.LOAD_MORE_BUTTON}
                             >
                                 Загрузка

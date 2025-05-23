@@ -17,8 +17,8 @@ import { ShevronDown } from '~/assets/icons/icons';
 import { BASE_IMG_URL } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetCategoriesQuery } from '~/query/services/categories';
+import { selectAllCategories } from '~/store/category-slice';
 import { useAppSelector } from '~/store/hooks';
-import { selectAllCategories } from '~/store/selectors/categoriesSelectors';
 import { Category } from '~/types/apiTypes';
 
 interface NavProps {
