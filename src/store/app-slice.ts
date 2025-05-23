@@ -1,12 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ApplicationState } from './configure-store';
-export type AppState = typeof initialState;
+import { AlertPayload, ModalPayload } from '~/types/utilTypes';
 
-const initialState = {
+export interface AppState {
+    isLoading: boolean;
+    error: string | null;
+    modal: ModalPayload | null;
+    alert: AlertPayload | null;
+}
+
+const initialState: AppState = {
     isLoading: true,
-    error: '' as string | null,
+    error: null,
+    modal: null,
+    alert: null,
 };
+
 export const appSlice = createSlice({
     name: 'app',
     initialState,
@@ -20,10 +29,36 @@ export const appSlice = createSlice({
         setAppLoader(state, { payload: isLoading }: PayloadAction<boolean>) {
             state.isLoading = isLoading;
         },
+        setAppModal(state, { payload }: PayloadAction<ModalPayload>) {
+            state.modal = payload;
+        },
+        clearModal(state) {
+            state.modal = null;
+        },
+        setAppAlert(state, { payload }: PayloadAction<AlertPayload>) {
+            state.alert = payload;
+        },
+        clearAppAlert(state) {
+            state.alert = null;
+        },
+    },
+    selectors: {
+        userLoadingSelector: (state) => state.isLoading,
+        userErrorSelector: (state) => state.error,
+        userAlertSelector: (state) => state.alert,
+        userModalSelector: (state) => state.modal,
     },
 });
-export const userLoadingSelector = (state: ApplicationState) => state.app.isLoading;
-export const userErrorSelector = (state: ApplicationState) => state.app.error;
 
-export const { setAppError, setAppLoader, clearAppError } = appSlice.actions;
+export const {
+    setAppError,
+    setAppLoader,
+    clearAppError,
+    setAppModal,
+    clearModal,
+    setAppAlert,
+    clearAppAlert,
+} = appSlice.actions;
+export const { userLoadingSelector, userErrorSelector, userAlertSelector, userModalSelector } =
+    appSlice.selectors;
 export default appSlice.reducer;

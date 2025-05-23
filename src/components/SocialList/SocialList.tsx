@@ -1,9 +1,13 @@
 import { HStack, Image, Stack, Text } from '@chakra-ui/react';
 
+import BsBookmarkHeart from '~/assets/icons/BsBookmarkHeart.svg';
+import BsEmojiHeartEyes from '~/assets/icons/BsEmojiHeartEyes.svg';
+import BsPeopleFill from '~/assets/icons/BsPeopleFill.svg';
+
 const userData = [
-    { icon: '/icons/BsBookmarkHeart.svg', count: 185 },
-    { icon: '/icons/BsPeopleFill.svg', count: 589 },
-    { icon: '/icons/BsEmojiHeartEyes.svg', count: 587 },
+    { icon: BsBookmarkHeart, count: 185 },
+    { icon: BsPeopleFill, count: 589 },
+    { icon: BsEmojiHeartEyes, count: 587 },
 ];
 
 export const SocialList = () => (

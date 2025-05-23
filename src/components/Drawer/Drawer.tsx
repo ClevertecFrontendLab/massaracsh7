@@ -25,21 +25,12 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 
 import { initialFilterData } from '~/constants/filter-date';
-import {
-    ALLERGEN_SWITCHER_FILTER,
-    CLEAR_FILTER_BUTTON,
-    CLOSE_FILTER_DRAWER,
-    FILTER_DRAWER,
-    FILTER_TAG,
-    FIND_RECIPE_BUTTON,
-} from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { meatTypes, sideTypes } from '~/data/allergens';
 import { authors } from '~/data/authors';
 import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
     resetAllFilters,
-    selectExcludeAllergens,
-    selectSelectedAllergens,
     setIsSearch,
     setSelectedAuthors,
     setSelectedCategories,
@@ -47,6 +38,7 @@ import {
     setSelectedSide,
     setSelectedSubCategories,
 } from '~/store/filter-slice';
+import { selectExcludeAllergens, selectSelectedAllergens } from '~/store/filter-slice';
 import { useAppSelector } from '~/store/hooks';
 import { Category } from '~/types/apiTypes';
 import { FilterData, SelectOption } from '~/types/utilTypes';
@@ -135,7 +127,7 @@ export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                 maxW={{ sm: '344px', md: '344px', lg: '463px', xl: '463px' }}
                 p={{ sm: '4', md: '4', mid: '4', lg: '8', xl: '8' }}
                 pr={{ sm: '5', md: '5', mid: '5', lg: '7', xl: '7' }}
-                data-test-id={FILTER_DRAWER}
+                data-test-id={TEST_IDS.FILTER_DRAWER}
             >
                 <HStack justify='space-between' align='center' mb={6}>
                     <DrawerHeader p={0}>Фильтр</DrawerHeader>
@@ -149,7 +141,7 @@ export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderRadius='full'
                         p={2}
                         _hover={{ bg: 'gray.700' }}
-                        data-test-id={CLOSE_FILTER_DRAWER}
+                        data-test-id={TEST_IDS.CLOSE_FILTER_DRAWER}
                     />
                 </HStack>
 
@@ -239,7 +231,7 @@ export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         excludeAllergens: checked,
                                     }));
                                 }}
-                                data-test-id={ALLERGEN_SWITCHER_FILTER}
+                                data-test-id={TEST_IDS.ALLERGEN_SWITCHER_FILTER}
                             />
                         </HStack>
                         <MultipleSelect
@@ -265,7 +257,7 @@ export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                                         bg='customLime.100'
                                         border='1px solid'
                                         borderColor='customLime.400'
-                                        data-test-id={FILTER_TAG}
+                                        data-test-id={TEST_IDS.FILTER_TAG}
                                     >
                                         <TagLabel color='customLime.700'>{tag}</TagLabel>
                                         <TagCloseButton
@@ -285,7 +277,7 @@ export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         borderColor='black'
                         onClick={handleClear}
                         size='large'
-                        data-test-id={CLEAR_FILTER_BUTTON}
+                        data-test-id={TEST_IDS.CLEAR_FILTER_BUTTON}
                     >
                         Очистить фильтр
                     </Button>
@@ -297,7 +289,7 @@ export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                         onClick={handleSearch}
                         isDisabled={!filterSelected}
                         size='large'
-                        data-test-id={FIND_RECIPE_BUTTON}
+                        data-test-id={TEST_IDS.FIND_RECIPE_BUTTON}
                         sx={{
                             pointerEvents: filterSelected ? 'auto' : 'none',
                         }}

@@ -1,47 +1,64 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, CloseButton } from '@chakra-ui/react';
-import { useDisclosure } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
-import { CLOSE_ALERT_BUTTON, ERROR_NOTIFICATION } from '~/constants/test-ids';
-import { clearAppError } from '~/store/app-slice';
-import { ApplicationState } from '~/store/configure-store';
+import { TEST_IDS } from '~/constants/test-ids';
+import { clearAppAlert } from '~/store/app-slice';
+import { userAlertSelector } from '~/store/app-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { bgMap } from '~/types/utilTypes';
 
-export const ErrorAlert = () => {
-    const error = useAppSelector((state: ApplicationState) => state.app.error);
+export const AppAlert = () => {
+    const alert = useAppSelector(userAlertSelector);
     const dispatch = useAppDispatch();
-    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 
-    if (!error || !isOpen) return null;
+    useEffect(() => {
+        if (alert) {
+            const timer = setTimeout(() => {
+                dispatch(clearAppAlert());
+            }, 40000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [alert, dispatch]);
+
+    if (!alert) return null;
+
+    const onCloseAlert = () => dispatch(clearAppAlert());
+
+    const { type, title, message } = alert;
 
     return (
-        <Box position='fixed' bottom='80px' left='50%' transform='translateX(-50%)' zIndex={20}>
+        <Box
+            position='absolute'
+            bottom='80px'
+            left='50%'
+            transform='translateX(-50%)'
+            zIndex={1600}
+        >
             <Alert
-                status='error'
+                status={type}
                 borderRadius='md'
                 boxShadow='md'
                 mx='auto'
-                data-test-id={ERROR_NOTIFICATION}
+                data-test-id={TEST_IDS.ERROR_NOTIFICATION}
                 w={{ base: '328px', md: '328px', lg: '400px', xl: '400px' }}
-                bg='#E53E3E'
+                bg={bgMap[type]}
                 color='white'
                 fontSize='16px'
             >
-                <AlertIcon bg='#E53E3E' color='white' />
+                <AlertIcon color='white' />
                 <Box>
-                    <AlertTitle>Ошибка сервера</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
+                    {title && <AlertTitle>{title}</AlertTitle>}
+                    <AlertDescription>{message}</AlertDescription>
                 </Box>
                 <CloseButton
-                    data-test-id={CLOSE_ALERT_BUTTON}
+                    data-test-id={TEST_IDS.CLOSE_ALERT_BUTTON}
                     alignSelf='flex-start'
                     position='relative'
                     right={-1}
                     top={-1}
                     ml='auto'
-                    onClick={() => {
-                        dispatch(clearAppError());
-                        onClose();
-                    }}
+                    onClick={onCloseAlert}
                 />
             </Alert>
         </Box>

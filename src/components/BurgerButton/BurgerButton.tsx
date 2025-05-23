@@ -1,7 +1,7 @@
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
 
-import { CLOSE_ICON, HUMB_ICON } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface BurgerButtonProps {
     isOpen: boolean;
@@ -13,9 +13,9 @@ export const BurgerButton = ({ isOpen, onToggle }: BurgerButtonProps) => (
         aria-label={isOpen ? 'Закрыть меню' : 'Открыть/меню'}
         icon={
             isOpen ? (
-                <CloseIcon data-test-id={CLOSE_ICON} />
+                <CloseIcon data-test-id={TEST_IDS.CLOSE_ICON} />
             ) : (
-                <HamburgerIcon w='20px' h='20px' data-test-id={HUMB_ICON} />
+                <HamburgerIcon w='20px' h='20px' data-test-id={TEST_IDS.HUMB_ICON} />
             )
         }
         variant='ghost'

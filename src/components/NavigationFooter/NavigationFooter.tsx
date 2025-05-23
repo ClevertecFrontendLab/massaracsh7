@@ -1,6 +1,7 @@
 import { Flex, HStack, IconButton, Image, Link, Text } from '@chakra-ui/react';
 
-import { FOOTER } from '~/constants/test-ids';
+import leftIcon from '~/assets/icons/left-icon.svg';
+import { TEST_IDS } from '~/constants/test-ids';
 
 export const NavigationFooter = () => (
     <Flex
@@ -12,7 +13,7 @@ export const NavigationFooter = () => (
         direction='column'
         gap={4}
         as='footer'
-        data-test-id={FOOTER}
+        data-test-id={TEST_IDS.FOOTER}
     >
         <Text fontWeight='500' color='lightText'>
             Версия программы 03.25
@@ -25,7 +26,7 @@ export const NavigationFooter = () => (
         <HStack spacing={1.5} align='center'>
             <IconButton
                 aria-label='Выйти'
-                icon={<Image src='/icons/left-icon.svg' alt='Exit' boxSize='12px' />}
+                icon={<Image src={leftIcon} alt='Exit' boxSize='12px' />}
                 variant='ghost'
                 size='sm'
             />

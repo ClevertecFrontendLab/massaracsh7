@@ -65,6 +65,7 @@ export const CategoryPage = () => {
         if (!subCat?._id) return skipToken;
         return buildQuery({
             selectedSubCategories: [subCat._id],
+            page: 1,
             limit: BASE_LIMIT_JUICY,
         });
     }, [subCat?._id]);
@@ -159,7 +160,9 @@ export const CategoryPage = () => {
 
             <TabsCategory subcategories={cat?.subCategories ?? []} />
 
-            {recipesData?.data && <RecipeList recipes={recipesData.data} gridVariant='low' />}
+            {recipesData?.data && recipesData?.data?.length > 0 && (
+                <RecipeList recipes={recipesData.data} gridVariant='low' />
+            )}
 
             {randomRecipes && (
                 <KitchenSection

@@ -9,7 +9,7 @@ import { RecipeList } from '~/components/RecipeList/RecipeList';
 import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { SliderList } from '~/components/SliderList/SliderList';
 import { BASE_LIMIT_SLIDER, ERROR_SEARCH_MESSAGE, MAIN_LIMIT_JUICY } from '~/constants/constants';
-import { JUICIEST_LINK, JUICIEST_LINK_MOB } from '~/constants/test-ids';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import {
@@ -151,11 +151,11 @@ export const MainPage = () => {
                         display={{
                             base: 'flex',
                             sm: 'none',
-                            md: 'flex',
+                            md: 'none',
                             lg: 'flex',
                             xl: 'flex',
                         }}
-                        data-test-id={JUICIEST_LINK}
+                        data-test-id={TEST_IDS.JUICIEST_LINK}
                         variant='limeSolid'
                         size='large'
                         rightIcon={<ArrowBlackRight w='14px' />}
@@ -174,8 +174,8 @@ export const MainPage = () => {
             )}
 
             <Button
-                display={{ base: 'none', sm: 'block', md: 'none', lg: 'none', xl: 'none' }}
-                data-test-id={JUICIEST_LINK_MOB}
+                display={{ base: 'none', sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
+                data-test-id={TEST_IDS.JUICIEST_LINK_MOB}
                 variant='limeSolid'
                 size='large'
                 mb={8}

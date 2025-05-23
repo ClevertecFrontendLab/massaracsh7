@@ -1,41 +1,72 @@
-export const JUICIEST_LINK = 'juiciest-link';
-export const JUICIEST_LINK_MOB = 'juiciest-link-mobile';
-export const VEGAN = 'vegan-cuisine';
-export const HEADER = 'header';
-export const FOOTER = 'footer';
-export const NAV = 'nav';
-export const BREADCRUMBS = 'breadcrumbs';
-export const HUMB_ICON = 'hamburger-icon';
-export const CLOSE_ICON = 'close-icon';
-export const SEARCH_INPUT = 'search-input';
-export const SEARCH_BUTTON = 'search-button';
-export const FOOD_CARD = 'food-card';
-export const CARD_LINK = 'card-link';
-export const CAROUSEL = 'carousel';
-export const CAROUSEL_CARD = 'carousel-card';
-export const CAROUSEL_BACK = 'carousel-back';
-export const CAROUSEL_FORWARD = 'carousel-forward';
-export const ALLERGEN_SWITCHER = 'allergens-switcher';
-export const ALLERGEN_BUTTON = 'allergens-menu-button';
-export const ALLERGEN_MENU = 'allergens-menu';
-export const FILTER_DRAWER = 'filter-drawer';
-export const CLOSE_FILTER_DRAWER = 'close-filter-drawer';
-export const FILTER_BUTTON = 'filter-button';
-export const CLEAR_FILTER_BUTTON = 'clear-filter-button';
-export const FIND_RECIPE_BUTTON = 'find-recipe-button';
-export const FILTER_CATEGORY = 'filter-menu-button-категория';
-export const VEGAN_CHECKBOX = 'checkbox-веганская кухня';
-export const ALLERGEN_SWITCHER_FILTER = 'allergens-switcher-filter';
-export const ALLERGEN_BUTTON_FILTER = 'allergens-menu-button-filter';
-export const ADD_OTHER_ALLERGEN = 'add-other-allergen';
-export const ADD_ALLERGEN_BUTTON = 'add-allergen-button';
-export const FILTER_TAG = 'filter-tag';
-export const ERROR_PAGE_GO_HOME = 'error-page-go-home';
-export const APP_LOADER = 'app-loader';
-export const LOADER_SEARCH_BLOCK = 'loader-search-block';
-export const ERROR_NOTIFICATION = 'error-notification';
-export const CLOSE_ALERT_BUTTON = 'close-alert-button';
-export const LOAD_MORE_BUTTON = 'load-more-button';
-export const DECREMENT_STEPPER = 'decrement-stepper';
-export const INCREMENT_STEPPER = 'increment-stepper';
-export const INGREDIENT_QUANTITY = 'ingredient-quantity';
+export const TEST_IDS = {
+    JUICIEST_LINK: 'juiciest-link',
+    JUICIEST_LINK_MOB: 'juiciest-link-mobile',
+    VEGAN: 'vegan-cuisine',
+    HEADER: 'header',
+    FOOTER: 'footer',
+    NAV: 'nav',
+    BREADCRUMBS: 'breadcrumbs',
+    HUMB_ICON: 'hamburger-icon',
+    CLOSE_ICON: 'close-icon',
+    SEARCH_INPUT: 'search-input',
+    SEARCH_BUTTON: 'search-button',
+    FOOD_CARD: 'food-card',
+    CARD_LINK: 'card-link',
+    CAROUSEL: 'carousel',
+    CAROUSEL_CARD: 'carousel-card',
+    CAROUSEL_BACK: 'carousel-back',
+    CAROUSEL_FORWARD: 'carousel-forward',
+    ALLERGEN_SWITCHER: 'allergens-switcher',
+    ALLERGEN_BUTTON: 'allergens-menu-button',
+    ALLERGEN_MENU: 'allergens-menu',
+    FILTER_DRAWER: 'filter-drawer',
+    CLOSE_FILTER_DRAWER: 'close-filter-drawer',
+    FILTER_BUTTON: 'filter-button',
+    CLEAR_FILTER_BUTTON: 'clear-filter-button',
+    FIND_RECIPE_BUTTON: 'find-recipe-button',
+    FILTER_CATEGORY: 'filter-menu-button-категория',
+    VEGAN_CHECKBOX: 'checkbox-веганская кухня',
+    ALLERGEN_SWITCHER_FILTER: 'allergens-switcher-filter',
+    ALLERGEN_BUTTON_FILTER: 'allergens-menu-button-filter',
+    ADD_OTHER_ALLERGEN: 'add-other-allergen',
+    ADD_ALLERGEN_BUTTON: 'add-allergen-button',
+    FILTER_TAG: 'filter-tag',
+    ERROR_PAGE_GO_HOME: 'error-page-go-home',
+    APP_LOADER: 'app-loader',
+    LOADER_SEARCH_BLOCK: 'loader-search-block',
+    ERROR_NOTIFICATION: 'error-notification',
+    CLOSE_ALERT_BUTTON: 'close-alert-button',
+    LOAD_MORE_BUTTON: 'load-more-button',
+    DECREMENT_STEPPER: 'decrement-stepper',
+    INCREMENT_STEPPER: 'increment-stepper',
+    INGREDIENT_QUANTITY: 'ingredient-quantity',
+
+    SIGN_IN_FORM: 'sign-in-form',
+    LOGIN_INPUT: 'login-input',
+    PASSWORD_INPUT: 'password-input',
+    PASSWORD_VISIBILITY_BUTTON: 'password-visibility-button',
+    SUBMIT_BUTTON: 'submit-button',
+    SUBMIT_CODE: 'submit-code',
+    FORGOT_PASSWORD: 'forgot-password',
+
+    SIGN_IN_ERROR_MODAL: 'sign-in-error-modal',
+    CLOSE_BUTTON: 'close-button',
+    REPEAT_BUTTON: 'repeat-button',
+
+    SIGN_UP_PROGRESS: 'sign-up-progress',
+    SIGN_UP_FORM: 'sign-up-form',
+    FIRST_NAME_INPUT: 'first-name-input',
+    LAST_NAME_INPUT: 'last-name-input',
+    EMAIL_INPUT: 'email-input',
+    CONFIRM_PASSWORD_INPUT: 'confirm-password-input',
+
+    SIGN_UP_SUCCESS_MODAL: 'sign-up-success-modal',
+
+    EMAIL_VERIFICATION_FAILED_MODAL: 'email-verification-failed-modal',
+
+    SEND_EMAIL_MODAL: 'send-email-modal',
+    VERIFICATION_CODE_MODAL: 'verification-code-modal',
+    VERIFICATION_CODE_INPUT: 'verification-code-input',
+
+    RESET_CREDENTIALS_MODAL: 'reset-credentials-modal',
+} as const;

@@ -1,7 +1,10 @@
 import { Avatar, Box, Hide, HStack, Show, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import { HEADER } from '~/constants/test-ids';
+import avatar from '~/assets/avatar.png';
+import logo from '~/assets/logo.png';
+import logoMini from '~/assets/logo-mini.png';
+import { TEST_IDS } from '~/constants/test-ids';
 
 import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 import { MobileMenu } from '../MobileMenu/MobileMenu';
@@ -16,7 +19,7 @@ export const Header = () => {
             bg={isMenuOpen ? 'white' : 'customLime.50'}
             mb={isMenuOpen ? '16px' : '8px'}
             py={4}
-            data-test-id={HEADER}
+            data-test-id={TEST_IDS.HEADER}
             w='100%'
             position='fixed'
             top={0}
@@ -33,10 +36,10 @@ export const Header = () => {
                 <HStack justify='space-between' align='center'>
                     <HStack spacing={32} align='center'>
                         <Hide below='smPlus'>
-                            <Box as='img' src='/logo.png' alt='Logo' h='32px' />
+                            <Box as='img' src={logo} alt='Logo' h='32px' />
                         </Hide>
                         <Show below='smPlus'>
-                            <Box as='img' src='/logo-mini.png' alt='Logo' h='32px' />
+                            <Box as='img' src={logoMini} alt='Logo' h='32px' />
                         </Show>
 
                         <Hide below='mid'>
@@ -45,11 +48,7 @@ export const Header = () => {
                     </HStack>
                     <Hide below='mid'>
                         <HStack spacing={3} px={6} align='center'>
-                            <Avatar
-                                name='Екатерина Константинопольская'
-                                src='/avatar.png'
-                                w='48px'
-                            />
+                            <Avatar name='Екатерина Константинопольская' src={avatar} w='48px' />
                             <Box>
                                 <Text textStyle='nameText'>Екатерина Константинопольская</Text>
                                 <Text textStyle='miniText'>@bake_and_pie</Text>

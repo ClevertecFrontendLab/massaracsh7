@@ -3,8 +3,6 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { categoriesApiSlice } from '~/query/services/categories';
 import { Category, CategorySub } from '~/types/apiTypes';
 
-import { ApplicationState } from './configure-store';
-
 export interface CategoriesState {
     categories: Category[];
     subCategories: CategorySub[];
@@ -41,23 +39,11 @@ export const categoriesSlice = createSlice({
             },
         );
     },
+    selectors: {
+        selectAllCategories: (state: CategoriesState): Category[] => state.categories,
+        selectAllSubCategories: (state: CategoriesState): CategorySub[] => state.subCategories,
+    },
 });
-
-export const { setCategories } = categoriesSlice.actions;
-export default categoriesSlice.reducer;
-
-const selectCategoriesState = (state: ApplicationState) => state.categories;
-
-export const selectAllCategories = createSelector(
-    [selectCategoriesState],
-    (state) => state.categories,
-);
-
-export const selectAllSubCategories = createSelector(
-    [selectCategoriesState],
-    (state) => state.subCategories,
-);
-
 export const selectCategoryBySlug = (slug: string) =>
     createSelector([selectAllCategories], (categories) =>
         categories.find((cat: Category) => cat.category === slug),
@@ -72,3 +58,8 @@ export const selectSubCategoriesByRootId = (rootId: string) =>
     createSelector([selectAllSubCategories], (subcategories) =>
         subcategories.filter((sub: CategorySub) => sub.rootCategoryId === rootId),
     );
+export const { setCategories } = categoriesSlice.actions;
+
+export const { selectAllCategories, selectAllSubCategories } = categoriesSlice.selectors;
+
+export default categoriesSlice.reducer;

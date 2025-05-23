@@ -1,12 +1,28 @@
-import { BrowserRouter as Router } from 'react-router';
+import { useLocation } from 'react-router';
+
+import { AppAlert } from '~/components/ErrorAlert/ErrorAlert';
+import { FullLoader } from '~/components/FullLoader/FullLoader';
+import { CustomModal } from '~/components/Modal/CustomModal';
+import { userAlertSelector, userLoadingSelector, userModalSelector } from '~/store/app-slice';
+import { useAppSelector } from '~/store/hooks';
 
 import AppRoutes from './AppRoutes';
+import { ROUTES_PATH } from './routes';
 
 function App() {
+    const location = useLocation();
+    const isNotFound = location.pathname === ROUTES_PATH.NOT_FOUND;
+    const isLoading = useAppSelector(userLoadingSelector);
+    const modal = useAppSelector(userModalSelector);
+    const alert = useAppSelector(userAlertSelector);
     return (
-        <Router>
+        <>
+            {modal && <CustomModal />}
+            {!isNotFound && isLoading && <FullLoader />}
+            {alert?.sourse === 'global' && <AppAlert />}
+
             <AppRoutes />
-        </Router>
+        </>
     );
 }
 
