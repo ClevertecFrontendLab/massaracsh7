@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 
 import { AppAlert } from '~/components/ErrorAlert/ErrorAlert';
 import { FullLoader } from '~/components/FullLoader/FullLoader';
@@ -16,12 +16,13 @@ function App() {
     const modal = useAppSelector(userModalSelector);
     const alert = useAppSelector(userAlertSelector);
     return (
-        <Router basename={import.meta.env.BASE_URL}>
+        <>
             {modal && <CustomModal />}
             {!isNotFound && isLoading && <FullLoader />}
             {alert?.sourse === 'global' && <AppAlert />}
+
             <AppRoutes />
-        </Router>
+        </>
     );
 }
 

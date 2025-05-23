@@ -1,17 +1,13 @@
 import { z } from 'zod';
 
-import {
-    CONFIRM_PASSWORD_ERROR,
-    CONFIRM_PASSWORD_NONEMPTY,
-    EMAIL_ERROR,
-    EMAIL_NONEMPTY,
-    FORMAT_ERROR,
-    MAXLENGTH_ERROR,
-    PASSWORD_NONEMPTY,
-} from '~/constants/validation-messages';
+import { VALIDATION_MESSAGES } from '~/constants/validation-messages';
 
 export const emailSchema = z.object({
-    email: z.string().nonempty(EMAIL_NONEMPTY).max(50, MAXLENGTH_ERROR).email(EMAIL_ERROR),
+    email: z
+        .string()
+        .nonempty(VALIDATION_MESSAGES.EMAIL_NONEMPTY)
+        .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR)
+        .email(VALIDATION_MESSAGES.EMAIL_ERROR),
 });
 
 export const resetSchema = z
@@ -19,21 +15,21 @@ export const resetSchema = z
         email: z.string(),
         login: z
             .string()
-            .min(5, FORMAT_ERROR)
-            .max(50, MAXLENGTH_ERROR)
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, FORMAT_ERROR),
+            .min(5, VALIDATION_MESSAGES.FORMAT_ERROR)
+            .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR)
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, VALIDATION_MESSAGES.FORMAT_ERROR),
         password: z
             .string()
-            .nonempty(PASSWORD_NONEMPTY)
-            .max(50, MAXLENGTH_ERROR)
-            .min(8, FORMAT_ERROR)
-            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, FORMAT_ERROR)
-            .regex(/[A-ZА-Я]/, FORMAT_ERROR)
-            .regex(/\d/, FORMAT_ERROR),
-        passwordConfirm: z.string().nonempty(CONFIRM_PASSWORD_NONEMPTY),
+            .nonempty(VALIDATION_MESSAGES.PASSWORD_NONEMPTY)
+            .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR)
+            .min(8, VALIDATION_MESSAGES.FORMAT_ERROR)
+            .regex(/^[A-Za-z0-9!@#$&_*+\-.]+$/, VALIDATION_MESSAGES.FORMAT_ERROR)
+            .regex(/[A-ZА-Я]/, VALIDATION_MESSAGES.FORMAT_ERROR)
+            .regex(/\d/, VALIDATION_MESSAGES.FORMAT_ERROR),
+        passwordConfirm: z.string().nonempty(VALIDATION_MESSAGES.CONFIRM_PASSWORD_NONEMPTY),
     })
     .refine((data) => data.password === data.passwordConfirm, {
-        message: CONFIRM_PASSWORD_ERROR,
+        message: VALIDATION_MESSAGES.CONFIRM_PASSWORD_ERROR,
         path: ['passwordConfirm'],
     });
 

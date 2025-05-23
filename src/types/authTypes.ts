@@ -1,53 +1,43 @@
-export interface SignUpRequest {
+type BaseResponse = {
+    statusText: string;
+    message: string;
+};
+
+export type SignUpRequest = {
     email: string;
     login: string;
     password: string;
     firstName?: string;
     lastName?: string;
-}
+};
 
-export interface SignUpResponse {
-    statusText: string;
-    message: string;
-}
+export type SignUpResponse = BaseResponse;
 
-export interface LoginRequest {
+export type LoginRequest = {
     login: string;
     password: string;
-}
+};
 
-export interface LoginResponse {
-    statusText: string;
-    message: string;
-}
+export type LoginResponse = BaseResponse;
 
-export interface ForgotPasswordRequest {
+export type ForgotPasswordRequest = {
     email: string;
-}
+};
 
-export interface ForgotPasswordResponse {
-    statusText: string;
-    message: string;
-}
+export type ForgotPasswordResponse = BaseResponse;
 
-export interface VerifyOtpRequest {
+export type VerifyOtpRequest = {
     email: string;
     otpToken: string;
-}
+};
 
-export interface VerifyOtpResponse {
-    statusText: string;
-    message: string;
-}
+export type VerifyOtpResponse = BaseResponse;
 
-export interface ResetPasswordRequest {
+export type ResetPasswordRequest = {
     login: string;
     email: string;
     password: string;
     passwordConfirm: string;
-}
+};
 
-export interface ResetPasswordResponse {
-    statusText: string;
-    message: string;
-}
+export type ResetPasswordResponse = BaseResponse;
