@@ -31,12 +31,12 @@ export interface NutritionValue {
 export interface RecipeStep {
     stepNumber: number;
     description: string;
-    image: string;
+    image?: string;
 }
 
 export interface Ingredient {
     title: string;
-    count: string;
+    count: number;
     measureUnit: string;
 }
 
@@ -106,3 +106,14 @@ export type BuildQueryParams = Partial<{
     limit: number;
     page: number;
 }>;
+
+export interface CreateRecipeDto {
+    title: string;
+    description: string;
+    time: number;
+    portions: number;
+    image: string;
+    categoriesIds: string[];
+    steps: RecipeStep[];
+    ingredients: Ingredient[];
+}

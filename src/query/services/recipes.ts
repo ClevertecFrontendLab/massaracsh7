@@ -1,4 +1,10 @@
-import { Recipe, RecipesByCategoryParams, RecipesParams, RecipesResponse } from '~/types/apiTypes';
+import {
+    CreateRecipeDto,
+    Recipe,
+    RecipesByCategoryParams,
+    RecipesParams,
+    RecipesResponse,
+} from '~/types/apiTypes';
 
 import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
@@ -67,6 +73,16 @@ export const recipesApiSlice = catalogApiSlice
                 }),
                 providesTags: [Tags.RECIPES],
             }),
+            createRecipe: builder.mutation<Recipe, CreateRecipeDto>({
+                query: (body) => ({
+                    url: ApiEndpoints.RECIPES,
+                    method: 'POST',
+                    body,
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.CREATE_RECIPE,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
         }),
         overrideExisting: false,
     });
@@ -77,4 +93,5 @@ export const {
     useGetRecipesByCategoryQuery,
     useLazyGetRecipesByCategoryQuery,
     useGetRecipeByIdQuery,
+    useCreateRecipeMutation,
 } = recipesApiSlice;
