@@ -7,4 +7,5 @@ export const ROUTES_PATH = {
     SIGN_IN: '/signin',
     LOG_IN: '/login',
     VERIFICATION: '/verification',
+    NEW_RECIPE: '/new-recipe',
 };

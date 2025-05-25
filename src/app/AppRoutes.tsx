@@ -5,6 +5,7 @@ import { CategoryPage } from '~/pages/CategoryPage/CategoryPage';
 import { JuicyPage } from '~/pages/JuicyPage/JuicyPage';
 import { LoginPage } from '~/pages/LoginPage/LoginPage';
 import { MainPage } from '~/pages/MainPage/MainPage';
+import { NewRecipePage } from '~/pages/NewRecipePage/NewRecipePage';
 import { NotFoundPage } from '~/pages/NotFoundPage/NotFoundPage';
 import { RecipePage } from '~/pages/RecipePage/RecipePage';
 import { SignInPage } from '~/pages/SignInPage/SignInPage';
@@ -28,6 +29,7 @@ const AppRoutes = () => (
                 <Route path={ROUTES_PATH.CATEGORY} element={<CategoryPage />} />
                 <Route path={ROUTES_PATH.RECIPE} element={<RecipePage />} />
                 <Route path={ROUTES_PATH.JUICY} element={<JuicyPage />} />
+                <Route path={ROUTES_PATH.NEW_RECIPE} element={<NewRecipePage />} />
             </Route>
 
             <Route path={ROUTES_PATH.LOG_IN} element={<LoginPage />} />
