@@ -107,7 +107,7 @@ export type BuildQueryParams = Partial<{
     page: number;
 }>;
 
-export interface CreateRecipeDto {
+export type CreateRecipeDto = {
     title: string;
     description: string;
     time: number;
@@ -116,4 +116,6 @@ export interface CreateRecipeDto {
     categoriesIds: string[];
     steps: RecipeStep[];
     ingredients: Ingredient[];
-}
+};
+
+export type RecipeDraftDto = Partial<CreateRecipeDto>;

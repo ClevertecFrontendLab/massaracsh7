@@ -16,6 +16,7 @@ import {
     Textarea,
     useDisclosure,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -26,9 +27,9 @@ import { useCreateRecipeMutation } from '~/query/services/recipes';
 import { CreateRecipeDto } from '~/types/apiTypes';
 
 import { ImageUploadModal } from './ImageUploadModal';
+import { CreateRecipeInput, createRecipeSchema } from './RecipeSchema';
 
 export const NewRecipePage = () => {
-    const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [createRecipe] = useCreateRecipeMutation();
@@ -41,7 +42,8 @@ export const NewRecipePage = () => {
         setValue,
         control,
         getValues,
-    } = useForm<CreateRecipeDto>({
+    } = useForm<CreateRecipeInput>({
+        resolver: zodResolver(createRecipeSchema),
         defaultValues: {
             title: '',
             description: '',
@@ -64,14 +66,13 @@ export const NewRecipePage = () => {
         name: 'steps',
     });
 
-    const onSubmit = async (data: CreateRecipeDto) => {
+    const onSubmit = async (data: CreateRecipeInput) => {
         try {
             if (data.categoriesIds.length < 3) {
                 alert('Нужно выбрать минимум 3 категории');
                 return;
             }
-
-            const response = await createRecipe(data).unwrap();
+            const response = await createRecipe(data as CreateRecipeDto).unwrap();
             navigate(`/recipe/${response._id}`);
         } catch (err) {
             const fetchErr = err as FetchBaseQueryError;
@@ -81,17 +82,11 @@ export const NewRecipePage = () => {
 
     const handleImageClick = (stepIndex: number | null) => {
         setCurrentStepIndex(stepIndex);
-
-        const currentImage =
-            stepIndex === null ? getValues('image') : getValues(`steps.${stepIndex}.image`);
-
-        setPreviewImage(currentImage || null);
         onOpen();
     };
 
     const handleImageConfirm = (base64Image: string) => {
         if (currentStepIndex === null) {
-            setPreviewImage(base64Image);
             setValue('image', base64Image);
         } else {
             setValue(`steps.${currentStepIndex}.image`, base64Image);
@@ -118,9 +113,9 @@ export const NewRecipePage = () => {
                             cursor='pointer'
                             onClick={() => handleImageClick(null)}
                         >
-                            {previewImage ? (
+                            {getValues('image') ? (
                                 <Image
-                                    src={previewImage}
+                                    src={getValues('image')}
                                     alt='Предпросмотр'
                                     objectFit='cover'
                                     h='100%'
@@ -201,8 +196,7 @@ export const NewRecipePage = () => {
                             control={control}
                             name='categoriesIds'
                             rules={{
-                                validate: (value) =>
-                                    value.length >= 3 || 'Выберите минимум 3 категории',
+                                validate: (v) => v.length >= 3 || 'Выберите минимум 3 категории',
                             }}
                             render={({ field }) => (
                                 <SearchableSelect
@@ -268,6 +262,7 @@ export const NewRecipePage = () => {
                         </Button>
                     </Box>
 
+                    {/* Шаги */}
                     <Box>
                         <Text fontWeight='bold' mb={2}>
                             Шаги приготовления
@@ -277,7 +272,6 @@ export const NewRecipePage = () => {
                                 <Text fontWeight='bold' mb={2}>
                                     Шаг {index + 1}
                                 </Text>
-
                                 <FormControl
                                     isInvalid={!!errors.steps?.[index]?.description}
                                     mb={2}
@@ -312,7 +306,9 @@ export const NewRecipePage = () => {
                                             h='100%'
                                         />
                                     ) : (
-                                        <Text color='gray.400'>загрузить изображение</Text>
+                                        <Text color='gray.400'>
+                                            Нажмите, чтобы загрузить изображение
+                                        </Text>
                                     )}
                                 </Box>
                             </Box>
@@ -331,6 +327,7 @@ export const NewRecipePage = () => {
                         </Button>
                     </Box>
 
+                    {/* Кнопки */}
                     <HStack>
                         <Button type='submit' colorScheme='gray'>
                             Сохранить черновик
@@ -345,7 +342,11 @@ export const NewRecipePage = () => {
             <ImageUploadModal
                 isOpen={isOpen}
                 onClose={onClose}
-                initialImage={previewImage}
+                initialImage={
+                    currentStepIndex === null
+                        ? getValues('image')
+                        : getValues(`steps.${currentStepIndex}.image`)
+                }
                 onSave={handleImageConfirm}
             />
         </>
