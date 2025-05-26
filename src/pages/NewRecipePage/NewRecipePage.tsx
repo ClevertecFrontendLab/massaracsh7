@@ -5,6 +5,7 @@ import {
     FormControl,
     FormErrorMessage,
     HStack,
+    Image,
     Input,
     NumberDecrementStepper,
     NumberIncrementStepper,
@@ -13,8 +14,10 @@ import {
     NumberInputStepper,
     Text,
     Textarea,
+    useDisclosure,
 } from '@chakra-ui/react';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
@@ -22,13 +25,22 @@ import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect
 import { useCreateRecipeMutation } from '~/query/services/recipes';
 import { CreateRecipeDto } from '~/types/apiTypes';
 
+import { ImageUploadModal } from './ImageUploadModal';
+
 export const NewRecipePage = () => {
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [createRecipe] = useCreateRecipeMutation();
+    const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
         formState: { errors },
         setValue,
         control,
+        getValues,
     } = useForm<CreateRecipeDto>({
         defaultValues: {
             title: '',
@@ -37,7 +49,8 @@ export const NewRecipePage = () => {
             time: 1,
             categoriesIds: [],
             ingredients: [{ title: '', count: 1, measureUnit: '' }],
-            steps: [{ description: '' }],
+            steps: [{ description: '', stepNumber: 1, image: '' }],
+            image: '',
         },
     });
 
@@ -51,15 +64,13 @@ export const NewRecipePage = () => {
         name: 'steps',
     });
 
-    const [createRecipe] = useCreateRecipeMutation();
-    const navigate = useNavigate();
-
     const onSubmit = async (data: CreateRecipeDto) => {
         try {
             if (data.categoriesIds.length < 3) {
                 alert('Нужно выбрать минимум 3 категории');
                 return;
             }
+
             const response = await createRecipe(data).unwrap();
             navigate(`/recipe/${response._id}`);
         } catch (err) {
@@ -68,232 +79,275 @@ export const NewRecipePage = () => {
         }
     };
 
+    const handleImageClick = (stepIndex: number | null) => {
+        setCurrentStepIndex(stepIndex);
+
+        const currentImage =
+            stepIndex === null ? getValues('image') : getValues(`steps.${stepIndex}.image`);
+
+        setPreviewImage(currentImage || null);
+        onOpen();
+    };
+
+    const handleImageConfirm = (base64Image: string) => {
+        if (currentStepIndex === null) {
+            setPreviewImage(base64Image);
+            setValue('image', base64Image);
+        } else {
+            setValue(`steps.${currentStepIndex}.image`, base64Image);
+        }
+        onClose();
+    };
+
     return (
-        <Box as='form' onSubmit={handleSubmit(onSubmit)} pt={6} mb={10}>
-            <Flex flexDirection='column' gap={6}>
-                <FormControl isInvalid={!!errors.image}>
-                    <Input
-                        type='file'
-                        accept='image/*'
-                        onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                                setValue(`image`, reader.result as string);
-                            };
-                            reader.readAsDataURL(file);
-                        }}
-                    />
-                    <FormErrorMessage>{errors.image?.message}</FormErrorMessage>
-                </FormControl>
-                <FormControl isInvalid={!!errors.title}>
-                    <Input
-                        placeholder='Название рецепта'
-                        {...register('title', {
-                            required: 'Название обязательно',
-                            maxLength: { value: 50, message: 'Макс. 50 символов' },
-                        })}
-                    />
-                    <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-                </FormControl>
-
-                <FormControl isInvalid={!!errors.description}>
-                    <Textarea
-                        placeholder='Описание'
-                        {...register('description', {
-                            required: 'Описание обязательно',
-                            maxLength: { value: 500, message: 'Макс. 500 символов' },
-                        })}
-                    />
-                    <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
-                </FormControl>
-
-                <FormControl isInvalid={!!errors.portions}>
-                    <HStack>
-                        <Text>Порций:</Text>
-                        <NumberInput
-                            min={1}
-                            maxW={90}
-                            onChange={(val) => setValue('portions', Number(val))}
+        <>
+            <Box as='form' onSubmit={handleSubmit(onSubmit)} pt={6} mb={10}>
+                <Flex flexDirection='column' gap={6}>
+                    <Box>
+                        <Text fontWeight='bold' mb={2}>
+                            Изображение рецепта
+                        </Text>
+                        <Box
+                            w='full'
+                            h='200px'
+                            bg='gray.200'
+                            borderRadius='md'
+                            display='flex'
+                            alignItems='center'
+                            justifyContent='center'
+                            cursor='pointer'
+                            onClick={() => handleImageClick(null)}
                         >
-                            <NumberInputField
-                                {...register('portions', { required: true, min: 1 })}
-                            />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
-                    </HStack>
-                </FormControl>
+                            {previewImage ? (
+                                <Image
+                                    src={previewImage}
+                                    alt='Предпросмотр'
+                                    objectFit='cover'
+                                    h='100%'
+                                />
+                            ) : (
+                                <Text color='gray.500'>Нажмите, чтобы загрузить</Text>
+                            )}
+                        </Box>
+                    </Box>
 
-                <FormControl isInvalid={!!errors.time}>
-                    <HStack>
-                        <Text>Время (мин):</Text>
-                        <NumberInput
-                            min={1}
-                            max={10000}
-                            maxW={120}
-                            onChange={(val) => setValue('time', Number(val))}
-                        >
-                            <NumberInputField
-                                {...register('time', {
-                                    required: true,
-                                    min: 1,
-                                    max: 10000,
-                                })}
-                            />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
-                    </HStack>
-                </FormControl>
+                    <FormControl isInvalid={!!errors.title}>
+                        <Input
+                            placeholder='Название рецепта'
+                            {...register('title', {
+                                required: 'Название обязательно',
+                                maxLength: { value: 50, message: 'Макс. 50 символов' },
+                            })}
+                        />
+                        <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+                    </FormControl>
 
-                <FormControl isInvalid={!!errors.categoriesIds}>
-                    <Controller
-                        control={control}
-                        name='categoriesIds'
-                        rules={{
-                            validate: (value) =>
-                                value.length >= 3 || 'Выберите минимум 3 категории',
-                        }}
-                        render={({ field }) => (
-                            <SearchableSelect
-                                label='Категория'
-                                options={[
-                                    'Завтрак',
-                                    'Ужин',
-                                    'Обед',
-                                    'Супы',
-                                    'Десерты',
-                                    'Веганская кухня',
-                                    'ПП',
-                                    'Гриль',
-                                ]}
-                                selectedValues={field.value}
-                                onChange={field.onChange}
-                            />
-                        )}
-                    />
-                    <FormErrorMessage>{errors.categoriesIds?.message}</FormErrorMessage>
-                </FormControl>
-                <Box>
-                    <Text fontWeight='bold' mb={2}>
-                        Ингредиенты
-                    </Text>
-                    {ingredientFields.map((field, index) => (
-                        <HStack key={field.id} mb={2}>
-                            <FormControl isInvalid={!!errors.ingredients?.[index]?.title}>
-                                <Input
-                                    placeholder='Название'
-                                    {...register(`ingredients.${index}.title`, {
+                    <FormControl isInvalid={!!errors.description}>
+                        <Textarea
+                            placeholder='Описание'
+                            {...register('description', {
+                                required: 'Описание обязательно',
+                                maxLength: { value: 500, message: 'Макс. 500 символов' },
+                            })}
+                        />
+                        <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={!!errors.portions}>
+                        <HStack>
+                            <Text>Порций:</Text>
+                            <NumberInput
+                                min={1}
+                                maxW={90}
+                                onChange={(val) => setValue('portions', Number(val))}
+                            >
+                                <NumberInputField
+                                    {...register('portions', { required: true, min: 1 })}
+                                />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </HStack>
+                    </FormControl>
+
+                    <FormControl isInvalid={!!errors.time}>
+                        <HStack>
+                            <Text>Время (мин):</Text>
+                            <NumberInput
+                                min={1}
+                                max={10000}
+                                maxW={120}
+                                onChange={(val) => setValue('time', Number(val))}
+                            >
+                                <NumberInputField
+                                    {...register('time', {
                                         required: true,
-                                        maxLength: 50,
+                                        min: 1,
+                                        max: 10000,
                                     })}
                                 />
-                            </FormControl>
-                            <FormControl isInvalid={!!errors.ingredients?.[index]?.count}>
-                                <NumberInput
-                                    min={1}
-                                    maxW={90}
-                                    onChange={(val) =>
-                                        setValue(`ingredients.${index}.count`, Number(val))
-                                    }
-                                >
-                                    <NumberInputField
-                                        {...register(`ingredients.${index}.count`, {
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </HStack>
+                    </FormControl>
+
+                    <FormControl isInvalid={!!errors.categoriesIds}>
+                        <Controller
+                            control={control}
+                            name='categoriesIds'
+                            rules={{
+                                validate: (value) =>
+                                    value.length >= 3 || 'Выберите минимум 3 категории',
+                            }}
+                            render={({ field }) => (
+                                <SearchableSelect
+                                    label='Категория'
+                                    options={[
+                                        'Завтрак',
+                                        'Ужин',
+                                        'Обед',
+                                        'Супы',
+                                        'Десерты',
+                                        'Веганская кухня',
+                                        'ПП',
+                                        'Гриль',
+                                    ]}
+                                    selectedValues={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
+                        />
+                        <FormErrorMessage>{errors.categoriesIds?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    <Box>
+                        <Text fontWeight='bold' mb={2}>
+                            Ингредиенты
+                        </Text>
+                        {ingredientFields.map((field, index) => (
+                            <HStack key={field.id} mb={2}>
+                                <FormControl isInvalid={!!errors.ingredients?.[index]?.title}>
+                                    <Input
+                                        placeholder='Название'
+                                        {...register(`ingredients.${index}.title`, {
                                             required: true,
-                                            min: 1,
+                                            maxLength: 50,
                                         })}
                                     />
-                                </NumberInput>
-                            </FormControl>
-                        </HStack>
-                    ))}
-                    <Button
-                        onClick={() => appendIngredient({ title: '', count: 1, measureUnit: '' })}
-                    >
-                        Добавить ингредиент
-                    </Button>
-                </Box>
+                                </FormControl>
+                                <FormControl isInvalid={!!errors.ingredients?.[index]?.count}>
+                                    <NumberInput
+                                        min={1}
+                                        maxW={90}
+                                        onChange={(val) =>
+                                            setValue(`ingredients.${index}.count`, Number(val))
+                                        }
+                                    >
+                                        <NumberInputField
+                                            {...register(`ingredients.${index}.count`, {
+                                                required: true,
+                                                min: 1,
+                                            })}
+                                        />
+                                    </NumberInput>
+                                </FormControl>
+                            </HStack>
+                        ))}
+                        <Button
+                            type='button'
+                            onClick={() =>
+                                appendIngredient({ title: '', count: 1, measureUnit: '' })
+                            }
+                        >
+                            Добавить ингредиент
+                        </Button>
+                    </Box>
 
-                <Box>
-                    <Text fontWeight='bold' mb={2}>
-                        Шаги приготовления
-                    </Text>
-                    {stepFields.map((field, index) => (
-                        <Box key={field.id} mb={4} p={3} borderWidth='1px' borderRadius='md'>
-                            <Text fontWeight='bold' mb={2}>
-                                Шаг {index + 1}
-                            </Text>
+                    <Box>
+                        <Text fontWeight='bold' mb={2}>
+                            Шаги приготовления
+                        </Text>
+                        {stepFields.map((field, index) => (
+                            <Box key={field.id} mb={4} p={3} borderWidth='1px' borderRadius='md'>
+                                <Text fontWeight='bold' mb={2}>
+                                    Шаг {index + 1}
+                                </Text>
 
-                            <FormControl isInvalid={!!errors.steps?.[index]?.description} mb={2}>
-                                <Textarea
-                                    placeholder='Описание шага'
-                                    {...register(`steps.${index}.description`, {
-                                        required: 'Описание обязательно',
-                                        maxLength: 300,
-                                    })}
-                                />
-                                <FormErrorMessage>
-                                    {errors.steps?.[index]?.description?.message}
-                                </FormErrorMessage>
-                            </FormControl>
+                                <FormControl
+                                    isInvalid={!!errors.steps?.[index]?.description}
+                                    mb={2}
+                                >
+                                    <Textarea
+                                        placeholder='Описание шага'
+                                        {...register(`steps.${index}.description`, {
+                                            required: 'Описание обязательно',
+                                            maxLength: 300,
+                                        })}
+                                    />
+                                    <FormErrorMessage>
+                                        {errors.steps?.[index]?.description?.message}
+                                    </FormErrorMessage>
+                                </FormControl>
 
-                            <FormControl isInvalid={!!errors.steps?.[index]?.image}>
-                                <Input
-                                    type='file'
-                                    accept='image/*'
-                                    onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (!file) return;
-                                        const reader = new FileReader();
-                                        reader.onloadend = () => {
-                                            setValue(
-                                                `steps.${index}.image`,
-                                                reader.result as string,
-                                            );
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }}
-                                />
-                                <FormErrorMessage>
-                                    {errors.steps?.[index]?.image?.message}
-                                </FormErrorMessage>
-                            </FormControl>
+                                <Box
+                                    h='150px'
+                                    bg='gray.100'
+                                    borderRadius='md'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='center'
+                                    cursor='pointer'
+                                    onClick={() => handleImageClick(index)}
+                                >
+                                    {getValues(`steps.${index}.image`) ? (
+                                        <Image
+                                            src={getValues(`steps.${index}.image`)}
+                                            alt={`Шаг ${index + 1}`}
+                                            objectFit='cover'
+                                            h='100%'
+                                        />
+                                    ) : (
+                                        <Text color='gray.400'>загрузить изображение</Text>
+                                    )}
+                                </Box>
+                            </Box>
+                        ))}
+                        <Button
+                            type='button'
+                            onClick={() =>
+                                appendStep({
+                                    stepNumber: stepFields.length + 1,
+                                    description: '',
+                                    image: '',
+                                })
+                            }
+                        >
+                            Добавить шаг
+                        </Button>
+                    </Box>
 
-                            <input
-                                type='hidden'
-                                {...register(`steps.${index}.stepNumber`)}
-                                value={index + 1}
-                            />
-                        </Box>
-                    ))}
-                    <Button
-                        onClick={() =>
-                            appendStep({
-                                stepNumber: stepFields.length + 1,
-                                description: '',
-                                image: '',
-                            })
-                        }
-                    >
-                        Добавить шаг
-                    </Button>
-                </Box>
+                    <HStack>
+                        <Button type='submit' colorScheme='gray'>
+                            Сохранить черновик
+                        </Button>
+                        <Button type='submit' colorScheme='green'>
+                            Опубликовать рецепт
+                        </Button>
+                    </HStack>
+                </Flex>
+            </Box>
 
-                <HStack>
-                    <Button type='submit' colorScheme='gray'>
-                        Сохранить черновик
-                    </Button>
-                    <Button type='submit' colorScheme='green'>
-                        Опубликовать рецепт
-                    </Button>
-                </HStack>
-            </Flex>
-        </Box>
+            <ImageUploadModal
+                isOpen={isOpen}
+                onClose={onClose}
+                initialImage={previewImage}
+                onSave={handleImageConfirm}
+            />
+        </>
     );
 };
