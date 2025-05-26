@@ -3,7 +3,6 @@ import {
     Button,
     Flex,
     FormControl,
-    FormErrorMessage,
     HStack,
     Image,
     Input,
@@ -24,6 +23,8 @@ import { useNavigate } from 'react-router';
 
 import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect';
 import { useCreateRecipeMutation } from '~/query/services/recipes';
+import { selectAllSubCategories } from '~/store/category-slice';
+import { useAppSelector } from '~/store/hooks';
 import { CreateRecipeDto } from '~/types/apiTypes';
 
 import { ImageUploadModal } from './ImageUploadModal';
@@ -34,6 +35,7 @@ export const NewRecipePage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [createRecipe] = useCreateRecipeMutation();
     const navigate = useNavigate();
+    const subCats = useAppSelector(selectAllSubCategories);
 
     const {
         register,
@@ -127,25 +129,11 @@ export const NewRecipePage = () => {
                     </Box>
 
                     <FormControl isInvalid={!!errors.title}>
-                        <Input
-                            placeholder='Название рецепта'
-                            {...register('title', {
-                                required: 'Название обязательно',
-                                maxLength: { value: 50, message: 'Макс. 50 символов' },
-                            })}
-                        />
-                        <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+                        <Input placeholder='Название рецепта' {...register('title')} />
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.description}>
-                        <Textarea
-                            placeholder='Описание'
-                            {...register('description', {
-                                required: 'Описание обязательно',
-                                maxLength: { value: 500, message: 'Макс. 500 символов' },
-                            })}
-                        />
-                        <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+                        <Textarea placeholder='Описание' {...register('description')} />
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.portions}>
@@ -156,9 +144,7 @@ export const NewRecipePage = () => {
                                 maxW={90}
                                 onChange={(val) => setValue('portions', Number(val))}
                             >
-                                <NumberInputField
-                                    {...register('portions', { required: true, min: 1 })}
-                                />
+                                <NumberInputField {...register('portions')} />
                                 <NumberInputStepper>
                                     <NumberIncrementStepper />
                                     <NumberDecrementStepper />
@@ -176,13 +162,7 @@ export const NewRecipePage = () => {
                                 maxW={120}
                                 onChange={(val) => setValue('time', Number(val))}
                             >
-                                <NumberInputField
-                                    {...register('time', {
-                                        required: true,
-                                        min: 1,
-                                        max: 10000,
-                                    })}
-                                />
+                                <NumberInputField {...register('time')} />
                                 <NumberInputStepper>
                                     <NumberIncrementStepper />
                                     <NumberDecrementStepper />
@@ -195,28 +175,15 @@ export const NewRecipePage = () => {
                         <Controller
                             control={control}
                             name='categoriesIds'
-                            rules={{
-                                validate: (v) => v.length >= 3 || 'Выберите минимум 3 категории',
-                            }}
                             render={({ field }) => (
                                 <SearchableSelect
                                     label='Категория'
-                                    options={[
-                                        'Завтрак',
-                                        'Ужин',
-                                        'Обед',
-                                        'Супы',
-                                        'Десерты',
-                                        'Веганская кухня',
-                                        'ПП',
-                                        'Гриль',
-                                    ]}
+                                    options={subCats.map((item) => item.title)}
                                     selectedValues={field.value}
                                     onChange={field.onChange}
                                 />
                             )}
                         />
-                        <FormErrorMessage>{errors.categoriesIds?.message}</FormErrorMessage>
                     </FormControl>
 
                     <Box>
@@ -228,10 +195,7 @@ export const NewRecipePage = () => {
                                 <FormControl isInvalid={!!errors.ingredients?.[index]?.title}>
                                     <Input
                                         placeholder='Название'
-                                        {...register(`ingredients.${index}.title`, {
-                                            required: true,
-                                            maxLength: 50,
-                                        })}
+                                        {...register(`ingredients.${index}.title`)}
                                     />
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.ingredients?.[index]?.count}>
@@ -243,11 +207,12 @@ export const NewRecipePage = () => {
                                         }
                                     >
                                         <NumberInputField
-                                            {...register(`ingredients.${index}.count`, {
-                                                required: true,
-                                                min: 1,
-                                            })}
+                                            {...register(`ingredients.${index}.count`)}
                                         />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
                                     </NumberInput>
                                 </FormControl>
                             </HStack>
@@ -262,7 +227,6 @@ export const NewRecipePage = () => {
                         </Button>
                     </Box>
 
-                    {/* Шаги */}
                     <Box>
                         <Text fontWeight='bold' mb={2}>
                             Шаги приготовления
@@ -278,14 +242,8 @@ export const NewRecipePage = () => {
                                 >
                                     <Textarea
                                         placeholder='Описание шага'
-                                        {...register(`steps.${index}.description`, {
-                                            required: 'Описание обязательно',
-                                            maxLength: 300,
-                                        })}
+                                        {...register(`steps.${index}.description`)}
                                     />
-                                    <FormErrorMessage>
-                                        {errors.steps?.[index]?.description?.message}
-                                    </FormErrorMessage>
                                 </FormControl>
 
                                 <Box
@@ -327,7 +285,6 @@ export const NewRecipePage = () => {
                         </Button>
                     </Box>
 
-                    {/* Кнопки */}
                     <HStack>
                         <Button type='submit' colorScheme='gray'>
                             Сохранить черновик
