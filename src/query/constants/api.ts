@@ -8,4 +8,5 @@ export enum ApiEndpoints {
     RESET_PASSWORD = '/auth/reset-password',
     VERIFY_OTP = '/auth/verify-otp',
     FORGOT_PASSWORD = '/auth/forgot-password',
+    MEASURE_UNITS = '/measure-units',
 }

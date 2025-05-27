@@ -11,4 +11,6 @@ export enum EndpointNames {
     VERIFY_OTP = 'verifyOtp',
     RESET_PASSWORD = 'resetPassword',
     CREATE_RECIPE = 'createRecipe',
+    GET_MEASURE_UNITS = 'measureUnits',
+    UPLOAD_FILE = 'uploadFile',
 }

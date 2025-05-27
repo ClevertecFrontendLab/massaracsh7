@@ -1,27 +1,50 @@
 import { z } from 'zod';
 
 const ingredientSchema = z.object({
-    title: z.string().max(50, 'Не более 50 символов'),
+    title: z.string().trim().max(50, 'Не более 50 символов').optional(),
     count: z.number().positive('Должно быть положительным числом'),
-    measureUnit: z.string().optional(),
+    measureUnit: z.string(),
 });
 
 const stepSchema = z.object({
     stepNumber: z.number().int().positive(),
-    description: z.string().max(300, 'Не более 300 символов'),
-    image: z.string().optional(),
+    description: z
+        .string()
+        .trim()
+        .max(300, 'Не более 300 символов')
+        .transform((val) => (val === '' ? undefined : val))
+        .optional(),
+    image: z
+        .string()
+        .trim()
+        .transform((val) => (val === '' ? undefined : val))
+        .optional(),
 });
 
 const recipeBase = {
-    title: z.string().max(50, 'Не более 50 символов'),
-    description: z.string().max(500, 'Не более 500 символов'),
+    title: z
+        .string()
+        .trim()
+        .max(50, 'Не более 50 символов')
+        .transform((val) => (val === '' ? undefined : val))
+        .optional(),
+    description: z
+        .string()
+        .trim()
+        .max(500, 'Не более 500 символов')
+        .transform((val) => (val === '' ? undefined : val))
+        .optional(),
     time: z
         .number()
         .positive('Должно быть положительным числом')
         .max(10000, 'Не более 10000 минут'),
     portions: z.number().positive('Должно быть положительным числом'),
     categoriesIds: z.array(z.string()).min(3, 'Выберите минимум 3 категории'),
-    image: z.string().optional(),
+    image: z
+        .string()
+        .trim()
+        .transform((val) => (val === '' ? undefined : val))
+        .optional(),
 };
 
 export const createRecipeSchema = z.object({

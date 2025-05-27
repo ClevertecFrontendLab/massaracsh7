@@ -1,9 +1,11 @@
 import {
     CreateRecipeDto,
+    MeasureUnit,
     Recipe,
     RecipesByCategoryParams,
     RecipesParams,
     RecipesResponse,
+    UploadResponse,
 } from '~/types/apiTypes';
 
 import { ApiEndpoints } from '../constants/api';
@@ -83,6 +85,28 @@ export const recipesApiSlice = catalogApiSlice
                 }),
                 invalidatesTags: [Tags.RECIPES],
             }),
+            getMeasureUnits: builder.query<MeasureUnit[], void>({
+                query: () => ({
+                    url: ApiEndpoints.MEASURE_UNITS,
+                    method: 'GET',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.GET_MEASURE_UNITS,
+                }),
+                providesTags: [Tags.RECIPES],
+            }),
+            uploadFile: builder.mutation<UploadResponse, File>({
+                query: (file: string | Blob) => {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    return {
+                        url: '/file/upload',
+                        method: 'POST',
+                        body: formData,
+                        apiGroupName: ApiGroupNames.RECIPES,
+                        name: EndpointNames.UPLOAD_FILE,
+                    };
+                },
+            }),
         }),
         overrideExisting: false,
     });
@@ -94,4 +118,6 @@ export const {
     useLazyGetRecipesByCategoryQuery,
     useGetRecipeByIdQuery,
     useCreateRecipeMutation,
+    useGetMeasureUnitsQuery,
+    useUploadFileMutation,
 } = recipesApiSlice;

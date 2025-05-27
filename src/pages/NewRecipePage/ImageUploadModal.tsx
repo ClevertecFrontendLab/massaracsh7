@@ -11,6 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { useUploadFileMutation } from '~/query/services/recipes';
+
 interface ImageUploadModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -25,28 +27,37 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
     onSave,
 }) => {
     const [preview, setPreview] = useState<string | null>(initialImage);
+    const [file, setFile] = useState<File | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const [uploadFile, { isLoading }] = useUploadFileMutation();
 
     useEffect(() => {
         setPreview(initialImage);
     }, [initialImage]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+        const selectedFile = e.target.files?.[0];
+        if (!selectedFile) return;
 
+        setFile(selectedFile);
         const reader = new FileReader();
         reader.onloadend = () => {
             setPreview(reader.result as string);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(selectedFile);
     };
 
-    const handleSave = () => {
-        if (preview) {
-            onSave(preview);
+    const handleSave = async () => {
+        if (!file) return;
+
+        try {
+            const res = await uploadFile(file).unwrap();
+            onSave(res.url);
+            onClose();
+        } catch (err) {
+            console.error(err);
         }
-        onClose();
     };
 
     return (
@@ -64,12 +75,14 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                         borderRadius='md'
                         cursor='pointer'
                         onClick={() => inputRef.current?.click()}
+                        overflow='hidden'
                     >
                         {preview ? (
                             <Image
                                 src={preview}
                                 alt='Выбранное изображение'
                                 objectFit='cover'
+                                w='100%'
                                 h='100%'
                             />
                         ) : (
@@ -85,7 +98,14 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                     </Box>
 
                     {preview && (
-                        <Button mt={4} colorScheme='green' w='full' onClick={handleSave}>
+                        <Button
+                            mt={4}
+                            colorScheme='green'
+                            w='full'
+                            onClick={handleSave}
+                            isLoading={isLoading}
+                            loadingText='Загрузка...'
+                        >
                             Сохранить изображение
                         </Button>
                     )}

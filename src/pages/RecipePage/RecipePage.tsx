@@ -32,7 +32,7 @@ import { CategoryBadge } from '~/components/CategoryBadge/CategoryBadge';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { LikesInfo } from '~/components/LikesInfo/LikesInfo';
 import { SliderList } from '~/components/SliderList/SliderList';
-import { BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/constants';
+import { BASE_IMG_URL, BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { authors } from '~/data/authors';
 import { useGetCategory } from '~/hooks/useGetCategory';
@@ -91,7 +91,7 @@ export const RecipePage = () => {
                     gap={{ sm: 4, md: 4, lg: 6, xl: 6 }}
                 >
                     <Image
-                        src={recipe?.image}
+                        src={`${BASE_IMG_URL}${recipe?.image}`}
                         alt={recipe?.title}
                         objectFit='cover'
                         borderRadius='medium'
@@ -370,7 +370,7 @@ export const RecipePage = () => {
                                     <HStack gap={{ sm: 0, md: 2, lg: 4, xl: 4 }}>
                                         {step.image && (
                                             <Image
-                                                src={step.image}
+                                                src={`${BASE_IMG_URL}${step.image}`}
                                                 alt={`Шаг ${step.stepNumber}`}
                                                 w={{
                                                     base: '158px',

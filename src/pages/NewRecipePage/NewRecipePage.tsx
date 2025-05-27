@@ -1,9 +1,11 @@
+import { DeleteIcon } from '@chakra-ui/icons';
 import {
     Box,
     Button,
     Flex,
     FormControl,
     HStack,
+    IconButton,
     Image,
     Input,
     NumberDecrementStepper,
@@ -11,6 +13,7 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
+    Select,
     Text,
     Textarea,
     useDisclosure,
@@ -22,7 +25,10 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect';
-import { useCreateRecipeMutation } from '~/query/services/recipes';
+import { BASE_IMG_URL } from '~/constants/constants';
+import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetSubcategory } from '~/hooks/useGetSubcategory';
+import { useCreateRecipeMutation, useGetMeasureUnitsQuery } from '~/query/services/recipes';
 import { selectAllSubCategories } from '~/store/category-slice';
 import { useAppSelector } from '~/store/hooks';
 import { CreateRecipeDto } from '~/types/apiTypes';
@@ -34,8 +40,12 @@ export const NewRecipePage = () => {
     const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [createRecipe] = useCreateRecipeMutation();
+    const { data: unitData } = useGetMeasureUnitsQuery();
     const navigate = useNavigate();
     const subCats = useAppSelector(selectAllSubCategories);
+
+    const titleToIdMap = Object.fromEntries(subCats.map((c) => [c.title, c._id]));
+    const idToTitleMap = Object.fromEntries(subCats.map((c) => [c._id, c.title]));
 
     const {
         register,
@@ -44,38 +54,52 @@ export const NewRecipePage = () => {
         setValue,
         control,
         getValues,
+        watch,
     } = useForm<CreateRecipeInput>({
         resolver: zodResolver(createRecipeSchema),
         defaultValues: {
-            title: '',
-            description: '',
+            title: undefined,
+            description: undefined,
             portions: 1,
             time: 1,
             categoriesIds: [],
-            ingredients: [{ title: '', count: 1, measureUnit: '' }],
-            steps: [{ description: '', stepNumber: 1, image: '' }],
-            image: '',
+            ingredients: [{ title: undefined, count: 1, measureUnit: undefined }],
+            steps: [{ description: undefined, stepNumber: 1, image: undefined }],
+            image: undefined,
         },
     });
 
-    const { fields: ingredientFields, append: appendIngredient } = useFieldArray({
+    const {
+        fields: ingredientFields,
+        append: appendIngredient,
+        remove: removeIngredient,
+    } = useFieldArray({
         control,
         name: 'ingredients',
     });
 
-    const { fields: stepFields, append: appendStep } = useFieldArray({
+    const {
+        fields: stepFields,
+        append: appendStep,
+        remove: removeStep,
+    } = useFieldArray({
         control,
         name: 'steps',
     });
 
+    const watchedCategories = watch('categoriesIds');
+    const rootCategories = useGetCategory(watchedCategories);
+    const subCategories = useGetSubcategory(watchedCategories);
+
     const onSubmit = async (data: CreateRecipeInput) => {
+        console.log(data);
         try {
-            if (data.categoriesIds.length < 3) {
-                alert('Нужно выбрать минимум 3 категории');
-                return;
-            }
             const response = await createRecipe(data as CreateRecipeDto).unwrap();
-            navigate(`/recipe/${response._id}`);
+            navigate(
+                rootCategories?.[0]?.category && subCategories?.[0]?.category && response?._id
+                    ? `/${rootCategories[0].category}/${subCategories[0].category}/${response._id}`
+                    : '#',
+            );
         } catch (err) {
             const fetchErr = err as FetchBaseQueryError;
             console.error('Ошибка при создании рецепта:', fetchErr.status);
@@ -107,19 +131,22 @@ export const NewRecipePage = () => {
                         <Box
                             w='full'
                             h='200px'
-                            bg='gray.200'
+                            bg='gray.100'
                             borderRadius='md'
                             display='flex'
                             alignItems='center'
                             justifyContent='center'
+                            overflow='hidden'
                             cursor='pointer'
                             onClick={() => handleImageClick(null)}
+                            _hover={{ bg: 'gray.200' }}
                         >
                             {getValues('image') ? (
                                 <Image
-                                    src={getValues('image')}
-                                    alt='Предпросмотр'
+                                    src={`${BASE_IMG_URL}${getValues('image')}`}
+                                    alt='Изображение рецепта'
                                     objectFit='cover'
+                                    w='100%'
                                     h='100%'
                                 />
                             ) : (
@@ -137,38 +164,57 @@ export const NewRecipePage = () => {
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.portions}>
-                        <HStack>
-                            <Text>Порций:</Text>
-                            <NumberInput
-                                min={1}
-                                maxW={90}
-                                onChange={(val) => setValue('portions', Number(val))}
-                            >
-                                <NumberInputField {...register('portions')} />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </HStack>
+                        <Controller
+                            control={control}
+                            name='portions'
+                            render={({ field }) => (
+                                <HStack>
+                                    <Text>Порций:</Text>
+                                    <NumberInput
+                                        min={1}
+                                        max={100}
+                                        maxW={100}
+                                        value={field.value}
+                                        onChange={(_, valueAsNumber) =>
+                                            field.onChange(valueAsNumber)
+                                        }
+                                    >
+                                        <NumberInputField />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                </HStack>
+                            )}
+                        />
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.time}>
-                        <HStack>
-                            <Text>Время (мин):</Text>
-                            <NumberInput
-                                min={1}
-                                max={10000}
-                                maxW={120}
-                                onChange={(val) => setValue('time', Number(val))}
-                            >
-                                <NumberInputField {...register('time')} />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </HStack>
+                        <Controller
+                            control={control}
+                            name='time'
+                            render={({ field }) => (
+                                <HStack>
+                                    <Text>Время (мин):</Text>
+                                    <NumberInput
+                                        min={1}
+                                        max={10000}
+                                        maxW={120}
+                                        value={field.value}
+                                        onChange={(_, valueAsNumber) =>
+                                            field.onChange(valueAsNumber)
+                                        }
+                                    >
+                                        <NumberInputField />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                </HStack>
+                            )}
+                        />
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.categoriesIds}>
@@ -178,14 +224,17 @@ export const NewRecipePage = () => {
                             render={({ field }) => (
                                 <SearchableSelect
                                     label='Категория'
-                                    options={subCats.map((item) => item.title)}
-                                    selectedValues={field.value}
-                                    onChange={field.onChange}
+                                    options={subCats.map((cat) => cat.title)}
+                                    selectedValues={field.value.map((_id) => idToTitleMap[_id])}
+                                    onChange={(titles: string[]) =>
+                                        field.onChange(titles.map((title) => titleToIdMap[title]))
+                                    }
                                 />
                             )}
                         />
                     </FormControl>
 
+                    {/* Ингредиенты */}
                     <Box>
                         <Text fontWeight='bold' mb={2}>
                             Ингредиенты
@@ -199,22 +248,53 @@ export const NewRecipePage = () => {
                                     />
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.ingredients?.[index]?.count}>
-                                    <NumberInput
-                                        min={1}
-                                        maxW={90}
-                                        onChange={(val) =>
-                                            setValue(`ingredients.${index}.count`, Number(val))
-                                        }
-                                    >
-                                        <NumberInputField
-                                            {...register(`ingredients.${index}.count`)}
-                                        />
-                                        <NumberInputStepper>
-                                            <NumberIncrementStepper />
-                                            <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                    </NumberInput>
+                                    <Controller
+                                        control={control}
+                                        name={`ingredients.${index}.count`}
+                                        render={({ field }) => (
+                                            <NumberInput
+                                                min={1}
+                                                maxW={90}
+                                                value={field.value}
+                                                onChange={(_, valueAsNumber) =>
+                                                    field.onChange(valueAsNumber)
+                                                }
+                                            >
+                                                <NumberInputField />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        )}
+                                    />
                                 </FormControl>
+                                <FormControl isInvalid={!!errors.ingredients?.[index]?.measureUnit}>
+                                    <Controller
+                                        control={control}
+                                        name={`ingredients.${index}.measureUnit`}
+                                        render={({ field }) => (
+                                            <Select
+                                                placeholder='Ед. изм.'
+                                                {...field}
+                                                onChange={(e) => field.onChange(e.target.value)}
+                                            >
+                                                {unitData?.map((unit) => (
+                                                    <option key={unit._id} value={unit.name}>
+                                                        {unit.name}
+                                                    </option>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    />
+                                </FormControl>
+                                <IconButton
+                                    aria-label='Удалить ингредиент'
+                                    icon={<DeleteIcon />}
+                                    colorScheme='green'
+                                    variant='outline'
+                                    onClick={() => removeIngredient(index)}
+                                />
                             </HStack>
                         ))}
                         <Button
@@ -245,7 +325,6 @@ export const NewRecipePage = () => {
                                         {...register(`steps.${index}.description`)}
                                     />
                                 </FormControl>
-
                                 <Box
                                     h='150px'
                                     bg='gray.100'
@@ -258,7 +337,7 @@ export const NewRecipePage = () => {
                                 >
                                     {getValues(`steps.${index}.image`) ? (
                                         <Image
-                                            src={getValues(`steps.${index}.image`)}
+                                            src={`${BASE_IMG_URL}${getValues(`steps.${index}.image`)}`}
                                             alt={`Шаг ${index + 1}`}
                                             objectFit='cover'
                                             h='100%'
@@ -269,6 +348,13 @@ export const NewRecipePage = () => {
                                         </Text>
                                     )}
                                 </Box>
+                                <IconButton
+                                    aria-label='Удалить шаг'
+                                    icon={<DeleteIcon />}
+                                    colorScheme='green'
+                                    variant='outline'
+                                    onClick={() => removeStep(index)}
+                                />
                             </Box>
                         ))}
                         <Button
@@ -276,8 +362,8 @@ export const NewRecipePage = () => {
                             onClick={() =>
                                 appendStep({
                                     stepNumber: stepFields.length + 1,
-                                    description: '',
-                                    image: '',
+                                    description: undefined,
+                                    image: undefined,
                                 })
                             }
                         >

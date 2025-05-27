@@ -87,11 +87,13 @@ export const SearchableSelect = ({
                     p={0}
                     zIndex='11'
                     w={{ sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }}
+                    maxH='250px'
+                    overflowY='auto'
                 >
                     <VStack align='stretch' spacing={1}>
                         {options.map((option, index) => (
                             <MenuItem
-                                key={option}
+                                key={`${option}-${index}`}
                                 p={0}
                                 w='100%'
                                 bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}
