@@ -29,8 +29,9 @@ import { BASE_IMG_URL } from '~/constants/constants';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetSubcategory } from '~/hooks/useGetSubcategory';
 import { useCreateRecipeMutation, useGetMeasureUnitsQuery } from '~/query/services/recipes';
+import { setAppAlert } from '~/store/app-slice';
 import { selectAllSubCategories } from '~/store/category-slice';
-import { useAppSelector } from '~/store/hooks';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { CreateRecipeDto } from '~/types/apiTypes';
 
 import { ImageUploadModal } from './ImageUploadModal';
@@ -38,6 +39,8 @@ import { CreateRecipeInput, createRecipeSchema } from './RecipeSchema';
 
 export const NewRecipePage = () => {
     const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
+    const dispatch = useAppDispatch();
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [createRecipe] = useCreateRecipeMutation();
     const { data: unitData } = useGetMeasureUnitsQuery();
@@ -100,9 +103,37 @@ export const NewRecipePage = () => {
                     ? `/${rootCategories[0].category}/${subCategories[0].category}/${response._id}`
                     : '#',
             );
+            dispatch(
+                setAppAlert({
+                    type: 'success',
+                    title: 'Рецепт успешно опубликован',
+                    sourse: 'global',
+                }),
+            );
         } catch (err) {
             const fetchErr = err as FetchBaseQueryError;
+            const status = fetchErr?.status;
+
             console.error('Ошибка при создании рецепта:', fetchErr.status);
+            if (status === 409) {
+                dispatch(
+                    setAppAlert({
+                        type: 'error',
+                        title: 'Ошибка',
+                        sourse: 'global',
+                        message: 'Рецепт с таким названием уже существует',
+                    }),
+                );
+            } else if (String(status).startsWith('5')) {
+                dispatch(
+                    setAppAlert({
+                        type: 'error',
+                        title: 'Ошибка сервера',
+                        sourse: 'global',
+                        message: 'Попробуйте пока сохранить в черновик',
+                    }),
+                );
+            }
         }
     };
 

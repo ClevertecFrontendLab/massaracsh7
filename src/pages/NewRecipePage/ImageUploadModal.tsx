@@ -5,7 +5,9 @@ import {
     Input,
     Modal,
     ModalBody,
+    ModalCloseButton,
     ModalContent,
+    ModalHeader,
     ModalOverlay,
     Text,
 } from '@chakra-ui/react';
@@ -64,6 +66,8 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
             <ModalContent>
+                <ModalHeader>Изображение</ModalHeader>
+                <ModalCloseButton />
                 <ModalBody py={6}>
                     <Box
                         w='full'

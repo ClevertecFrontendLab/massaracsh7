@@ -16,8 +16,12 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
     const category = useAppSelector(selectCategoryBySlug(categorySlug ?? ''));
     const subcategory = useAppSelector(selectSubCategoryBySlug(subcategorySlug ?? ''));
 
-    const catTitle = categorySlug === 'the-juiciest' ? 'Самое сочное' : category?.title;
-
+    const catTitle =
+        categorySlug === 'the-juiciest'
+            ? 'Самое сочное'
+            : categorySlug === 'new-recipe'
+              ? 'Новый рецепт'
+              : category?.title;
     const { data: recipe } = useGetRecipeByIdQuery(dishSlug ?? skipToken);
 
     return (
