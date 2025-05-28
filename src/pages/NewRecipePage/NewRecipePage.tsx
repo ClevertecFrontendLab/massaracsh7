@@ -8,6 +8,13 @@ import {
     IconButton,
     Image,
     Input,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -29,6 +36,7 @@ import { BASE_IMG_URL } from '~/constants/constants';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetSubcategory } from '~/hooks/useGetSubcategory';
 import {
+    useCreateRecipeDraftMutation,
     useCreateRecipeMutation,
     useEditRecipeMutation,
     useGetMeasureUnitsQuery,
@@ -37,10 +45,10 @@ import {
 import { setAppAlert } from '~/store/app-slice';
 import { selectAllSubCategories } from '~/store/category-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { CreateRecipeDto, UpdateRecipeDto } from '~/types/apiTypes';
+import { CreateRecipeDto, RecipeDraftDto, UpdateRecipeDto } from '~/types/apiTypes';
 
 import { ImageUploadModal } from './ImageUploadModal';
-import { CreateRecipeInput, createRecipeSchema } from './RecipeSchema';
+import { CreateRecipeInput, createRecipeSchema, draftRecipeSchema } from './RecipeSchema';
 
 export const NewRecipePage = () => {
     const { category, subcategory, id } = useParams();
@@ -54,8 +62,11 @@ export const NewRecipePage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [createRecipe] = useCreateRecipeMutation();
     const [editRecipe] = useEditRecipeMutation();
+    const [createRecipeDraft] = useCreateRecipeDraftMutation();
     const { data: unitData } = useGetMeasureUnitsQuery();
-    const navigate = useNavigate();
+    const realNavigate = useNavigate();
+
+    const [pendingLocation, setPendingLocation] = useState<string | null>(null);
     const subCats = useAppSelector(selectAllSubCategories);
 
     const titleToIdMap = Object.fromEntries(subCats.map((c) => [c.title, c._id]));
@@ -64,7 +75,7 @@ export const NewRecipePage = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isDirty },
         setValue,
         control,
         getValues,
@@ -127,6 +138,35 @@ export const NewRecipePage = () => {
     const watchedCategories = watch('categoriesIds');
     const rootCategories = useGetCategory(watchedCategories);
     const subCategories = useGetSubcategory(watchedCategories);
+    const { isOpen: isExitOpen, onOpen: openExit, onClose: closeExit } = useDisclosure();
+
+    useEffect(() => {
+        const onBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (isDirty) {
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('beforeunload', onBeforeUnload);
+        return () => window.removeEventListener('beforeunload', onBeforeUnload);
+    }, [isDirty]);
+
+    const navigate = (to: string) => {
+        if (isDirty) {
+            setPendingLocation(to);
+            openExit();
+        } else {
+            realNavigate(to);
+        }
+    };
+
+    const handleExitWithoutSaving = () => {
+        closeExit();
+        if (pendingLocation) realNavigate(pendingLocation);
+    };
+    const handleCancelExit = () => {
+        closeExit();
+        setPendingLocation(null);
+    };
 
     const onSubmit = async (data: CreateRecipeInput) => {
         console.log(data);
@@ -182,6 +222,31 @@ export const NewRecipePage = () => {
                     }),
                 );
             }
+        }
+    };
+
+    const handleSaveDraft = async () => {
+        const data = getValues();
+        const result = draftRecipeSchema.safeParse(data);
+        try {
+            await createRecipeDraft(result.data as RecipeDraftDto).unwrap();
+            dispatch(
+                setAppAlert({
+                    type: 'success',
+                    title: 'Черновик успешно сохранён',
+                    sourse: 'global',
+                }),
+            );
+        } catch (err) {
+            console.error('Ошибка сохранения черновика:', err);
+            dispatch(
+                setAppAlert({
+                    type: 'error',
+                    title: 'Ошибка',
+                    sourse: 'global',
+                    message: 'Не удалось сохранить черновик, попробуйте ещё раз',
+                }),
+            );
         }
     };
 
@@ -450,7 +515,7 @@ export const NewRecipePage = () => {
                     </Box>
 
                     <HStack>
-                        <Button type='submit' colorScheme='gray'>
+                        <Button type='button' colorScheme='gray' onClick={handleSaveDraft}>
                             Сохранить черновик
                         </Button>
                         <Button type='submit' colorScheme='green'>
@@ -470,6 +535,25 @@ export const NewRecipePage = () => {
                 }
                 onSave={handleImageConfirm}
             />
+
+            <Modal isOpen={isExitOpen} onClose={handleCancelExit} isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Выйти без сохранения?</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Text>Чтобы сохранитьнажмите кнопку сохранить черновик</Text>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button variant='ghost' mr={3} onClick={handleExitWithoutSaving}>
+                            Выйти без сохранения
+                        </Button>
+                        <Button colorScheme='gray' onClick={handleSaveDraft}>
+                            Сохранить черновик
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 };

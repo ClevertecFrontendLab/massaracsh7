@@ -14,4 +14,5 @@ export enum EndpointNames {
     GET_MEASURE_UNITS = 'measureUnits',
     UPLOAD_FILE = 'uploadFile',
     EDIT_RECIPE = 'editRecipe',
+    CREATE_RECIPE_DRAFT = 'createRecipeDraft',
 }

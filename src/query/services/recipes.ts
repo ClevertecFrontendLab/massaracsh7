@@ -2,6 +2,7 @@ import {
     CreateRecipeDto,
     MeasureUnit,
     Recipe,
+    RecipeDraftDto,
     RecipesByCategoryParams,
     RecipesParams,
     RecipesResponse,
@@ -86,6 +87,16 @@ export const recipesApiSlice = catalogApiSlice
                 }),
                 invalidatesTags: [Tags.RECIPES],
             }),
+            createRecipeDraft: builder.mutation<Recipe, RecipeDraftDto>({
+                query: (body) => ({
+                    url: `${ApiEndpoints.RECIPES}/draft`,
+                    method: 'POST',
+                    body,
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.CREATE_RECIPE_DRAFT,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
             editRecipe: builder.mutation<Recipe, { id: string; data: UpdateRecipeDto }>({
                 query: ({ id, data }) => ({
                     url: `${ApiEndpoints.RECIPES}/${id}`,
@@ -125,6 +136,7 @@ export const recipesApiSlice = catalogApiSlice
 
 export const {
     useGetRecipesQuery,
+    useCreateRecipeDraftMutation,
     useGetRecipesPagesInfiniteQuery,
     useGetRecipesByCategoryQuery,
     useLazyGetRecipesByCategoryQuery,

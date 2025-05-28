@@ -119,6 +119,7 @@ export type CreateRecipeDto = {
 };
 
 export type RecipeDraftDto = Partial<CreateRecipeDto>;
+export type UpdateRecipeDto = Partial<CreateRecipeDto>;
 
 export interface MeasureUnit {
     _id: string;
