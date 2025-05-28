@@ -5,6 +5,7 @@ import {
     RecipesByCategoryParams,
     RecipesParams,
     RecipesResponse,
+    UpdateRecipeDto,
     UploadResponse,
 } from '~/types/apiTypes';
 
@@ -85,6 +86,17 @@ export const recipesApiSlice = catalogApiSlice
                 }),
                 invalidatesTags: [Tags.RECIPES],
             }),
+            editRecipe: builder.mutation<Recipe, { id: string; data: UpdateRecipeDto }>({
+                query: ({ id, data }) => ({
+                    url: `${ApiEndpoints.RECIPES}/${id}`,
+                    method: 'PATCH',
+                    body: data,
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.EDIT_RECIPE,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
+
             getMeasureUnits: builder.query<MeasureUnit[], void>({
                 query: () => ({
                     url: ApiEndpoints.MEASURE_UNITS,
@@ -120,4 +132,5 @@ export const {
     useCreateRecipeMutation,
     useGetMeasureUnitsQuery,
     useUploadFileMutation,
+    useEditRecipeMutation,
 } = recipesApiSlice;

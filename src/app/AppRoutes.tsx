@@ -30,6 +30,7 @@ const AppRoutes = () => (
                 <Route path={ROUTES_PATH.RECIPE} element={<RecipePage />} />
                 <Route path={ROUTES_PATH.JUICY} element={<JuicyPage />} />
                 <Route path={ROUTES_PATH.NEW_RECIPE} element={<NewRecipePage />} />
+                <Route path={ROUTES_PATH.EDIT_RECIPE} element={<NewRecipePage />} />
             </Route>
 
             <Route path={ROUTES_PATH.LOG_IN} element={<LoginPage />} />

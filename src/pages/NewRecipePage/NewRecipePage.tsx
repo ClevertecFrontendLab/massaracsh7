@@ -20,29 +20,40 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect';
 import { BASE_IMG_URL } from '~/constants/constants';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetSubcategory } from '~/hooks/useGetSubcategory';
-import { useCreateRecipeMutation, useGetMeasureUnitsQuery } from '~/query/services/recipes';
+import {
+    useCreateRecipeMutation,
+    useEditRecipeMutation,
+    useGetMeasureUnitsQuery,
+    useGetRecipeByIdQuery,
+} from '~/query/services/recipes';
 import { setAppAlert } from '~/store/app-slice';
 import { selectAllSubCategories } from '~/store/category-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
-import { CreateRecipeDto } from '~/types/apiTypes';
+import { CreateRecipeDto, UpdateRecipeDto } from '~/types/apiTypes';
 
 import { ImageUploadModal } from './ImageUploadModal';
 import { CreateRecipeInput, createRecipeSchema } from './RecipeSchema';
 
 export const NewRecipePage = () => {
+    const { category, subcategory, id } = useParams();
+
+    const isEditMode = Boolean(id);
     const [currentStepIndex, setCurrentStepIndex] = useState<number | null>(null);
     const dispatch = useAppDispatch();
-
+    const { data: recipe } = useGetRecipeByIdQuery(id!, {
+        skip: !isEditMode,
+    });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [createRecipe] = useCreateRecipeMutation();
+    const [editRecipe] = useEditRecipeMutation();
     const { data: unitData } = useGetMeasureUnitsQuery();
     const navigate = useNavigate();
     const subCats = useAppSelector(selectAllSubCategories);
@@ -58,6 +69,7 @@ export const NewRecipePage = () => {
         control,
         getValues,
         watch,
+        reset,
     } = useForm<CreateRecipeInput>({
         resolver: zodResolver(createRecipeSchema),
         defaultValues: {
@@ -90,6 +102,28 @@ export const NewRecipePage = () => {
         name: 'steps',
     });
 
+    useEffect(() => {
+        if (recipe) {
+            reset({
+                title: recipe.title,
+                description: recipe.description,
+                portions: recipe.portions,
+                time: recipe.time,
+                categoriesIds: recipe.categoriesIds || [],
+                ingredients: recipe.ingredients.length
+                    ? recipe.ingredients
+                    : [{ title: undefined, count: 1, measureUnit: undefined }],
+                steps: recipe.steps.length
+                    ? recipe.steps.map((step, index) => ({
+                          ...step,
+                          stepNumber: index + 1,
+                      }))
+                    : [{ description: undefined, stepNumber: 1, image: undefined }],
+                image: recipe.image || undefined,
+            });
+        }
+    }, [recipe, reset]);
+
     const watchedCategories = watch('categoriesIds');
     const rootCategories = useGetCategory(watchedCategories);
     const subCategories = useGetSubcategory(watchedCategories);
@@ -97,19 +131,33 @@ export const NewRecipePage = () => {
     const onSubmit = async (data: CreateRecipeInput) => {
         console.log(data);
         try {
-            const response = await createRecipe(data as CreateRecipeDto).unwrap();
-            navigate(
-                rootCategories?.[0]?.category && subCategories?.[0]?.category && response?._id
-                    ? `/${rootCategories[0].category}/${subCategories[0].category}/${response._id}`
-                    : '#',
-            );
-            dispatch(
-                setAppAlert({
-                    type: 'success',
-                    title: 'Рецепт успешно опубликован',
-                    sourse: 'global',
-                }),
-            );
+            let response;
+
+            if (isEditMode && id) {
+                response = await editRecipe({ id, data: data as UpdateRecipeDto }).unwrap();
+                navigate(`/${category}/${subcategory}/${id}`);
+                dispatch(
+                    setAppAlert({
+                        type: 'success',
+                        title: 'Рецепт успешно обновлен',
+                        sourse: 'global',
+                    }),
+                );
+            } else {
+                response = await createRecipe(data as CreateRecipeDto).unwrap();
+                navigate(
+                    rootCategories?.[0]?.category && subCategories?.[0]?.category && response?._id
+                        ? `/${rootCategories[0].category}/${subCategories[0].category}/${response._id}`
+                        : '#',
+                );
+                dispatch(
+                    setAppAlert({
+                        type: 'success',
+                        title: 'Рецепт успешно опубликован',
+                        sourse: 'global',
+                    }),
+                );
+            }
         } catch (err) {
             const fetchErr = err as FetchBaseQueryError;
             const status = fetchErr?.status;
@@ -265,7 +313,6 @@ export const NewRecipePage = () => {
                         />
                     </FormControl>
 
-                    {/* Ингредиенты */}
                     <Box>
                         <Text fontWeight='bold' mb={2}>
                             Ингредиенты

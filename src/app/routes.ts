@@ -8,4 +8,5 @@ export const ROUTES_PATH = {
     LOG_IN: '/login',
     VERIFICATION: '/verification',
     NEW_RECIPE: '/new-recipe',
+    EDIT_RECIPE: '/edit-recipe/:category/:subcategory/:id',
 };

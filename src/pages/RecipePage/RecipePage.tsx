@@ -39,9 +39,10 @@ import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetRecipeByIdQuery, useGetRecipesQuery } from '~/query/services/recipes';
 import { setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
+import { isRecipeAuthor } from '~/utils/tokenUtils';
 
 export const RecipePage = () => {
-    const { id } = useParams();
+    const { category, subcategory, id } = useParams();
     const navigate = useNavigate();
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const categoryIds = recipe?.categoriesIds ?? [];
@@ -143,6 +144,20 @@ export const RecipePage = () => {
                                 </HStack>
                             </Badge>
                             <HStack spacing={4}>
+                                {recipe && isRecipeAuthor(recipe.authorId) && (
+                                    <Button
+                                        colorScheme='customLime'
+                                        variant='solid'
+                                        size='sm'
+                                        onClick={() =>
+                                            navigate(
+                                                `/edit-recipe/${category}/${subcategory}/${id}`,
+                                            )
+                                        }
+                                    >
+                                        Редактировать рецепт
+                                    </Button>
+                                )}
                                 <Button
                                     leftIcon={
                                         <Image
