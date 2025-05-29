@@ -43,6 +43,7 @@ import {
     useGetRecipeByIdQuery,
     useGetRecipesQuery,
     useToggleBookmarkRecipeMutation,
+    useToggleLikeRecipeMutation,
 } from '~/query/services/recipes';
 import { setAppAlert, setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
@@ -72,6 +73,7 @@ export const RecipePage = () => {
     };
     const [deleteRecipe] = useDeleteRecipeMutation();
     const [toggleBookmark] = useToggleBookmarkRecipeMutation();
+    const [toggleLike] = useToggleLikeRecipeMutation();
 
     const handleDelete = async () => {
         if (!id) return;
@@ -105,6 +107,28 @@ export const RecipePage = () => {
         if (!id) return;
         try {
             await toggleBookmark(id).unwrap();
+        } catch (err) {
+            if (typeof err === 'object' && err !== null && 'status' in err) {
+                const fetchErr = err as FetchBaseQueryError;
+                const status = fetchErr.status;
+                if (String(status).startsWith('5')) {
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: 'Ошибка сервера',
+                            sourse: 'global',
+                            message: 'Попробуйте немного позже',
+                        }),
+                    );
+                }
+            }
+        }
+    };
+
+    const handleLike = async () => {
+        if (!id) return;
+        try {
+            await toggleLike(id).unwrap();
         } catch (err) {
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 const fetchErr = err as FetchBaseQueryError;
@@ -239,6 +263,7 @@ export const RecipePage = () => {
                                     py={{ base: '6px', lg: '6px', xl: '4' }}
                                     px={{ base: '3', lg: '3', xl: '6' }}
                                     height={{ sm: '24px', md: '24px', lg: '32px', xl: '48px' }}
+                                    onClick={handleLike}
                                 >
                                     <Text
                                         fontWeight='500'
