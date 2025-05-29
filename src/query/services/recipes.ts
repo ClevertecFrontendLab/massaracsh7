@@ -130,6 +130,35 @@ export const recipesApiSlice = catalogApiSlice
                     };
                 },
             }),
+            deleteRecipe: builder.mutation<{ message: string }, string>({
+                query: (id) => ({
+                    url: `${ApiEndpoints.RECIPES}/${id}`,
+                    method: 'DELETE',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.DELETE_RECIPE,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
+
+            toggleLikeRecipe: builder.mutation<{ message: string; likes: number }, string>({
+                query: (recipeId) => ({
+                    url: `${ApiEndpoints.RECIPES}/${recipeId}/like`,
+                    method: 'POST',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.TOGGLE_LIKE_RECIPE,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
+
+            toggleBookmarkRecipe: builder.mutation<{ message: string; bookmarks: number }, string>({
+                query: (recipeId) => ({
+                    url: `${ApiEndpoints.RECIPES}/${recipeId}/bookmark`,
+                    method: 'POST',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.TOGGLE_BOOKMARK_RECIPE,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
         }),
         overrideExisting: false,
     });
@@ -145,4 +174,7 @@ export const {
     useGetMeasureUnitsQuery,
     useUploadFileMutation,
     useEditRecipeMutation,
+    useDeleteRecipeMutation,
+    useToggleLikeRecipeMutation,
+    useToggleBookmarkRecipeMutation,
 } = recipesApiSlice;

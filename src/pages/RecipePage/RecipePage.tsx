@@ -1,3 +1,4 @@
+import { DeleteIcon } from '@chakra-ui/icons';
 import {
     Avatar,
     Badge,
@@ -8,6 +9,7 @@ import {
     Grid,
     Heading,
     HStack,
+    IconButton,
     Image,
     NumberDecrementStepper,
     NumberIncrementStepper,
@@ -18,7 +20,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { skipToken } from '@reduxjs/toolkit/query';
+import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -36,8 +38,13 @@ import { BASE_IMG_URL, BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/
 import { TEST_IDS } from '~/constants/test-ids';
 import { authors } from '~/data/authors';
 import { useGetCategory } from '~/hooks/useGetCategory';
-import { useGetRecipeByIdQuery, useGetRecipesQuery } from '~/query/services/recipes';
-import { setAppError } from '~/store/app-slice';
+import {
+    useDeleteRecipeMutation,
+    useGetRecipeByIdQuery,
+    useGetRecipesQuery,
+    useToggleBookmarkRecipeMutation,
+} from '~/query/services/recipes';
+import { setAppAlert, setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import { isRecipeAuthor } from '~/utils/tokenUtils';
 
@@ -62,6 +69,58 @@ export const RecipePage = () => {
 
     const handlePortionsChange = (value: string) => {
         setPortions(Number(value));
+    };
+    const [deleteRecipe] = useDeleteRecipeMutation();
+    const [toggleBookmark] = useToggleBookmarkRecipeMutation();
+
+    const handleDelete = async () => {
+        if (!id) return;
+        try {
+            await deleteRecipe(id).unwrap();
+            navigate('/');
+            dispatch(
+                setAppAlert({
+                    type: 'success',
+                    title: 'Рецепт успешно удален',
+                    sourse: 'global',
+                }),
+            );
+        } catch (err) {
+            if (typeof err === 'object' && err !== null && 'status' in err) {
+                const fetchErr = err as FetchBaseQueryError;
+                const status = fetchErr.status;
+                if (String(status).startsWith('5')) {
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: 'Ошибка при удалении рецепта',
+                            sourse: 'global',
+                        }),
+                    );
+                }
+            }
+        }
+    };
+    const handleBookmark = async () => {
+        if (!id) return;
+        try {
+            await toggleBookmark(id).unwrap();
+        } catch (err) {
+            if (typeof err === 'object' && err !== null && 'status' in err) {
+                const fetchErr = err as FetchBaseQueryError;
+                const status = fetchErr.status;
+                if (String(status).startsWith('5')) {
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: 'Ошибка сервера',
+                            sourse: 'global',
+                            message: 'Попробуйте немного позже',
+                        }),
+                    );
+                }
+            }
+        }
     };
 
     const { data: sliderRecipes } = useGetRecipesQuery(
@@ -145,18 +204,28 @@ export const RecipePage = () => {
                             </Badge>
                             <HStack spacing={4}>
                                 {recipe && isRecipeAuthor(recipe.authorId) && (
-                                    <Button
-                                        colorScheme='customLime'
-                                        variant='solid'
-                                        size='sm'
-                                        onClick={() =>
-                                            navigate(
-                                                `/edit-recipe/${category}/${subcategory}/${id}`,
-                                            )
-                                        }
-                                    >
-                                        Редактировать рецепт
-                                    </Button>
+                                    <HStack spacing={2}>
+                                        <IconButton
+                                            aria-label='Удалить рецепт'
+                                            icon={<DeleteIcon />}
+                                            colorScheme='customLime'
+                                            variant='outline'
+                                            size='sm'
+                                            onClick={handleDelete}
+                                        />
+                                        <Button
+                                            colorScheme='customLime'
+                                            variant='solid'
+                                            size='sm'
+                                            onClick={() =>
+                                                navigate(
+                                                    `/edit-recipe/${category}/${subcategory}/${id}`,
+                                                )
+                                            }
+                                        >
+                                            Редактировать рецепт
+                                        </Button>{' '}
+                                    </HStack>
                                 )}
                                 <Button
                                     leftIcon={
@@ -200,6 +269,7 @@ export const RecipePage = () => {
                                     py={{ base: '6px', lg: '6px', xl: '4' }}
                                     px={{ base: '3', lg: '3', xl: '6' }}
                                     height={{ sm: '24px', md: '24px', lg: '32px', xl: '48px' }}
+                                    onClick={handleBookmark}
                                 >
                                     <Text
                                         fontWeight='500'
