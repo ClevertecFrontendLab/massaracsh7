@@ -27,9 +27,9 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router';
+import { BlockerFunction, useBlocker, useNavigate, useParams } from 'react-router';
 
 import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect';
 import { BASE_IMG_URL } from '~/constants/constants';
@@ -64,9 +64,8 @@ export const NewRecipePage = () => {
     const [editRecipe] = useEditRecipeMutation();
     const [createRecipeDraft] = useCreateRecipeDraftMutation();
     const { data: unitData } = useGetMeasureUnitsQuery();
-    const realNavigate = useNavigate();
+    const navigate = useNavigate();
 
-    const [pendingLocation, setPendingLocation] = useState<string | null>(null);
     const subCats = useAppSelector(selectAllSubCategories);
 
     const titleToIdMap = Object.fromEntries(subCats.map((c) => [c.title, c._id]));
@@ -140,32 +139,23 @@ export const NewRecipePage = () => {
     const subCategories = useGetSubcategory(watchedCategories);
     const { isOpen: isExitOpen, onOpen: openExit, onClose: closeExit } = useDisclosure();
 
+    const shouldBlock = useCallback<BlockerFunction>(() => isDirty === true, [isDirty]);
+    const blocker = useBlocker(shouldBlock);
+
     useEffect(() => {
-        const onBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (isDirty) {
-                e.preventDefault();
-            }
-        };
-        window.addEventListener('beforeunload', onBeforeUnload);
-        return () => window.removeEventListener('beforeunload', onBeforeUnload);
-    }, [isDirty]);
-
-    const navigate = (to: string) => {
-        if (isDirty) {
-            setPendingLocation(to);
+        if (blocker.state === 'blocked') {
             openExit();
-        } else {
-            realNavigate(to);
         }
+    }, [blocker.state, blocker.location, openExit]);
+
+    const handleExit = () => {
+        closeExit();
+        blocker.proceed?.();
     };
 
-    const handleExitWithoutSaving = () => {
+    const handleStay = () => {
         closeExit();
-        if (pendingLocation) realNavigate(pendingLocation);
-    };
-    const handleCancelExit = () => {
-        closeExit();
-        setPendingLocation(null);
+        blocker.reset?.();
     };
 
     const onSubmit = async (data: CreateRecipeInput) => {
@@ -536,19 +526,25 @@ export const NewRecipePage = () => {
                 onSave={handleImageConfirm}
             />
 
-            <Modal isOpen={isExitOpen} onClose={handleCancelExit} isCentered>
+            <Modal isOpen={isExitOpen} onClose={handleStay} isCentered>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Выйти без сохранения?</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Text>Чтобы сохранитьнажмите кнопку сохранить черновик</Text>
+                        <Text>
+                            У вас есть несохранённые изменения. Вы действительно хотите покинуть
+                            страницу?
+                        </Text>
+                        <Text mt={2} fontSize='sm' color='gray.500'>
+                            Чтобы сохранить изменения, нажмите «Сохранить черновик».
+                        </Text>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant='ghost' mr={3} onClick={handleExitWithoutSaving}>
+                        <Button colorScheme='gray' mr={3} onClick={handleExit}>
                             Выйти без сохранения
                         </Button>
-                        <Button colorScheme='gray' onClick={handleSaveDraft}>
+                        <Button colorScheme='green' onClick={handleSaveDraft}>
                             Сохранить черновик
                         </Button>
                     </ModalFooter>
