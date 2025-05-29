@@ -8,13 +8,6 @@ import {
     IconButton,
     Image,
     Input,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -47,8 +40,9 @@ import { selectAllSubCategories } from '~/store/category-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { CreateRecipeDto, RecipeDraftDto, UpdateRecipeDto } from '~/types/apiTypes';
 
+import { ExitConfirmModal } from './ExitConfirmModal';
 import { ImageUploadModal } from './ImageUploadModal';
-import { CreateRecipeInput, createRecipeSchema, draftRecipeSchema } from './RecipeSchema';
+import { createOrUpdateRecipeSchema, CreateRecipeInput, draftRecipeSchema } from './RecipeSchema';
 
 export const NewRecipePage = () => {
     const { category, subcategory, id } = useParams();
@@ -67,6 +61,7 @@ export const NewRecipePage = () => {
     const navigate = useNavigate();
 
     const subCats = useAppSelector(selectAllSubCategories);
+    const [canExit, setCanExit] = useState(false);
 
     const titleToIdMap = Object.fromEntries(subCats.map((c) => [c.title, c._id]));
     const idToTitleMap = Object.fromEntries(subCats.map((c) => [c._id, c.title]));
@@ -81,7 +76,8 @@ export const NewRecipePage = () => {
         watch,
         reset,
     } = useForm<CreateRecipeInput>({
-        resolver: zodResolver(createRecipeSchema),
+        resolver: zodResolver(createOrUpdateRecipeSchema),
+        mode: 'onSubmit',
         defaultValues: {
             title: undefined,
             description: undefined,
@@ -124,10 +120,7 @@ export const NewRecipePage = () => {
                     ? recipe.ingredients
                     : [{ title: undefined, count: 1, measureUnit: undefined }],
                 steps: recipe.steps.length
-                    ? recipe.steps.map((step, index) => ({
-                          ...step,
-                          stepNumber: index + 1,
-                      }))
+                    ? recipe.steps.map((step, index) => ({ ...step, stepNumber: index + 1 }))
                     : [{ description: undefined, stepNumber: 1, image: undefined }],
                 image: recipe.image || undefined,
             });
@@ -139,14 +132,18 @@ export const NewRecipePage = () => {
     const subCategories = useGetSubcategory(watchedCategories);
     const { isOpen: isExitOpen, onOpen: openExit, onClose: closeExit } = useDisclosure();
 
-    const shouldBlock = useCallback<BlockerFunction>(() => isDirty === true, [isDirty]);
+    const shouldBlock = useCallback<BlockerFunction>(() => !canExit && isDirty, [canExit, isDirty]);
     const blocker = useBlocker(shouldBlock);
 
     useEffect(() => {
         if (blocker.state === 'blocked') {
-            openExit();
+            if (canExit) {
+                blocker.proceed?.();
+            } else {
+                openExit();
+            }
         }
-    }, [blocker.state, blocker.location, openExit]);
+    }, [blocker.state, blocker.location, openExit, blocker, canExit]);
 
     const handleExit = () => {
         closeExit();
@@ -159,12 +156,13 @@ export const NewRecipePage = () => {
     };
 
     const onSubmit = async (data: CreateRecipeInput) => {
-        console.log(data);
         try {
             let response;
 
             if (isEditMode && id) {
                 response = await editRecipe({ id, data: data as UpdateRecipeDto }).unwrap();
+                setCanExit(true);
+                reset(data);
                 navigate(`/${category}/${subcategory}/${id}`);
                 dispatch(
                     setAppAlert({
@@ -175,6 +173,8 @@ export const NewRecipePage = () => {
                 );
             } else {
                 response = await createRecipe(data as CreateRecipeDto).unwrap();
+                setCanExit(true);
+                reset(data);
                 navigate(
                     rootCategories?.[0]?.category && subCategories?.[0]?.category && response?._id
                         ? `/${rootCategories[0].category}/${subCategories[0].category}/${response._id}`
@@ -220,6 +220,7 @@ export const NewRecipePage = () => {
         const result = draftRecipeSchema.safeParse(data);
         try {
             await createRecipeDraft(result.data as RecipeDraftDto).unwrap();
+            setCanExit(true);
             dispatch(
                 setAppAlert({
                     type: 'success',
@@ -258,10 +259,7 @@ export const NewRecipePage = () => {
         <>
             <Box as='form' onSubmit={handleSubmit(onSubmit)} pt={6} mb={10}>
                 <Flex flexDirection='column' gap={6}>
-                    <Box>
-                        <Text fontWeight='bold' mb={2}>
-                            Изображение рецепта
-                        </Text>
+                    <FormControl isInvalid={!!errors.image}>
                         <Box
                             w='full'
                             h='200px'
@@ -274,6 +272,8 @@ export const NewRecipePage = () => {
                             cursor='pointer'
                             onClick={() => handleImageClick(null)}
                             _hover={{ bg: 'gray.200' }}
+                            border={errors.image ? '2px solid' : '2px solid transparent'}
+                            borderColor={errors.image ? 'red.500' : 'transparent'}
                         >
                             {getValues('image') ? (
                                 <Image
@@ -287,7 +287,7 @@ export const NewRecipePage = () => {
                                 <Text color='gray.500'>Нажмите, чтобы загрузить</Text>
                             )}
                         </Box>
-                    </Box>
+                    </FormControl>
 
                     <FormControl isInvalid={!!errors.title}>
                         <Input placeholder='Название рецепта' {...register('title')} />
@@ -313,7 +313,18 @@ export const NewRecipePage = () => {
                                             field.onChange(valueAsNumber)
                                         }
                                     >
-                                        <NumberInputField />
+                                        <NumberInputField
+                                            borderWidth={errors.portions ? '2px' : '1px'}
+                                            borderColor={errors.portions ? 'red.500' : 'inherit'}
+                                            _focus={{
+                                                borderColor: errors.portions
+                                                    ? 'red.600'
+                                                    : 'blue.500',
+                                                boxShadow: errors.portions
+                                                    ? '0 0 0 1px red'
+                                                    : '0 0 0 1px blue',
+                                            }}
+                                        />
                                         <NumberInputStepper>
                                             <NumberIncrementStepper />
                                             <NumberDecrementStepper />
@@ -324,7 +335,7 @@ export const NewRecipePage = () => {
                         />
                     </FormControl>
 
-                    <FormControl isInvalid={!!errors.time}>
+                    <FormControl isInvalid={!!errors.time} mt={4}>
                         <Controller
                             control={control}
                             name='time'
@@ -340,7 +351,18 @@ export const NewRecipePage = () => {
                                             field.onChange(valueAsNumber)
                                         }
                                     >
-                                        <NumberInputField />
+                                        <NumberInputField
+                                            borderWidth={errors.portions ? '2px' : '1px'}
+                                            borderColor={errors.portions ? 'red.500' : 'inherit'}
+                                            _focus={{
+                                                borderColor: errors.portions
+                                                    ? 'red.600'
+                                                    : 'blue.500',
+                                                boxShadow: errors.portions
+                                                    ? '0 0 0 1px red'
+                                                    : '0 0 0 1px blue',
+                                            }}
+                                        />
                                         <NumberInputStepper>
                                             <NumberIncrementStepper />
                                             <NumberDecrementStepper />
@@ -351,21 +373,30 @@ export const NewRecipePage = () => {
                         />
                     </FormControl>
 
-                    <FormControl isInvalid={!!errors.categoriesIds}>
-                        <Controller
-                            control={control}
-                            name='categoriesIds'
-                            render={({ field }) => (
-                                <SearchableSelect
-                                    label='Категория'
-                                    options={subCats.map((cat) => cat.title)}
-                                    selectedValues={field.value.map((_id) => idToTitleMap[_id])}
-                                    onChange={(titles: string[]) =>
-                                        field.onChange(titles.map((title) => titleToIdMap[title]))
-                                    }
-                                />
-                            )}
-                        />
+                    <FormControl>
+                        <Box
+                            border={errors.categoriesIds ? '2px solid' : '2px solid transparent'}
+                            borderColor={errors.categoriesIds ? 'red.500' : 'transparent'}
+                            borderRadius='md'
+                            p={1}
+                        >
+                            <Controller
+                                control={control}
+                                name='categoriesIds'
+                                render={({ field }) => (
+                                    <SearchableSelect
+                                        label='Категория'
+                                        options={subCats.map((cat) => cat.title)}
+                                        selectedValues={field.value.map((_id) => idToTitleMap[_id])}
+                                        onChange={(titles: string[]) =>
+                                            field.onChange(
+                                                titles.map((title) => titleToIdMap[title]),
+                                            )
+                                        }
+                                    />
+                                )}
+                            />
+                        </Box>
                     </FormControl>
 
                     <Box>
@@ -495,8 +526,8 @@ export const NewRecipePage = () => {
                             onClick={() =>
                                 appendStep({
                                     stepNumber: stepFields.length + 1,
-                                    description: undefined,
-                                    image: undefined,
+                                    description: '',
+                                    image: '',
                                 })
                             }
                         >
@@ -526,30 +557,12 @@ export const NewRecipePage = () => {
                 onSave={handleImageConfirm}
             />
 
-            <Modal isOpen={isExitOpen} onClose={handleStay} isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Выйти без сохранения?</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Text>
-                            У вас есть несохранённые изменения. Вы действительно хотите покинуть
-                            страницу?
-                        </Text>
-                        <Text mt={2} fontSize='sm' color='gray.500'>
-                            Чтобы сохранить изменения, нажмите «Сохранить черновик».
-                        </Text>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme='gray' mr={3} onClick={handleExit}>
-                            Выйти без сохранения
-                        </Button>
-                        <Button colorScheme='green' onClick={handleSaveDraft}>
-                            Сохранить черновик
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+            <ExitConfirmModal
+                isOpen={isExitOpen}
+                onClose={handleStay}
+                onExit={handleExit}
+                onSaveDraft={handleSaveDraft}
+            />
         </>
     );
 };

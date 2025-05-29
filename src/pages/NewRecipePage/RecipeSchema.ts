@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
 const ingredientSchema = z.object({
-    title: z.string().trim().max(50, 'Не более 50 символов').optional(),
+    title: z
+        .string()
+        .trim()
+        .max(50, 'Не более 50 символов')
+        .transform((val) => (val === '' ? undefined : val))
+        .refine((val) => val !== undefined, { message: 'Название обязательно' }),
     count: z.number().positive('Должно быть положительным числом'),
     measureUnit: z.string(),
 });
@@ -13,7 +18,7 @@ const stepSchema = z.object({
         .trim()
         .max(300, 'Не более 300 символов')
         .transform((val) => (val === '' ? undefined : val))
-        .optional(),
+        .refine((val) => val !== undefined, { message: 'Описание шага обязательно' }),
     image: z
         .string()
         .trim()
@@ -27,13 +32,13 @@ const recipeBase = {
         .trim()
         .max(50, 'Не более 50 символов')
         .transform((val) => (val === '' ? undefined : val))
-        .optional(),
+        .refine((val) => val !== undefined, { message: 'Обязательное поле' }),
     description: z
         .string()
         .trim()
         .max(500, 'Не более 500 символов')
         .transform((val) => (val === '' ? undefined : val))
-        .optional(),
+        .refine((val) => val !== undefined, { message: 'Обязательное поле' }),
     time: z
         .number()
         .positive('Должно быть положительным числом')
@@ -44,16 +49,30 @@ const recipeBase = {
         .string()
         .trim()
         .transform((val) => (val === '' ? undefined : val))
-        .optional(),
+        .refine((val) => val !== undefined, { message: 'Обязательное поле' }),
 };
 
-export const createRecipeSchema = z.object({
-    ...recipeBase,
+export const createOrUpdateRecipeSchema = z.object({
+    title: recipeBase.title,
+    description: recipeBase.description,
+    time: recipeBase.time,
+    portions: recipeBase.portions,
+    categoriesIds: recipeBase.categoriesIds,
+    image: recipeBase.image,
     ingredients: z.array(ingredientSchema).min(1, 'Добавьте хотя бы один ингредиент'),
     steps: z.array(stepSchema).min(1, 'Добавьте хотя бы один шаг'),
 });
 
-export const draftRecipeSchema = createRecipeSchema.partial();
+export const draftRecipeSchema = z.object({
+    title: recipeBase.title,
+    description: recipeBase.description.optional(),
+    time: recipeBase.time.optional(),
+    portions: recipeBase.portions.optional(),
+    categoriesIds: z.array(z.string()).optional(),
+    image: recipeBase.image.optional(),
+    ingredients: z.array(ingredientSchema).optional(),
+    steps: z.array(stepSchema).optional(),
+});
 
-export type CreateRecipeInput = z.infer<typeof createRecipeSchema>;
+export type CreateRecipeInput = z.infer<typeof createOrUpdateRecipeSchema>;
 export type DraftRecipeInput = z.infer<typeof draftRecipeSchema>;
