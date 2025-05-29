@@ -36,7 +36,13 @@ export const Header = () => {
                 <HStack justify='space-between' align='center'>
                     <HStack spacing={32} align='center'>
                         <Hide below='smPlus'>
-                            <Box as='img' src={logo} alt='Logo' h='32px' />
+                            <Box
+                                as='img'
+                                src={logo}
+                                alt='Logo'
+                                h='32px'
+                                data-test-id='header-logo'
+                            />
                         </Hide>
                         <Show below='smPlus'>
                             <Box as='img' src={logoMini} alt='Logo' h='32px' />

@@ -10,6 +10,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Text,
+    VStack,
 } from '@chakra-ui/react';
 import { FC, useEffect, useRef, useState } from 'react';
 
@@ -20,6 +21,7 @@ interface ImageUploadModalProps {
     onClose: () => void;
     initialImage?: string | null;
     onSave: (imageData: string) => void;
+    stepIndex?: number;
 }
 
 export const ImageUploadModal: FC<ImageUploadModalProps> = ({
@@ -27,6 +29,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
     onClose,
     initialImage = null,
     onSave,
+    stepIndex,
 }) => {
     const [preview, setPreview] = useState<string | null>(initialImage);
     const [file, setFile] = useState<File | null>(null);
@@ -62,10 +65,14 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
         }
     };
 
+    const handleClear = () => {
+        setPreview(null);
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent data-test-id='recipe-image-modal'>
                 <ModalHeader>Изображение</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody py={6}>
@@ -80,6 +87,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                         cursor='pointer'
                         onClick={() => inputRef.current?.click()}
                         overflow='hidden'
+                        data-test-id='recipe-image-modal-image-block'
                     >
                         {preview ? (
                             <Image
@@ -88,6 +96,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                                 objectFit='cover'
                                 w='100%'
                                 h='100%'
+                                data-test-id='recipe-image-modal-preview-image'
                             />
                         ) : (
                             <Text color='gray.500'>Нажмите, чтобы выбрать фото</Text>
@@ -98,20 +107,31 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                             accept='image/*'
                             display='none'
                             onChange={handleImageChange}
+                            data-test-id={
+                                stepIndex
+                                    ? `recipe-steps-image-block-${stepIndex}-input-file`
+                                    : 'recipe-image-block-input-file'
+                            }
                         />
                     </Box>
 
                     {preview && (
-                        <Button
-                            mt={4}
-                            colorScheme='green'
-                            w='full'
-                            onClick={handleSave}
-                            isLoading={isLoading}
-                            loadingText='Загрузка...'
-                        >
-                            Сохранить изображение
-                        </Button>
+                        <VStack>
+                            <Button
+                                mt={4}
+                                colorScheme='green'
+                                w='full'
+                                onClick={handleSave}
+                                isLoading={isLoading}
+                                loadingText='Загрузка...'
+                            >
+                                Сохранить изображение
+                            </Button>
+
+                            <Button mt={4} variant='outline' w='full' onClick={handleClear}>
+                                Удалить
+                            </Button>
+                        </VStack>
                     )}
                 </ModalBody>
             </ModalContent>

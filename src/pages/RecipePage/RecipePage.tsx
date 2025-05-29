@@ -95,7 +95,7 @@ export const RecipePage = () => {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: 'Ошибка при удалении рецепта',
+                            title: 'Не удалось удалить рецепт',
                             sourse: 'global',
                         }),
                     );
@@ -236,6 +236,7 @@ export const RecipePage = () => {
                                             variant='outline'
                                             size='sm'
                                             onClick={handleDelete}
+                                            data-test-id='recipe-delete-button'
                                         />
                                         <Button
                                             colorScheme='customLime'

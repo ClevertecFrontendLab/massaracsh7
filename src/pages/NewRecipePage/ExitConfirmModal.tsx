@@ -1,5 +1,6 @@
 import {
     Button,
+    Image,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -9,6 +10,9 @@ import {
     ModalOverlay,
     Text,
 } from '@chakra-ui/react';
+
+import modalBreakfast from '~/assets/images/modal-breakfast.png';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface ExitConfirmModalProps {
     isOpen: boolean;
@@ -21,9 +25,24 @@ export function ExitConfirmModal({ isOpen, onClose, onExit, onSaveDraft }: ExitC
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent data-test-id='recipe-preventive-modal'>
+                <ModalCloseButton data-test-id={TEST_IDS.CLOSE_BUTTON} />
+
+                <Image
+                    src={modalBreakfast}
+                    alt='Modal illustration'
+                    mx='auto'
+                    boxSize={{
+                        sm: '108px',
+                        md: '108px',
+                        mid: '206px',
+                        lg: '206px',
+                        xl: '206px',
+                    }}
+                    objectFit='contain'
+                />
+
                 <ModalHeader>Выйти без сохранения?</ModalHeader>
-                <ModalCloseButton />
                 <ModalBody>
                     <Text>
                         У вас есть несохранённые изменения. Вы действительно хотите покинуть
