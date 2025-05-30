@@ -47,7 +47,6 @@ import {
 } from '~/query/services/recipes';
 import { setAppAlert, setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
-import { isRecipeAuthor } from '~/utils/tokenUtils';
 
 export const RecipePage = () => {
     const { category, subcategory, id } = useParams();
@@ -55,7 +54,6 @@ export const RecipePage = () => {
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const categoryIds = recipe?.categoriesIds ?? [];
     const rootCategories = useGetCategory(categoryIds);
-
     const author = authors[0];
     const dispatch = useAppDispatch();
     const [portions, setPortions] = useState<number>(1);
@@ -74,6 +72,11 @@ export const RecipePage = () => {
     const [deleteRecipe] = useDeleteRecipeMutation();
     const [toggleBookmark] = useToggleBookmarkRecipeMutation();
     const [toggleLike] = useToggleLikeRecipeMutation();
+
+    const userId = localStorage.getItem('userId');
+    console.log(userId);
+    const result2 = userId === recipe?.authorId;
+    console.log(result2);
 
     const handleDelete = async () => {
         if (!id) return;
@@ -95,7 +98,8 @@ export const RecipePage = () => {
                     dispatch(
                         setAppAlert({
                             type: 'error',
-                            title: 'Не удалось удалить рецепт',
+                            title: 'Ошибка сервера',
+                            message: 'Не удалось удалить рецепт',
                             sourse: 'global',
                         }),
                     );
@@ -227,7 +231,7 @@ export const RecipePage = () => {
                                 </HStack>
                             </Badge>
                             <HStack spacing={4}>
-                                {recipe && isRecipeAuthor(recipe.authorId) && (
+                                {result2 ? (
                                     <HStack spacing={2}>
                                         <IconButton
                                             aria-label='Удалить рецепт'
@@ -249,72 +253,93 @@ export const RecipePage = () => {
                                             }
                                         >
                                             Редактировать рецепт
-                                        </Button>{' '}
+                                        </Button>
+                                    </HStack>
+                                ) : (
+                                    <HStack spacing={2}>
+                                        <Button
+                                            leftIcon={
+                                                <Image
+                                                    src={BsEmojiHeartEyes}
+                                                    boxSize={{
+                                                        base: '14px',
+                                                        lg: '14px',
+                                                        xl: '16px',
+                                                    }}
+                                                />
+                                            }
+                                            variant='outline'
+                                            colorScheme='black'
+                                            py={{ base: '6px', lg: '6px', xl: '4' }}
+                                            px={{ base: '3', lg: '3', xl: '6' }}
+                                            height={{
+                                                sm: '24px',
+                                                md: '24px',
+                                                lg: '32px',
+                                                xl: '48px',
+                                            }}
+                                            onClick={handleLike}
+                                        >
+                                            <Text
+                                                fontWeight='500'
+                                                fontSize={{
+                                                    base: '12px',
+                                                    md: '12px',
+                                                    lg: '14px',
+                                                    xl: '18px',
+                                                }}
+                                                lineHeight={{
+                                                    base: '16px',
+                                                    md: '16px',
+                                                    lg: '20px',
+                                                    xl: '28px',
+                                                }}
+                                            >
+                                                Оценить рецепт
+                                            </Text>
+                                        </Button>
+                                        <Button
+                                            leftIcon={
+                                                <Image
+                                                    src={BsBookmarkHeart}
+                                                    boxSize={{
+                                                        base: '14px',
+                                                        lg: '14px',
+                                                        xl: '16px',
+                                                    }}
+                                                />
+                                            }
+                                            variant='limeSolid'
+                                            py={{ base: '6px', lg: '6px', xl: '4' }}
+                                            px={{ base: '3', lg: '3', xl: '6' }}
+                                            height={{
+                                                sm: '24px',
+                                                md: '24px',
+                                                lg: '32px',
+                                                xl: '48px',
+                                            }}
+                                            onClick={handleBookmark}
+                                        >
+                                            <Text
+                                                fontWeight='500'
+                                                fontSize={{
+                                                    base: '12px',
+                                                    md: '12px',
+                                                    lg: '14px',
+                                                    xl: '18px',
+                                                }}
+                                                lineHeight={{
+                                                    base: '16px',
+                                                    md: '16px',
+                                                    lg: '20px',
+                                                    xl: '28px',
+                                                }}
+                                            >
+                                                Сохранить в закладки
+                                            </Text>
+                                        </Button>
                                     </HStack>
                                 )}
-                                <Button
-                                    leftIcon={
-                                        <Image
-                                            src={BsEmojiHeartEyes}
-                                            boxSize={{ base: '14px', lg: '14px', xl: '16px' }}
-                                        />
-                                    }
-                                    variant='outline'
-                                    colorScheme='black'
-                                    py={{ base: '6px', lg: '6px', xl: '4' }}
-                                    px={{ base: '3', lg: '3', xl: '6' }}
-                                    height={{ sm: '24px', md: '24px', lg: '32px', xl: '48px' }}
-                                    onClick={handleLike}
-                                >
-                                    <Text
-                                        fontWeight='500'
-                                        fontSize={{
-                                            base: '12px',
-                                            md: '12px',
-                                            lg: '14px',
-                                            xl: '18px',
-                                        }}
-                                        lineHeight={{
-                                            base: '16px',
-                                            md: '16px',
-                                            lg: '20px',
-                                            xl: '28px',
-                                        }}
-                                    >
-                                        Оценить рецепт
-                                    </Text>
-                                </Button>
-                                <Button
-                                    leftIcon={
-                                        <Image
-                                            src={BsBookmarkHeart}
-                                            boxSize={{ base: '14px', lg: '14px', xl: '16px' }}
-                                        />
-                                    }
-                                    variant='limeSolid'
-                                    py={{ base: '6px', lg: '6px', xl: '4' }}
-                                    px={{ base: '3', lg: '3', xl: '6' }}
-                                    height={{ sm: '24px', md: '24px', lg: '32px', xl: '48px' }}
-                                    onClick={handleBookmark}
-                                >
-                                    <Text
-                                        fontWeight='500'
-                                        fontSize={{
-                                            base: '12px',
-                                            md: '12px',
-                                            lg: '14px',
-                                            xl: '18px',
-                                        }}
-                                        lineHeight={{
-                                            base: '16px',
-                                            md: '16px',
-                                            lg: '20px',
-                                            xl: '28px',
-                                        }}
-                                    >
-                                        Сохранить в закладки
-                                    </Text>
-                                </Button>
                             </HStack>
                         </HStack>
                     </Flex>

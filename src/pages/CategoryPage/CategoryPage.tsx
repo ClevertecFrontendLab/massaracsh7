@@ -124,7 +124,11 @@ export const CategoryPage = () => {
         return <Navigate to='/not-found' replace />;
     }
 
-    if (isLoading) {
+    if (queryParams === skipToken) {
+        return <CustomLoader size='large' dataTestId='app-loader' />;
+    }
+
+    if (isLoading || isFetching) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 

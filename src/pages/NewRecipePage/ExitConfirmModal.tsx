@@ -1,9 +1,9 @@
 import {
     Button,
+    CloseButton,
     Image,
     Modal,
     ModalBody,
-    ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
@@ -26,8 +26,18 @@ export function ExitConfirmModal({ isOpen, onClose, onExit, onSaveDraft }: ExitC
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
             <ModalContent data-test-id='recipe-preventive-modal'>
-                <ModalCloseButton data-test-id={TEST_IDS.CLOSE_BUTTON} />
-
+                {/* <ModalCloseButton data-test-id={TEST_IDS.CLOSE_BUTTON} /> */}
+                <CloseButton
+                    position='absolute'
+                    right={6}
+                    top={6}
+                    onClick={onClose}
+                    data-test-id={TEST_IDS.CLOSE_BUTTON}
+                    border='1px solid black'
+                    borderRadius='50%'
+                    w={6}
+                    h={6}
+                />
                 <Image
                     src={modalBreakfast}
                     alt='Modal illustration'

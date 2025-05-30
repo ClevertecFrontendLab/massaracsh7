@@ -13,6 +13,8 @@ export const CreateRecipeButton = () => {
                 w='208px'
                 h='208px'
                 onClick={() => navigate(ROUTES_PATH.NEW_RECIPE)}
+                transition='none'
+                style={{ pointerEvents: 'auto', opacity: 1 }}
                 data-test-id='add-recipe-button'
             >
                 <VStack spacing={3} pt='10px'>

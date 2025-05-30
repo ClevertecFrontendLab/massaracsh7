@@ -22,6 +22,8 @@ interface SearchableSelectProps {
     options: string[];
     selectedValues: string[];
     onChange: (selected: string[]) => void;
+    dataId?: string;
+    error?: boolean;
 }
 
 export const SearchableSelect = ({
@@ -29,6 +31,8 @@ export const SearchableSelect = ({
     options,
     selectedValues,
     onChange,
+    dataId,
+    error,
 }: SearchableSelectProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,6 +43,10 @@ export const SearchableSelect = ({
             onChange([...selectedValues, value]);
         }
     };
+
+    const visibleTags =
+        dataId === 'recipe-categories' ? selectedValues.slice(0, 2) : selectedValues;
+    const hiddenCount = dataId === 'recipe-categories' ? selectedValues.length - 2 : 0;
 
     return (
         <Box>
@@ -62,11 +70,13 @@ export const SearchableSelect = ({
                     pr={2}
                     _hover={{ bg: 'white' }}
                     _expanded={{ bg: 'white' }}
-                    data-test-id={label === 'Категория' ? TEST_IDS.FILTER_CATEGORY : ''}
+                    data-test-id={dataId}
+                    border={error ? '2px solid' : '2px solid transparent'}
+                    borderColor={error ? 'red.500' : 'transparent'}
                 >
                     {selectedValues.length > 0 ? (
                         <Wrap spacing={2}>
-                            {selectedValues.map((item) => (
+                            {visibleTags.map((item) => (
                                 <Tag
                                     size='sm'
                                     key={item}
@@ -78,6 +88,18 @@ export const SearchableSelect = ({
                                     <TagLabel color='customLime.600'>{item}</TagLabel>
                                 </Tag>
                             ))}
+
+                            {hiddenCount > 0 && (
+                                <Tag
+                                    size='sm'
+                                    borderRadius='6px'
+                                    bg='white'
+                                    border='1px solid'
+                                    borderColor='gray.300'
+                                >
+                                    <TagLabel color='gray.600'>+{hiddenCount}</TagLabel>
+                                </Tag>
+                            )}
                         </Wrap>
                     ) : (
                         <Text textAlign='left'>{label}</Text>

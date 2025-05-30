@@ -1,11 +1,11 @@
 import {
     Box,
     Button,
+    CloseButton,
     Image,
     Input,
     Modal,
     ModalBody,
-    ModalCloseButton,
     ModalContent,
     ModalHeader,
     ModalOverlay,
@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { TEST_IDS } from '~/constants/test-ids';
 import { useUploadFileMutation } from '~/query/services/recipes';
 
 interface ImageUploadModalProps {
@@ -34,7 +35,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
     const [preview, setPreview] = useState<string | null>(initialImage);
     const [file, setFile] = useState<File | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-
+    console.log(stepIndex);
     const [uploadFile, { isLoading }] = useUploadFileMutation();
 
     useEffect(() => {
@@ -67,6 +68,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
 
     const handleClear = () => {
         setPreview(null);
+        onClose();
     };
 
     return (
@@ -74,7 +76,17 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
             <ModalOverlay />
             <ModalContent data-test-id='recipe-image-modal'>
                 <ModalHeader>Изображение</ModalHeader>
-                <ModalCloseButton />
+                <CloseButton
+                    position='absolute'
+                    right={6}
+                    top={6}
+                    onClick={onClose}
+                    data-test-id={TEST_IDS.CLOSE_BUTTON}
+                    border='1px solid black'
+                    borderRadius='50%'
+                    w={6}
+                    h={6}
+                />
                 <ModalBody py={6}>
                     <Box
                         w='full'
@@ -108,7 +120,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                             display='none'
                             onChange={handleImageChange}
                             data-test-id={
-                                stepIndex
+                                stepIndex !== undefined
                                     ? `recipe-steps-image-block-${stepIndex}-input-file`
                                     : 'recipe-image-block-input-file'
                             }

@@ -1,5 +1,6 @@
 import { Avatar, Box, Hide, HStack, Show, Text } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import avatar from '~/assets/avatar.png';
 import logo from '~/assets/logo.png';
@@ -12,7 +13,7 @@ import { SocialList } from '../SocialList/SocialList';
 
 export const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+    const navigate = useNavigate();
     return (
         <Box
             as='header'
@@ -42,6 +43,7 @@ export const Header = () => {
                                 alt='Logo'
                                 h='32px'
                                 data-test-id='header-logo'
+                                onClick={() => navigate('/')}
                             />
                         </Hide>
                         <Show below='smPlus'>

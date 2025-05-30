@@ -25,6 +25,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { BlockerFunction, useBlocker, useNavigate, useParams } from 'react-router';
 
 import { ButtonPlus, ButtonPlusLg, ButtonPlusWhite } from '~/assets/icons/icons';
+import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect';
 import { BASE_IMG_URL } from '~/constants/constants';
 import { useGetCategory } from '~/hooks/useGetCategory';
@@ -43,7 +44,7 @@ import { CreateRecipeDto, RecipeDraftDto, UpdateRecipeDto } from '~/types/apiTyp
 
 import { ExitConfirmModal } from './ExitConfirmModal';
 import { ImageUploadModal } from './ImageUploadModal';
-import { createOrUpdateRecipeSchema, CreateRecipeInput, draftRecipeSchema } from './RecipeSchema';
+import { createOrUpdateRecipeSchema, CreateRecipeInput } from './RecipeSchema';
 
 export const NewRecipePage = () => {
     const { category, subcategory, id } = useParams();
@@ -55,12 +56,12 @@ export const NewRecipePage = () => {
         skip: !isEditMode,
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [createRecipe] = useCreateRecipeMutation();
+    const [createRecipe, { isLoading: isCreating }] = useCreateRecipeMutation();
     const [editRecipe] = useEditRecipeMutation();
     const [createRecipeDraft] = useCreateRecipeDraftMutation();
     const { data: unitData } = useGetMeasureUnitsQuery();
     const navigate = useNavigate();
-
+    console.log(currentStepIndex);
     const subCats = useAppSelector(selectAllSubCategories);
     const [canExit, setCanExit] = useState(false);
 
@@ -76,17 +77,19 @@ export const NewRecipePage = () => {
         getValues,
         watch,
         reset,
+        clearErrors,
+        trigger,
     } = useForm<CreateRecipeInput>({
         resolver: zodResolver(createOrUpdateRecipeSchema),
         mode: 'onSubmit',
         defaultValues: {
             title: undefined,
             description: undefined,
-            portions: 1,
-            time: 1,
+            portions: undefined,
+            time: undefined,
             categoriesIds: [],
-            ingredients: [{ title: undefined, count: 1, measureUnit: undefined }],
-            steps: [{ description: undefined, stepNumber: 1, image: undefined }],
+            ingredients: [{ title: undefined, count: undefined, measureUnit: undefined }],
+            steps: [{ description: undefined, stepNumber: 1, image: null }],
             image: undefined,
         },
     });
@@ -112,18 +115,18 @@ export const NewRecipePage = () => {
     useEffect(() => {
         if (recipe) {
             reset({
-                title: recipe.title,
-                description: recipe.description,
-                portions: recipe.portions,
-                time: recipe.time,
-                categoriesIds: recipe.categoriesIds || [],
+                title: recipe.title ?? undefined,
+                description: recipe.description ?? undefined,
+                portions: recipe.portions ?? undefined,
+                time: recipe.time ?? undefined,
+                categoriesIds: recipe.categoriesIds ?? [],
                 ingredients: recipe.ingredients.length
                     ? recipe.ingredients
-                    : [{ title: undefined, count: 1, measureUnit: undefined }],
+                    : [{ title: undefined, count: undefined, measureUnit: undefined }],
                 steps: recipe.steps.length
                     ? recipe.steps.map((step, index) => ({ ...step, stepNumber: index + 1 }))
-                    : [{ description: undefined, stepNumber: 1, image: undefined }],
-                image: recipe.image || undefined,
+                    : [{ description: undefined, stepNumber: 1, image: null }],
+                image: recipe.image ?? undefined,
             });
         }
     }, [recipe, reset]);
@@ -147,13 +150,23 @@ export const NewRecipePage = () => {
     }, [blocker.state, blocker.location, openExit, blocker, canExit]);
 
     const handleExit = () => {
+        reset();
         closeExit();
         blocker.proceed?.();
     };
 
-    const handleStay = () => {
+    // const handleStay = () => {
+    //     closeExit();
+    //     blocker.reset?.();
+    // };
+
+    const handleCloseButton = () => {
         closeExit();
-        blocker.reset?.();
+    };
+
+    const handleDraftModal = () => {
+        closeExit();
+        handleSaveDraft();
     };
 
     const onSubmit = async (data: CreateRecipeInput) => {
@@ -168,7 +181,7 @@ export const NewRecipePage = () => {
                 dispatch(
                     setAppAlert({
                         type: 'success',
-                        title: 'Рецепт успешно обновлен',
+                        title: 'Рецепт успешно опубликован',
                         sourse: 'global',
                     }),
                 );
@@ -217,28 +230,54 @@ export const NewRecipePage = () => {
     };
 
     const handleSaveDraft = async () => {
+        clearErrors('title');
+        const isValidTitle = await trigger('title');
+        if (!isValidTitle) {
+            return;
+        }
         const data = getValues();
-        const result = draftRecipeSchema.safeParse(data);
+        const json = JSON.stringify(data, (_key, v) => (v === '' ? undefined : v));
+        const dataToSend = JSON.parse(json) as RecipeDraftDto;
+
         try {
-            await createRecipeDraft(result.data as RecipeDraftDto).unwrap();
+            await createRecipeDraft(dataToSend).unwrap();
+            // dispatch(
+            //     setAppAlert({
+            //         type: 'success',
+            //         title: 'Черновик успешно сохранён',
+            //         sourse: 'global',
+            //     }),
+            // );
             setCanExit(true);
-            dispatch(
-                setAppAlert({
-                    type: 'success',
-                    title: 'Черновик успешно сохранён',
-                    sourse: 'global',
-                }),
-            );
+            navigate('/', {
+                replace: true,
+                state: {
+                    showSuccessDraftAlert: true,
+                },
+            });
         } catch (err) {
-            console.error('Ошибка сохранения черновика:', err);
-            dispatch(
-                setAppAlert({
-                    type: 'error',
-                    title: 'Ошибка',
-                    sourse: 'global',
-                    message: 'Не удалось сохранить черновик, попробуйте ещё раз',
-                }),
-            );
+            const fetchErr = err as FetchBaseQueryError;
+            const status = fetchErr?.status;
+
+            if (status === 409) {
+                dispatch(
+                    setAppAlert({
+                        type: 'error',
+                        title: 'Ошибка',
+                        sourse: 'global',
+                        message: 'Рецепт с таким названием уже существует',
+                    }),
+                );
+            } else if (String(status).startsWith('5')) {
+                dispatch(
+                    setAppAlert({
+                        type: 'error',
+                        title: 'Ошибка сервера',
+                        sourse: 'global',
+                        message: 'Не удалось сохранить черновик рецепта',
+                    }),
+                );
+            }
         }
     };
 
@@ -256,9 +295,19 @@ export const NewRecipePage = () => {
         onClose();
     };
 
+    if (isCreating) {
+        return <CustomLoader size='large' dataTestId='app-loader' />;
+    }
+
     return (
         <>
-            <Box as='form' onSubmit={handleSubmit(onSubmit)} pt={6} mb={10}>
+            <Box
+                as='form'
+                onSubmit={handleSubmit(onSubmit)}
+                pt={6}
+                mb={10}
+                data-test-id='recipe-form'
+            >
                 <Flex flexDirection='column' gap={6}>
                     <FormControl isInvalid={!!errors.image}>
                         <Box
@@ -297,6 +346,10 @@ export const NewRecipePage = () => {
                             placeholder='Название рецепта'
                             {...register('title')}
                             data-test-id='recipe-title'
+                            _focus={{
+                                borderColor: errors.title ? 'red.500' : '',
+                                boxShadow: errors.title ? '0 0 0 1px red.500' : '',
+                            }}
                         />
                     </FormControl>
 
@@ -305,10 +358,14 @@ export const NewRecipePage = () => {
                             placeholder='Описание'
                             {...register('description')}
                             data-test-id='recipe-description'
+                            _focus={{
+                                borderColor: errors.description ? 'red.500' : '',
+                                boxShadow: errors.description ? '0 0 0 1px red.500' : '',
+                            }}
                         />
                     </FormControl>
 
-                    <FormControl isInvalid={!!errors.portions}>
+                    <FormControl isInvalid={!!errors.portions} mt={4}>
                         <Controller
                             control={control}
                             name='portions'
@@ -316,21 +373,24 @@ export const NewRecipePage = () => {
                                 <HStack>
                                     <Text>На сколько человек ваш рецепт?</Text>
                                     <NumberInput
-                                        min={1}
-                                        max={100}
+                                        max={1000}
                                         maxW={100}
-                                        value={field.value}
-                                        onChange={(_, valueAsNumber) =>
-                                            field.onChange(valueAsNumber)
-                                        }
-                                        data-test-id='recipe-portions'
+                                        value={field.value ?? ''}
+                                        onChange={(valueString, valueAsNumber) => {
+                                            if (valueString === '-' || valueString === '') {
+                                                field.onChange(valueString);
+                                            } else if (!isNaN(valueAsNumber)) {
+                                                field.onChange(valueAsNumber);
+                                            }
+                                        }}
                                     >
                                         <NumberInputField
-                                            borderWidth={errors.portions ? '2px' : '1px'}
+                                            data-test-id='recipe-portions'
+                                            borderWidth={errors.portions ? '1px' : '1px'}
                                             borderColor={errors.portions ? 'red.500' : 'inherit'}
                                             _focus={{
                                                 borderColor: errors.portions
-                                                    ? 'red.600'
+                                                    ? 'red.500'
                                                     : 'blue.500',
                                                 boxShadow: errors.portions
                                                     ? '0 0 0 1px red'
@@ -346,53 +406,41 @@ export const NewRecipePage = () => {
                             )}
                         />
                     </FormControl>
-
                     <FormControl isInvalid={!!errors.time} mt={4}>
+                        <Text mb={2}>Сколько времени готовить в минутах?</Text>
                         <Controller
-                            control={control}
                             name='time'
-                            render={({ field }) => (
-                                <HStack>
-                                    <Text>Сколько времени готовить в минутах?</Text>
-                                    <NumberInput
-                                        min={1}
-                                        max={10000}
-                                        maxW={120}
-                                        value={field.value}
-                                        onChange={(_, valueAsNumber) =>
-                                            field.onChange(valueAsNumber)
-                                        }
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <NumberInput
+                                    max={10000}
+                                    value={value || undefined}
+                                    onChange={(_, valueAsNumber) => onChange(valueAsNumber)}
+                                    maxW={120}
+                                >
+                                    <NumberInputField
                                         data-test-id='recipe-time'
-                                    >
-                                        <NumberInputField
-                                            borderWidth={errors.portions ? '2px' : '1px'}
-                                            borderColor={errors.portions ? 'red.500' : 'inherit'}
-                                            _focus={{
-                                                borderColor: errors.portions
-                                                    ? 'red.600'
-                                                    : 'blue.500',
-                                                boxShadow: errors.portions
-                                                    ? '0 0 0 1px red'
-                                                    : '0 0 0 1px blue',
-                                            }}
-                                        />
-                                        <NumberInputStepper>
-                                            <NumberIncrementStepper />
-                                            <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                    </NumberInput>
-                                </HStack>
+                                        placeholder='Время'
+                                        borderWidth={errors.time ? '2px' : '1px'}
+                                        borderColor={errors.time ? 'red.500' : 'inherit'}
+                                        _focus={{
+                                            borderColor: errors.time ? 'red.500' : 'blue.500',
+                                            boxShadow: errors.time
+                                                ? '0 0 0 1px red'
+                                                : '0 0 0 1px blue',
+                                        }}
+                                    />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
                             )}
                         />
                     </FormControl>
 
                     <FormControl>
-                        <Box
-                            border={errors.categoriesIds ? '2px solid' : '2px solid transparent'}
-                            borderColor={errors.categoriesIds ? 'red.500' : 'transparent'}
-                            borderRadius='md'
-                            p={1}
-                        >
+                        <Box borderRadius='md' p={1}>
                             <Controller
                                 control={control}
                                 name='categoriesIds'
@@ -410,7 +458,8 @@ export const NewRecipePage = () => {
                                                     titles.map((title) => titleToIdMap[title]),
                                                 )
                                             }
-                                            data-test-id='recipe-categories'
+                                            dataId='recipe-categories'
+                                            error={!!errors?.categoriesIds}
                                         />
                                     </HStack>
                                 )}
@@ -440,32 +489,45 @@ export const NewRecipePage = () => {
                                     <Input
                                         placeholder='Ингредиент'
                                         {...register(`ingredients.${index}.title`)}
-                                        data-test-id={`recipe-ingredients-title-${index + 1}`}
+                                        data-test-id={`recipe-ingredients-title-${index}`}
+                                        _focus={{
+                                            borderColor: errors.ingredients?.[index]?.title
+                                                ? 'red.500'
+                                                : '',
+                                            boxShadow: errors.ingredients?.[index]?.title
+                                                ? '0 0 0 1px red.500'
+                                                : '',
+                                        }}
                                     />
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.ingredients?.[index]?.count}>
                                     <Controller
-                                        control={control}
                                         name={`ingredients.${index}.count`}
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                type='number'
-                                                min={1}
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                            <NumberInput
                                                 step={1}
+                                                value={value || undefined}
+                                                onChange={(_, valueAsNumber) =>
+                                                    onChange(valueAsNumber)
+                                                }
                                                 maxW={90}
-                                                placeholder='Количество'
-                                                onChange={(e) => {
-                                                    const value = e.target.value;
-                                                    if (
-                                                        value === '' ||
-                                                        (/^\d+$/.test(value) && Number(value) > 0)
-                                                    ) {
-                                                        field.onChange(Number(value));
-                                                    }
-                                                }}
-                                                data-test-id={`recipe-ingredients-count-${index + 1}`}
-                                            />
+                                            >
+                                                <NumberInputField
+                                                    placeholder='Количество'
+                                                    data-test-id={`recipe-ingredients-count-${index}`}
+                                                    _focus={{
+                                                        borderColor: errors.ingredients?.[index]
+                                                            ?.count
+                                                            ? 'red.500'
+                                                            : '',
+                                                        boxShadow: errors.ingredients?.[index]
+                                                            ?.count
+                                                            ? '0 0 0 1px red.500'
+                                                            : '',
+                                                    }}
+                                                />
+                                            </NumberInput>
                                         )}
                                     />
                                 </FormControl>
@@ -478,7 +540,15 @@ export const NewRecipePage = () => {
                                                 placeholder='Единица измерен...'
                                                 {...field}
                                                 onChange={(e) => field.onChange(e.target.value)}
-                                                data-test-id={`recipe-ingredients-measureUnit-${index + 1}`}
+                                                data-test-id={`recipe-ingredients-measureUnit-${index}`}
+                                                _focus={{
+                                                    borderColor: errors.time
+                                                        ? 'red.500'
+                                                        : 'blue.500',
+                                                    boxShadow: errors.time
+                                                        ? '0 0 0 1px red'
+                                                        : '0 0 0 1px blue',
+                                                }}
                                             >
                                                 {unitData?.map((unit) => (
                                                     <option key={unit._id} value={unit.name}>
@@ -495,7 +565,7 @@ export const NewRecipePage = () => {
                                     colorScheme='green'
                                     variant='outline'
                                     onClick={() => removeIngredient(index)}
-                                    data-test-id={`recipe-ingredients-remove-ingredients-${index + 1}`}
+                                    data-test-id={`recipe-ingredients-remove-ingredients-${index}`}
                                 />
                             </HStack>
                         ))}
@@ -526,7 +596,13 @@ export const NewRecipePage = () => {
                                     <Textarea
                                         placeholder='Описание шага'
                                         {...register(`steps.${index}.description`)}
-                                        data-test-id={`recipe-steps-description-${index + 1}`}
+                                        data-test-id={`recipe-steps-description-${index}`}
+                                        _focus={{
+                                            borderColor: errors.time ? 'red.500' : 'blue.500',
+                                            boxShadow: errors.time
+                                                ? '0 0 0 1px red'
+                                                : '0 0 0 1px blue',
+                                        }}
                                     />
                                 </FormControl>
                                 <Box
@@ -538,7 +614,7 @@ export const NewRecipePage = () => {
                                     justifyContent='center'
                                     cursor='pointer'
                                     onClick={() => handleImageClick(index)}
-                                    data-test-id={`recipe-steps-image-block-${index + 1}`}
+                                    data-test-id={`recipe-steps-image-block-${index}`}
                                 >
                                     {getValues(`steps.${index}.image`) ? (
                                         <Image
@@ -546,7 +622,7 @@ export const NewRecipePage = () => {
                                             alt={`Шаг ${index + 1}`}
                                             objectFit='cover'
                                             h='100%'
-                                            data-test-id={`recipe-steps-image-block-${index + 1}-preview-image`}
+                                            data-test-id={`recipe-steps-image-block-${index}-preview-image`}
                                         />
                                     ) : (
                                         <Text color='gray.400'>
@@ -554,14 +630,16 @@ export const NewRecipePage = () => {
                                         </Text>
                                     )}
                                 </Box>
-                                <IconButton
-                                    aria-label='Удалить шаг'
-                                    icon={<DeleteIcon />}
-                                    colorScheme='green'
-                                    variant='outline'
-                                    onClick={() => removeStep(index)}
-                                    data-test-id={`recipe-steps-remove-button-${index + 1}`}
-                                />
+                                {index !== 0 && (
+                                    <IconButton
+                                        aria-label='Удалить шаг'
+                                        icon={<DeleteIcon />}
+                                        colorScheme='green'
+                                        variant='outline'
+                                        onClick={() => removeStep(index)}
+                                        data-test-id={`recipe-steps-remove-button-${index}`}
+                                    />
+                                )}
                             </Box>
                         ))}
                         <Button
@@ -570,7 +648,7 @@ export const NewRecipePage = () => {
                                 appendStep({
                                     stepNumber: stepFields.length + 1,
                                     description: '',
-                                    image: '',
+                                    image: null,
                                 })
                             }
                         >
@@ -579,7 +657,7 @@ export const NewRecipePage = () => {
                         </Button>
                     </Box>
 
-                    <HStack>
+                    <HStack justifyContent='space-between'>
                         <Button
                             type='button'
                             colorScheme='gray'
@@ -593,7 +671,7 @@ export const NewRecipePage = () => {
                             colorScheme='green'
                             data-test-id='recipe-publish-recipe-button'
                         >
-                            Опубликовать рецепт
+                            {isEditMode ? 'Редактировать рецепт' : 'Опубликовать рецепт'}
                         </Button>
                     </HStack>
                 </Flex>
@@ -613,9 +691,9 @@ export const NewRecipePage = () => {
 
             <ExitConfirmModal
                 isOpen={isExitOpen}
-                onClose={handleStay}
+                onClose={handleCloseButton}
                 onExit={handleExit}
-                onSaveDraft={handleSaveDraft}
+                onSaveDraft={handleDraftModal}
             />
         </>
     );

@@ -1,5 +1,7 @@
 import { FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+import { jwtDecode } from 'jwt-decode';
 
+import { setUserId } from '~/store/app-slice';
 import {
     ForgotPasswordRequest,
     ForgotPasswordResponse,
@@ -10,8 +12,8 @@ import {
     VerifyOtpRequest,
     VerifyOtpResponse,
 } from '~/types/authTypes';
-import { saveAccessToken } from '~/utils/tokenUtils';
 
+// import { saveAccessToken } from '~/utils/tokenUtils';
 import { ApiEndpoints } from '../constants/api';
 import { EndpointNames } from '../constants/endpoint-names';
 import { Tags } from '../constants/tags';
@@ -28,6 +30,10 @@ interface SignUpRequest {
 interface SignUpResponse {
     statusText: string;
     message: string;
+}
+
+interface DecodedToken {
+    userId: string;
 }
 
 export const authApiSlice = catalogApiSlice
@@ -52,21 +58,28 @@ export const authApiSlice = catalogApiSlice
                     body,
                     name: EndpointNames.LOGIN,
                 }),
-                async onQueryStarted(_, { queryFulfilled }) {
-                    queryFulfilled
-                        .then(({ meta }) => {
-                            const response = (meta as FetchBaseQueryMeta)?.response;
-                            const accessToken = response?.headers.get('Authentication-Access');
-                            if (accessToken) {
-                                saveAccessToken(accessToken);
-                            }
-                            if (typeof window !== 'undefined') {
+                onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
+                    try {
+                        const { meta } = await queryFulfilled;
+                        const accessToken = (meta as FetchBaseQueryMeta)?.response?.headers.get(
+                            'Authentication-Access',
+                        );
+
+                        if (accessToken) {
+                            localStorage.setItem('accessToken', accessToken);
+                            const decoded = jwtDecode<DecodedToken>(accessToken);
+                            dispatch(setUserId(decoded.userId));
+                            localStorage.setItem('userId', decoded.userId);
+                        }
+
+                        if (typeof window !== 'undefined') {
+                            setTimeout(() => {
                                 window.location.href = import.meta.env.BASE_URL;
-                            }
-                        })
-                        .catch((err) => {
-                            console.error('Login error:', err);
-                        });
+                            }, 0);
+                        }
+                    } catch (err) {
+                        console.error('Login error:', err);
+                    }
                 },
 
                 invalidatesTags: [Tags.AUTH],
