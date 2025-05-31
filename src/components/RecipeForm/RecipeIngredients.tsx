@@ -24,6 +24,7 @@ import {
 
 import { ButtonPlusLg, ButtonPlusWhite } from '~/assets/icons/icons';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
+import { INGREDIENTS_HELPER } from '~/constants/constants';
 import { Unit } from '~/types/apiTypes';
 
 interface RecipeIngredientsProps {
@@ -48,11 +49,19 @@ export const RecipeIngredients = ({
     <Stack maxW={{ base: '606px', xl: '668px' }} w='100%' m='0 auto'>
         <Stack spacing={{ base: 3, xl: 4 }} mb={10}>
             <HStack spacing={2} mb={4}>
-                <Text textStyle='formBoldText'>Добавьте ингредиенты рецепта, нажав на</Text>
+                <Text textStyle='formBoldText'>{INGREDIENTS_HELPER}</Text>
                 <ButtonPlusWhite />
             </HStack>
 
             <Grid
+                display={{
+                    base: 'none',
+                    sm: 'none',
+                    smPlus: 'none',
+                    md: 'grid',
+                    lg: 'grid',
+                    xl: 'grid',
+                }}
                 h={6}
                 templateColumns='247px 125px 203px'
                 gap={{ base: 3, xl: 4 }}
@@ -70,16 +79,20 @@ export const RecipeIngredients = ({
             {ingredientFields.map((field, index) => (
                 <SimpleGrid
                     key={field.id}
-                    gap={{ base: 3, xl: 4 }}
+                    gap={{ base: 3, sm: 3, md: 4, lg: 4, xl: 4 }}
                     templateColumns={{
                         base: '80px 192px 32px',
-                        sm: '241px 80px 215px 32px',
+                        sm: '80px 192px 32px',
+                        md: '241px 80px 215px 32px',
+                        lg: '295px 80px 215px 32px',
                         xl: '295px 80px 215px 32px',
                     }}
+                    templateRows={{ base: 'auto auto', sm: 'auto auto', md: 'auto', xl: 'auto' }}
                 >
                     <FormControl
                         isInvalid={!!errors.ingredients?.[index]?.title}
-                        gridColumn={{ base: '1 / 4', sm: '1' }}
+                        gridColumn={{ base: '1 / -1', sm: '1 / -1', md: 'auto' }}
+                        gridRow={{ base: '1', sm: '1', md: 'auto' }}
                     >
                         <Input
                             variant='recipe'

@@ -20,4 +20,12 @@ export const API_RESULTS = {
 
     ERROR_EMAILRESET_TITLE: 'Такого e-mail нет',
     ERROR_EMAILRESET_MESSAGE: 'Попробуйте другой e-mail или проверьте правильность его написания',
+
+    RECIPE_SUCCESS: 'Рецепт успешно опубликован',
+    ERROR_RECIPE_DUBLE: 'Рецепт с таким названием уже существует',
+    ERROR_TITLE: 'Ошибка',
+    ERROR_RECIPE_SERVER: 'Попробуйте пока сохранить в черновик',
+
+    DRAFT_SUCCESS: 'Черновик успешно сохранен',
+    ERROR_DRAFT_SERVER: 'Не удалось сохранить черновик рецепта',
 } as const;

@@ -63,7 +63,7 @@ export const SearchableSelect = ({
                     variant='outline'
                     w={
                         dataId === 'recipe-categories'
-                            ? '350px'
+                            ? { sm: '196px', md: '232px', mid: '250px', lg: '350px', xl: '350px' }
                             : { sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }
                     }
                     fontSize='16px'

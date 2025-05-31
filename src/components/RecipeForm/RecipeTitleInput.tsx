@@ -2,6 +2,7 @@ import { FormControl, Input } from '@chakra-ui/react';
 import { UseFormRegister } from 'react-hook-form';
 
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface RecipeTitleInputProps {
     register: UseFormRegister<CreateRecipeInput>;
@@ -14,7 +15,7 @@ export const RecipeTitleInput: React.FC<RecipeTitleInputProps> = ({ register, er
             variant='recipetitle'
             placeholder='Название рецепта'
             {...register('title')}
-            data-test-id='recipe-title'
+            data-test-id={TEST_IDS.RECIPE_TITLE}
         />
     </FormControl>
 );

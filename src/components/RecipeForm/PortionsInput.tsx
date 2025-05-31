@@ -11,6 +11,8 @@ import {
 import { Control, Controller } from 'react-hook-form';
 
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
+import { PORTIONS_HELPER } from '~/constants/constants';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface PortionsInputProps {
     control: Control<CreateRecipeInput>;
@@ -24,7 +26,7 @@ export const PortionsInput: React.FC<PortionsInputProps> = ({ control, error }) 
             name='portions'
             render={({ field }) => (
                 <HStack gap={6}>
-                    <Text textStyle='formBoldText'>На сколько человек ваш рецепт?</Text>
+                    <Text textStyle='formBoldText'>{PORTIONS_HELPER}</Text>
                     <NumberInput
                         max={1000}
                         w={90}
@@ -39,7 +41,7 @@ export const PortionsInput: React.FC<PortionsInputProps> = ({ control, error }) 
                         }}
                     >
                         <NumberInputField
-                            data-test-id='recipe-portions'
+                            data-test-id={TEST_IDS.RECIPE_PORTIONS}
                             borderWidth='1px'
                             borderColor={error ? 'red.500' : 'inherit'}
                             _focus={{

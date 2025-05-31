@@ -2,6 +2,7 @@ import { Avatar, Box, Hide, HStack, Show, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import avatar from '~/assets/avatar.png';
 import logo from '~/assets/logo.png';
 import logoMini from '~/assets/logo-mini.png';
@@ -42,8 +43,8 @@ export const Header = () => {
                                 src={logo}
                                 alt='Logo'
                                 h='32px'
-                                data-test-id='header-logo'
-                                onClick={() => navigate('/')}
+                                data-test-id={TEST_IDS.HEADER_LOGO}
+                                onClick={() => navigate(ROUTES_PATH.HOME)}
                             />
                         </Hide>
                         <Show below='smPlus'>

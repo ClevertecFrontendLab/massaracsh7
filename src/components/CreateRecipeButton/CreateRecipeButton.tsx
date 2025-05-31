@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import iconPen from '~/assets/icons/IconPen.svg';
+import { TEST_IDS } from '~/constants/test-ids';
 
 export const CreateRecipeButton = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const CreateRecipeButton = () => {
                 onClick={() => navigate(ROUTES_PATH.NEW_RECIPE)}
                 transition='none'
                 style={{ pointerEvents: 'auto', opacity: 1 }}
-                data-test-id='add-recipe-button'
+                data-test-id={TEST_IDS.ADD_RECIPE_BUTTON}
             >
                 <VStack spacing={3} pt='10px'>
                     <Image src={iconPen} boxSize='48px' />

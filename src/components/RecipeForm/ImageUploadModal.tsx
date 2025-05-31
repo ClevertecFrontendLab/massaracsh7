@@ -75,7 +75,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent data-test-id='recipe-image-modal' p={8}>
+            <ModalContent data-test-id={TEST_IDS.RECIPE_IMAGE_MODAL} p={8}>
                 <ModalHeader px='0' pb={4}>
                     <Heading variant='nameTitle'>Изображение</Heading>
                 </ModalHeader>
@@ -102,7 +102,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                         cursor='pointer'
                         onClick={() => inputRef.current?.click()}
                         overflow='hidden'
-                        data-test-id='recipe-image-modal-image-block'
+                        data-test-id={TEST_IDS.RECIPE_IMAGE_MODAL_IMAGE_BLOCK}
                     >
                         {preview ? (
                             <Image
@@ -111,7 +111,7 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                                 objectFit='cover'
                                 w='100%'
                                 h='100%'
-                                data-test-id='recipe-image-modal-preview-image'
+                                data-test-id={TEST_IDS.RECIPE_IMAGE_MODAL_PREVIEW_IMAGE}
                             />
                         ) : (
                             <ImagePlaceholder w='32px' h='32px' />
@@ -124,8 +124,8 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
                             onChange={handleImageChange}
                             data-test-id={
                                 stepIndex !== undefined
-                                    ? `recipe-steps-image-block-${stepIndex}-input-file`
-                                    : 'recipe-image-block-input-file'
+                                    ? TEST_IDS.RECIPE_STEPS_IMAGE_BLOCK_INPUT_FILE(stepIndex)
+                                    : TEST_IDS.RECIPE_IMAGE_BLOCK_INPUT_FILE
                             }
                         />
                     </Box>

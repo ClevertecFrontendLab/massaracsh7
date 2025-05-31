@@ -240,7 +240,7 @@ export const RecipePage = () => {
                                             w='48px'
                                             h='48px'
                                             onClick={handleDelete}
-                                            data-test-id='recipe-delete-button'
+                                            data-test-id={TEST_IDS.RECIPE_DELETE_BUTTON}
                                         />
                                         <Button
                                             variant='blackOutline'

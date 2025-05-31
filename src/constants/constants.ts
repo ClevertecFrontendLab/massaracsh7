@@ -16,3 +16,13 @@ export const FOOTER_RECOVERY_MESSAGE = 'Не пришло письмо? Пров
 export const STEP_CODE_MESSAGE =
     'Для восстановления входа введите ваш e-mail, куда можно отправить уникальный код';
 export const STEP_RESET_MESSAGE = 'Восстановление аккаунта';
+
+export const CATEGORY_HELPER = 'Выберите не менее 3-х тегов';
+
+export const CONFIRM_MODAL_TITLE = 'Выйти без сохранения?';
+export const CONFIRM_MODAL = 'Чтобы сохранить, нажмите кнопку сохранить черновик';
+
+export const PORTIONS_HELPER = 'На сколько человек ваш рецепт?';
+export const INGREDIENTS_HELPER = 'Добавьте ингредиенты рецепта, нажав на';
+export const STEPS_HELPER = 'Добавьте шаги приготовления';
+export const TIME_HELPER = 'Сколько времени готовить в минутах?';

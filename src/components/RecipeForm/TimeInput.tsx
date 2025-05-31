@@ -11,6 +11,8 @@ import {
 import { Control, Controller } from 'react-hook-form';
 
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
+import { TIME_HELPER } from '~/constants/constants';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface TimeInputProps {
     control: Control<CreateRecipeInput>;
@@ -20,7 +22,7 @@ interface TimeInputProps {
 export const TimeInput: React.FC<TimeInputProps> = ({ control, error }) => (
     <FormControl isInvalid={!!error} mt={4}>
         <HStack gap={6}>
-            <Text textStyle='formBoldText'>Сколько времени готовить в минутах?</Text>
+            <Text textStyle='formBoldText'>{TIME_HELPER}</Text>
             <Controller
                 name='time'
                 control={control}
@@ -39,7 +41,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({ control, error }) => (
                         variant='recipe'
                     >
                         <NumberInputField
-                            data-test-id='recipe-time'
+                            data-test-id={TEST_IDS.RECIPE_TIME}
                             borderWidth='1px'
                             borderColor={error ? 'red.500' : 'inherit'}
                             _focus={{

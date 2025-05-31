@@ -23,7 +23,8 @@ import {
 
 import { ImagePlaceholder } from '~/assets/icons/icons';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
-import { BASE_IMG_URL } from '~/constants/constants';
+import { BASE_IMG_URL, STEPS_HELPER } from '~/constants/constants';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface RecipeStepsProps {
     stepFields: FieldArrayWithId<CreateRecipeInput, 'steps', 'id'>[];
@@ -46,7 +47,7 @@ export const RecipeSteps: React.FC<RecipeStepsProps> = ({
 }) => (
     <Box mb={10}>
         <Text textStyle='formBoldText' mb={4}>
-            Добавьте шаги приготовления
+            {STEPS_HELPER}
         </Text>
         {stepFields.map((field, index) => (
             <Stack
@@ -68,7 +69,7 @@ export const RecipeSteps: React.FC<RecipeStepsProps> = ({
                     justifyContent='center'
                     cursor='pointer'
                     onClick={() => handleImageClick(index)}
-                    data-test-id={`recipe-steps-image-block-${index}`}
+                    data-test-id={TEST_IDS.RECIPE_STEPS_IMAGE_BLOCK(index)}
                 >
                     {getValues(`steps.${index}.image`) ? (
                         <Image
@@ -76,7 +77,7 @@ export const RecipeSteps: React.FC<RecipeStepsProps> = ({
                             alt={`Шаг ${index + 1}`}
                             objectFit='cover'
                             h='100%'
-                            data-test-id={`recipe-steps-image-block-${index}-preview-image`}
+                            data-test-id={TEST_IDS.RECIPE_STEPS_IMAGE_PREVIEW_IMAGE(index)}
                         />
                     ) : (
                         <ImagePlaceholder w='32px' h='32px' />
@@ -96,7 +97,7 @@ export const RecipeSteps: React.FC<RecipeStepsProps> = ({
                                 colorScheme='customLime'
                                 variant='ghost'
                                 onClick={() => removeStep(index)}
-                                data-test-id={`recipe-steps-remove-button-${index}`}
+                                data-test-id={TEST_IDS.RECIPE_STEPS_REMOVE_BUTTON(index)}
                                 w='14px'
                                 h='14px'
                             />
@@ -107,7 +108,7 @@ export const RecipeSteps: React.FC<RecipeStepsProps> = ({
                         <Textarea
                             placeholder='Описание шага'
                             {...register(`steps.${index}.description` as const)}
-                            data-test-id={`recipe-steps-description-${index}`}
+                            data-test-id={TEST_IDS.RECIPE_STEPS_DESCRIPTION(index)}
                             fontSize='14px'
                             lineHeight='20px'
                             h={{ sm: 'auto', md: '104px', lg: '104px', xl: '104px' }}

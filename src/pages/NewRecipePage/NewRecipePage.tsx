@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import { LeftPen } from '~/assets/icons/icons';
 import { ImageBlock } from '~/components/RecipeForm/ImageBlock';
 import { PortionsInput } from '~/components/RecipeForm/PortionsInput';
@@ -23,6 +24,9 @@ import { RecipeSteps } from '~/components/RecipeForm/RecipeSteps';
 import { RecipeTitleInput } from '~/components/RecipeForm/RecipeTitleInput';
 import { TimeInput } from '~/components/RecipeForm/TimeInput';
 import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect';
+import { API_RESULTS } from '~/constants/api-results';
+import { CATEGORY_HELPER } from '~/constants/constants';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useExitBlocker } from '~/hooks/useExitBlocker';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetSubcategory } from '~/hooks/useGetSubcategory';
@@ -141,7 +145,7 @@ export const NewRecipePage = () => {
                 dispatch(
                     setAppAlert({
                         type: 'success',
-                        title: 'Рецепт успешно опубликован',
+                        title: API_RESULTS.RECIPE_SUCCESS,
                         sourse: 'global',
                     }),
                 );
@@ -157,7 +161,7 @@ export const NewRecipePage = () => {
                 dispatch(
                     setAppAlert({
                         type: 'success',
-                        title: 'Рецепт успешно опубликован',
+                        title: API_RESULTS.RECIPE_SUCCESS,
                         sourse: 'global',
                     }),
                 );
@@ -165,24 +169,22 @@ export const NewRecipePage = () => {
         } catch (err) {
             const fetchErr = err as FetchBaseQueryError;
             const status = fetchErr?.status;
-
-            console.error('Ошибка при создании рецепта:', fetchErr.status);
             if (status === 409) {
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Ошибка',
+                        title: API_RESULTS.ERROR_TITLE,
                         sourse: 'global',
-                        message: 'Рецепт с таким названием уже существует',
+                        message: API_RESULTS.ERROR_RECIPE_DUBLE,
                     }),
                 );
             } else if (String(status).startsWith('5')) {
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Ошибка сервера',
+                        title: API_RESULTS.ERROR_SERVER_TITLE,
                         sourse: 'global',
-                        message: 'Попробуйте пока сохранить в черновик',
+                        message: API_RESULTS.ERROR_RECIPE_SERVER,
                     }),
                 );
             }
@@ -206,13 +208,13 @@ export const NewRecipePage = () => {
             if (fromModal) {
                 handleExit();
             } else {
-                navigate('/');
+                navigate(ROUTES_PATH.HOME);
             }
 
             dispatch(
                 setAppAlert({
                     type: 'success',
-                    title: 'Черновик успешно сохранен',
+                    title: API_RESULTS.DRAFT_SUCCESS,
                     sourse: 'global',
                 }),
             );
@@ -224,18 +226,18 @@ export const NewRecipePage = () => {
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Ошибка',
+                        title: API_RESULTS.ERROR_TITLE,
                         sourse: 'global',
-                        message: 'Рецепт с таким названием уже существует',
+                        message: API_RESULTS.ERROR_RECIPE_DUBLE,
                     }),
                 );
             } else {
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: 'Ошибка сервера',
+                        title: API_RESULTS.ERROR_SERVER_TITLE,
                         sourse: 'global',
-                        message: 'Не удалось сохранить черновик рецепта',
+                        message: API_RESULTS.ERROR_DRAFT_SERVER,
                     }),
                 );
             }
@@ -262,7 +264,7 @@ export const NewRecipePage = () => {
 
     return (
         <>
-            <Box as='form' onSubmit={handleSubmit(onSubmit)} data-test-id='recipe-form'>
+            <Box as='form' onSubmit={handleSubmit(onSubmit)} data-test-id={TEST_IDS.RECIPE_FORM}>
                 <Stack mt={{ base: 0, xl: 6 }} spacing={{ base: '32px', xl: '40px' }}>
                     <Flex
                         gap={{ base: 4, xl: 6 }}
@@ -286,9 +288,7 @@ export const NewRecipePage = () => {
                                     name='categoriesIds'
                                     render={({ field }) => (
                                         <HStack justify='space-between' width='100%'>
-                                            <Text textStyle='formBoldText'>
-                                                Выберите не менее 3-х тегов
-                                            </Text>
+                                            <Text textStyle='formBoldText'>{CATEGORY_HELPER}</Text>
                                             <SearchableSelect
                                                 label='Категория'
                                                 options={subCats.map((cat) => cat.title)}
@@ -351,7 +351,7 @@ export const NewRecipePage = () => {
                             type='button'
                             leftIcon={<LeftPen />}
                             onClick={() => handleSaveDraft(false)}
-                            data-test-id='recipe-save-draft-button'
+                            data-test-id={TEST_IDS.RECIPE_SAVE_DRAFT_BUTTON}
                         >
                             Сохранить черновик
                         </Button>
@@ -360,7 +360,7 @@ export const NewRecipePage = () => {
                             bg='black'
                             color='white'
                             type='submit'
-                            data-test-id='recipe-publish-recipe-button'
+                            data-test-id={TEST_IDS.RECIPE_PUBLISH_RECIPE_BUTTON}
                         >
                             {isEditMode ? 'Редактировать рецепт' : 'Опубликовать рецепт'}
                         </Button>
