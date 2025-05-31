@@ -75,9 +75,7 @@ export const RecipePage = () => {
     const [toggleLike] = useToggleLikeRecipeMutation();
 
     const userId = localStorage.getItem('userId');
-    console.log(userId);
-    const result2 = userId === recipe?.authorId;
-    console.log(result2);
+    const isAuthor = userId === recipe?.authorId;
 
     const handleDelete = async () => {
         if (!id) return;
@@ -232,7 +230,7 @@ export const RecipePage = () => {
                                 </HStack>
                             </Badge>
                             <HStack spacing={4}>
-                                {result2 ? (
+                                {isAuthor ? (
                                     <HStack spacing={2}>
                                         <IconButton
                                             aria-label='Удалить рецепт'

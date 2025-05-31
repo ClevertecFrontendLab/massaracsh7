@@ -40,6 +40,11 @@ export interface Ingredient {
     measureUnit: string;
 }
 
+export interface Unit {
+    _id: string;
+    name: string;
+}
+
 export interface Recipe {
     _id: string;
     title: string;

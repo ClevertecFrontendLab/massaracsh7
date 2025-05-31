@@ -65,12 +65,12 @@ export function ExitConfirmModal({ isOpen, onClose, onExit, onSaveDraft }: ExitC
                     <Button
                         variant='darkWhite'
                         leftIcon={<LeftPenWhite w='16px' h='16px' />}
-                        onClick={onExit}
+                        onClick={onSaveDraft}
                         w='full'
                     >
                         Сохранить черновик
                     </Button>
-                    <Button variant='darkOutline' onClick={onSaveDraft} w='full'>
+                    <Button variant='darkOutline' onClick={onExit} w='full'>
                         Выйти без сохранения
                     </Button>
                 </ModalFooter>

@@ -1,6 +1,6 @@
 import { Box, Button, Heading, HStack } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { BlogList } from '~/components/BlogList/BlogList';
@@ -12,7 +12,6 @@ import { BASE_LIMIT_SLIDER, ERROR_SEARCH_MESSAGE, MAIN_LIMIT_JUICY } from '~/con
 import { TEST_IDS } from '~/constants/test-ids';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
 import { useGetRecipesQuery } from '~/query/services/recipes';
-import { setAppAlert } from '~/store/app-slice';
 import {
     selectHasFiltersOrSearch,
     selectIsExcludingAllergensWithTags,
@@ -23,7 +22,7 @@ import {
     selectSelectedMeat,
     selectSelectedSide,
 } from '~/store/filter-slice';
-import { useAppDispatch, useAppSelector } from '~/store/hooks';
+import { useAppSelector } from '~/store/hooks';
 import { buildQuery } from '~/utils/buildQuery';
 
 export const MainPage = () => {
@@ -31,8 +30,6 @@ export const MainPage = () => {
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(null);
     const [isFilterClose, setIsFilterClose] = useState(true);
     const [message, setMessage] = useState('');
-    const dispatch = useAppDispatch();
-    const location = useLocation();
 
     const selectedAllergens = useAppSelector(selectSelectedAllergens);
     const selectedSubCategories = useAppSelector(selectSelectedCategories);
@@ -43,20 +40,6 @@ export const MainPage = () => {
 
     const isExcludingWithTags = useAppSelector(selectIsExcludingAllergensWithTags);
     const hasFiltersOrSearch = useAppSelector(selectHasFiltersOrSearch);
-
-    useEffect(() => {
-        if (location.state?.showSuccessDraftAlert) {
-            dispatch(
-                setAppAlert({
-                    type: 'success',
-                    title: 'Черновик успешно сохранён',
-                    sourse: 'global',
-                }),
-            );
-
-            navigate(location.pathname, { replace: true, state: {} });
-        }
-    }, [location, navigate, dispatch]);
 
     const baseJuicyParams = useMemo(
         () =>
