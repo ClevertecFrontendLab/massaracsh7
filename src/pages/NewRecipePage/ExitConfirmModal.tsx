@@ -1,6 +1,7 @@
 import {
     Button,
     CloseButton,
+    Heading,
     Image,
     Modal,
     ModalBody,
@@ -11,6 +12,7 @@ import {
     Text,
 } from '@chakra-ui/react';
 
+import { LeftPenWhite } from '~/assets/icons/icons';
 import modalBreakfast from '~/assets/images/modal-breakfast.png';
 import { TEST_IDS } from '~/constants/test-ids';
 
@@ -25,8 +27,7 @@ export function ExitConfirmModal({ isOpen, onClose, onExit, onSaveDraft }: ExitC
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent data-test-id='recipe-preventive-modal'>
-                {/* <ModalCloseButton data-test-id={TEST_IDS.CLOSE_BUTTON} /> */}
+            <ModalContent data-test-id='recipe-preventive-modal' p={8}>
                 <CloseButton
                     position='absolute'
                     right={6}
@@ -52,22 +53,25 @@ export function ExitConfirmModal({ isOpen, onClose, onExit, onSaveDraft }: ExitC
                     objectFit='contain'
                 />
 
-                <ModalHeader>Выйти без сохранения?</ModalHeader>
-                <ModalBody>
-                    <Text>
-                        У вас есть несохранённые изменения. Вы действительно хотите покинуть
-                        страницу?
-                    </Text>
-                    <Text mt={2} fontSize='sm' color='gray.500'>
-                        Чтобы сохранить изменения, нажмите «Сохранить черновик».
+                <ModalHeader px='0' pb={4}>
+                    <Heading variant='nameTitle'>Выйти без сохранения?</Heading>
+                </ModalHeader>
+                <ModalBody px='0' pb={8}>
+                    <Text fontSize='16px' lineHeight='24px' color='blackAlpha.700'>
+                        Чтобы сохранить, нажмите кнопку сохранить черновик
                     </Text>
                 </ModalBody>
-                <ModalFooter>
-                    <Button colorScheme='gray' mr={3} onClick={onExit}>
-                        Выйти без сохранения
-                    </Button>
-                    <Button colorScheme='green' onClick={onSaveDraft}>
+                <ModalFooter flexDirection='column' gap='4' p='0'>
+                    <Button
+                        variant='darkWhite'
+                        leftIcon={<LeftPenWhite w='16px' h='16px' />}
+                        onClick={onExit}
+                        w='full'
+                    >
                         Сохранить черновик
+                    </Button>
+                    <Button variant='darkOutline' onClick={onSaveDraft} w='full'>
+                        Выйти без сохранения
                     </Button>
                 </ModalFooter>
             </ModalContent>

@@ -1,9 +1,11 @@
 import { DeleteIcon } from '@chakra-ui/icons';
 import {
+    Badge,
     Box,
     Button,
     Flex,
     FormControl,
+    Grid,
     HStack,
     IconButton,
     Image,
@@ -14,9 +16,12 @@ import {
     NumberInputField,
     NumberInputStepper,
     Select,
+    SimpleGrid,
+    Stack,
     Text,
     Textarea,
     useDisclosure,
+    VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
@@ -24,7 +29,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { BlockerFunction, useBlocker, useNavigate, useParams } from 'react-router';
 
-import { ButtonPlus, ButtonPlusLg, ButtonPlusWhite } from '~/assets/icons/icons';
+import {
+    ButtonPlus,
+    ButtonPlusLg,
+    ButtonPlusWhite,
+    ImagePlaceholder,
+    LeftPen,
+} from '~/assets/icons/icons';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { SearchableSelect } from '~/components/SearchableSelect/SearchableSelect';
 import { BASE_IMG_URL } from '~/constants/constants';
@@ -301,380 +312,480 @@ export const NewRecipePage = () => {
 
     return (
         <>
-            <Box
-                as='form'
-                onSubmit={handleSubmit(onSubmit)}
-                pt={6}
-                mb={10}
-                data-test-id='recipe-form'
-            >
-                <Flex flexDirection='column' gap={6}>
-                    <FormControl isInvalid={!!errors.image}>
-                        <Box
-                            w='full'
-                            h='200px'
-                            bg='gray.100'
-                            borderRadius='md'
-                            display='flex'
-                            alignItems='center'
-                            justifyContent='center'
-                            overflow='hidden'
-                            cursor='pointer'
-                            onClick={() => handleImageClick(null)}
-                            _hover={{ bg: 'gray.200' }}
-                            border={errors.image ? '2px solid' : '2px solid transparent'}
-                            borderColor={errors.image ? 'red.500' : 'transparent'}
-                            data-test-id='recipe-image-block'
-                        >
-                            {getValues('image') ? (
-                                <Image
-                                    src={`${BASE_IMG_URL}${getValues('image')}`}
-                                    alt='Изображение рецепта'
-                                    objectFit='cover'
-                                    w='100%'
-                                    h='100%'
-                                    data-test-id='recipe-image-block-preview-image'
-                                />
-                            ) : (
-                                <Text color='gray.500'>Нажмите, чтобы загрузить</Text>
-                            )}
-                        </Box>
-                    </FormControl>
-
-                    <FormControl isInvalid={!!errors.title}>
-                        <Input
-                            placeholder='Название рецепта'
-                            {...register('title')}
-                            data-test-id='recipe-title'
-                            _focus={{
-                                borderColor: errors.title ? 'red.500' : '',
-                                boxShadow: errors.title ? '0 0 0 1px red.500' : '',
-                            }}
-                        />
-                    </FormControl>
-
-                    <FormControl isInvalid={!!errors.description}>
-                        <Textarea
-                            placeholder='Описание'
-                            {...register('description')}
-                            data-test-id='recipe-description'
-                            _focus={{
-                                borderColor: errors.description ? 'red.500' : '',
-                                boxShadow: errors.description ? '0 0 0 1px red.500' : '',
-                            }}
-                        />
-                    </FormControl>
-
-                    <FormControl isInvalid={!!errors.portions} mt={4}>
-                        <Controller
-                            control={control}
-                            name='portions'
-                            render={({ field }) => (
-                                <HStack>
-                                    <Text>На сколько человек ваш рецепт?</Text>
-                                    <NumberInput
-                                        max={1000}
-                                        maxW={100}
-                                        value={field.value ?? ''}
-                                        onChange={(valueString, valueAsNumber) => {
-                                            if (valueString === '-' || valueString === '') {
-                                                field.onChange(valueString);
-                                            } else if (!isNaN(valueAsNumber)) {
-                                                field.onChange(valueAsNumber);
-                                            }
-                                        }}
-                                    >
-                                        <NumberInputField
-                                            data-test-id='recipe-portions'
-                                            borderWidth={errors.portions ? '1px' : '1px'}
-                                            borderColor={errors.portions ? 'red.500' : 'inherit'}
-                                            _focus={{
-                                                borderColor: errors.portions
-                                                    ? 'red.500'
-                                                    : 'blue.500',
-                                                boxShadow: errors.portions
-                                                    ? '0 0 0 1px red'
-                                                    : '0 0 0 1px blue',
-                                            }}
-                                        />
-                                        <NumberInputStepper>
-                                            <NumberIncrementStepper />
-                                            <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                    </NumberInput>
-                                </HStack>
-                            )}
-                        />
-                    </FormControl>
-                    <FormControl isInvalid={!!errors.time} mt={4}>
-                        <Text mb={2}>Сколько времени готовить в минутах?</Text>
-                        <Controller
-                            name='time'
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                                <NumberInput
-                                    max={10000}
-                                    value={value || undefined}
-                                    onChange={(_, valueAsNumber) => onChange(valueAsNumber)}
-                                    maxW={120}
-                                >
-                                    <NumberInputField
-                                        data-test-id='recipe-time'
-                                        placeholder='Время'
-                                        borderWidth={errors.time ? '2px' : '1px'}
-                                        borderColor={errors.time ? 'red.500' : 'inherit'}
-                                        _focus={{
-                                            borderColor: errors.time ? 'red.500' : 'blue.500',
-                                            boxShadow: errors.time
-                                                ? '0 0 0 1px red'
-                                                : '0 0 0 1px blue',
-                                        }}
+            <Box as='form' onSubmit={handleSubmit(onSubmit)} data-test-id='recipe-form'>
+                <Stack mt={{ base: 0, xl: 6 }} spacing={{ base: '32px', xl: '40px' }}>
+                    <Flex
+                        gap={{ base: 4, xl: 6 }}
+                        flexDirection={{
+                            base: 'row',
+                            sm: 'column',
+                            md: 'row',
+                            lg: 'row',
+                            xl: 'row',
+                        }}
+                    >
+                        <FormControl isInvalid={!!errors.image} w='auto'>
+                            <Box
+                                h={{ sm: '224px', md: '224px', lg: '410px', xl: '410px' }}
+                                w={{ sm: '232px', md: '328px', lg: '553px', xl: '553px' }}
+                                bg='gray.100'
+                                borderRadius='md'
+                                display='flex'
+                                alignItems='center'
+                                justifyContent='center'
+                                overflow='hidden'
+                                cursor='pointer'
+                                onClick={() => handleImageClick(null)}
+                                _hover={{ bg: 'gray.200' }}
+                                border={errors.image ? '1px solid' : '1px solid transparent'}
+                                borderColor={errors.image ? 'red.500' : 'transparent'}
+                                data-test-id='recipe-image-block'
+                            >
+                                {getValues('image') ? (
+                                    <Image
+                                        src={`${BASE_IMG_URL}${getValues('image')}`}
+                                        alt='Изображение рецепта'
+                                        objectFit='cover'
+                                        w='100%'
+                                        h='100%'
+                                        data-test-id='recipe-image-block-preview-image'
                                     />
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper />
-                                        <NumberDecrementStepper />
-                                    </NumberInputStepper>
-                                </NumberInput>
-                            )}
-                        />
-                    </FormControl>
-
-                    <FormControl>
-                        <Box borderRadius='md' p={1}>
-                            <Controller
-                                control={control}
-                                name='categoriesIds'
-                                render={({ field }) => (
-                                    <HStack>
-                                        <Text>Выберите не менее 3-х тегов</Text>
-                                        <SearchableSelect
-                                            label='Категория'
-                                            options={subCats.map((cat) => cat.title)}
-                                            selectedValues={field.value.map(
-                                                (_id) => idToTitleMap[_id],
-                                            )}
-                                            onChange={(titles: string[]) =>
-                                                field.onChange(
-                                                    titles.map((title) => titleToIdMap[title]),
-                                                )
-                                            }
-                                            dataId='recipe-categories'
-                                            error={!!errors?.categoriesIds}
-                                        />
-                                    </HStack>
+                                ) : (
+                                    <ImagePlaceholder w='32px' h='32px' />
                                 )}
-                            />
-                        </Box>
-                    </FormControl>
+                            </Box>
+                        </FormControl>
+                        <Stack maxWidth='668px' w='100%' spacing={{ base: 4, xl: 6 }}>
+                            <FormControl>
+                                <Controller
+                                    control={control}
+                                    name='categoriesIds'
+                                    render={({ field }) => (
+                                        <HStack justify='space-between' width='100%'>
+                                            <Text textStyle='formBoldText'>
+                                                Выберите не менее 3-х тегов
+                                            </Text>
+                                            <SearchableSelect
+                                                label='Категория'
+                                                options={subCats.map((cat) => cat.title)}
+                                                selectedValues={field.value.map(
+                                                    (_id) => idToTitleMap[_id],
+                                                )}
+                                                onChange={(titles: string[]) =>
+                                                    field.onChange(
+                                                        titles.map((title) => titleToIdMap[title]),
+                                                    )
+                                                }
+                                                dataId='recipe-categories'
+                                                error={!!errors?.categoriesIds}
+                                            />
+                                        </HStack>
+                                    )}
+                                />
+                            </FormControl>
 
-                    <Box>
-                        <Text fontWeight='bold' mb={2}>
-                            Добавьте ингредиенты рецепта, нажав на <ButtonPlusWhite />
-                        </Text>
-                        <HStack mb={1} pl={1}>
-                            <Text flex='2' fontWeight='semibold'>
-                                Ингредиент
-                            </Text>
-                            <Text flex='1' fontWeight='semibold' textAlign='center'>
-                                Количество
-                            </Text>
-                            <Text flex='1' fontWeight='semibold' textAlign='center'>
-                                Единица измерения
-                            </Text>
-                            <Box w='40px' />
-                        </HStack>
-                        {ingredientFields.map((field, index) => (
-                            <HStack key={field.id} mb={2}>
-                                <FormControl isInvalid={!!errors.ingredients?.[index]?.title}>
-                                    <Input
-                                        placeholder='Ингредиент'
-                                        {...register(`ingredients.${index}.title`)}
-                                        data-test-id={`recipe-ingredients-title-${index}`}
-                                        _focus={{
-                                            borderColor: errors.ingredients?.[index]?.title
-                                                ? 'red.500'
-                                                : '',
-                                            boxShadow: errors.ingredients?.[index]?.title
-                                                ? '0 0 0 1px red.500'
-                                                : '',
-                                        }}
-                                    />
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.ingredients?.[index]?.count}>
+                            <FormControl isInvalid={!!errors.title}>
+                                <Input
+                                    variant='recipetitle'
+                                    placeholder='Название рецепта'
+                                    {...register('title')}
+                                    data-test-id='recipe-title'
+                                    // _focus={{
+                                    //     borderColor: errors.title ? 'red.500' : 'customLime.150',
+                                    //     boxShadow: errors.title ? '0 0 0 1px red.500' : '0 0 0 1px customLime.150',
+                                    // }}
+                                />
+                            </FormControl>
+
+                            <FormControl isInvalid={!!errors.description}>
+                                <Textarea
+                                    variant='recipe-descr'
+                                    placeholder='Описание'
+                                    {...register('description')}
+                                    data-test-id='recipe-description'
+                                    // _focus={{
+                                    //     borderColor: errors.description ? 'red.500' : 'customLime.150',
+                                    //     boxShadow: errors.description ? '0 0 0 1px red.500' : '0 0 0 1px customLime.150',
+                                    // }}
+                                />
+                            </FormControl>
+
+                            <FormControl isInvalid={!!errors.portions}>
+                                <Controller
+                                    control={control}
+                                    name='portions'
+                                    render={({ field }) => (
+                                        <HStack gap={6}>
+                                            <Text textStyle='formBoldText'>
+                                                На сколько человек ваш рецепт?
+                                            </Text>
+                                            <NumberInput
+                                                max={1000}
+                                                w={90}
+                                                variant='recipe'
+                                                value={field.value ?? ''}
+                                                onChange={(valueString, valueAsNumber) => {
+                                                    if (valueString === '-' || valueString === '') {
+                                                        field.onChange(valueString);
+                                                    } else if (!isNaN(valueAsNumber)) {
+                                                        field.onChange(valueAsNumber);
+                                                    }
+                                                }}
+                                            >
+                                                <NumberInputField
+                                                    data-test-id='recipe-portions'
+                                                    borderWidth={errors.portions ? '1px' : '1px'}
+                                                    borderColor={
+                                                        errors.portions ? 'red.500' : 'inherit'
+                                                    }
+                                                    _focus={{
+                                                        borderColor: errors.portions
+                                                            ? 'red.500'
+                                                            : 'customLime.150',
+                                                        boxShadow: errors.portions
+                                                            ? '0 0 0 1px red'
+                                                            : '0 0 0 1px customLime.150',
+                                                    }}
+                                                />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        </HStack>
+                                    )}
+                                />
+                            </FormControl>
+                            <FormControl isInvalid={!!errors.time} mt={4}>
+                                <HStack gap={6}>
+                                    <Text textStyle='formBoldText'>
+                                        Сколько времени готовить в минутах?
+                                    </Text>
                                     <Controller
-                                        name={`ingredients.${index}.count`}
+                                        name='time'
                                         control={control}
                                         render={({ field: { onChange, value } }) => (
                                             <NumberInput
-                                                step={1}
+                                                max={10000}
                                                 value={value || undefined}
                                                 onChange={(_, valueAsNumber) =>
                                                     onChange(valueAsNumber)
                                                 }
-                                                maxW={90}
+                                                w={90}
+                                                variant='recipe'
+                                                data-test-id='recipe-time'
                                             >
                                                 <NumberInputField
-                                                    placeholder='Количество'
-                                                    data-test-id={`recipe-ingredients-count-${index}`}
+                                                    data-test-id='recipe-time'
+                                                    borderWidth={errors.time ? '1px' : '1px'}
+                                                    borderColor={
+                                                        errors.time ? 'red.500' : 'inherit'
+                                                    }
+                                                    _focus={{
+                                                        borderColor: errors.time
+                                                            ? 'red.500'
+                                                            : 'customLime.150',
+                                                        boxShadow: errors.time
+                                                            ? '0 0 0 1px red.500'
+                                                            : '0 0 0 1px customLime.150',
+                                                    }}
+                                                />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        )}
+                                    />
+                                </HStack>
+                            </FormControl>
+                        </Stack>
+                    </Flex>
+                    <Stack maxW={{ base: '606px', xl: '668px' }} w='100%' m='0 auto'>
+                        <Stack spacing={{ base: 3, xl: 4 }} mb={10}>
+                            <HStack spacing={2} mb={4}>
+                                <Text textStyle='formBoldText'>
+                                    Добавьте ингредиенты рецепта, нажав на
+                                </Text>
+                                <ButtonPlusWhite />
+                            </HStack>
+
+                            <Grid
+                                h={6}
+                                templateColumns='247px 125px 203px'
+                                gap={{ base: 3, xl: 4 }}
+                                alignItems='center'
+                                fontWeight='600'
+                                fontSize='12px'
+                                color='customLime.600'
+                                textAlign='left'
+                            >
+                                <Text pl='24px'>Ингредиент</Text>
+                                <Text>Количество</Text>
+                                <Text>Единица измерения</Text>
+                            </Grid>
+
+                            {ingredientFields.map((field, index) => (
+                                <SimpleGrid
+                                    key={field.id}
+                                    gap={{ base: 3, xl: 4 }}
+                                    templateColumns={{
+                                        base: '80px 192px 32px',
+                                        sm: '241px 80px 215px 32px',
+                                        xl: '295px 80px 215px 32px',
+                                    }}
+                                >
+                                    <FormControl
+                                        isInvalid={!!errors.ingredients?.[index]?.title}
+                                        gridColumn={{ base: '1 / 4', sm: '1' }}
+                                    >
+                                        <Input
+                                            variant='recipe'
+                                            placeholder='Ингредиент'
+                                            {...register(`ingredients.${index}.title`)}
+                                            data-test-id={`recipe-ingredients-title-${index}`}
+                                            // _focus={{
+                                            //     borderColor: errors.ingredients?.[index]?.title ? 'red.500' : 'customLime.150',
+                                            //     boxShadow: errors.ingredients?.[index]?.title ? '0 0 0 1px red.500' : '',
+                                            // }}
+                                        />
+                                    </FormControl>
+
+                                    <FormControl isInvalid={!!errors.ingredients?.[index]?.count}>
+                                        <Controller
+                                            name={`ingredients.${index}.count`}
+                                            control={control}
+                                            render={({ field: { onChange, value } }) => (
+                                                <NumberInput
+                                                    step={1}
+                                                    value={value || undefined}
+                                                    onChange={(_, valueAsNumber) =>
+                                                        onChange(valueAsNumber)
+                                                    }
+                                                >
+                                                    <NumberInputField
+                                                        placeholder='100'
+                                                        data-test-id={`recipe-ingredients-count-${index}`}
+                                                        _focus={{
+                                                            borderColor: errors.ingredients?.[index]
+                                                                ?.count
+                                                                ? 'red.500'
+                                                                : 'customLime.150',
+                                                            boxShadow: errors.ingredients?.[index]
+                                                                ?.count
+                                                                ? '0 0 0 1px red.500'
+                                                                : '0 0 0 1px customLime.150',
+                                                        }}
+                                                    />
+                                                </NumberInput>
+                                            )}
+                                        />
+                                    </FormControl>
+
+                                    <FormControl
+                                        isInvalid={!!errors.ingredients?.[index]?.measureUnit}
+                                    >
+                                        <Controller
+                                            control={control}
+                                            name={`ingredients.${index}.measureUnit`}
+                                            render={({ field }) => (
+                                                <Select
+                                                    placeholder='Единица измерен...'
+                                                    {...field}
+                                                    onChange={(e) => field.onChange(e.target.value)}
+                                                    data-test-id={`recipe-ingredients-measureUnit-${index}`}
                                                     _focus={{
                                                         borderColor: errors.ingredients?.[index]
                                                             ?.count
                                                             ? 'red.500'
-                                                            : '',
+                                                            : 'customLime.150',
                                                         boxShadow: errors.ingredients?.[index]
                                                             ?.count
                                                             ? '0 0 0 1px red.500'
-                                                            : '',
+                                                            : '0 0 0 1px customLime.150',
                                                     }}
-                                                />
-                                            </NumberInput>
+                                                >
+                                                    {unitData?.map((unit) => (
+                                                        <option key={unit._id} value={unit.name}>
+                                                            {unit.name}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            )}
+                                        />
+                                    </FormControl>
+                                    {index === ingredientFields.length - 1 ? (
+                                        <IconButton
+                                            aria-label='Добавить ингредиент'
+                                            variant='ghost'
+                                            onClick={() =>
+                                                appendIngredient({
+                                                    title: '',
+                                                    count: 1,
+                                                    measureUnit: '',
+                                                })
+                                            }
+                                            data-test-id='recipe-ingredients-add-ingredients'
+                                            icon={<ButtonPlusLg w='32px' h='32px' />}
+                                        />
+                                    ) : (
+                                        <IconButton
+                                            aria-label='Удалить ингредиент'
+                                            icon={<DeleteIcon />}
+                                            colorScheme='customLime'
+                                            variant='ghost'
+                                            onClick={() => removeIngredient(index)}
+                                            data-test-id={`recipe-ingredients-remove-ingredients-${index}`}
+                                        />
+                                    )}
+                                </SimpleGrid>
+                            ))}
+                        </Stack>
+                        <Box mb={10}>
+                            <Text textStyle='formBoldText' mb={4}>
+                                Добавьте шаги приготовления
+                            </Text>
+                            {stepFields.map((field, index) => (
+                                <Stack
+                                    key={field.id}
+                                    border='1px solid'
+                                    borderColor='blackAlpha.200'
+                                    borderRadius={12}
+                                    mb={4}
+                                    h={{ sm: 'auto', md: '180px', lg: '180px', xl: '180px' }}
+                                    flexDir={{ sm: 'column', md: 'row', lg: 'row', xl: 'row' }}
+                                >
+                                    <Box
+                                        h={{ sm: '160px', md: '100%', lg: '100%', xl: '100%' }}
+                                        w={{ sm: '328px', md: '346px', lg: '346px', xl: '346px' }}
+                                        bg='gray.100'
+                                        borderRadius='md'
+                                        display='flex'
+                                        alignItems='center'
+                                        justifyContent='center'
+                                        cursor='pointer'
+                                        onClick={() => handleImageClick(index)}
+                                        data-test-id={`recipe-steps-image-block-${index}`}
+                                    >
+                                        {getValues(`steps.${index}.image`) ? (
+                                            <Image
+                                                src={`${BASE_IMG_URL}${getValues(`steps.${index}.image`)}`}
+                                                alt={`Шаг ${index + 1}`}
+                                                objectFit='cover'
+                                                h='100%'
+                                                data-test-id={`recipe-steps-image-block-${index}-preview-image`}
+                                            />
+                                        ) : (
+                                            <ImagePlaceholder w='32px' h='32px' />
                                         )}
-                                    />
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.ingredients?.[index]?.measureUnit}>
-                                    <Controller
-                                        control={control}
-                                        name={`ingredients.${index}.measureUnit`}
-                                        render={({ field }) => (
-                                            <Select
-                                                placeholder='Единица измерен...'
-                                                {...field}
-                                                onChange={(e) => field.onChange(e.target.value)}
-                                                data-test-id={`recipe-ingredients-measureUnit-${index}`}
+                                    </Box>
+                                    <VStack
+                                        p={5}
+                                        gap={4}
+                                        w={{ sm: '328px', md: '258px', lg: '312px', xl: '322px' }}
+                                    >
+                                        <Flex
+                                            justifyContent='space-between'
+                                            alignItems='center'
+                                            width='100%'
+                                        >
+                                            <Badge
+                                                variant='gray06'
+                                                textTransform='capitalize'
+                                                fontWeight='600'
+                                            >
+                                                Шаг {index + 1}
+                                            </Badge>
+
+                                            {index !== 0 && (
+                                                <IconButton
+                                                    aria-label='Удалить шаг'
+                                                    icon={<DeleteIcon />}
+                                                    colorScheme='customLime'
+                                                    variant='ghost'
+                                                    onClick={() => removeStep(index)}
+                                                    data-test-id={`recipe-steps-remove-button-${index}`}
+                                                    w='14px'
+                                                    h='14px'
+                                                />
+                                            )}
+                                        </Flex>
+                                        <FormControl
+                                            isInvalid={!!errors.steps?.[index]?.description}
+                                        >
+                                            <Textarea
+                                                placeholder='Описание шага'
+                                                {...register(`steps.${index}.description`)}
+                                                data-test-id={`recipe-steps-description-${index}`}
+                                                fontSize='14px'
+                                                lineHeight='20px'
+                                                h={{
+                                                    sm: 'auto',
+                                                    md: '104px',
+                                                    lg: '104px',
+                                                    xl: '104px',
+                                                }}
                                                 _focus={{
                                                     borderColor: errors.time
                                                         ? 'red.500'
-                                                        : 'blue.500',
+                                                        : 'customLime.150',
                                                     boxShadow: errors.time
                                                         ? '0 0 0 1px red'
-                                                        : '0 0 0 1px blue',
+                                                        : '0 0 0 1px customLime.150',
                                                 }}
-                                            >
-                                                {unitData?.map((unit) => (
-                                                    <option key={unit._id} value={unit.name}>
-                                                        {unit.name}
-                                                    </option>
-                                                ))}
-                                            </Select>
-                                        )}
-                                    />
-                                </FormControl>
-                                <IconButton
-                                    aria-label='Удалить ингредиент'
-                                    icon={<DeleteIcon />}
-                                    colorScheme='green'
+                                            />
+                                        </FormControl>
+                                    </VStack>
+                                </Stack>
+                            ))}
+                            <Flex justifyContent='flex-end' mt={4}>
+                                <Button
+                                    type='button'
                                     variant='outline'
-                                    onClick={() => removeIngredient(index)}
-                                    data-test-id={`recipe-ingredients-remove-ingredients-${index}`}
-                                />
-                            </HStack>
-                        ))}
-                        <Button
-                            type='button'
-                            onClick={() =>
-                                appendIngredient({ title: '', count: 1, measureUnit: '' })
-                            }
-                            data-test-id='recipe-ingredients-add-ingredients'
-                        >
-                            <ButtonPlusLg />
-                        </Button>
-                    </Box>
-
-                    <Box>
-                        <Text fontWeight='bold' mb={2}>
-                            Шаги приготовления
-                        </Text>
-                        {stepFields.map((field, index) => (
-                            <Box key={field.id} mb={4} p={3} borderWidth='1px' borderRadius='md'>
-                                <Text fontWeight='bold' mb={2}>
-                                    Шаг {index + 1}
-                                </Text>
-                                <FormControl
-                                    isInvalid={!!errors.steps?.[index]?.description}
-                                    mb={2}
+                                    borderColor='black'
+                                    rightIcon={<ButtonPlus />}
+                                    onClick={() =>
+                                        appendStep({
+                                            stepNumber: stepFields.length + 1,
+                                            description: '',
+                                            image: null,
+                                        })
+                                    }
+                                    size='sm'
                                 >
-                                    <Textarea
-                                        placeholder='Описание шага'
-                                        {...register(`steps.${index}.description`)}
-                                        data-test-id={`recipe-steps-description-${index}`}
-                                        _focus={{
-                                            borderColor: errors.time ? 'red.500' : 'blue.500',
-                                            boxShadow: errors.time
-                                                ? '0 0 0 1px red'
-                                                : '0 0 0 1px blue',
-                                        }}
-                                    />
-                                </FormControl>
-                                <Box
-                                    h='150px'
-                                    bg='gray.100'
-                                    borderRadius='md'
-                                    display='flex'
-                                    alignItems='center'
-                                    justifyContent='center'
-                                    cursor='pointer'
-                                    onClick={() => handleImageClick(index)}
-                                    data-test-id={`recipe-steps-image-block-${index}`}
-                                >
-                                    {getValues(`steps.${index}.image`) ? (
-                                        <Image
-                                            src={`${BASE_IMG_URL}${getValues(`steps.${index}.image`)}`}
-                                            alt={`Шаг ${index + 1}`}
-                                            objectFit='cover'
-                                            h='100%'
-                                            data-test-id={`recipe-steps-image-block-${index}-preview-image`}
-                                        />
-                                    ) : (
-                                        <Text color='gray.400'>
-                                            Нажмите, чтобы загрузить изображение
-                                        </Text>
-                                    )}
-                                </Box>
-                                {index !== 0 && (
-                                    <IconButton
-                                        aria-label='Удалить шаг'
-                                        icon={<DeleteIcon />}
-                                        colorScheme='green'
-                                        variant='outline'
-                                        onClick={() => removeStep(index)}
-                                        data-test-id={`recipe-steps-remove-button-${index}`}
-                                    />
-                                )}
-                            </Box>
-                        ))}
-                        <Button
-                            type='button'
-                            onClick={() =>
-                                appendStep({
-                                    stepNumber: stepFields.length + 1,
-                                    description: '',
-                                    image: null,
-                                })
-                            }
-                        >
-                            Новый шаг &nbsp;
-                            <ButtonPlus />
-                        </Button>
-                    </Box>
+                                    Новый шаг
+                                </Button>
+                            </Flex>
+                        </Box>
 
-                    <HStack justifyContent='space-between'>
-                        <Button
-                            type='button'
-                            colorScheme='gray'
-                            onClick={handleSaveDraft}
-                            data-test-id='recipe-save-draft-button'
+                        <Stack
+                            justifyContent='center'
+                            gap={5}
+                            flexDirection={{ sm: 'column', md: 'row', lg: 'row', xl: 'row' }}
                         >
-                            Сохранить черновик
-                        </Button>
-                        <Button
-                            type='submit'
-                            colorScheme='green'
-                            data-test-id='recipe-publish-recipe-button'
-                        >
-                            {isEditMode ? 'Редактировать рецепт' : 'Опубликовать рецепт'}
-                        </Button>
-                    </HStack>
-                </Flex>
+                            <Button
+                                size='lg'
+                                colorScheme='black'
+                                variant='outline'
+                                type='button'
+                                leftIcon={<LeftPen />}
+                                onClick={handleSaveDraft}
+                                data-test-id='recipe-save-draft-button'
+                            >
+                                Сохранить черновик
+                            </Button>
+                            <Button
+                                size='lg'
+                                bg='black'
+                                color='white'
+                                type='submit'
+                                data-test-id='recipe-publish-recipe-button'
+                            >
+                                {isEditMode ? 'Редактировать рецепт' : 'Опубликовать рецепт'}
+                            </Button>
+                        </Stack>
+                    </Stack>
+                </Stack>
             </Box>
 
             <ImageUploadModal

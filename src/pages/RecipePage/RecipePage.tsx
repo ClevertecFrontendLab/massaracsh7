@@ -29,6 +29,7 @@ import BsAlarm from '~/assets/icons/BsAlarm.svg';
 import BsBookmarkHeart from '~/assets/icons/BsBookmarkHeart.svg';
 import BsEmojiHeartEyes from '~/assets/icons/BsEmojiHeartEyes.svg';
 import followIcon from '~/assets/icons/followIcon.svg';
+import { LeftPen } from '~/assets/icons/icons';
 import people from '~/assets/icons/people.svg';
 import { CategoryBadge } from '~/components/CategoryBadge/CategoryBadge';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
@@ -236,16 +237,17 @@ export const RecipePage = () => {
                                         <IconButton
                                             aria-label='Удалить рецепт'
                                             icon={<DeleteIcon />}
-                                            colorScheme='customLime'
-                                            variant='outline'
-                                            size='sm'
+                                            colorScheme='black'
+                                            variant='ghost'
+                                            w='48px'
+                                            h='48px'
                                             onClick={handleDelete}
                                             data-test-id='recipe-delete-button'
                                         />
                                         <Button
-                                            colorScheme='customLime'
-                                            variant='solid'
-                                            size='sm'
+                                            variant='blackOutline'
+                                            type='button'
+                                            leftIcon={<LeftPen w='16px' h='16px' />}
                                             onClick={() =>
                                                 navigate(
                                                     `/edit-recipe/${category}/${subcategory}/${id}`,

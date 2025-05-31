@@ -61,7 +61,11 @@ export const SearchableSelect = ({
                         />
                     }
                     variant='outline'
-                    w={{ sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }}
+                    w={
+                        dataId === 'recipe-categories'
+                            ? '350px'
+                            : { sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }
+                    }
                     fontSize='16px'
                     fontWeight='400'
                     lineHeight='24px'
@@ -71,8 +75,8 @@ export const SearchableSelect = ({
                     _hover={{ bg: 'white' }}
                     _expanded={{ bg: 'white' }}
                     data-test-id={dataId}
-                    border={error ? '2px solid' : '2px solid transparent'}
-                    borderColor={error ? 'red.500' : 'transparent'}
+                    border={error ? '1px solid' : '1px solid'}
+                    borderColor={error ? 'red.500' : 'gray.200'}
                 >
                     {selectedValues.length > 0 ? (
                         <Wrap spacing={2}>
