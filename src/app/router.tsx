@@ -41,7 +41,7 @@ export const router = createBrowserRouter(
             <Route path='*' element={<Navigate to={ROUTES_PATH.NOT_FOUND} replace />} />
         </Route>,
     ),
-    // {
-    //     basename: import.meta.env.BASE_URL,
-    // },
+    {
+        basename: import.meta.env.BASE_URL,
+    },
 );
