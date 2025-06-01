@@ -10,4 +10,12 @@ export enum EndpointNames {
     FORGOT_PASSWORD = 'forgotPassword',
     VERIFY_OTP = 'verifyOtp',
     RESET_PASSWORD = 'resetPassword',
+    CREATE_RECIPE = 'createRecipe',
+    GET_MEASURE_UNITS = 'measureUnits',
+    UPLOAD_FILE = 'uploadFile',
+    EDIT_RECIPE = 'editRecipe',
+    CREATE_RECIPE_DRAFT = 'createRecipeDraft',
+    DELETE_RECIPE = 'deleteRecipe',
+    TOGGLE_LIKE_RECIPE = 'toggleLikeRecipe',
+    TOGGLE_BOOKMARK_RECIPE = 'toggleBookmarkRecipe',
 }

@@ -32,3 +32,15 @@ export const isTokenExpired = (token: string): boolean => {
     const currentTime = Math.floor(Date.now() / 1000);
     return exp < currentTime;
 };
+
+export const isRecipeAuthor = (recipeAuthorId: string): boolean => {
+    const token = getAccessToken();
+    if (!token || isTokenExpired(token)) return false;
+    try {
+        const decoded = jwtDecode<DecodedToken>(token);
+        return decoded.userId === recipeAuthorId;
+    } catch (error) {
+        console.error('Ошибка при проверке автора рецепта:', error);
+        return false;
+    }
+};

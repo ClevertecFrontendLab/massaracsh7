@@ -4,11 +4,11 @@ import { ChakraProvider, CSSReset } from '@chakra-ui/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router';
+import { RouterProvider } from 'react-router';
 
-import App from '~/app/App.tsx';
 import { store } from '~/store/configure-store.ts';
 
+import { router } from './app/router';
 import theme from './theme';
 
 createRoot(document.getElementById('root')!).render(
@@ -16,9 +16,7 @@ createRoot(document.getElementById('root')!).render(
         <Provider store={store}>
             <ChakraProvider theme={theme}>
                 <CSSReset />
-                <Router basename={import.meta.env.BASE_URL}>
-                    <App />
-                </Router>
+                <RouterProvider router={router} />
             </ChakraProvider>
         </Provider>
     </StrictMode>,

@@ -7,6 +7,7 @@ export interface AppState {
     error: string | null;
     modal: ModalPayload | null;
     alert: AlertPayload | null;
+    userId: string | null;
 }
 
 const initialState: AppState = {
@@ -14,6 +15,7 @@ const initialState: AppState = {
     error: null,
     modal: null,
     alert: null,
+    userId: null,
 };
 
 export const appSlice = createSlice({
@@ -41,12 +43,16 @@ export const appSlice = createSlice({
         clearAppAlert(state) {
             state.alert = null;
         },
+        setUserId(state, { payload }: PayloadAction<string | null>) {
+            state.userId = payload;
+        },
     },
     selectors: {
         userLoadingSelector: (state) => state.isLoading,
         userErrorSelector: (state) => state.error,
         userAlertSelector: (state) => state.alert,
         userModalSelector: (state) => state.modal,
+        userIdSelector: (state) => state.userId,
     },
 });
 
@@ -58,7 +64,15 @@ export const {
     clearModal,
     setAppAlert,
     clearAppAlert,
+    setUserId,
 } = appSlice.actions;
-export const { userLoadingSelector, userErrorSelector, userAlertSelector, userModalSelector } =
-    appSlice.selectors;
+
+export const {
+    userLoadingSelector,
+    userErrorSelector,
+    userAlertSelector,
+    userModalSelector,
+    userIdSelector,
+} = appSlice.selectors;
+
 export default appSlice.reducer;

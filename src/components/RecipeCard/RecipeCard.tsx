@@ -13,6 +13,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useNavigate } from 'react-router';
 
 import { BookmarkHeart } from '~/assets/icons/icons';
@@ -20,8 +21,10 @@ import { BASE_IMG_URL } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetCategory } from '~/hooks/useGetCategory';
 import { useGetSubcategory } from '~/hooks/useGetSubcategory';
+import { useToggleBookmarkRecipeMutation } from '~/query/services/recipes';
+import { setAppAlert } from '~/store/app-slice';
 import { selectSearchTerm } from '~/store/filter-slice';
-import { useAppSelector } from '~/store/hooks';
+import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { Recipe } from '~/types/apiTypes';
 import { highlightText } from '~/utils/highlightText';
 
@@ -36,7 +39,32 @@ export const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
     const searchTerm = useAppSelector(selectSearchTerm);
     const rootCategories = useGetCategory(recipe.categoriesIds);
     const subCategories = useGetSubcategory(recipe.categoriesIds);
+    const dispatch = useAppDispatch();
+    const [toggleBookmark] = useToggleBookmarkRecipeMutation();
+
     const navigate = useNavigate();
+    const handleBookmark = async () => {
+        if (!recipe._id) return;
+        try {
+            await toggleBookmark(recipe._id).unwrap();
+        } catch (err) {
+            if (typeof err === 'object' && err !== null && 'status' in err) {
+                const fetchErr = err as FetchBaseQueryError;
+                const status = fetchErr.status;
+                if (String(status).startsWith('5')) {
+                    dispatch(
+                        setAppAlert({
+                            type: 'error',
+                            title: 'Ошибка сервера',
+                            sourse: 'global',
+                            message: 'Попробуйте немного позже',
+                        }),
+                    );
+                }
+            }
+        }
+    };
+
     return (
         <Card
             direction='row'
@@ -130,7 +158,11 @@ export const RecipeCard = ({ recipe, index }: RecipeCardProps) => {
                     mt={{ sm: 'auto', md: 'auto', lg: 'auto', xl: '0' }}
                 >
                     <Hide below='md'>
-                        <Button variant='whiteOutline' leftIcon={<BookmarkHeart />}>
+                        <Button
+                            variant='whiteOutline'
+                            leftIcon={<BookmarkHeart />}
+                            onClick={handleBookmark}
+                        >
                             Сохранить
                         </Button>
                     </Hide>

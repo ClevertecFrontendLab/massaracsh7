@@ -69,4 +69,43 @@ export const TEST_IDS = {
     VERIFICATION_CODE_INPUT: 'verification-code-input',
 
     RESET_CREDENTIALS_MODAL: 'reset-credentials-modal',
+
+    RECIPE_FORM: 'recipe-form',
+    RECIPE_IMAGE_BLOCK_INPUT_FILE: 'recipe-image-block-input-file',
+    RECIPE_CATEGORIES: 'recipe-categories',
+    RECIPE_TITLE: 'recipe-title',
+    RECIPE_DESCRIPTION: 'recipe-description',
+    RECIPE_PORTIONS: 'recipe-portions',
+    RECIPE_TIME: 'recipe-time',
+
+    RECIPE_INGREDIENTS_TITLE: (index: number) => `recipe-ingredients-title-${index}`,
+    RECIPE_INGREDIENTS_COUNT: (index: number) => `recipe-ingredients-count-${index}`,
+    RECIPE_INGREDIENTS_MEASURE_UNIT: (index: number) => `recipe-ingredients-measureUnit-${index}`,
+
+    RECIPE_STEPS_IMAGE_BLOCK: (index: number) => `recipe-steps-image-block-${index}`,
+    RECIPE_STEPS_IMAGE_BLOCK_INPUT_FILE: (index: number) =>
+        `recipe-steps-image-block-${index}-input-file`,
+    RECIPE_STEPS_DESCRIPTION: (index: number) => `recipe-steps-description-${index}`,
+
+    RECIPE_SAVE_DRAFT_BUTTON: 'recipe-save-draft-button',
+    RECIPE_PUBLISH_RECIPE_BUTTON: 'recipe-publish-recipe-button',
+
+    RECIPE_INGREDIENTS_REMOVE: (index: number) => `recipe-ingredients-remove-ingredients-${index}`,
+    RECIPE_INGREDIENTS_ADD: 'recipe-ingredients-add-ingredients',
+
+    RECIPE_STEPS_IMAGE_PREVIEW_IMAGE: (index: number) =>
+        `recipe-steps-image-block-${index}-preview-image`,
+    RECIPE_STEPS_REMOVE_BUTTON: (index: number) => `recipe-steps-remove-button-${index}`,
+
+    RECIPE_IMAGE_BLOCK_PREVIEW_IMAGE: 'recipe-image-block-preview-image',
+    RECIPE_IMAGE_BLOCK: 'recipe-image-block',
+    RECIPE_IMAGE_MODAL: 'recipe-image-modal',
+    RECIPE_IMAGE_MODAL_IMAGE_BLOCK: 'recipe-image-modal-image-block',
+    RECIPE_IMAGE_MODAL_PREVIEW_IMAGE: 'recipe-image-modal-preview-image',
+    RECIPE_PREVENTIVE_MODAL: 'recipe-preventive-modal',
+    RECIPE_DELETE_BUTTON: 'recipe-delete-button',
+
+    HEADER_LOGO: 'header-logo',
+
+    ADD_RECIPE_BUTTON: 'add-recipe-button',
 } as const;

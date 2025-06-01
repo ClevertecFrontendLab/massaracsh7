@@ -170,6 +170,7 @@ export const FilterDrawer = ({ isOpen, onClose }: FilterDrawerProps) => {
                             options={categoryOptions}
                             selectedValues={filters.categories}
                             onChange={(val) => setFilters((f) => ({ ...f, categories: val }))}
+                            dataId={TEST_IDS.FILTER_CATEGORY}
                         />
                         <SearchableSelect
                             label='Поиск по автору'

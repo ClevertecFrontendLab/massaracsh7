@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router';
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router';
 
 import { Layout } from '~/layout/Layout';
 import { CategoryPage } from '~/pages/CategoryPage/CategoryPage';
@@ -11,12 +11,13 @@ import { RecipePage } from '~/pages/RecipePage/RecipePage';
 import { SignInPage } from '~/pages/SignInPage/SignInPage';
 import { VerificationPage } from '~/pages/VerificationPage/VerificationPage';
 
+import App from './App';
 import { PrivateRoute } from './PrivateRoute';
 import { ROUTES_PATH } from './routes';
 
-const AppRoutes = () => (
-    <>
-        <Routes>
+export const router = createBrowserRouter(
+    createRoutesFromElements(
+        <Route path='/' element={<App />}>
             <Route
                 path={ROUTES_PATH.HOME}
                 element={
@@ -38,8 +39,9 @@ const AppRoutes = () => (
             <Route path={ROUTES_PATH.VERIFICATION} element={<VerificationPage />} />
             <Route path={ROUTES_PATH.NOT_FOUND} element={<NotFoundPage />} />
             <Route path='*' element={<Navigate to={ROUTES_PATH.NOT_FOUND} replace />} />
-        </Routes>
-    </>
+        </Route>,
+    ),
+    {
+        basename: import.meta.env.BASE_URL,
+    },
 );
-
-export default AppRoutes;

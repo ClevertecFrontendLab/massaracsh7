@@ -147,6 +147,71 @@ const Input = defineStyleConfig({
                 },
             },
         },
+        recipetitle: {
+            field: {
+                bgColor: 'white',
+                border: '1px solid',
+                borderColor: 'gray.200',
+                color: 'blackAlpha.900',
+                fontSize: '18px',
+                lineHeight: '150%',
+                height: '48px',
+                _focus: {
+                    borderColor: 'customLime.150',
+                },
+                _placeholder: {
+                    color: 'secondaryText',
+                },
+                _invalid: {
+                    borderColor: 'red.500',
+                    boxShadow: '0 0 0 1px red.500',
+                },
+            },
+        },
+        recipe: {
+            field: {
+                bgColor: 'white',
+                border: '1px solid',
+                borderColor: 'customLime.150',
+                color: 'blackAlpha.900',
+                fontSize: '16px',
+                lineHeight: '24px',
+                height: '40px',
+                _focus: {
+                    borderColor: 'customLime.150',
+                },
+                _placeholder: {
+                    color: 'secondaryText',
+                },
+                _invalid: {
+                    borderColor: 'red.500',
+                    boxShadow: '0 0 0 1px red.500',
+                },
+            },
+        },
+    },
+});
+
+const Textarea = defineStyleConfig({
+    variants: {
+        'recipe-descr': {
+            bgColor: 'white',
+            border: '1px solid',
+            borderColor: 'gray.200',
+            color: 'blackAlpha.900',
+            fontSize: '14px',
+            lineHeight: '150%',
+            _focus: {
+                borderColor: 'customLime.150',
+            },
+            _placeholder: {
+                color: 'secondaryText',
+            },
+            _invalid: {
+                borderColor: 'red.500',
+                boxShadow: '0 0 0 1px red.500',
+            },
+        },
     },
 });
 
@@ -189,6 +254,26 @@ export const Button = defineStyleConfig({
                 opacity: 0.8,
                 bgColor: 'blackAlpha.800',
             },
+        },
+        darkOutline: {
+            bg: 'white',
+            color: 'black',
+            padding: '8px',
+            fontSize: '18px',
+            lineHeight: '28px',
+            fontWeight: '600',
+            height: '48px',
+        },
+        blackOutline: {
+            bg: 'white',
+            color: 'black',
+            border: '1px solid',
+            borderColor: 'black',
+            padding: '8px',
+            fontSize: '18px',
+            lineHeight: '28px',
+            fontWeight: '600',
+            height: '48px',
         },
         whiteOutline: {
             bg: 'white',
@@ -474,6 +559,12 @@ const theme = extendTheme({
             fontSize: '12px',
             fontWeight: '16px',
         },
+        formBoldText: {
+            color: 'rgba(0, 0, 0, 1)',
+            fontWeight: 600,
+            fontSize: { base: '14px', sm: '14px', md: '14px', lg: '16px', xl: '16px' },
+            lineHeight: { base: '20px', sm: '20px', md: '20px', lg: '24px', xl: '24px' },
+        },
     },
 
     components: {
@@ -483,6 +574,7 @@ const theme = extendTheme({
         Card: cardTheme,
         Modal: modalTheme,
         Input,
+        Textarea,
         Link: {
             baseStyle: {
                 textDecoration: 'none',

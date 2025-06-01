@@ -1,46 +1,51 @@
-export interface BaseSubCategory {
+export type BaseSubCategory = {
     title: string;
     category: string;
     rootCategoryId: string;
-}
+};
 
-export interface CategorySub extends BaseSubCategory {
+export type CategorySub = BaseSubCategory & {
     _id: string;
-}
+};
 
 export type SubCategory = BaseSubCategory;
 
-export interface Category {
+export type Category = {
     _id: string;
     title: string;
     category: string;
     icon: string;
     description: string;
     subCategories: SubCategory[];
-}
+};
 
 export type CategoryItem = Category | CategorySub;
 
-export interface NutritionValue {
+export type NutritionValue = {
     calories: number;
     protein: number;
     fats: number;
     carbohydrates: number;
-}
+};
 
-export interface RecipeStep {
+export type RecipeStep = {
     stepNumber: number;
     description: string;
-    image: string;
-}
+    image?: string;
+};
 
-export interface Ingredient {
+export type Ingredient = {
     title: string;
-    count: string;
+    count: number;
     measureUnit: string;
-}
+};
 
-export interface Recipe {
+export type Unit = {
+    _id: string;
+    name: string;
+};
+
+export type Recipe = {
     _id: string;
     title: string;
     description: string;
@@ -58,19 +63,19 @@ export interface Recipe {
     views: number;
     bookmarks: number;
     createdAt: string;
-}
+};
 
-export interface Meta {
+export type Meta = {
     total: number;
     page: number;
     limit: number;
     totalPages: number;
-}
+};
 
-export interface RecipesResponse {
+export type RecipesResponse = {
     data: Recipe[];
     meta: Meta;
-}
+};
 
 export type RecipesParams = Partial<{
     page: number;
@@ -106,3 +111,28 @@ export type BuildQueryParams = Partial<{
     limit: number;
     page: number;
 }>;
+
+export type CreateRecipeDto = {
+    title: string;
+    description: string;
+    time: number;
+    portions: number;
+    image: string;
+    categoriesIds: string[];
+    steps: RecipeStep[];
+    ingredients: Ingredient[];
+};
+
+export type RecipeDraftDto = Partial<CreateRecipeDto>;
+export type UpdateRecipeDto = Partial<CreateRecipeDto>;
+
+export type MeasureUnit = {
+    _id: string;
+    name: string;
+};
+
+export type UploadResponse = {
+    name: string;
+    url: string;
+    id: string;
+};

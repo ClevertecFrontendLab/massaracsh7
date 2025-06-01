@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     Checkbox,
+    Flex,
     Menu,
     MenuButton,
     MenuItem,
@@ -10,25 +11,29 @@ import {
     Tag,
     TagLabel,
     Text,
+    useBreakpointValue,
     useDisclosure,
     VStack,
-    Wrap,
 } from '@chakra-ui/react';
 
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface SearchableSelectProps {
+type SearchableSelectProps = {
     label: string;
     options: string[];
     selectedValues: string[];
     onChange: (selected: string[]) => void;
-}
+    dataId?: string;
+    error?: boolean;
+};
 
 export const SearchableSelect = ({
     label,
     options,
     selectedValues,
     onChange,
+    dataId,
+    error,
 }: SearchableSelectProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,6 +44,23 @@ export const SearchableSelect = ({
             onChange([...selectedValues, value]);
         }
     };
+
+    const isMobile = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false });
+
+    const visibleTags =
+        isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES
+            ? selectedValues.slice(0, 1)
+            : dataId === TEST_IDS.RECIPE_CATEGORIES
+              ? selectedValues.slice(0, 2)
+              : selectedValues;
+
+    const hiddenCount =
+        isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES
+            ? selectedValues.length - 1
+            : dataId === TEST_IDS.RECIPE_CATEGORIES
+              ? selectedValues.length - 2
+              : 0;
+    const noWrap = isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES;
 
     return (
         <Box>
@@ -53,7 +75,11 @@ export const SearchableSelect = ({
                         />
                     }
                     variant='outline'
-                    w={{ sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }}
+                    w={
+                        dataId === TEST_IDS.RECIPE_CATEGORIES
+                            ? { sm: '100%', md: '100%', mid: '250px', lg: '350px', xl: '350px' }
+                            : { sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }
+                    }
                     fontSize='16px'
                     fontWeight='400'
                     lineHeight='24px'
@@ -62,11 +88,18 @@ export const SearchableSelect = ({
                     pr={2}
                     _hover={{ bg: 'white' }}
                     _expanded={{ bg: 'white' }}
-                    data-test-id={label === 'Категория' ? TEST_IDS.FILTER_CATEGORY : ''}
+                    data-test-id={dataId}
+                    border={error ? '1px solid' : '1px solid'}
+                    borderColor={error ? 'red.500' : 'gray.200'}
                 >
                     {selectedValues.length > 0 ? (
-                        <Wrap spacing={2}>
-                            {selectedValues.map((item) => (
+                        <Flex
+                            wrap={noWrap ? 'nowrap' : 'wrap'}
+                            direction='row'
+                            gap='8px'
+                            overflowX={noWrap ? 'auto' : 'visible'}
+                        >
+                            {visibleTags.map((item) => (
                                 <Tag
                                     size='sm'
                                     key={item}
@@ -78,7 +111,19 @@ export const SearchableSelect = ({
                                     <TagLabel color='customLime.600'>{item}</TagLabel>
                                 </Tag>
                             ))}
-                        </Wrap>
+
+                            {hiddenCount > 0 && (
+                                <Tag
+                                    size='sm'
+                                    borderRadius='6px'
+                                    bg='white'
+                                    border='1px solid'
+                                    borderColor='customLime.400'
+                                >
+                                    <TagLabel color='customLime.600'>+{hiddenCount}</TagLabel>
+                                </Tag>
+                            )}
+                        </Flex>
                     ) : (
                         <Text textAlign='left'>{label}</Text>
                     )}
@@ -87,11 +132,13 @@ export const SearchableSelect = ({
                     p={0}
                     zIndex='11'
                     w={{ sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }}
+                    maxH='250px'
+                    overflowY='auto'
                 >
                     <VStack align='stretch' spacing={1}>
                         {options.map((option, index) => (
                             <MenuItem
-                                key={option}
+                                key={`${option}-${index}`}
                                 p={0}
                                 w='100%'
                                 bg={index % 2 === 0 ? 'blackAlpha.100' : 'white'}

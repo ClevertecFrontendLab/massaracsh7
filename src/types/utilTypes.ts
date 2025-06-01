@@ -1,10 +1,10 @@
-export interface FilterData {
+export type FilterData = {
     categories: string[];
     authors: string[];
     meatTypes: string[];
     sideTypes: string[];
     excludeAllergens: boolean;
-}
+};
 
 export type SelectOption = {
     value: string;
@@ -13,7 +13,7 @@ export type SelectOption = {
 
 export type InputType = 'text' | 'code';
 
-export interface ModalPayload {
+export type ModalPayload = {
     title: string;
     description: string;
     imageSrc?: string;
@@ -21,17 +21,17 @@ export interface ModalPayload {
     primaryActionText?: string;
     footerNote?: string;
     dataId?: string;
-}
+};
 
-type AlertType = 'error' | 'success';
-type AlertSourse = 'global' | 'auth';
+export type AlertType = 'error' | 'success';
+export type AlertSource = 'global' | 'auth';
 
-export interface AlertPayload {
+export type AlertPayload = {
     type: AlertType;
     message?: string;
     title: string;
-    sourse?: AlertSourse;
-}
+    sourse?: AlertSource;
+};
 
 export const bgMap: Record<AlertType, string> = {
     error: '#E53E3E',

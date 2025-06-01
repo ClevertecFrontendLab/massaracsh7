@@ -7,6 +7,7 @@ import { TEST_IDS } from '~/constants/test-ids';
 import { useGetRecipeByIdQuery } from '~/query/services/recipes';
 import { selectCategoryBySlug, selectSubCategoryBySlug } from '~/store/category-slice';
 import { useAppSelector } from '~/store/hooks';
+import { getTitleBySlug } from '~/utils/getTitleByUrl';
 import { parsePathname } from '~/utils/parsePathname';
 
 export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
@@ -16,8 +17,7 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
     const category = useAppSelector(selectCategoryBySlug(categorySlug ?? ''));
     const subcategory = useAppSelector(selectSubCategoryBySlug(subcategorySlug ?? ''));
 
-    const catTitle = categorySlug === 'the-juiciest' ? 'Самое сочное' : category?.title;
-
+    const catTitle = categorySlug && getTitleBySlug(categorySlug, category?.title ?? 'Категория');
     const { data: recipe } = useGetRecipeByIdQuery(dishSlug ?? skipToken);
 
     return (

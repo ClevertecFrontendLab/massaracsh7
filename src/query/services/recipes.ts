@@ -1,4 +1,14 @@
-import { Recipe, RecipesByCategoryParams, RecipesParams, RecipesResponse } from '~/types/apiTypes';
+import {
+    CreateRecipeDto,
+    MeasureUnit,
+    Recipe,
+    RecipeDraftDto,
+    RecipesByCategoryParams,
+    RecipesParams,
+    RecipesResponse,
+    UpdateRecipeDto,
+    UploadResponse,
+} from '~/types/apiTypes';
 
 import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
@@ -67,14 +77,107 @@ export const recipesApiSlice = catalogApiSlice
                 }),
                 providesTags: [Tags.RECIPES],
             }),
+            createRecipe: builder.mutation<Recipe, CreateRecipeDto>({
+                query: (body) => ({
+                    url: ApiEndpoints.RECIPES,
+                    method: 'POST',
+                    body,
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.CREATE_RECIPE,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
+            createRecipeDraft: builder.mutation<Recipe, RecipeDraftDto>({
+                query: (body) => ({
+                    url: `${ApiEndpoints.RECIPES}/draft`,
+                    method: 'POST',
+                    body,
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.CREATE_RECIPE_DRAFT,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
+            editRecipe: builder.mutation<Recipe, { id: string; data: UpdateRecipeDto }>({
+                query: ({ id, data }) => ({
+                    url: `${ApiEndpoints.RECIPES}/${id}`,
+                    method: 'PATCH',
+                    body: data,
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.EDIT_RECIPE,
+                }),
+                invalidatesTags: [Tags.RECIPES],
+            }),
+
+            getMeasureUnits: builder.query<MeasureUnit[], void>({
+                query: () => ({
+                    url: ApiEndpoints.MEASURE_UNITS,
+                    method: 'GET',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.GET_MEASURE_UNITS,
+                }),
+                providesTags: [Tags.RECIPES],
+            }),
+            uploadFile: builder.mutation<UploadResponse, File>({
+                query: (file: string | Blob) => {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    return {
+                        url: '/file/upload',
+                        method: 'POST',
+                        body: formData,
+                        apiGroupName: ApiGroupNames.RECIPES,
+                        name: EndpointNames.UPLOAD_FILE,
+                    };
+                },
+            }),
+            deleteRecipe: builder.mutation<{ message: string }, string>({
+                query: (id) => ({
+                    url: `${ApiEndpoints.RECIPES}/${id}`,
+                    method: 'DELETE',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.DELETE_RECIPE,
+                }),
+                invalidatesTags: (_, error, id) =>
+                    error ? [] : [{ type: Tags.RECIPES as const, id }],
+            }),
+
+            toggleLikeRecipe: builder.mutation<{ message: string; likes: number }, string>({
+                query: (recipeId) => ({
+                    url: `${ApiEndpoints.RECIPES}/${recipeId}/like`,
+                    method: 'POST',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.TOGGLE_LIKE_RECIPE,
+                }),
+                invalidatesTags: (_, error, recipeId) =>
+                    error ? [] : [{ type: Tags.RECIPES as const, id: recipeId }],
+            }),
+
+            toggleBookmarkRecipe: builder.mutation<{ message: string; bookmarks: number }, string>({
+                query: (recipeId) => ({
+                    url: `${ApiEndpoints.RECIPES}/${recipeId}/bookmark`,
+                    method: 'POST',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.TOGGLE_BOOKMARK_RECIPE,
+                }),
+                invalidatesTags: (_, error, recipeId) =>
+                    error ? [] : [{ type: Tags.RECIPES as const, id: recipeId }],
+            }),
         }),
         overrideExisting: false,
     });
 
 export const {
     useGetRecipesQuery,
+    useCreateRecipeDraftMutation,
     useGetRecipesPagesInfiniteQuery,
     useGetRecipesByCategoryQuery,
     useLazyGetRecipesByCategoryQuery,
     useGetRecipeByIdQuery,
+    useCreateRecipeMutation,
+    useGetMeasureUnitsQuery,
+    useUploadFileMutation,
+    useEditRecipeMutation,
+    useDeleteRecipeMutation,
+    useToggleLikeRecipeMutation,
+    useToggleBookmarkRecipeMutation,
 } = recipesApiSlice;
