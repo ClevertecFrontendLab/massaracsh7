@@ -3,6 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
 import { RecipeList } from '~/components/RecipeList/RecipeList';
@@ -10,7 +11,7 @@ import { SearchBar } from '~/components/SearchBar/SearchBar';
 import { TabsCategory } from '~/components/TabsCategory/TabsCategory';
 import { BASE_LIMIT_JUICY, ERROR_SEARCH_MESSAGE, MIN_SEARCH_LENGTH } from '~/constants/constants';
 import { useRandomCategory } from '~/hooks/useRandomCategory';
-import { useGetRecipesQuery } from '~/query/services/recipes';
+import { useGetRecipesByCategoryQuery, useGetRecipesQuery } from '~/query/services/recipes';
 import { selectAllCategories, selectAllSubCategories } from '~/store/category-slice';
 import {
     selectExcludeAllergens,
@@ -61,15 +62,6 @@ export const CategoryPage = () => {
         [subCategories, cat?._id],
     );
 
-    const baseParams = useMemo(() => {
-        if (!subCat?._id) return skipToken;
-        return buildQuery({
-            selectedSubCategories: [subCat._id],
-            page: 1,
-            limit: BASE_LIMIT_JUICY,
-        });
-    }, [subCat?._id]);
-
     const filteredParams = useMemo(() => {
         if (!subCatIds.length) return skipToken;
         return buildQuery({
@@ -82,18 +74,33 @@ export const CategoryPage = () => {
         });
     }, [subCatIds, selectedMeat, selectedSide, selectedAllergens, searchTerm]);
 
-    const queryParams = useMemo(() => {
-        if (isSearch) return filteredParams;
-        return baseParams;
-    }, [isSearch, filteredParams, baseParams]);
-
     const {
-        data: recipesData,
-        isFetching,
-        isLoading,
-    } = useGetRecipesQuery(queryParams, {
+        data: recipesDataFilter,
+        isFetching: isFetchingFilter,
+        isLoading: isLoadingFilter,
+    } = useGetRecipesQuery(!isSearch ? skipToken : filteredParams, {
         refetchOnMountOrArgChange: isFilterClose,
     });
+    const {
+        data: recipesDataBase,
+        isFetching: isFetchingBase,
+        isLoading: isLoadingBase,
+    } = useGetRecipesByCategoryQuery(
+        !subCat?._id || isSearch
+            ? skipToken
+            : {
+                  id: subCat._id,
+                  page: 1,
+                  limit: BASE_LIMIT_JUICY,
+              },
+        {
+            refetchOnMountOrArgChange: isFilterClose,
+        },
+    );
+
+    const recipesData = isSearch ? recipesDataFilter : recipesDataBase;
+    const isLoading = isSearch ? isLoadingFilter : isLoadingBase;
+    const isFetching = isSearch ? isFetchingFilter : isFetchingBase;
 
     const { randomRecipes, randomTitle, randomDescription } = useRandomCategory(cat?._id ?? null);
 
@@ -121,11 +128,7 @@ export const CategoryPage = () => {
     }, [isEmptyResult, hasFilters]);
 
     if (!cat || !subCat || subCat.rootCategoryId !== cat._id) {
-        return <Navigate to='/not-found' replace />;
-    }
-
-    if (queryParams === skipToken) {
-        return <CustomLoader size='large' dataTestId='app-loader' />;
+        return <Navigate to={ROUTES_PATH.NOT_FOUND} replace />;
     }
 
     if (isLoading || isFetching) {
