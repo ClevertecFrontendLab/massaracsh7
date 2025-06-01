@@ -5,7 +5,7 @@ import { VALIDATION_MESSAGES } from '~/constants/validation-messages';
 export const createOrUpdateRecipeSchema = z.object({
     title: z
         .string()
-        .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR_50)
+        .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR)
         .nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),
     description: z
         .string()
@@ -23,7 +23,7 @@ export const createOrUpdateRecipeSchema = z.object({
         z.object({
             title: z
                 .string()
-                .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR_50)
+                .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR)
                 .nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),
             count: z.number().positive(VALIDATION_MESSAGES.POSITIVE_COUNT),
             measureUnit: z.string().nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),

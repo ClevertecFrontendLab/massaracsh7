@@ -3,7 +3,7 @@ export const VALIDATION_MESSAGES = {
     CONFIRM_PASSWORD_NONEMPTY: 'Повторите пароль',
     LOGIN_NONEMPTY: 'Введите логин',
     FORMAT_ERROR: 'Не соответствует формату',
-    MAXLENGTH_ERROR_50: 'Максимальная длина 50 символов',
+    MAXLENGTH_ERROR: 'Максимальная длина 50 символов',
     MAXLENGTH_ERROR_300: 'Максимум 300 символов',
     MAXLENGTH_ERROR_500: 'Не более 500 символов',
 

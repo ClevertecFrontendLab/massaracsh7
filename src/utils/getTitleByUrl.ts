@@ -11,8 +11,8 @@ export const getTitleByUrl = (url: string | null) => {
     return bread ? bread.title : url;
 };
 
-export const getTitleBySlug = (slug: string) => {
+export const getTitleBySlug = (slug: string, title: string) => {
     if (slug === 'the-juiciest') return 'Самое сочное';
     if (slug === 'new-recipe') return 'Новый рецепт';
-    return 'Категория';
+    return title;
 };

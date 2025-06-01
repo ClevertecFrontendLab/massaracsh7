@@ -6,6 +6,7 @@ import BsAlarm from '~/assets/icons/BsAlarm.svg';
 import BsBookmarkHeart from '~/assets/icons/BsBookmarkHeart.svg';
 import BsEmojiHeartEyes from '~/assets/icons/BsEmojiHeartEyes.svg';
 import { LeftPen } from '~/assets/icons/icons';
+import { TEST_IDS } from '~/constants/test-ids';
 
 interface RecipeActionsProps {
     time?: number;
@@ -53,7 +54,7 @@ const RecipeActions: React.FC<RecipeActionsProps> = ({
                         w='48px'
                         h='48px'
                         onClick={handleDelete}
-                        data-test-id='RECIPE_DELETE_BUTTON'
+                        data-test-id={TEST_IDS.RECIPE_DELETE_BUTTON}
                     />
                     <Button
                         variant='blackOutline'

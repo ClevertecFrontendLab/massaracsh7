@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
+import { TEST_IDS } from '~/constants/test-ids';
 import { Ingredient } from '~/types/apiTypes';
 
 type IngredientsListProps = {
@@ -48,8 +49,8 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                         >
                             <NumberInputField />
                             <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
+                                <NumberIncrementStepper data-test-id={TEST_IDS.INCREMENT_STEPPER} />
+                                <NumberDecrementStepper data-test-id={TEST_IDS.DECREMENT_STEPPER} />
                             </NumberInputStepper>
                         </NumberInput>
                     </HStack>
@@ -66,7 +67,10 @@ export const IngredientsList: React.FC<IngredientsListProps> = ({
                                 <Text color='colorBlack'>{ingredient.title}</Text>
                             </Box>
                             <Box py={4} px={6} bg={bgColor} textAlign='right'>
-                                <Text color='colorBlack'>
+                                <Text
+                                    color='colorBlack'
+                                    data-test-id={`${TEST_IDS.INGREDIENT_QUANTITY}-${index}`}
+                                >
                                     <span style={{ marginRight: '4px' }}>
                                         {ingredient.measureUnit === 'по вкусу' ? '' : newCount}
                                     </span>
