@@ -9,7 +9,6 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
@@ -43,6 +42,7 @@ import { selectAllSubCategories } from '~/store/category-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { CreateRecipeDto, RecipeDraftDto, UpdateRecipeDto } from '~/types/apiTypes';
 import { createMaps } from '~/utils/createMaps';
+import { handleRecipeCreateError } from '~/utils/handleRecipeCreateError';
 
 import { ExitConfirmModal } from '../../components/RecipeForm/ExitConfirmModal';
 import { ImageUploadModal } from '../../components/RecipeForm/ImageUploadModal';
@@ -167,27 +167,7 @@ export const NewRecipePage = () => {
                 );
             }
         } catch (err) {
-            const fetchErr = err as FetchBaseQueryError;
-            const status = fetchErr?.status;
-            if (status === 409) {
-                dispatch(
-                    setAppAlert({
-                        type: 'error',
-                        title: API_RESULTS.ERROR_TITLE,
-                        sourse: 'global',
-                        message: API_RESULTS.ERROR_RECIPE_DUBLE,
-                    }),
-                );
-            } else if (String(status).startsWith('5')) {
-                dispatch(
-                    setAppAlert({
-                        type: 'error',
-                        title: API_RESULTS.ERROR_SERVER_TITLE,
-                        sourse: 'global',
-                        message: API_RESULTS.ERROR_RECIPE_SERVER,
-                    }),
-                );
-            }
+            handleRecipeCreateError({ err, dispatch });
         }
     };
 
@@ -219,29 +199,7 @@ export const NewRecipePage = () => {
                 }),
             );
         } catch (err) {
-            const fetchErr = err as FetchBaseQueryError;
-            const status = fetchErr?.status;
-
-            if (status === 409) {
-                dispatch(
-                    setAppAlert({
-                        type: 'error',
-                        title: API_RESULTS.ERROR_TITLE,
-                        sourse: 'global',
-                        message: API_RESULTS.ERROR_RECIPE_DUBLE,
-                    }),
-                );
-            } else {
-                dispatch(
-                    setAppAlert({
-                        type: 'error',
-                        title: API_RESULTS.ERROR_SERVER_TITLE,
-                        sourse: 'global',
-                        message: API_RESULTS.ERROR_DRAFT_SERVER,
-                    }),
-                );
-            }
-
+            handleRecipeCreateError({ err, dispatch, isDraft: true });
             if (fromModal) {
                 closeExit();
             }

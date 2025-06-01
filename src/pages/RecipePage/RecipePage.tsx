@@ -20,7 +20,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react';
-import { FetchBaseQueryError, skipToken } from '@reduxjs/toolkit/query';
+import { skipToken } from '@reduxjs/toolkit/query';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -48,6 +48,7 @@ import {
 } from '~/query/services/recipes';
 import { setAppAlert, setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
+import { handleRecipePageError } from '~/utils/handleRecipePageError';
 
 export const RecipePage = () => {
     const { category, subcategory, id } = useParams();
@@ -90,20 +91,11 @@ export const RecipePage = () => {
                 }),
             );
         } catch (err) {
-            if (typeof err === 'object' && err !== null && 'status' in err) {
-                const fetchErr = err as FetchBaseQueryError;
-                const status = fetchErr.status;
-                if (String(status).startsWith('5')) {
-                    dispatch(
-                        setAppAlert({
-                            type: 'error',
-                            title: 'Ошибка сервера',
-                            message: 'Не удалось удалить рецепт',
-                            sourse: 'global',
-                        }),
-                    );
-                }
-            }
+            handleRecipePageError({
+                err,
+                dispatch,
+                message: 'Не удалось удалить рецепт',
+            });
         }
     };
     const handleBookmark = async () => {
@@ -111,20 +103,10 @@ export const RecipePage = () => {
         try {
             await toggleBookmark(id).unwrap();
         } catch (err) {
-            if (typeof err === 'object' && err !== null && 'status' in err) {
-                const fetchErr = err as FetchBaseQueryError;
-                const status = fetchErr.status;
-                if (String(status).startsWith('5')) {
-                    dispatch(
-                        setAppAlert({
-                            type: 'error',
-                            title: 'Ошибка сервера',
-                            sourse: 'global',
-                            message: 'Попробуйте немного позже',
-                        }),
-                    );
-                }
-            }
+            handleRecipePageError({
+                err,
+                dispatch,
+            });
         }
     };
 
@@ -133,20 +115,10 @@ export const RecipePage = () => {
         try {
             await toggleLike(id).unwrap();
         } catch (err) {
-            if (typeof err === 'object' && err !== null && 'status' in err) {
-                const fetchErr = err as FetchBaseQueryError;
-                const status = fetchErr.status;
-                if (String(status).startsWith('5')) {
-                    dispatch(
-                        setAppAlert({
-                            type: 'error',
-                            title: 'Ошибка сервера',
-                            sourse: 'global',
-                            message: 'Попробуйте немного позже',
-                        }),
-                    );
-                }
-            }
+            handleRecipePageError({
+                err,
+                dispatch,
+            });
         }
     };
 

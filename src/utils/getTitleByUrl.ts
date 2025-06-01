@@ -10,3 +10,9 @@ export const getTitleByUrl = (url: string | null) => {
     const bread = breads.find((b) => b.url === `/${url}`);
     return bread ? bread.title : url;
 };
+
+export const getTitleBySlug = (slug: string) => {
+    if (slug === 'the-juiciest') return 'Самое сочное';
+    if (slug === 'new-recipe') return 'Новый рецепт';
+    return 'Категория';
+};
