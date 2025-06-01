@@ -14,6 +14,7 @@ import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { TIME_HELPER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { getFocusStyles } from '~/utils/getFocusStyles';
+import { handleNumberInputChange } from '~/utils/handleNumberInputChange';
 
 type TimeInputProps = {
     control: Control<CreateRecipeInput>;
@@ -31,13 +32,9 @@ export const TimeInput: React.FC<TimeInputProps> = ({ control, error }) => (
                     <NumberInput
                         max={10000}
                         value={field.value || undefined}
-                        onChange={(valueString, valueAsNumber) => {
-                            if (valueString === '-' || valueString === '') {
-                                field.onChange(valueString);
-                            } else if (!isNaN(valueAsNumber)) {
-                                field.onChange(valueAsNumber);
-                            }
-                        }}
+                        onChange={(valueString, valueAsNumber) =>
+                            handleNumberInputChange(valueString, valueAsNumber, field.onChange)
+                        }
                         w={90}
                         variant='recipe'
                     >

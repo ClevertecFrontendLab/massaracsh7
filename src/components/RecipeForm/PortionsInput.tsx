@@ -14,6 +14,7 @@ import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { PORTIONS_HELPER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { getFocusStyles } from '~/utils/getFocusStyles';
+import { handleNumberInputChange } from '~/utils/handleNumberInputChange';
 
 type PortionsInputProps = {
     control: Control<CreateRecipeInput>;
@@ -33,13 +34,9 @@ export const PortionsInput: React.FC<PortionsInputProps> = ({ control, error }) 
                         w={90}
                         variant='recipe'
                         value={field.value ?? ''}
-                        onChange={(valueString, valueAsNumber) => {
-                            if (valueString === '-' || valueString === '') {
-                                field.onChange(valueString);
-                            } else if (!isNaN(valueAsNumber)) {
-                                field.onChange(valueAsNumber);
-                            }
-                        }}
+                        onChange={(valueString, valueAsNumber) =>
+                            handleNumberInputChange(valueString, valueAsNumber, field.onChange)
+                        }
                     >
                         <NumberInputField
                             data-test-id={TEST_IDS.RECIPE_PORTIONS}
