@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     Checkbox,
+    Flex,
     Menu,
     MenuButton,
     MenuItem,
@@ -10,9 +11,9 @@ import {
     Tag,
     TagLabel,
     Text,
+    useBreakpointValue,
     useDisclosure,
     VStack,
-    Wrap,
 } from '@chakra-ui/react';
 
 import { TEST_IDS } from '~/constants/test-ids';
@@ -44,9 +45,22 @@ export const SearchableSelect = ({
         }
     };
 
+    const isMobile = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false });
+
     const visibleTags =
-        dataId === TEST_IDS.RECIPE_CATEGORIES ? selectedValues.slice(0, 2) : selectedValues;
-    const hiddenCount = dataId === TEST_IDS.RECIPE_CATEGORIES ? selectedValues.length - 2 : 0;
+        isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES
+            ? selectedValues.slice(0, 1)
+            : dataId === TEST_IDS.RECIPE_CATEGORIES
+              ? selectedValues.slice(0, 2)
+              : selectedValues;
+
+    const hiddenCount =
+        isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES
+            ? selectedValues.length - 1
+            : dataId === TEST_IDS.RECIPE_CATEGORIES
+              ? selectedValues.length - 2
+              : 0;
+    const noWrap = isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES;
 
     return (
         <Box>
@@ -63,7 +77,7 @@ export const SearchableSelect = ({
                     variant='outline'
                     w={
                         dataId === TEST_IDS.RECIPE_CATEGORIES
-                            ? { sm: '196px', md: '232px', mid: '250px', lg: '350px', xl: '350px' }
+                            ? { sm: '100%', md: '100%', mid: '250px', lg: '350px', xl: '350px' }
                             : { sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }
                     }
                     fontSize='16px'
@@ -79,7 +93,12 @@ export const SearchableSelect = ({
                     borderColor={error ? 'red.500' : 'gray.200'}
                 >
                     {selectedValues.length > 0 ? (
-                        <Wrap spacing={2}>
+                        <Flex
+                            wrap={noWrap ? 'nowrap' : 'wrap'}
+                            direction='row'
+                            gap='8px'
+                            overflowX={noWrap ? 'auto' : 'visible'}
+                        >
                             {visibleTags.map((item) => (
                                 <Tag
                                     size='sm'
@@ -99,12 +118,12 @@ export const SearchableSelect = ({
                                     borderRadius='6px'
                                     bg='white'
                                     border='1px solid'
-                                    borderColor='gray.300'
+                                    borderColor='customLime.400'
                                 >
-                                    <TagLabel color='gray.600'>+{hiddenCount}</TagLabel>
+                                    <TagLabel color='customLime.600'>+{hiddenCount}</TagLabel>
                                 </Tag>
                             )}
-                        </Wrap>
+                        </Flex>
                     ) : (
                         <Text textAlign='left'>{label}</Text>
                     )}

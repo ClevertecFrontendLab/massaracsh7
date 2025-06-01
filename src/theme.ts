@@ -151,7 +151,7 @@ const Input = defineStyleConfig({
             field: {
                 bgColor: 'white',
                 border: '1px solid',
-                borderColor: 'customLime.150',
+                borderColor: 'gray.200',
                 color: 'blackAlpha.900',
                 fontSize: '18px',
                 lineHeight: '150%',
@@ -197,7 +197,7 @@ const Textarea = defineStyleConfig({
         'recipe-descr': {
             bgColor: 'white',
             border: '1px solid',
-            borderColor: 'customLime.150',
+            borderColor: 'gray.200',
             color: 'blackAlpha.900',
             fontSize: '14px',
             lineHeight: '150%',
