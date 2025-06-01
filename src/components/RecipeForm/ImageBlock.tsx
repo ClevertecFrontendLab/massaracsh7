@@ -4,11 +4,11 @@ import { ImagePlaceholder } from '~/assets/icons/icons';
 import { BASE_IMG_URL } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface ImageBlockProps {
-    image: string | null | undefined;
-    error: boolean | undefined;
+type ImageBlockProps = {
+    image?: string | null;
+    error?: boolean;
     onClick: () => void;
-}
+};
 
 export const ImageBlock: React.FC<ImageBlockProps> = ({ image, error, onClick }) => (
     <FormControl isInvalid={!!error} w='auto'>

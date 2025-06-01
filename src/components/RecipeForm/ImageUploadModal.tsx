@@ -18,13 +18,13 @@ import { ImagePlaceholder } from '~/assets/icons/icons';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useUploadFileMutation } from '~/query/services/recipes';
 
-interface ImageUploadModalProps {
+type ImageUploadModalProps = {
     isOpen: boolean;
     onClose: () => void;
-    initialImage?: string | null;
     onSave: (imageData: string) => void;
+    initialImage?: string | null;
     stepIndex?: number;
-}
+};
 
 export const ImageUploadModal: FC<ImageUploadModalProps> = ({
     isOpen,
@@ -36,7 +36,6 @@ export const ImageUploadModal: FC<ImageUploadModalProps> = ({
     const [preview, setPreview] = useState<string | null>(initialImage);
     const [file, setFile] = useState<File | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
-    console.log(stepIndex);
     const [uploadFile] = useUploadFileMutation();
 
     useEffect(() => {

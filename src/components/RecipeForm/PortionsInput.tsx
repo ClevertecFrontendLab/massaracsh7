@@ -14,10 +14,10 @@ import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { PORTIONS_HELPER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface PortionsInputProps {
+type PortionsInputProps = {
     control: Control<CreateRecipeInput>;
-    error: boolean | undefined;
-}
+    error?: boolean;
+};
 
 export const PortionsInput: React.FC<PortionsInputProps> = ({ control, error }) => (
     <FormControl isInvalid={!!error}>

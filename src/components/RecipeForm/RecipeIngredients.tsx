@@ -27,7 +27,7 @@ import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { INGREDIENTS_HELPER } from '~/constants/constants';
 import { Unit } from '~/types/apiTypes';
 
-interface RecipeIngredientsProps {
+type RecipeIngredientsProps = {
     ingredientFields: FieldArrayWithId<CreateRecipeInput, 'ingredients', 'id'>[];
     register: UseFormRegister<CreateRecipeInput>;
     control: Control<CreateRecipeInput>;
@@ -35,7 +35,7 @@ interface RecipeIngredientsProps {
     appendIngredient: UseFieldArrayAppend<CreateRecipeInput, 'ingredients'>;
     removeIngredient: UseFieldArrayRemove;
     unitData?: Unit[];
-}
+};
 
 export const RecipeIngredients = ({
     ingredientFields,

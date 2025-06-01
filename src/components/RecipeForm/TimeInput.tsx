@@ -14,10 +14,10 @@ import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { TIME_HELPER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface TimeInputProps {
+type TimeInputProps = {
     control: Control<CreateRecipeInput>;
-    error: boolean | undefined;
-}
+    error?: boolean;
+};
 
 export const TimeInput: React.FC<TimeInputProps> = ({ control, error }) => (
     <FormControl isInvalid={!!error} mt={4}>

@@ -4,10 +4,10 @@ import { UseFormRegister } from 'react-hook-form';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface RecipeDescriptionInputProps {
+type RecipeDescriptionInputProps = {
     register: UseFormRegister<CreateRecipeInput>;
-    error: boolean | undefined;
-}
+    error?: boolean;
+};
 
 export const RecipeDescriptionInput: React.FC<RecipeDescriptionInputProps> = ({
     register,

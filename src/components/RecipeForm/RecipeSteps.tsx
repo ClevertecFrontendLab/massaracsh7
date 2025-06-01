@@ -26,7 +26,7 @@ import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { BASE_IMG_URL, STEPS_HELPER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface RecipeStepsProps {
+type RecipeStepsProps = {
     stepFields: FieldArrayWithId<CreateRecipeInput, 'steps', 'id'>[];
     register: UseFormRegister<CreateRecipeInput>;
     errors: FieldErrors<CreateRecipeInput>;
@@ -34,7 +34,7 @@ interface RecipeStepsProps {
     removeStep: UseFieldArrayRemove;
     getValues: (name: string) => unknown;
     handleImageClick: (index: number) => void;
-}
+};
 
 export const RecipeSteps: React.FC<RecipeStepsProps> = ({
     stepFields,
