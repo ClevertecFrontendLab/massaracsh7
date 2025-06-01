@@ -13,6 +13,7 @@ import { Control, Controller } from 'react-hook-form';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { PORTIONS_HELPER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
+import { getFocusStyles } from '~/utils/getFocusStyles';
 
 type PortionsInputProps = {
     control: Control<CreateRecipeInput>;
@@ -44,10 +45,7 @@ export const PortionsInput: React.FC<PortionsInputProps> = ({ control, error }) 
                             data-test-id={TEST_IDS.RECIPE_PORTIONS}
                             borderWidth='1px'
                             borderColor={error ? 'red.500' : 'inherit'}
-                            _focus={{
-                                borderColor: error ? 'red.500' : 'customLime.150',
-                                boxShadow: error ? '0 0 0 1px red' : '0 0 0 1px customLime.150',
-                            }}
+                            _focus={getFocusStyles({ hasError: !!error })}
                         />
                         <NumberInputStepper>
                             <NumberIncrementStepper />

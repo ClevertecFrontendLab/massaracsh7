@@ -25,6 +25,7 @@ import { ImagePlaceholder } from '~/assets/icons/icons';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { BASE_IMG_URL, STEPS_HELPER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
+import { getFocusStyles } from '~/utils/getFocusStyles';
 
 type RecipeStepsProps = {
     stepFields: FieldArrayWithId<CreateRecipeInput, 'steps', 'id'>[];
@@ -112,14 +113,9 @@ export const RecipeSteps: React.FC<RecipeStepsProps> = ({
                             fontSize='14px'
                             lineHeight='20px'
                             h={{ sm: 'auto', md: '104px', lg: '104px', xl: '104px' }}
-                            _focus={{
-                                borderColor: errors.steps?.[index]?.description
-                                    ? 'red.500'
-                                    : 'customLime.150',
-                                boxShadow: errors.steps?.[index]?.description
-                                    ? '0 0 0 1px red'
-                                    : '0 0 0 1px customLime.150',
-                            }}
+                            _focus={getFocusStyles({
+                                hasError: !!errors.steps?.[index]?.description,
+                            })}
                         />
                     </FormControl>
                 </VStack>

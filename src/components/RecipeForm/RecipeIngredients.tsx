@@ -26,6 +26,7 @@ import { ButtonPlusLg, ButtonPlusWhite } from '~/assets/icons/icons';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { INGREDIENTS_HELPER } from '~/constants/constants';
 import { Unit } from '~/types/apiTypes';
+import { getFocusStyles } from '~/utils/getFocusStyles';
 
 type RecipeIngredientsProps = {
     ingredientFields: FieldArrayWithId<CreateRecipeInput, 'ingredients', 'id'>[];
@@ -115,14 +116,9 @@ export const RecipeIngredients = ({
                                     <NumberInputField
                                         placeholder='100'
                                         data-test-id={`recipe-ingredients-count-${index}`}
-                                        _focus={{
-                                            borderColor: errors.ingredients?.[index]?.count
-                                                ? 'red.500'
-                                                : 'customLime.150',
-                                            boxShadow: errors.ingredients?.[index]?.count
-                                                ? '0 0 0 1px red.500'
-                                                : '0 0 0 1px customLime.150',
-                                        }}
+                                        _focus={getFocusStyles({
+                                            hasError: !!errors.ingredients?.[index]?.count,
+                                        })}
                                     />
                                 </NumberInput>
                             )}
@@ -139,14 +135,9 @@ export const RecipeIngredients = ({
                                     {...field}
                                     onChange={(e) => field.onChange(e.target.value)}
                                     data-test-id={`recipe-ingredients-measureUnit-${index}`}
-                                    _focus={{
-                                        borderColor: errors.ingredients?.[index]?.measureUnit
-                                            ? 'red.500'
-                                            : 'customLime.150',
-                                        boxShadow: errors.ingredients?.[index]?.measureUnit
-                                            ? '0 0 0 1px red.500'
-                                            : '0 0 0 1px customLime.150',
-                                    }}
+                                    _focus={getFocusStyles({
+                                        hasError: !!errors.ingredients?.[index]?.measureUnit,
+                                    })}
                                 >
                                     {unitData?.map((unit) => (
                                         <option key={unit._id} value={unit.name}>
