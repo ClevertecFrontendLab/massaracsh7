@@ -136,7 +136,6 @@ export const NewRecipePage = () => {
     const onSubmit = async (data: CreateRecipeInput) => {
         try {
             let response;
-
             if (isEditMode && id) {
                 response = await editRecipe({ id, data: data as UpdateRecipeDto }).unwrap();
                 setCanExit(true);

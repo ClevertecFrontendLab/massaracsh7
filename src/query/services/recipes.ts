@@ -105,8 +105,7 @@ export const recipesApiSlice = catalogApiSlice
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.EDIT_RECIPE,
                 }),
-                invalidatesTags: (_, error, { id }) =>
-                    error ? [] : [{ type: Tags.RECIPES as const, id }],
+                invalidatesTags: [Tags.RECIPES],
             }),
 
             getMeasureUnits: builder.query<MeasureUnit[], void>({
