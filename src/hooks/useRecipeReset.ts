@@ -4,7 +4,7 @@ import { UseFormReset } from 'react-hook-form';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { Recipe } from '~/types/apiTypes';
 
-export function useRecipeReset(recipe: Recipe | undefined, reset: UseFormReset<CreateRecipeInput>) {
+export function useRecipeReset(reset: UseFormReset<CreateRecipeInput>, recipe?: Recipe) {
     useEffect(() => {
         if (recipe) {
             reset({

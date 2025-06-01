@@ -13,7 +13,6 @@ import {
     VerifyOtpResponse,
 } from '~/types/authTypes';
 
-// import { saveAccessToken } from '~/utils/tokenUtils';
 import { ApiEndpoints } from '../constants/api';
 import { EndpointNames } from '../constants/endpoint-names';
 import { Tags } from '../constants/tags';

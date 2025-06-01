@@ -17,12 +17,12 @@ import modalBreakfast from '~/assets/images/modal-breakfast.png';
 import { CONFIRM_MODAL, CONFIRM_MODAL_TITLE } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface ExitConfirmModalProps {
+type ExitConfirmModalProps = {
     isOpen: boolean;
     onClose: () => void;
     onExit: () => void;
     onSaveDraft: () => void;
-}
+};
 
 export function ExitConfirmModal({ isOpen, onClose, onExit, onSaveDraft }: ExitConfirmModalProps) {
     return (

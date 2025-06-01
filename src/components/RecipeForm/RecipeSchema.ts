@@ -1,23 +1,41 @@
 import { z } from 'zod';
 
+import { VALIDATION_MESSAGES } from '~/constants/validation-messages';
+
 export const createOrUpdateRecipeSchema = z.object({
-    title: z.string().max(50, 'Максимум 50 символов').nonempty('Обязательное поле'),
-    description: z.string().trim().max(500, 'Не более 500 символов').nonempty('Обязательное поле'),
-    image: z.string().nonempty('Изображение обязательно'),
-    portions: z.number().positive('Должно быть положительным числом'),
-    time: z.number().positive('Должно быть положительным числом').max(10000, 'Максимум 10000'),
-    categoriesIds: z.array(z.string()).min(3, 'Выберите минимум 3 категории'),
+    title: z
+        .string()
+        .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR_50)
+        .nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),
+    description: z
+        .string()
+        .trim()
+        .max(500, VALIDATION_MESSAGES.MAXLENGTH_ERROR_500)
+        .nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),
+    image: z.string().nonempty(VALIDATION_MESSAGES.IMAGE_REQUIRED),
+    portions: z.number().positive(VALIDATION_MESSAGES.POSITIVE_NUMBER),
+    time: z
+        .number()
+        .positive(VALIDATION_MESSAGES.POSITIVE_NUMBER)
+        .max(10000, VALIDATION_MESSAGES.MAX_TIME),
+    categoriesIds: z.array(z.string()).min(3, VALIDATION_MESSAGES.MIN_CATEGORIES),
     ingredients: z.array(
         z.object({
-            title: z.string().max(50, 'Максимум 50 символов').nonempty('Обязательное поле'),
-            count: z.number().positive('Количество должно быть положительным'),
-            measureUnit: z.string().nonempty('Обязательное поле'),
+            title: z
+                .string()
+                .max(50, VALIDATION_MESSAGES.MAXLENGTH_ERROR_50)
+                .nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),
+            count: z.number().positive(VALIDATION_MESSAGES.POSITIVE_COUNT),
+            measureUnit: z.string().nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),
         }),
     ),
     steps: z.array(
         z.object({
             stepNumber: z.number().int().positive(),
-            description: z.string().max(300, 'Максимум 300 символов').nonempty('Обязательное поле'),
+            description: z
+                .string()
+                .max(300, VALIDATION_MESSAGES.MAXLENGTH_ERROR_300)
+                .nonempty(VALIDATION_MESSAGES.REQUIRED_FIELD),
             image: z
                 .string()
                 .nullable()

@@ -25,6 +25,7 @@ import {
 import { ButtonPlusLg, ButtonPlusWhite } from '~/assets/icons/icons';
 import { CreateRecipeInput } from '~/components/RecipeForm/RecipeSchema';
 import { INGREDIENTS_HELPER } from '~/constants/constants';
+import { TEST_IDS } from '~/constants/test-ids';
 import { Unit } from '~/types/apiTypes';
 import { getFocusStyles } from '~/utils/getFocusStyles';
 
@@ -99,7 +100,7 @@ export const RecipeIngredients = ({
                             variant='recipe'
                             placeholder='Ингредиент'
                             {...register(`ingredients.${index}.title`)}
-                            data-test-id={`recipe-ingredients-title-${index}`}
+                            data-test-id={TEST_IDS.RECIPE_INGREDIENTS_TITLE(index)}
                         />
                     </FormControl>
 
@@ -115,7 +116,7 @@ export const RecipeIngredients = ({
                                 >
                                     <NumberInputField
                                         placeholder='100'
-                                        data-test-id={`recipe-ingredients-count-${index}`}
+                                        data-test-id={TEST_IDS.RECIPE_INGREDIENTS_COUNT(index)}
                                         _focus={getFocusStyles({
                                             hasError: !!errors.ingredients?.[index]?.count,
                                         })}
@@ -134,7 +135,7 @@ export const RecipeIngredients = ({
                                     placeholder='Единица измерен...'
                                     {...field}
                                     onChange={(e) => field.onChange(e.target.value)}
-                                    data-test-id={`recipe-ingredients-measureUnit-${index}`}
+                                    data-test-id={TEST_IDS.RECIPE_INGREDIENTS_MEASURE_UNIT(index)}
                                     _focus={getFocusStyles({
                                         hasError: !!errors.ingredients?.[index]?.measureUnit,
                                     })}
@@ -156,7 +157,7 @@ export const RecipeIngredients = ({
                             onClick={() =>
                                 appendIngredient({ title: '', count: 1, measureUnit: '' })
                             }
-                            data-test-id='recipe-ingredients-add-ingredients'
+                            data-test-id={TEST_IDS.RECIPE_INGREDIENTS_ADD}
                             icon={<ButtonPlusLg w='32px' h='32px' />}
                         />
                     ) : (
@@ -166,7 +167,7 @@ export const RecipeIngredients = ({
                             colorScheme='customLime'
                             variant='ghost'
                             onClick={() => removeIngredient(index)}
-                            data-test-id={`recipe-ingredients-remove-ingredients-${index}`}
+                            data-test-id={TEST_IDS.RECIPE_INGREDIENTS_REMOVE(index)}
                         />
                     )}
                 </SimpleGrid>

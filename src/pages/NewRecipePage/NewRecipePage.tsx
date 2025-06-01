@@ -115,7 +115,7 @@ export const NewRecipePage = () => {
         name: 'steps',
     });
 
-    useRecipeReset(recipe, reset);
+    useRecipeReset(reset, recipe);
 
     const watchedCategories = watch('categoriesIds');
     const rootCategories = useGetCategory(watchedCategories);

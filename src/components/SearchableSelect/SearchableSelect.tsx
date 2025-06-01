@@ -17,14 +17,14 @@ import {
 
 import { TEST_IDS } from '~/constants/test-ids';
 
-interface SearchableSelectProps {
+type SearchableSelectProps = {
     label: string;
     options: string[];
     selectedValues: string[];
     onChange: (selected: string[]) => void;
     dataId?: string;
     error?: boolean;
-}
+};
 
 export const SearchableSelect = ({
     label,
@@ -45,8 +45,8 @@ export const SearchableSelect = ({
     };
 
     const visibleTags =
-        dataId === 'recipe-categories' ? selectedValues.slice(0, 2) : selectedValues;
-    const hiddenCount = dataId === 'recipe-categories' ? selectedValues.length - 2 : 0;
+        dataId === TEST_IDS.RECIPE_CATEGORIES ? selectedValues.slice(0, 2) : selectedValues;
+    const hiddenCount = dataId === TEST_IDS.RECIPE_CATEGORIES ? selectedValues.length - 2 : 0;
 
     return (
         <Box>
@@ -62,7 +62,7 @@ export const SearchableSelect = ({
                     }
                     variant='outline'
                     w={
-                        dataId === 'recipe-categories'
+                        dataId === TEST_IDS.RECIPE_CATEGORIES
                             ? { sm: '196px', md: '232px', mid: '250px', lg: '350px', xl: '350px' }
                             : { sm: '308px', md: '308px', mid: '308px', lg: '390px', xl: '390px' }
                     }
