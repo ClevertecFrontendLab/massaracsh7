@@ -9,4 +9,6 @@ export enum ApiEndpoints {
     VERIFY_OTP = '/auth/verify-otp',
     FORGOT_PASSWORD = '/auth/forgot-password',
     MEASURE_UNITS = '/measure-units',
+    BLOGGERS = '/bloggers',
+    RECIPES_BY_USER = '/recipe/user',
 }

@@ -162,6 +162,15 @@ export const recipesApiSlice = catalogApiSlice
                 invalidatesTags: (_, error, recipeId) =>
                     error ? [] : [{ type: Tags.RECIPES as const, id: recipeId }],
             }),
+            getRecipesByUserId: builder.query<Recipe[], string>({
+                query: (userId) => ({
+                    url: `${ApiEndpoints.RECIPES_BY_USER}/${userId}`,
+                    method: 'GET',
+                    apiGroupName: ApiGroupNames.RECIPES,
+                    name: EndpointNames.GET_RECIPES_BY_USER_ID,
+                }),
+                providesTags: [Tags.RECIPES],
+            }),
         }),
         overrideExisting: false,
     });
@@ -180,4 +189,5 @@ export const {
     useDeleteRecipeMutation,
     useToggleLikeRecipeMutation,
     useToggleBookmarkRecipeMutation,
+    useGetRecipesByUserIdQuery,
 } = recipesApiSlice;

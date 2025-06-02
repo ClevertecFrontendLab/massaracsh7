@@ -18,4 +18,7 @@ export enum EndpointNames {
     DELETE_RECIPE = 'deleteRecipe',
     TOGGLE_LIKE_RECIPE = 'toggleLikeRecipe',
     TOGGLE_BOOKMARK_RECIPE = 'toggleBookmarkRecipe',
+    GET_BLOGGERS = 'getBloggers',
+    GET_BLOGGER_BY_ID = 'getBloggerById',
+    GET_RECIPES_BY_USER_ID = 'getRecipesByUserId',
 }
