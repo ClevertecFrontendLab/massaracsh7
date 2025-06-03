@@ -24,6 +24,16 @@ export const BlogsPage = () => {
         },
     );
 
+    const { data: favoriteData } = useGetBloggersQuery(
+        {
+            currentUserId: userId!,
+            limit: 'all',
+        },
+        {
+            skip: !shouldFetch,
+        },
+    );
+
     return (
         <Box>
             <Heading variant='pageTitle' mb={8}>
@@ -38,11 +48,14 @@ export const BlogsPage = () => {
                 mx='auto'
                 px={{ base: '16px', lg: '30px', xl: '190px' }}
             >
-                <Heading variant='sectionTitle'>Избранные блоги</Heading>
+                <Heading variant='sectionBlogTitle'>Избранные блоги</Heading>
+                {favoriteData?.favorites && (
+                    <BlogList blogs={favoriteData?.favorites} variant='favorite' />
+                )}
             </Box>
 
             <>
-                {data?.others && <BlogList blogs={data?.others} />}
+                {data?.others && <BlogList blogs={data?.others} variant='full' />}
 
                 <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
                     <Button

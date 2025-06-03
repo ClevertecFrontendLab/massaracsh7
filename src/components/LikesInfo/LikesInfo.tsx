@@ -2,14 +2,21 @@ import { HStack, Image, Text } from '@chakra-ui/react';
 
 import BsBookmarkHeart from '~/assets/icons/BsBookmarkHeart.svg';
 import BsEmojiHeartEyes from '~/assets/icons/BsEmojiHeartEyes.svg';
+import BsPeopleFill from '~/assets/icons/BsPeopleFill.svg';
 
 type LikesAndCommentsInfoProps = {
     likes?: number;
     bookmarks?: number;
+    subscribers?: number;
     size?: string;
 };
 
-export const LikesInfo = ({ likes, bookmarks, size = 'limeSmall' }: LikesAndCommentsInfoProps) => {
+export const LikesInfo = ({
+    likes,
+    bookmarks,
+    subscribers,
+    size = 'limeSmall',
+}: LikesAndCommentsInfoProps) => {
     if (!likes && !bookmarks) return null;
 
     return (
@@ -24,6 +31,12 @@ export const LikesInfo = ({ likes, bookmarks, size = 'limeSmall' }: LikesAndComm
                 <HStack spacing={1}>
                     <Image src={BsEmojiHeartEyes} boxSize='12px' />
                     <Text textStyle={size}>{likes}</Text>
+                </HStack>
+            )}
+            {subscribers !== undefined && subscribers > 0 && (
+                <HStack spacing={1}>
+                    <Image src={BsPeopleFill} boxSize='12px' />
+                    <Text textStyle={size}>{subscribers}</Text>
                 </HStack>
             )}
         </HStack>

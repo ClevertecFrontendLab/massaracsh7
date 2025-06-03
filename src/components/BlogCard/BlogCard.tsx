@@ -1,8 +1,18 @@
-import { Avatar, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Button, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
 
 import { Blogger } from '~/types/bloggerTypes';
 
-export const BlogCard = ({ login, firstName, lastName, notes }: Blogger) => {
+import { LikesInfo } from '../LikesInfo/LikesInfo';
+
+type BlogCardProps = {
+    blogger: Blogger;
+    variant?: 'base' | 'full' | 'favorite';
+};
+
+export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
+    const { login, firstName, lastName, notes, subscribersCount, bookmarksCount, newRecipesCount } =
+        blogger;
+
     const imageUrl = undefined;
     return (
         <Card variant='basic'>
@@ -50,6 +60,47 @@ export const BlogCard = ({ login, firstName, lastName, notes }: Blogger) => {
                     >
                         {notes[0].text}
                     </Text>
+                )}
+
+                {variant === 'full' && (
+                    <HStack mt={4}>
+                        <HStack mt={3} spacing={4}>
+                            <Button size='sm' variant='limeSolid'>
+                                Подписаться
+                            </Button>
+                            <Button size='sm' variant='ghost'>
+                                Читать
+                            </Button>
+                        </HStack>
+                        <LikesInfo
+                            subscribers={subscribersCount}
+                            bookmarks={bookmarksCount}
+                            size='limeSmall'
+                        />
+                    </HStack>
+                )}
+
+                {variant === 'favorite' && (
+                    <>
+                        <HStack mt={4}>
+                            <HStack mt={3} spacing={4}>
+                                <Button size='sm' variant='limeSolid'>
+                                    Рецепты
+                                </Button>
+                                <Button size='sm' variant='ghost'>
+                                    Читать
+                                </Button>
+                            </HStack>
+                            <LikesInfo
+                                subscribers={subscribersCount}
+                                bookmarks={bookmarksCount}
+                                size='limeSmall'
+                            />
+                        </HStack>
+                        <Text textStyle='miniText' mb={1}>
+                            Новых рецептов: {newRecipesCount || 0}
+                        </Text>
+                    </>
                 )}
             </CardBody>
         </Card>
