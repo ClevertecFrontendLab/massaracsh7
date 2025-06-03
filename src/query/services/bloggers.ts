@@ -1,14 +1,10 @@
+import { Blogger, BloggersResponse } from '~/types/bloggerTypes';
+
 import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
 import { EndpointNames } from '../constants/endpoint-names';
 import { Tags } from '../constants/tags';
 import { catalogApiSlice } from '../create-api';
-
-interface Blogger {
-    id: string;
-    name: string;
-    avatarUrl?: string;
-}
 
 export const bloggersApiSlice = catalogApiSlice
     .enhanceEndpoints({
@@ -16,19 +12,21 @@ export const bloggersApiSlice = catalogApiSlice
     })
     .injectEndpoints({
         endpoints: (builder) => ({
-            getBloggers: builder.query<Blogger[], { currentUserId: string; limit?: string }>({
-                query: ({ currentUserId, limit }) => ({
-                    url: ApiEndpoints.BLOGGERS,
-                    method: 'GET',
-                    params: {
-                        currentUserId,
-                        ...(limit ? { limit } : {}),
-                    },
-                    apiGroupName: ApiGroupNames.BLOGGERS,
-                    name: EndpointNames.GET_BLOGGERS,
-                }),
-                providesTags: [Tags.BLOGGERS],
-            }),
+            getBloggers: builder.query<BloggersResponse, { currentUserId: string; limit?: string }>(
+                {
+                    query: ({ currentUserId, limit }) => ({
+                        url: ApiEndpoints.BLOGGERS,
+                        method: 'GET',
+                        params: {
+                            currentUserId,
+                            limit,
+                        },
+                        apiGroupName: ApiGroupNames.BLOGGERS,
+                        name: EndpointNames.GET_BLOGGERS,
+                    }),
+                    providesTags: [Tags.BLOGGERS],
+                },
+            ),
 
             getBloggerById: builder.query<Blogger, { bloggerId: string; currentUserId: string }>({
                 query: ({ bloggerId, currentUserId }) => ({

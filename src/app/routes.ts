@@ -9,4 +9,5 @@ export const ROUTES_PATH = {
     VERIFICATION: '/verification',
     NEW_RECIPE: '/new-recipe',
     EDIT_RECIPE: '/edit-recipe/:category/:subcategory/:id',
+    BLOGS: '/blogs',
 };

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
-import { BlogList } from '~/components/BlogList/BlogList';
+import { BlogSection } from '~/components/BlogSection/BlogSection';
 import { KitchenSection } from '~/components/KitchenSection/KitchenSection';
 import { RecipeList } from '~/components/RecipeList/RecipeList';
 import { SearchBar } from '~/components/SearchBar/SearchBar';
@@ -186,7 +186,7 @@ export const MainPage = () => {
                 Вся подборка
             </Button>
 
-            {!hasFiltersOrSearch && <BlogList />}
+            {!hasFiltersOrSearch && <BlogSection />}
             {!hasFiltersOrSearch && randomRecipes && (
                 <KitchenSection
                     title={randomTitle}
