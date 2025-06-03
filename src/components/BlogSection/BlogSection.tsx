@@ -1,11 +1,14 @@
 import { Box, Button, Center, Heading, Hide, HStack, Show } from '@chakra-ui/react';
+import { useNavigate } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 
 import { BlogList } from '../BlogList/BlogList';
 
 export const BlogSection = () => {
+    const navigate = useNavigate();
     const userId = localStorage.getItem('userId');
 
     const shouldFetch = Boolean(userId);
@@ -19,6 +22,10 @@ export const BlogSection = () => {
             skip: !shouldFetch,
         },
     );
+
+    const handleNavigate = () => {
+        navigate(ROUTES_PATH.BLOGS);
+    };
 
     return (
         <Box
@@ -37,6 +44,7 @@ export const BlogSection = () => {
                         variant='limeLightSolid'
                         size='large'
                         rightIcon={<ArrowBlackRight w='14px' />}
+                        onClick={handleNavigate}
                     >
                         Все авторы
                     </Button>
@@ -51,6 +59,7 @@ export const BlogSection = () => {
                         variant='limeLightSolid'
                         size='large'
                         rightIcon={<ArrowBlackRight w='14px' />}
+                        onClick={handleNavigate}
                     >
                         Все авторы
                     </Button>

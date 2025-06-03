@@ -16,7 +16,7 @@ export const BlogCard = ({ login, firstName, lastName, notes }: Blogger) => {
                 >
                     <Avatar
                         src={imageUrl}
-                        name={login}
+                        name={`${firstName} ${lastName}`}
                         w={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
                         h={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
                     />
@@ -34,21 +34,23 @@ export const BlogCard = ({ login, firstName, lastName, notes }: Blogger) => {
                         >
                             {firstName} {lastName}
                         </Text>
-                        <Text textStyle='miniText'>{login}</Text>
+                        <Text textStyle='miniText'>@{login}</Text>
                     </VStack>
                 </HStack>
-                <Text
-                    textStyle='cutText'
-                    sx={{
-                        WebkitLineClamp: {
-                            sm: 3,
-                            md: 3,
-                            lg: 3,
-                        },
-                    }}
-                >
-                    {notes[0].text}
-                </Text>
+                {notes?.[0]?.text && (
+                    <Text
+                        textStyle='cutText'
+                        sx={{
+                            WebkitLineClamp: {
+                                sm: 3,
+                                md: 3,
+                                lg: 3,
+                            },
+                        }}
+                    >
+                        {notes[0].text}
+                    </Text>
+                )}
             </CardBody>
         </Card>
     );
