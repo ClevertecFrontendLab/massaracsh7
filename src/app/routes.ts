@@ -10,4 +10,5 @@ export const ROUTES_PATH = {
     NEW_RECIPE: '/new-recipe',
     EDIT_RECIPE: '/edit-recipe/:category/:subcategory/:id',
     BLOGS: '/blogs',
+    BLOGGER_PROFILE: '/blogs/:bloggerId',
 };
