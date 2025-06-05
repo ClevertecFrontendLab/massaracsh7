@@ -21,4 +21,5 @@ export enum EndpointNames {
     GET_BLOGGERS = 'getBloggers',
     GET_BLOGGER_BY_ID = 'getBloggerById',
     GET_RECIPES_BY_USER_ID = 'getRecipesByUserId',
+    TOGGLE_SUBSCRIPTION = 'toggleSubscription',
 }

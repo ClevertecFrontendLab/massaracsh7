@@ -11,4 +11,5 @@ export enum ApiEndpoints {
     MEASURE_UNITS = '/measure-units',
     BLOGGERS = '/bloggers',
     RECIPES_BY_USER = '/recipe/user',
+    TOGGLE_SUBSCRIPTION = '/users/toggle-subscription',
 }

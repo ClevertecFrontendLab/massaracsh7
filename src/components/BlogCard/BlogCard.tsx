@@ -1,7 +1,12 @@
 import { Avatar, Button, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
 
+import { API_RESULTS } from '~/constants/api-results';
+import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
+import { setAppAlert } from '~/store/app-slice';
 import { Blogger } from '~/types/bloggerTypes';
 
+import { CustomLoader } from '../CustomLoader/CustomLoader';
 import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BlogCardProps = {
@@ -10,10 +15,45 @@ type BlogCardProps = {
 };
 
 export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
-    const { login, firstName, lastName, notes, subscribersCount, bookmarksCount, newRecipesCount } =
-        blogger;
+    const dispatch = useDispatch();
+    const {
+        _id,
+        login,
+        firstName,
+        lastName,
+        notes,
+        subscribersCount,
+        bookmarksCount,
+        newRecipesCount,
+    } = blogger;
+    const currentUserId = localStorage.getItem('userId');
+    const [toggleSubscription, { isLoading }] = useToggleSubscriptionMutation();
+
+    const handleToggleSubscription = async () => {
+        if (!currentUserId) {
+            return;
+        }
+        try {
+            await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
+        } catch (err) {
+            if (typeof err === 'object' && err !== null && 'status' in err) {
+                dispatch(
+                    setAppAlert({
+                        type: 'error',
+                        title: API_RESULTS.ERROR_SERVER_TITLE,
+                        sourse: 'global',
+                        message: API_RESULTS.ERROR_SERVER_MESSAGE,
+                    }),
+                );
+            }
+        }
+    };
 
     const imageUrl = undefined;
+
+    if (isLoading) {
+        return <CustomLoader size='small' />;
+    }
     return (
         <Card variant='basic'>
             <CardBody
@@ -65,7 +105,11 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                 {variant === 'full' && (
                     <HStack mt={4}>
                         <HStack mt={3} spacing={4}>
-                            <Button size='sm' variant='limeSolid'>
+                            <Button
+                                size='sm'
+                                variant='limeSolid'
+                                onClick={handleToggleSubscription}
+                            >
                                 Подписаться
                             </Button>
                             <Button size='sm' variant='ghost'>
@@ -97,9 +141,11 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                                 size='limeSmall'
                             />
                         </HStack>
-                        <Text textStyle='miniText' mb={1}>
-                            Новых рецептов: {newRecipesCount || 0}
-                        </Text>
+                        {newRecipesCount > 0 && (
+                            <Text textStyle='miniText' mb={1}>
+                                Новых рецептов: {newRecipesCount}
+                            </Text>
+                        )}
                     </>
                 )}
             </CardBody>

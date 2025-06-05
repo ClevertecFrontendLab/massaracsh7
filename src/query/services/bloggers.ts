@@ -40,7 +40,18 @@ export const bloggersApiSlice = catalogApiSlice
                 }),
                 providesTags: [Tags.BLOGGERS],
             }),
+            toggleSubscription: builder.mutation<void, { fromUserId: string; toUserId: string }>({
+                query: ({ fromUserId, toUserId }) => ({
+                    url: ApiEndpoints.TOGGLE_SUBSCRIPTION,
+                    method: 'PATCH',
+                    body: { fromUserId, toUserId },
+                    apiGroupName: EndpointNames.TOGGLE_SUBSCRIPTION,
+                    name: EndpointNames.TOGGLE_SUBSCRIPTION,
+                }),
+                invalidatesTags: [Tags.BLOGGERS],
+            }),
         }),
     });
 
-export const { useGetBloggersQuery, useGetBloggerByIdQuery } = bloggersApiSlice;
+export const { useGetBloggersQuery, useGetBloggerByIdQuery, useToggleSubscriptionMutation } =
+    bloggersApiSlice;

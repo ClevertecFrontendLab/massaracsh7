@@ -36,17 +36,17 @@ export const BlogsPage = () => {
 
     return (
         <Box>
-            <Heading variant='pageTitle' mb={8}>
+            <Heading variant='sectionTitle' mb={8}>
                 Кулинарные блоги
             </Heading>
 
             <Box
                 pb={8}
                 mb={6}
-                borderRadius='0 0 8px 8px'
-                width={{ base: '100%', md: '578px', xl: '898px' }}
+                borderRadius='8px'
                 mx='auto'
                 px={{ base: '16px', lg: '30px', xl: '190px' }}
+                bg='customLime.300'
             >
                 <Heading variant='sectionBlogTitle'>Избранные блоги</Heading>
                 {favoriteData?.favorites && (
