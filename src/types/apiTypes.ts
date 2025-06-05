@@ -136,3 +136,7 @@ export type UploadResponse = {
     url: string;
     id: string;
 };
+
+export type RecipesByUser = {
+    recipes: Recipe[];
+};

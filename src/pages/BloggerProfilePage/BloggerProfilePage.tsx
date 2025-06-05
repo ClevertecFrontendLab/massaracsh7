@@ -1,9 +1,11 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { BloggerCard } from '~/components/Blogger/BloggerCard';
+import { BloggerNotesSection } from '~/components/Blogger/BloggerNotesSection';
+import { RecipeList } from '~/components/RecipeList/RecipeList';
 import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
+import { useGetRecipesByUserIdQuery } from '~/query/services/recipes';
 
 export const BloggerProfilePage = () => {
     const { bloggerId } = useParams();
@@ -17,17 +19,19 @@ export const BloggerProfilePage = () => {
             : { bloggerId: bloggerId, currentUserId: currentUserId },
     );
 
-    useEffect(() => {
-        if (window.location.hash === '#notes') {
-            const el = document.getElementById('notes');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, []);
+    const {
+        data: recipes,
+        // isLoading: isRecipesLoading,
+    } = useGetRecipesByUserIdQuery(bloggerId || skipToken);
+
     console.log(blogger);
     return (
         <div>
             {blogger && <BloggerCard blogger={blogger} />}
-            <div id='notes'>Заметки</div>
+            {recipes && <RecipeList recipes={recipes?.recipes} />}
+            <div id='notes'>
+                {blogger && blogger.notes && <BloggerNotesSection notes={blogger.notes} />}
+            </div>
         </div>
     );
 };
