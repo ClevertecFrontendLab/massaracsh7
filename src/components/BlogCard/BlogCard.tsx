@@ -1,6 +1,8 @@
 import { Avatar, Button, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import { API_RESULTS } from '~/constants/api-results';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
@@ -16,6 +18,7 @@ type BlogCardProps = {
 
 export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const {
         _id,
         login,
@@ -47,6 +50,10 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                 );
             }
         }
+    };
+
+    const handleMoveToNotes = () => {
+        navigate(`${ROUTES_PATH.BLOGS}/${_id}#notes`);
     };
 
     const imageUrl = undefined;
@@ -112,7 +119,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                             >
                                 Подписаться
                             </Button>
-                            <Button size='sm' variant='ghost'>
+                            <Button size='sm' variant='ghost' onClick={handleMoveToNotes}>
                                 Читать
                             </Button>
                         </HStack>
@@ -131,7 +138,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                                 <Button size='sm' variant='limeSolid'>
                                     Рецепты
                                 </Button>
-                                <Button size='sm' variant='ghost'>
+                                <Button size='sm' variant='ghost' onClick={handleMoveToNotes}>
                                     Читать
                                 </Button>
                             </HStack>
