@@ -4,20 +4,20 @@ import { useDispatch } from 'react-redux';
 import { API_RESULTS } from '~/constants/api-results';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
-import { Blogger } from '~/types/bloggerTypes';
+import { BloggerByIdResponse } from '~/types/bloggerTypes';
 
 import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BloggerCardProps = {
-    blogger: Blogger;
+    blogger: BloggerByIdResponse;
 };
 
 export const BloggerCard = ({ blogger }: BloggerCardProps) => {
     const [toggleSubscription] = useToggleSubscriptionMutation();
     const currentUserId = localStorage.getItem('userId');
     const dispatch = useDispatch();
-    const { _id, login, firstName, lastName, isFavorite, subscribersCount, bookmarksCount } =
-        blogger;
+    const { bloggerInfo, isFavorite, totalBookmarks, totalSubscribers } = blogger;
+    const { _id, login, firstName, lastName } = bloggerInfo;
     const imageUrl = undefined;
     const handleToggleSubscription = async () => {
         if (!currentUserId) {
@@ -78,8 +78,8 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                         </Button>
                     </HStack>
                     <LikesInfo
-                        subscribers={subscribersCount}
-                        bookmarks={bookmarksCount}
+                        subscribers={totalSubscribers}
+                        bookmarks={totalBookmarks}
                         size='limeSmall'
                     />
                 </HStack>

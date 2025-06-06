@@ -1,4 +1,4 @@
-import { Blogger, BloggersResponse } from '~/types/bloggerTypes';
+import { BloggerByIdResponse, BloggersResponse } from '~/types/bloggerTypes';
 
 import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
@@ -28,7 +28,10 @@ export const bloggersApiSlice = catalogApiSlice
                 },
             ),
 
-            getBloggerById: builder.query<Blogger, { bloggerId: string; currentUserId: string }>({
+            getBloggerById: builder.query<
+                BloggerByIdResponse,
+                { bloggerId: string; currentUserId: string }
+            >({
                 query: ({ bloggerId, currentUserId }) => ({
                     url: `${ApiEndpoints.BLOGGERS}/${bloggerId}`,
                     method: 'GET',

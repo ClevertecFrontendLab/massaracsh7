@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { BloggerCard } from '~/components/Blogger/BloggerCard';
 import { BloggerNotesSection } from '~/components/Blogger/BloggerNotesSection';
+import { BlogSection } from '~/components/BlogSection/BlogSection';
 import { RecipeList } from '~/components/RecipeList/RecipeList';
 import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import { useGetRecipesByUserIdQuery } from '~/query/services/recipes';
@@ -20,7 +21,7 @@ export const BloggerProfilePage = () => {
     );
 
     const {
-        data: recipes,
+        data: data,
         // isLoading: isRecipesLoading,
     } = useGetRecipesByUserIdQuery(bloggerId || skipToken);
 
@@ -28,10 +29,9 @@ export const BloggerProfilePage = () => {
     return (
         <div>
             {blogger && <BloggerCard blogger={blogger} />}
-            {recipes && <RecipeList recipes={recipes?.recipes} />}
-            <div id='notes'>
-                {blogger && blogger.notes && <BloggerNotesSection notes={blogger.notes} />}
-            </div>
+            {data && <RecipeList recipes={data?.recipes} />}
+            {data && data?.notes && <BloggerNotesSection notes={data?.notes} />}
+            <BlogSection variant='full' />
         </div>
     );
 };
