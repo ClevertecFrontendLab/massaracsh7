@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Box, Button, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 
 import { API_RESULTS } from '~/constants/api-results';
@@ -10,19 +10,21 @@ import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BloggerCardProps = {
     blogger: BloggerByIdResponse;
+    variantCard?: 'blog' | 'recipe';
 };
 
-export const BloggerCard = ({ blogger }: BloggerCardProps) => {
+export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps) => {
     const [toggleSubscription] = useToggleSubscriptionMutation();
     const currentUserId = localStorage.getItem('userId');
     const dispatch = useDispatch();
+
     const { bloggerInfo, isFavorite, totalBookmarks, totalSubscribers } = blogger;
     const { _id, login, firstName, lastName } = bloggerInfo;
     const imageUrl = undefined;
+
     const handleToggleSubscription = async () => {
-        if (!currentUserId) {
-            return;
-        }
+        if (!currentUserId) return;
+
         try {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
@@ -38,12 +40,25 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
             }
         }
     };
+
     return (
-        <Card variant='basic'>
-            <CardBody
-                p={{ base: '4', md: '4', lg: '4', xl: '6' }}
-                pr={{ base: '4', md: '4', lg: '4', xl: '5' }}
-            >
+        <Card
+            variant='basic'
+            position='relative'
+            p={{ sm: '3', md: '6', lg: '6', xl: '6' }}
+            bg={variantCard === 'recipe' ? 'customLime.300' : 'white'}
+            w={{ sm: '100%', md: '604px' }}
+            borderRadius='xl'
+            mx='auto'
+        >
+            {variantCard === 'recipe' && (
+                <Box position='absolute' top='2' right='3'>
+                    <Text fontSize='xs' fontWeight='semibold' color='gray.500'>
+                        Автор рецепта
+                    </Text>
+                </Box>
+            )}
+            <CardBody>
                 <HStack
                     spacing={{ base: 2, md: 2, lg: 3, xl: 3 }}
                     mb={{ sm: 4, md: 4, lg: 4, xl: 7 }}
@@ -71,15 +86,17 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                         <Text textStyle='miniText'>@{login}</Text>
                     </VStack>
                 </HStack>
+
                 <HStack mt={4}>
                     <HStack mt={3} spacing={4}>
                         <Button size='sm' variant='limeSolid' onClick={handleToggleSubscription}>
                             {isFavorite ? 'Вы подписаны' : 'Подписаться'}
                         </Button>
                     </HStack>
+
                     <LikesInfo
                         subscribers={totalSubscribers}
-                        bookmarks={totalBookmarks}
+                        bookmarks={variantCard === 'blog' ? totalBookmarks : undefined}
                         size='limeSmall'
                     />
                 </HStack>

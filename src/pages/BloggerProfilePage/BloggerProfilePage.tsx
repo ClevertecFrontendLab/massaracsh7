@@ -28,7 +28,7 @@ export const BloggerProfilePage = () => {
     console.log(blogger);
     return (
         <div>
-            {blogger && <BloggerCard blogger={blogger} />}
+            {blogger && <BloggerCard blogger={blogger} variantCard='blog' />}
             {data && <RecipeList recipes={data?.recipes} />}
             {data && data?.notes && <BloggerNotesSection notes={data?.notes} />}
             <BlogSection variant='full' />

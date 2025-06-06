@@ -17,7 +17,7 @@ export const LikesInfo = ({
     subscribers,
     size = 'limeSmall',
 }: LikesAndCommentsInfoProps) => {
-    if (!likes && !bookmarks) return null;
+    if (!likes && !bookmarks && !subscribers) return null;
 
     return (
         <HStack spacing={3.5} px={1} width='100%' justify='flex-end'>

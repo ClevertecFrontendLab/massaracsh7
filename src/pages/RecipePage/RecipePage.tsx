@@ -3,9 +3,9 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import { BloggerCard } from '~/components/Blogger/BloggerCard';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { LikesInfo } from '~/components/LikesInfo/LikesInfo';
-import { AuthorCard } from '~/components/RecipeParts/AuthorCard';
 import { CategoryBadges } from '~/components/RecipeParts/CategoryBadges';
 import { IngredientsList } from '~/components/RecipeParts/IngredientsList';
 import { NutritionInfo } from '~/components/RecipeParts/NutritionInfo';
@@ -14,8 +14,8 @@ import { RecipeImage } from '~/components/RecipeParts/RecipeImage';
 import { RecipeStepsInfo } from '~/components/RecipeParts/RecipeSteps';
 import { SliderList } from '~/components/SliderList/SliderList';
 import { BASE_IMG_URL, BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/constants';
-import { authors } from '~/data/authors';
 import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import {
     useDeleteRecipeMutation,
     useGetRecipeByIdQuery,
@@ -26,7 +26,6 @@ import {
 import { setAppAlert, setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import type { Category } from '~/types/apiTypes';
-import { AuthorData } from '~/types/typesAuthor';
 import { handleRecipePageError } from '~/utils/handleRecipePageError';
 
 export const RecipePage: React.FC = () => {
@@ -41,7 +40,13 @@ export const RecipePage: React.FC = () => {
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const categoryIds = recipe?.categoriesIds ?? [];
     const rootCategories = useGetCategory(categoryIds) as Category[];
-    const author = authors[0] as AuthorData;
+
+    const currentUserId = localStorage.getItem('userId');
+    const { data: blogger } = useGetBloggerByIdQuery(
+        !recipe?.authorId || !currentUserId
+            ? skipToken
+            : { bloggerId: recipe.authorId, currentUserId: currentUserId },
+    );
 
     const [deleteRecipe] = useDeleteRecipeMutation();
     const [toggleBookmark] = useToggleBookmarkRecipeMutation();
@@ -188,7 +193,7 @@ export const RecipePage: React.FC = () => {
 
                     {recipe && <RecipeStepsInfo steps={recipe.steps!} />}
 
-                    <AuthorCard author={author} />
+                    {blogger && <BloggerCard blogger={blogger} variantCard='recipe' />}
                 </VStack>
             </Box>
 
