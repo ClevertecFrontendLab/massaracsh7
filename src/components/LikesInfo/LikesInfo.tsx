@@ -22,7 +22,7 @@ export const LikesInfo = ({
     return (
         <HStack spacing={3.5} px={1} width='100%' justify='flex-end'>
             {bookmarks !== undefined && bookmarks > 0 && (
-                <HStack spacing={1}>
+                <HStack spacing={1} data-test-id='blogger-followers-bookmarks'>
                     <Image src={BsBookmarkHeart} boxSize='12px' />
                     <Text textStyle={size}>{bookmarks}</Text>
                 </HStack>
@@ -34,7 +34,7 @@ export const LikesInfo = ({
                 </HStack>
             )}
             {subscribers !== undefined && subscribers > 0 && (
-                <HStack spacing={1}>
+                <HStack spacing={1} data-test-id='blogger-followers-count'>
                     <Image src={BsPeopleFill} boxSize='12px' />
                     <Text textStyle={size}>{subscribers}</Text>
                 </HStack>

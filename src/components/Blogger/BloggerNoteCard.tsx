@@ -11,8 +11,8 @@ export const BloggerNoteCard = ({ note }: BloggerNoteCardProps) => (
             p={{ base: '4', md: '4', lg: '4', xl: '6' }}
             pr={{ base: '4', md: '4', lg: '4', xl: '5' }}
         >
-            <Text>{note.date}</Text>
-            <Text>{note.text}</Text>
+            <Text data-test-id='notes-card-date'>{note.date}</Text>
+            <Text data-test-id='notes-card-text'>{note.text}</Text>
         </CardBody>
     </Card>
 );

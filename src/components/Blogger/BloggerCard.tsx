@@ -50,6 +50,7 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
             w={{ sm: '100%', md: '604px' }}
             borderRadius='xl'
             mx='auto'
+            data-test-id='blogger-user-info-box'
         >
             {variantCard === 'recipe' && (
                 <Box position='absolute' top='2' right='3'>
@@ -80,18 +81,45 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
                                 wordBreak: 'break-all',
                                 textOverflow: 'ellipsis',
                             }}
+                            data-test-id='blogger-user-info-name'
                         >
                             {firstName} {lastName}
                         </Text>
-                        <Text textStyle='miniText'>@{login}</Text>
+                        <Text textStyle='miniText' data-test-id='blogger-user-info-login'>
+                            @{login}
+                        </Text>
                     </VStack>
                 </HStack>
 
                 <HStack mt={4}>
                     <HStack mt={3} spacing={4}>
-                        <Button size='sm' variant='limeSolid' onClick={handleToggleSubscription}>
-                            {isFavorite ? 'Вы подписаны' : 'Подписаться'}
-                        </Button>
+                        {isFavorite ? (
+                            <Tooltip
+                                label='Нажмите, если хотите отписаться'
+                                aria-label='Tooltip для отписки'
+                                data-test-id='blog-tooltip'
+                                hasArrow
+                                placement='top'
+                            >
+                                <Button
+                                    size='sm'
+                                    variant='limeSolid'
+                                    onClick={handleToggleSubscription}
+                                    data-test-id='blog-toggle-unsubscribe'
+                                >
+                                    Вы подписаны
+                                </Button>
+                            </Tooltip>
+                        ) : (
+                            <Button
+                                size='sm'
+                                variant='limeSolid'
+                                onClick={handleToggleSubscription}
+                                data-test-id='blog-toggle-subscribe'
+                            >
+                                'Подписаться'
+                            </Button>
+                        )}
                     </HStack>
 
                     <LikesInfo

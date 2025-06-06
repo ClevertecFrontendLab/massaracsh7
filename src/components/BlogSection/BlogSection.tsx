@@ -1,4 +1,5 @@
 import { Box, Button, Center, Heading, Hide, HStack, Show } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
@@ -8,7 +9,7 @@ import { useGetBloggersQuery } from '~/query/services/bloggers';
 import { BlogList } from '../BlogList/BlogList';
 
 type BlogSectionProps = {
-    variant?: 'base' | 'full' | 'favorite';
+    variant?: 'base' | 'full' | 'fullProfile' | 'favorite';
 };
 
 export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
@@ -17,7 +18,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
 
     const shouldFetch = Boolean(userId);
 
-    const { data } = useGetBloggersQuery(
+    const { data, isError } = useGetBloggersQuery(
         {
             currentUserId: userId!,
             limit: '3',
@@ -31,8 +32,15 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
         navigate(ROUTES_PATH.BLOGS);
     };
 
-    const headingTitle = variant === 'full' ? 'Другие блоги' : 'Кулинарные блоги';
+    useEffect(() => {
+        if (isError && variant === 'fullProfile') {
+            navigate('/');
+        }
+    }, [isError, navigate, variant]);
 
+    const headingTitle = variant === 'fullProfile' ? 'Другие блоги' : 'Кулинарные блоги';
+    const dataTitle =
+        variant === 'fullProfile' ? 'blogger-user-other-blogs-button' : 'main-page-blogs-button';
     return (
         <Box
             as='section'
@@ -42,6 +50,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
             pb='24px'
             borderRadius='xlarge'
             mb={{ base: 8, md: 8, lg: 10, xl: 10 }}
+            data-test-id='main-page-blogs-box'
         >
             <HStack justify='space-between' mb={{ base: 3, md: 2, lg: 4.5, xl: 6 }}>
                 <Heading variant='sectionBlogTitle'>{headingTitle}</Heading>
@@ -52,6 +61,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
                         size='large'
                         rightIcon={<ArrowBlackRight w='14px' />}
                         onClick={handleNavigate}
+                        data-test-id={dataTitle}
                     >
                         Все авторы
                     </Button>

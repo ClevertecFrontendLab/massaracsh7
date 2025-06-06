@@ -1,4 +1,4 @@
-import { Button, Heading, VStack } from '@chakra-ui/react';
+import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 import { BloggerNote } from '~/types/bloggerTypes';
@@ -26,9 +26,9 @@ export const BloggerNotesSection = ({ notes }: BloggerNotesProps) => {
     if (!notes.length) return null;
 
     return (
-        <div id='notes'>
+        <Box id='notes' data-test-id='blog-notes-box'>
             <Heading variant='sectionBlogTitle' mb={4}>
-                Заметки ({notes.length})
+                Заметки <Text data-test-id='blogger-user-notes-count'>({notes.length})</Text>
             </Heading>
 
             <VStack spacing={4} align='stretch'>
@@ -36,10 +36,16 @@ export const BloggerNotesSection = ({ notes }: BloggerNotesProps) => {
             </VStack>
 
             {hasToggle && (
-                <Button variant='ghost' onClick={toggleExpand} alignSelf='flex-start' mt={2}>
+                <Button
+                    variant='ghost'
+                    onClick={toggleExpand}
+                    alignSelf='flex-start'
+                    mt={2}
+                    data-test-id='blogger-user-notes-button '
+                >
                     {isExpanded ? 'Свернуть' : 'Показать больше'}
                 </Button>
             )}
-        </div>
+        </Box>
     );
 };

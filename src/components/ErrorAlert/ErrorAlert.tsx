@@ -48,8 +48,12 @@ export const AppAlert = () => {
             >
                 <AlertIcon color='white' />
                 <Box>
-                    {title && <AlertTitle>{title}</AlertTitle>}
-                    <AlertDescription>{message}</AlertDescription>
+                    {title && (
+                        <AlertTitle data-test-id='error-notification-title'>{title}</AlertTitle>
+                    )}
+                    <AlertDescription data-test-id='error-notification-description'>
+                        {message}
+                    </AlertDescription>
                 </Box>
                 <CloseButton
                     data-test-id={TEST_IDS.CLOSE_ALERT_BUTTON}

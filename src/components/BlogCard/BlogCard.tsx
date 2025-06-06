@@ -13,7 +13,7 @@ import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BlogCardProps = {
     blogger: Blogger;
-    variant?: 'base' | 'full' | 'favorite';
+    variant?: 'base' | 'full' | 'fullProfile' | 'favorite';
 };
 
 export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
@@ -33,9 +33,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
     const [toggleSubscription, { isLoading }] = useToggleSubscriptionMutation();
 
     const handleToggleSubscription = async () => {
-        if (!currentUserId) {
-            return;
-        }
+        if (!currentUserId) return;
         try {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
@@ -59,10 +57,11 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
     const imageUrl = undefined;
 
     if (isLoading) {
-        return <CustomLoader size='small' />;
+        return <CustomLoader size='small' dataTestId='mobile-loader' />;
     }
+
     return (
-        <Card variant='basic'>
+        <Card variant='basic' data-test-id='blogs-card'>
             <CardBody
                 p={{ base: '4', md: '4', lg: '4', xl: '6' }}
                 pr={{ base: '4', md: '4', lg: '4', xl: '5' }}
@@ -80,6 +79,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     <VStack align='start' spacing={{ lg: '0', xl: '0' }} pt='2px'>
                         <Text
                             textStyle='nameText'
+                            data-test-id='blogs-card-name'
                             sx={{
                                 display: '-webkit-box',
                                 WebkitBoxOrient: 'vertical',
@@ -91,12 +91,16 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                         >
                             {firstName} {lastName}
                         </Text>
-                        <Text textStyle='miniText'>@{login}</Text>
+                        <Text textStyle='miniText' data-test-id='blogs-card-login'>
+                            @{login}
+                        </Text>
                     </VStack>
                 </HStack>
+
                 {notes?.[0]?.text && (
                     <Text
                         textStyle='cutText'
+                        data-test-id='blogs-card-notes-text'
                         sx={{
                             WebkitLineClamp: {
                                 sm: 3,
@@ -109,36 +113,52 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     </Text>
                 )}
 
-                {variant === 'full' && (
-                    <HStack mt={4}>
-                        <HStack mt={3} spacing={4}>
-                            <Button
-                                size='sm'
-                                variant='limeSolid'
-                                onClick={handleToggleSubscription}
-                            >
-                                Подписаться
-                            </Button>
-                            <Button size='sm' variant='ghost' onClick={handleMoveToNotes}>
-                                Читать
-                            </Button>
+                {variant === 'full' ||
+                    (variant === 'fullProfile' && (
+                        <HStack mt={4}>
+                            <HStack mt={3} spacing={4}>
+                                <Button
+                                    size='sm'
+                                    variant='limeSolid'
+                                    onClick={handleToggleSubscription}
+                                    data-test-id='blog-toggle-subscribe'
+                                >
+                                    Подписаться
+                                </Button>
+                                <Button
+                                    size='sm'
+                                    variant='ghost'
+                                    onClick={handleMoveToNotes}
+                                    data-test-id='blogs-card-notes-button'
+                                >
+                                    Читать
+                                </Button>
+                            </HStack>
+                            <LikesInfo
+                                subscribers={subscribersCount}
+                                bookmarks={bookmarksCount}
+                                size='limeSmall'
+                            />
                         </HStack>
-                        <LikesInfo
-                            subscribers={subscribersCount}
-                            bookmarks={bookmarksCount}
-                            size='limeSmall'
-                        />
-                    </HStack>
-                )}
+                    ))}
 
                 {variant === 'favorite' && (
                     <>
                         <HStack mt={4}>
                             <HStack mt={3} spacing={4}>
-                                <Button size='sm' variant='limeSolid'>
+                                <Button
+                                    size='sm'
+                                    variant='limeSolid'
+                                    data-test-id='blogs-card-recipes-button'
+                                >
                                     Рецепты
                                 </Button>
-                                <Button size='sm' variant='ghost' onClick={handleMoveToNotes}>
+                                <Button
+                                    size='sm'
+                                    variant='ghost'
+                                    onClick={handleMoveToNotes}
+                                    data-test-id='blogs-card-notes-button'
+                                >
                                     Читать
                                 </Button>
                             </HStack>
@@ -149,7 +169,11 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                             />
                         </HStack>
                         {newRecipesCount > 0 && (
-                            <Text textStyle='miniText' mb={1}>
+                            <Text
+                                textStyle='miniText'
+                                mb={1}
+                                data-test-id='blogs-card-new-recipes-badge'
+                            >
                                 Новых рецептов: {newRecipesCount}
                             </Text>
                         )}

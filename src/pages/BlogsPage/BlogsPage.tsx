@@ -1,20 +1,23 @@
 import { Box, Button, Center, Heading, useBreakpointValue } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { BlogList } from '~/components/BlogList/BlogList';
+import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 
 export const BlogsPage = () => {
     const userId = localStorage.getItem('userId');
     const shouldFetch = Boolean(userId);
+    const navigate = useNavigate();
 
     const defaultLimit = useBreakpointValue({ base: 8, xl: 9 }) ?? 8;
     const [isExpanded, setIsExpanded] = useState(false);
 
     const limit = isExpanded ? 'all' : String(defaultLimit);
 
-    const { data } = useGetBloggersQuery(
+    const { data, isLoading, isError } = useGetBloggersQuery(
         {
             currentUserId: userId!,
             limit,
@@ -24,7 +27,7 @@ export const BlogsPage = () => {
         },
     );
 
-    const { data: favoriteData } = useGetBloggersQuery(
+    const { data: favoriteData, isLoading: isFavoriteLoading } = useGetBloggersQuery(
         {
             currentUserId: userId!,
             limit: 'all',
@@ -33,6 +36,16 @@ export const BlogsPage = () => {
             skip: !shouldFetch,
         },
     );
+
+    useEffect(() => {
+        if (isError) {
+            navigate('/');
+        }
+    }, [isError, navigate]);
+
+    if (isLoading || isFavoriteLoading) {
+        return <CustomLoader size='large' dataTestId='app-loader' />;
+    }
 
     return (
         <Box>
@@ -47,6 +60,7 @@ export const BlogsPage = () => {
                 mx='auto'
                 px={{ base: '16px', lg: '30px', xl: '190px' }}
                 bg='customLime.300'
+                data-test-id='blogs-favorites-box'
             >
                 <Heading variant='sectionBlogTitle'>Избранные блоги</Heading>
                 {favoriteData?.favorites && (
@@ -54,7 +68,7 @@ export const BlogsPage = () => {
                 )}
             </Box>
 
-            <>
+            <Box data-test-id='blogs-others-box'>
                 {data?.others && <BlogList blogs={data?.others} variant='full' />}
 
                 <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
@@ -70,11 +84,12 @@ export const BlogsPage = () => {
                                 <ArrowBlackRight w='14px' transform='rotate(180deg)' />
                             ) : undefined
                         }
+                        data-test-id='blogs-others-button'
                     >
                         {isExpanded ? 'Свернуть' : 'Все авторы'}
                     </Button>
                 </Center>
-            </>
+            </Box>
         </Box>
     );
 };
