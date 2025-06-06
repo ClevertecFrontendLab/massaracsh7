@@ -10,7 +10,7 @@ type BloggerNotesProps = {
 };
 export const BloggerNotesSection = ({ notes }: BloggerNotesProps) => {
     const [isExpanded, setIsExpanded] = useState(false);
-
+    console.log(notes);
     const hasToggle = notes.length > 3;
     const visibleNotes = hasToggle && !isExpanded ? notes.slice(0, 3) : notes;
 
