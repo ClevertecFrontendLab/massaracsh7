@@ -25,6 +25,7 @@ export const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
 
     return (
         <SimpleGrid
+            data-test-id='recipe-card-list'
             w='100%'
             templateColumns={{
                 base: '1fr',

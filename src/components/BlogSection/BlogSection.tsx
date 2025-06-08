@@ -1,10 +1,12 @@
 import { Box, Button, Center, Heading, Hide, HStack, Show } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
+import { setAppAlert, setAppLoader } from '~/store/app-slice';
 
 import { BlogList } from '../BlogList/BlogList';
 
@@ -14,6 +16,7 @@ type BlogSectionProps = {
 
 export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const userId = localStorage.getItem('userId');
 
     const shouldFetch = Boolean(userId);
@@ -21,7 +24,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
     const { data, isError } = useGetBloggersQuery(
         {
             currentUserId: userId!,
-            limit: '3',
+            limit: '',
         },
         {
             skip: !shouldFetch,
@@ -34,13 +37,36 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
 
     useEffect(() => {
         if (isError && variant === 'fullProfile') {
+            dispatch(
+                setAppAlert({
+                    type: 'error',
+                    title: 'Ошибка сервера',
+                    message: 'Попробуйте немного позже.',
+                    sourse: 'global',
+                }),
+            );
+            dispatch(setAppLoader(false));
             navigate('/');
         }
-    }, [isError, navigate, variant]);
+        if (isError) {
+            dispatch(
+                setAppAlert({
+                    type: 'error',
+                    title: 'Ошибка сервера',
+                    message: 'Попробуйте немного позже.',
+                    sourse: 'global',
+                }),
+            );
+            dispatch(setAppLoader(false));
+            navigate('/');
+        }
+    }, [isError, navigate, variant, dispatch]);
 
     const headingTitle = variant === 'fullProfile' ? 'Другие блоги' : 'Кулинарные блоги';
     const dataTitle =
         variant === 'fullProfile' ? 'blogger-user-other-blogs-button' : 'main-page-blogs-button';
+
+    const dataUpdate = data?.others.slice(0, 3);
     return (
         <Box
             as='section'
@@ -63,12 +89,12 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
                         onClick={handleNavigate}
                         data-test-id={dataTitle}
                     >
-                        Все авторы
+                        Всe авторы
                     </Button>
                 </Hide>
             </HStack>
 
-            {data?.others && <BlogList blogs={data.others} variant={variant} />}
+            {dataUpdate && <BlogList blogs={dataUpdate} variant={variant} />}
 
             <Show below='md'>
                 <Center mt={{ sm: 3 }}>
@@ -77,6 +103,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
                         size='large'
                         rightIcon={<ArrowBlackRight w='14px' />}
                         onClick={handleNavigate}
+                        data-test-id={dataTitle}
                     >
                         Все авторы
                     </Button>

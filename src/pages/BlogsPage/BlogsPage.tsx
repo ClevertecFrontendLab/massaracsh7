@@ -1,36 +1,27 @@
 import { Box, Button, Center, Heading, useBreakpointValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { BlogList } from '~/components/BlogList/BlogList';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
+import { setAppAlert, setAppLoader } from '~/store/app-slice';
 
 export const BlogsPage = () => {
     const userId = localStorage.getItem('userId');
     const shouldFetch = Boolean(userId);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const defaultLimit = useBreakpointValue({ base: 8, xl: 9 }) ?? 8;
     const [isExpanded, setIsExpanded] = useState(false);
-
-    const limit = isExpanded ? 'all' : String(defaultLimit);
-
+    const limitResult = isExpanded ? 'all' : String(defaultLimit);
     const { data, isLoading, isError } = useGetBloggersQuery(
         {
             currentUserId: userId!,
-            limit,
-        },
-        {
-            skip: !shouldFetch,
-        },
-    );
-
-    const { data: favoriteData, isLoading: isFavoriteLoading } = useGetBloggersQuery(
-        {
-            currentUserId: userId!,
-            limit: 'all',
+            limit: limitResult,
         },
         {
             skip: !shouldFetch,
@@ -39,37 +30,50 @@ export const BlogsPage = () => {
 
     useEffect(() => {
         if (isError) {
+            dispatch(
+                setAppAlert({
+                    type: 'error',
+                    title: 'Ошибка сервера',
+                    message: 'Попробуйте немного позже.',
+                    sourse: 'global',
+                }),
+            );
+            dispatch(setAppLoader(false));
             navigate('/');
         }
     }, [isError, navigate]);
 
-    if (isLoading || isFavoriteLoading) {
+    if (isLoading) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
     }
 
+    console.log(data);
+
+    const favorites = data?.favorites ?? [];
+    const others = data?.others ?? [];
     return (
         <Box>
             <Heading variant='sectionTitle' mb={8}>
                 Кулинарные блоги
             </Heading>
 
-            <Box
-                pb={8}
-                mb={6}
-                borderRadius='8px'
-                mx='auto'
-                px={{ base: '16px', lg: '30px', xl: '190px' }}
-                bg='customLime.300'
-                data-test-id='blogs-favorites-box'
-            >
-                <Heading variant='sectionBlogTitle'>Избранные блоги</Heading>
-                {favoriteData?.favorites && (
-                    <BlogList blogs={favoriteData?.favorites} variant='favorite' />
-                )}
-            </Box>
+            {favorites && (
+                <Box
+                    pb={8}
+                    mb={6}
+                    borderRadius='8px'
+                    mx='auto'
+                    px={{ base: '16px', lg: '30px', xl: '190px' }}
+                    bg='customLime.300'
+                    data-test-id='blogs-favorites-box'
+                >
+                    <Heading variant='sectionBlogTitle'>Избранные блоги</Heading>
+                    <BlogList blogs={favorites} variant='favorite' />
+                </Box>
+            )}
 
             <Box data-test-id='blogs-others-box'>
-                {data?.others && <BlogList blogs={data?.others} variant='full' />}
+                <BlogList blogs={others} variant='full' />
 
                 <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
                     <Button

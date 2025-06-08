@@ -1,11 +1,23 @@
-import { Avatar, Box, Button, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardBody,
+    HStack,
+    Text,
+    Tooltip,
+    VStack,
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { API_RESULTS } from '~/constants/api-results';
+// import { API_RESULTS } from '~/constants/api-results';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
 import { BloggerByIdResponse } from '~/types/bloggerTypes';
 
+import { CardLoader } from '../FullLoader/CardLoader';
 import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BloggerCardProps = {
@@ -14,7 +26,7 @@ type BloggerCardProps = {
 };
 
 export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps) => {
-    const [toggleSubscription] = useToggleSubscriptionMutation();
+    const [toggleSubscription, { isLoading }] = useToggleSubscriptionMutation();
     const currentUserId = localStorage.getItem('userId');
     const dispatch = useDispatch();
 
@@ -22,19 +34,29 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
     const { _id, login, firstName, lastName } = bloggerInfo;
     const imageUrl = undefined;
 
+    const [isSubscribed, setIsSubscribed] = useState(isFavorite);
+
+    useEffect(() => {
+        setIsSubscribed(isFavorite);
+    }, [isFavorite]);
+
     const handleToggleSubscription = async () => {
         if (!currentUserId) return;
+
+        setIsSubscribed((prev) => !prev);
 
         try {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
+            setIsSubscribed((prev) => !prev);
+
             if (typeof err === 'object' && err !== null && 'status' in err) {
                 dispatch(
                     setAppAlert({
                         type: 'error',
-                        title: API_RESULTS.ERROR_SERVER_TITLE,
+                        title: 'Ошибка сервера',
+                        message: 'Попробуйте немного позже.',
                         sourse: 'global',
-                        message: API_RESULTS.ERROR_SERVER_MESSAGE,
                     }),
                 );
             }
@@ -52,6 +74,7 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
             mx='auto'
             data-test-id='blogger-user-info-box'
         >
+            {isLoading && <CardLoader />}
             {variantCard === 'recipe' && (
                 <Box position='absolute' top='2' right='3'>
                     <Text fontSize='xs' fontWeight='semibold' color='gray.500'>
@@ -93,13 +116,13 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
 
                 <HStack mt={4}>
                     <HStack mt={3} spacing={4}>
-                        {isFavorite ? (
+                        {isSubscribed ? (
                             <Tooltip
                                 label='Нажмите, если хотите отписаться'
                                 aria-label='Tooltip для отписки'
                                 data-test-id='blog-tooltip'
                                 hasArrow
-                                placement='top'
+                                placement='bottom'
                             >
                                 <Button
                                     size='sm'
@@ -117,7 +140,7 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
                                 onClick={handleToggleSubscription}
                                 data-test-id='blog-toggle-subscribe'
                             >
-                                'Подписаться'
+                                Подписаться
                             </Button>
                         )}
                     </HStack>

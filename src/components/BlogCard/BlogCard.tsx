@@ -7,8 +7,9 @@ import { API_RESULTS } from '~/constants/api-results';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
 import { Blogger } from '~/types/bloggerTypes';
+import { getRecipeCountLabel } from '~/utils/getRecipeCountLabel';
 
-import { CustomLoader } from '../CustomLoader/CustomLoader';
+import { CardLoader } from '../FullLoader/CardLoader';
 import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BlogCardProps = {
@@ -54,14 +55,19 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
         navigate(`${ROUTES_PATH.BLOGS}/${_id}#notes`);
     };
 
+    const handleMoveToBlog = () => {
+        navigate(`${ROUTES_PATH.BLOGS}/${_id}`);
+    };
+
     const imageUrl = undefined;
 
-    if (isLoading) {
-        return <CustomLoader size='small' dataTestId='mobile-loader' />;
-    }
+    // if (isLoading) {
+    //     return <CardLoader />;
+    // }
 
     return (
         <Card variant='basic' data-test-id='blogs-card'>
+            {isLoading && <CardLoader />}
             <CardBody
                 p={{ base: '4', md: '4', lg: '4', xl: '6' }}
                 pr={{ base: '4', md: '4', lg: '4', xl: '5' }}
@@ -113,34 +119,33 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     </Text>
                 )}
 
-                {variant === 'full' ||
-                    (variant === 'fullProfile' && (
-                        <HStack mt={4}>
-                            <HStack mt={3} spacing={4}>
-                                <Button
-                                    size='sm'
-                                    variant='limeSolid'
-                                    onClick={handleToggleSubscription}
-                                    data-test-id='blog-toggle-subscribe'
-                                >
-                                    Подписаться
-                                </Button>
-                                <Button
-                                    size='sm'
-                                    variant='ghost'
-                                    onClick={handleMoveToNotes}
-                                    data-test-id='blogs-card-notes-button'
-                                >
-                                    Читать
-                                </Button>
-                            </HStack>
-                            <LikesInfo
-                                subscribers={subscribersCount}
-                                bookmarks={bookmarksCount}
-                                size='limeSmall'
-                            />
+                {(variant === 'full' || variant === 'fullProfile') && (
+                    <HStack mt={4}>
+                        <HStack mt={3} spacing={4}>
+                            <Button
+                                data-test-id='blog-toggle-subscribe'
+                                size='sm'
+                                variant='limeSolid'
+                                onClick={handleToggleSubscription}
+                            >
+                                Подписаться
+                            </Button>
+                            <Button
+                                size='sm'
+                                variant='ghost'
+                                onClick={handleMoveToNotes}
+                                data-test-id='blogs-card-notes-button'
+                            >
+                                Читать
+                            </Button>
                         </HStack>
-                    ))}
+                        <LikesInfo
+                            subscribers={subscribersCount}
+                            bookmarks={bookmarksCount}
+                            size='limeSmall'
+                        />
+                    </HStack>
+                )}
 
                 {variant === 'favorite' && (
                     <>
@@ -150,6 +155,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                                     size='sm'
                                     variant='limeSolid'
                                     data-test-id='blogs-card-recipes-button'
+                                    onClick={handleMoveToBlog}
                                 >
                                     Рецепты
                                 </Button>
@@ -174,7 +180,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                                 mb={1}
                                 data-test-id='blogs-card-new-recipes-badge'
                             >
-                                Новых рецептов: {newRecipesCount}
+                                {getRecipeCountLabel(newRecipesCount)}
                             </Text>
                         )}
                     </>
