@@ -1,5 +1,7 @@
 import { Box } from '@chakra-ui/react';
 
+import { TEST_IDS } from '~/constants/test-ids';
+
 // import { TEST_IDS } from '~/constants/test-ids';
 import { CustomLoader } from '../CustomLoader/CustomLoader';
 
@@ -18,6 +20,6 @@ export const CardLoader = () => (
         justifyContent='center'
         borderRadius='xl'
     >
-        <CustomLoader size='small' dataTestId='mobile-loader' />
+        <CustomLoader size='small' dataTestId={TEST_IDS.MOBILE_LOADER} />
     </Box>
 );

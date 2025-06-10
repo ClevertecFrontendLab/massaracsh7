@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import { ArrowBlackRight } from '~/assets/icons/icons';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 import { setAppAlert, setAppLoader } from '~/store/app-slice';
 
@@ -64,7 +65,9 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
 
     const headingTitle = variant === 'fullProfile' ? 'Другие блоги' : 'Кулинарные блоги';
     const dataTitle =
-        variant === 'fullProfile' ? 'blogger-user-other-blogs-button' : 'main-page-blogs-button';
+        variant === 'fullProfile'
+            ? TEST_IDS.BLOGGER_USER_OTHER_BLOGS_BUTTON
+            : TEST_IDS.MAIN_PAGE_BLOGS_BUTTON;
 
     const dataUpdate = data?.others.slice(0, 3);
     const bgColor = variant === 'fullProfile' ? 'transparent' : 'customLime.300';
@@ -77,7 +80,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
             pb='24px'
             borderRadius='xlarge'
             mb={{ base: 8, md: 8, lg: 10, xl: 10 }}
-            data-test-id='main-page-blogs-box'
+            data-test-id={TEST_IDS.MAIN_PAGE_BLOGS_BOX}
         >
             <HStack justify='space-between' mb={{ base: 3, md: 2, lg: 4.5, xl: 6 }}>
                 <Heading variant='sectionBlogTitle'>{headingTitle}</Heading>

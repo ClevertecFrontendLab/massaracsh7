@@ -8,6 +8,7 @@ import { BloggerNotesSection } from '~/components/Blogger/BloggerNotesSection';
 import { BlogSection } from '~/components/BlogSection/BlogSection';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { RecipeList } from '~/components/RecipeList/RecipeList';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import { useGetRecipesByUserIdQuery } from '~/query/services/recipes';
 import { setAppAlert, setAppLoader } from '~/store/app-slice';
@@ -74,7 +75,7 @@ export const BloggerProfilePage = () => {
                     <RecipeList recipes={isExpanded ? data.recipes : data.recipes.slice(0, 8)} />
                     {!isExpanded && data.recipes.length > 8 && (
                         <Button
-                            data-test-id='load-more-button'
+                            data-test-id={TEST_IDS.LOAD_MORE_BUTTON}
                             onClick={handleExpand}
                             variant='limeSolid'
                             mt={4}

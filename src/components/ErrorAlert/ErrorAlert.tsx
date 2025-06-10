@@ -49,9 +49,11 @@ export const AppAlert = () => {
                 <AlertIcon color='white' />
                 <Box>
                     {title && (
-                        <AlertTitle data-test-id='error-notification-title'>{title}</AlertTitle>
+                        <AlertTitle data-test-id={TEST_IDS.ERROR_NOTIFICATION_TITLE}>
+                            {title}
+                        </AlertTitle>
                     )}
-                    <AlertDescription data-test-id='error-notification-description'>
+                    <AlertDescription data-test-id={TEST_IDS.ERROR_NOTIFICATION_DESCRIPTION}>
                         {message}
                     </AlertDescription>
                 </Box>

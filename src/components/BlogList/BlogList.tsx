@@ -1,6 +1,7 @@
 import { SimpleGrid } from '@chakra-ui/react';
 
 import { Blogger } from '~/types/bloggerTypes';
+import { getTestId } from '~/utils/chooseIds';
 
 import { BlogCard } from '../BlogCard/BlogCard';
 
@@ -10,20 +11,6 @@ type BlogListProps = {
 };
 
 export const BlogList = ({ blogs, variant = 'base' }: BlogListProps) => {
-    const getTestId = () => {
-        switch (variant) {
-            case 'favorite':
-                return 'blogs-favorites-grid';
-            case 'full':
-                return 'blogs-others-grid';
-            case 'fullProfile':
-                return 'blogger-user-other-blogs-grid';
-            case 'base':
-            default:
-                return 'main-page-blogs-grid';
-        }
-    };
-
     const gridProps =
         variant === 'fullProfile'
             ? {
@@ -40,7 +27,7 @@ export const BlogList = ({ blogs, variant = 'base' }: BlogListProps) => {
               };
 
     return (
-        <SimpleGrid {...gridProps} columnGap={4} rowGap={6} data-test-id={getTestId()}>
+        <SimpleGrid {...gridProps} columnGap={4} rowGap={6} data-test-id={getTestId(variant)}>
             {blogs.map((blog, index) => (
                 <BlogCard key={index} blogger={blog} variant={variant} />
             ))}

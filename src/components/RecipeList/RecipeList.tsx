@@ -1,5 +1,6 @@
 import { SimpleGrid } from '@chakra-ui/react';
 
+import { TEST_IDS } from '~/constants/test-ids';
 import { Recipe } from '~/types/apiTypes';
 
 import { RecipeCard } from '../RecipeCard/RecipeCard';
@@ -25,7 +26,7 @@ export const RecipeList = ({ recipes, gridVariant }: RecipeListProps) => {
 
     return (
         <SimpleGrid
-            data-test-id='recipe-card-list'
+            data-test-id={TEST_IDS.RECIPE_CARD_LIST}
             w='100%'
             templateColumns={{
                 base: '1fr',

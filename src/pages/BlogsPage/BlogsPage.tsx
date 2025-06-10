@@ -8,6 +8,7 @@ import { BlogList } from '~/components/BlogList/BlogList';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { SliderList } from '~/components/SliderList/SliderList';
 import { BASE_LIMIT_SLIDER } from '~/constants/constants';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { setAppAlert, setAppLoader } from '~/store/app-slice';
@@ -72,7 +73,7 @@ export const BlogsPage = () => {
                     borderRadius='16px'
                     mx='auto'
                     bg='customLime.300'
-                    data-test-id='blogs-favorites-box'
+                    data-test-id={TEST_IDS.BLOGS_FAVORITES_BOX}
                 >
                     <Heading variant='sectionBlogTitle' mb={4}>
                         Избранные блоги
@@ -82,7 +83,7 @@ export const BlogsPage = () => {
             )}
 
             <Box
-                data-test-id='blogs-others-box'
+                data-test-id={TEST_IDS.BLOGS_OTHERS_BOX}
                 bg='grayBg'
                 p={6}
                 pb={5}
@@ -104,7 +105,7 @@ export const BlogsPage = () => {
                                 <ArrowBlackRight w='14px' transform='rotate(180deg)' />
                             ) : undefined
                         }
-                        data-test-id='blogs-others-button'
+                        data-test-id={TEST_IDS.BLOGS_OTHERS_BUTTON}
                     >
                         {isExpanded ? 'Свернуть' : 'Все авторы'}
                     </Button>

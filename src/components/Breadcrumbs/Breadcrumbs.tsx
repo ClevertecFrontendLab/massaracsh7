@@ -61,7 +61,7 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
                         to='/blogs'
                         textStyle={bloggerId ? 'navInactive' : 'navActive'}
                         onClick={() => onClose?.()}
-                        data-test-id='blogger-user-breadcrumb-name'
+                        data-test-id={TEST_IDS.BLOGGER_USER_BREADCRUMB_NAME}
                     >
                         Блоги
                     </BreadcrumbLink>
@@ -75,7 +75,7 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
                         to={`/blogs/${bloggerId}`}
                         textStyle='navActive'
                         onClick={() => onClose?.()}
-                        data-test-id='blogger-user-breadcrumb-section'
+                        data-test-id={TEST_IDS.BLOGGER_USER_BREADCRUMB_SECTION}
                     >
                         {blogger.bloggerInfo.firstName} {blogger.bloggerInfo.lastName} (@
                         {blogger.bloggerInfo.login})

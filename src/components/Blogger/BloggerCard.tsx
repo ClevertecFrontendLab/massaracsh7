@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { PersonPlus, PersonPlusWhite } from '~/assets/icons/icons';
+import { TEST_IDS } from '~/constants/test-ids';
 // import { API_RESULTS } from '~/constants/api-results';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
@@ -75,7 +76,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
             borderRadius='xl'
             border='cardTransparent'
             mx='auto'
-            data-test-id='blogger-user-info-box'
+            data-test-id={TEST_IDS.BLOGGER_USER_INFO_BOX}
         >
             {isLoading && <CardLoader />}
             <CardBody
@@ -101,10 +102,10 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                         py='6px'
                         w={{ sm: '100%', md: '408px', lg: '608px', xl: '608px' }}
                     >
-                        <Heading variant='pageTitle' data-test-id='blogger-user-info-name'>
+                        <Heading variant='pageTitle' data-test-id={TEST_IDS.BLOGGER_USER_INFO_NAME}>
                             {firstName} {lastName}
                         </Heading>
-                        <Text textStyle='miniText' data-test-id='blogger-user-info-login'>
+                        <Text textStyle='miniText' data-test-id={TEST_IDS.BLOGGER_USER_INFO_LOGIN}>
                             @{login}
                         </Text>
                     </VStack>
@@ -116,7 +117,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                             <Tooltip
                                 label='Нажмите, если хотите отписаться'
                                 aria-label='Tooltip для отписки'
-                                data-test-id='blog-tooltip'
+                                data-test-id={TEST_IDS.BLOG_TOOLTIP}
                                 hasArrow
                                 placement='bottom'
                             >
@@ -124,7 +125,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                                     size='sm'
                                     variant='outlineWhiteSmall'
                                     onClick={handleToggleSubscription}
-                                    data-test-id='blog-toggle-unsubscribe'
+                                    data-test-id={TEST_IDS.BLOG_TOGGLE_UNSUBSCRIBE}
                                     leftIcon={<PersonPlusWhite />}
                                 >
                                     Вы подписаны
@@ -135,7 +136,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                                 size='sm'
                                 variant='darkWhiteSmall'
                                 onClick={handleToggleSubscription}
-                                data-test-id='blog-toggle-subscribe'
+                                data-test-id={TEST_IDS.BLOG_TOGGLE_SUBSCRIBE}
                                 leftIcon={<PersonPlus />}
                             >
                                 Подписаться

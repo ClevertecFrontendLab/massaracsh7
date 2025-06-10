@@ -1,6 +1,7 @@
 import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
+import { TEST_IDS } from '~/constants/test-ids';
 import { BloggerNote } from '~/types/bloggerTypes';
 
 import { BloggerNotes } from './BloggerNotes';
@@ -26,14 +27,14 @@ export const BloggerNotesSection = ({ notes }: BloggerNotesProps) => {
     return (
         <Box
             id='notes'
-            data-test-id='blog-notes-box'
+            data-test-id={TEST_IDS.BLOG_NOTES_BOX}
             bg='rgba(0, 0, 0, 0.04)'
             p={4}
             borderRadius='16px'
         >
             <Heading as='h2' variant='sliderTitle' mb={4}>
                 Заметки &nbsp;{' '}
-                <Text as='span' data-test-id='blogger-user-notes-count' color='grayText'>
+                <Text as='span' data-test-id={TEST_IDS.BLOGGER_USER_NOTES_COUNT} color='grayText'>
                     ({notes.length})
                 </Text>
             </Heading>
@@ -46,7 +47,7 @@ export const BloggerNotesSection = ({ notes }: BloggerNotesProps) => {
                         variant='ghost'
                         onClick={toggleExpand}
                         alignItems='center'
-                        data-test-id='blogger-user-notes-button'
+                        data-test-id={TEST_IDS.BLOGGER_USER_NOTES_BUTTON}
                     >
                         {isExpanded ? 'Свернуть' : 'Показать больше'}
                     </Button>

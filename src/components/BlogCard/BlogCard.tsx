@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router';
 import { ROUTES_PATH } from '~/app/routes';
 import { PersonPlus } from '~/assets/icons/icons';
 import { API_RESULTS } from '~/constants/api-results';
+import { TEST_IDS } from '~/constants/test-ids';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
 import { Blogger } from '~/types/bloggerTypes';
@@ -75,7 +76,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
     return (
         <Card
             variant='basic'
-            data-test-id='blogs-card'
+            data-test-id={TEST_IDS.BLOGS_CARD}
             h={
                 ['full', 'fullProfile', 'favorite'].includes(variant)
                     ? { base: '208px', lg: '224px', xl: '244px' }
@@ -103,7 +104,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     <VStack align='start' spacing={{ lg: '0', xl: '0' }} pt='2px'>
                         <Text
                             textStyle='nameText'
-                            data-test-id='blogs-card-name'
+                            data-test-id={TEST_IDS.BLOGS_CARD_NAME}
                             sx={{
                                 display: '-webkit-box',
                                 WebkitBoxOrient: 'vertical',
@@ -115,7 +116,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                         >
                             {firstName} {lastName}
                         </Text>
-                        <Text textStyle='miniText' data-test-id='blogs-card-login'>
+                        <Text textStyle='miniText' data-test-id={TEST_IDS.BLOGS_CARD_LOGIN}>
                             @{login}
                         </Text>
                     </VStack>
@@ -124,7 +125,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                 {notes?.[0]?.text && (
                     <Text
                         textStyle='cutText'
-                        data-test-id='blogs-card-notes-text'
+                        data-test-id={TEST_IDS.BLOGS_CARD_NOTES_TEXT}
                         sx={{
                             WebkitLineClamp: {
                                 sm: 3,
@@ -141,7 +142,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     <HStack mt='auto' pt={4} alignItems='center'>
                         <HStack spacing={4}>
                             <Button
-                                data-test-id='blog-toggle-subscribe'
+                                data-test-id={TEST_IDS.BLOG_TOGGLE_SUBSCRIBE}
                                 variant='darkWhiteSmall'
                                 onClick={handleToggleSubscription}
                                 leftIcon={<PersonPlus />}
@@ -151,7 +152,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                             <Button
                                 variant='limeOutlineSmall'
                                 onClick={handleMoveToNotes}
-                                data-test-id='blogs-card-notes-button'
+                                data-test-id={TEST_IDS.BLOGS_CARD_NOTES_BUTTON}
                             >
                                 Читать
                             </Button>
@@ -183,7 +184,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     >
                         <HStack spacing={4}>
                             <Button
-                                data-test-id='blog-toggle-subscribe'
+                                data-test-id={TEST_IDS.BLOG_TOGGLE_SUBSCRIBE}
                                 variant='darkWhiteSmall'
                                 onClick={handleToggleSubscription}
                                 leftIcon={<PersonPlus />}
@@ -193,7 +194,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                             <Button
                                 variant='limeOutlineSmall'
                                 onClick={handleMoveToNotes}
-                                data-test-id='blogs-card-notes-button'
+                                data-test-id={TEST_IDS.BLOGS_CARD_NOTES_BUTTON}
                             >
                                 Читать
                             </Button>
@@ -213,7 +214,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                                 <Button
                                     size='sm'
                                     variant='limeSolid'
-                                    data-test-id='blogs-card-recipes-button'
+                                    data-test-id={TEST_IDS.BLOGS_CARD_RECIPES_BUTTON}
                                     onClick={handleMoveToBlog}
                                 >
                                     Рецепты
@@ -222,7 +223,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                                     size='sm'
                                     variant='limeOutlineSmall'
                                     onClick={handleMoveToNotes}
-                                    data-test-id='blogs-card-notes-button'
+                                    data-test-id={TEST_IDS.BLOGS_CARD_NOTES_BUTTON}
                                 >
                                     Читать
                                 </Button>
@@ -237,7 +238,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                             <Badge variant='gray06' position='absolute' top='2' right='3'>
                                 <Text
                                     textTransform='lowercase'
-                                    data-test-id='blogs-card-new-recipes-badge'
+                                    data-test-id={TEST_IDS.BLOGS_CARD_NEW_RECIPES_BADGE}
                                 >
                                     {getRecipeCountLabel(newRecipesCount)}
                                 </Text>

@@ -1,5 +1,6 @@
 import { Card, CardBody, Text } from '@chakra-ui/react';
 
+import { TEST_IDS } from '~/constants/test-ids';
 import { BloggerNote } from '~/types/bloggerTypes';
 import { formatDate } from '~/utils/formatDate';
 
@@ -16,10 +17,10 @@ export const BloggerNoteCard = ({ note }: BloggerNoteCardProps) => (
             p={{ base: '4', md: '4', lg: '4', xl: '6' }}
             pr={{ base: '4', md: '4', lg: '4', xl: '5' }}
         >
-            <Text data-test-id='notes-card-date' color='customLime.600' pb={4}>
+            <Text data-test-id={TEST_IDS.NOTES_CARD_DATE} color='customLime.600' pb={4}>
                 {formatDate(note.date)}
             </Text>
-            <Text data-test-id='notes-card-text'>{note.text}</Text>
+            <Text data-test-id={TEST_IDS.NOTES_CARD_TEXT}>{note.text}</Text>
         </CardBody>
     </Card>
 );

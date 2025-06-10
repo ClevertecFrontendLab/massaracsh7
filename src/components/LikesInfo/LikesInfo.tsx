@@ -3,6 +3,7 @@ import { HStack, Image, Text } from '@chakra-ui/react';
 import BsBookmarkHeart from '~/assets/icons/BsBookmarkHeart.svg';
 import BsEmojiHeartEyes from '~/assets/icons/BsEmojiHeartEyes.svg';
 import BsPeopleFill from '~/assets/icons/BsPeopleFill.svg';
+import { TEST_IDS } from '~/constants/test-ids';
 
 type LikesAndCommentsInfoProps = {
     likes?: number;
@@ -22,7 +23,7 @@ export const LikesInfo = ({
     return (
         <HStack spacing={3.5} px={1} width='100%' justify='flex-end'>
             {bookmarks !== undefined && bookmarks > 0 && (
-                <HStack spacing={1} data-test-id='blogger-followers-bookmarks'>
+                <HStack spacing={1} data-test-id={TEST_IDS.BLOGGER_FOLLOWERS_BOOKMARKS}>
                     <Image src={BsBookmarkHeart} boxSize='12px' />
                     <Text textStyle={size}>{bookmarks}</Text>
                 </HStack>
@@ -34,7 +35,7 @@ export const LikesInfo = ({
                 </HStack>
             )}
             {subscribers !== undefined && subscribers > 0 && (
-                <HStack spacing={1} data-test-id='blogger-followers-count'>
+                <HStack spacing={1} data-test-id={TEST_IDS.BLOGGER_FOLLOWERS_COUNT}>
                     <Image src={BsPeopleFill} boxSize='12px' />
                     <Text textStyle={size}>{subscribers}</Text>
                 </HStack>
