@@ -1,10 +1,11 @@
 import {
     Avatar,
-    Box,
     Button,
     Card,
     CardBody,
+    Heading,
     HStack,
+    Stack,
     Text,
     Tooltip,
     VStack,
@@ -12,6 +13,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { PersonPlus, PersonPlusWhite } from '~/assets/icons/icons';
 // import { API_RESULTS } from '~/constants/api-results';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
@@ -22,10 +24,9 @@ import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BloggerCardProps = {
     blogger: BloggerByIdResponse;
-    variantCard?: 'blog' | 'recipe';
 };
 
-export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps) => {
+export const BloggerCard = ({ blogger }: BloggerCardProps) => {
     const [toggleSubscription, { isLoading }] = useToggleSubscriptionMutation();
     const currentUserId = localStorage.getItem('userId');
     const dispatch = useDispatch();
@@ -67,55 +68,50 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
         <Card
             variant='basic'
             position='relative'
-            p={{ sm: '3', md: '6', lg: '6', xl: '6' }}
-            bg={variantCard === 'recipe' ? 'customLime.300' : 'white'}
+            p={0}
+            pt={{ sm: 4, md: 0 }}
+            bg='white'
             w={{ sm: '100%', md: '604px' }}
             borderRadius='xl'
+            border='cardTransparent'
             mx='auto'
             data-test-id='blogger-user-info-box'
         >
             {isLoading && <CardLoader />}
-            {variantCard === 'recipe' && (
-                <Box position='absolute' top='2' right='3'>
-                    <Text fontSize='xs' fontWeight='semibold' color='gray.500'>
-                        Автор рецепта
-                    </Text>
-                </Box>
-            )}
-            <CardBody>
-                <HStack
-                    spacing={{ base: 2, md: 2, lg: 3, xl: 3 }}
-                    mb={{ sm: 4, md: 4, lg: 4, xl: 7 }}
+            <CardBody
+                p={{ base: 'default', sm: 0, md: 'default' }}
+                m={{ base: 'default', sm: 0, md: 'default' }}
+            >
+                <Stack
+                    spacing={6}
+                    direction={{ base: 'column', md: 'row' }}
+                    alignItems={{ base: 'center', md: 'stretch' }}
                 >
                     <Avatar
                         src={imageUrl}
                         name={`${firstName} ${lastName}`}
-                        w={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
-                        h={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
+                        w={{ base: '96px', lg: '128px' }}
+                        h={{ base: '96px', lg: '128px' }}
                     />
-                    <VStack align='start' spacing={{ lg: '0', xl: '0' }} pt='2px'>
-                        <Text
-                            textStyle='nameText'
-                            sx={{
-                                display: '-webkit-box',
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden',
-                                WebkitLineClamp: 1,
-                                wordBreak: 'break-all',
-                                textOverflow: 'ellipsis',
-                            }}
-                            data-test-id='blogger-user-info-name'
-                        >
+                    <VStack
+                        flex={1}
+                        alignItems={{ base: 'center', md: 'start' }}
+                        justifyContent='space-between'
+                        spacing='0'
+                        py='6px'
+                        w={{ sm: '100%', md: '408px', lg: '608px', xl: '608px' }}
+                    >
+                        <Heading variant='pageTitle' data-test-id='blogger-user-info-name'>
                             {firstName} {lastName}
-                        </Text>
+                        </Heading>
                         <Text textStyle='miniText' data-test-id='blogger-user-info-login'>
                             @{login}
                         </Text>
                     </VStack>
-                </HStack>
+                </Stack>
 
-                <HStack mt={4}>
-                    <HStack mt={3} spacing={4}>
+                <HStack mt={0} w={{ sm: '100%', md: 'auto' }} flex={1} spacing={4} align='flex-end'>
+                    <HStack spacing={4}>
                         {isSubscribed ? (
                             <Tooltip
                                 label='Нажмите, если хотите отписаться'
@@ -126,9 +122,10 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
                             >
                                 <Button
                                     size='sm'
-                                    variant='limeSolid'
+                                    variant='outlineWhiteSmall'
                                     onClick={handleToggleSubscription}
                                     data-test-id='blog-toggle-unsubscribe'
+                                    leftIcon={<PersonPlusWhite />}
                                 >
                                     Вы подписаны
                                 </Button>
@@ -136,9 +133,10 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
                         ) : (
                             <Button
                                 size='sm'
-                                variant='limeSolid'
+                                variant='darkWhiteSmall'
                                 onClick={handleToggleSubscription}
                                 data-test-id='blog-toggle-subscribe'
+                                leftIcon={<PersonPlus />}
                             >
                                 Подписаться
                             </Button>
@@ -147,7 +145,7 @@ export const BloggerCard = ({ blogger, variantCard = 'blog' }: BloggerCardProps)
 
                     <LikesInfo
                         subscribers={totalSubscribers}
-                        bookmarks={variantCard === 'blog' ? totalBookmarks : undefined}
+                        bookmarks={totalBookmarks}
                         size='limeSmall'
                     />
                 </HStack>

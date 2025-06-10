@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 import { BloggerNote } from '~/types/bloggerTypes';
@@ -24,23 +24,33 @@ export const BloggerNotesSection = ({ notes }: BloggerNotesProps) => {
     if (!notes.length) return null;
 
     return (
-        <Box id='notes' data-test-id='blog-notes-box'>
-            <Heading variant='sectionBlogTitle' mb={4}>
-                Заметки <Text data-test-id='blogger-user-notes-count'>({notes.length})</Text>
+        <Box
+            id='notes'
+            data-test-id='blog-notes-box'
+            bg='rgba(0, 0, 0, 0.04)'
+            p={4}
+            borderRadius='16px'
+        >
+            <Heading as='h2' variant='sliderTitle' mb={4}>
+                Заметки &nbsp;{' '}
+                <Text as='span' data-test-id='blogger-user-notes-count' color='grayText'>
+                    ({notes.length})
+                </Text>
             </Heading>
 
             <BloggerNotes notes={notes} isExpanded={isExpanded} maxVisible={3} />
 
             {hasToggle && (
-                <Button
-                    variant='ghost'
-                    onClick={toggleExpand}
-                    alignSelf='flex-start'
-                    mt={2}
-                    data-test-id='blogger-user-notes-button'
-                >
-                    {isExpanded ? 'Свернуть' : 'Показать больше'}
-                </Button>
+                <Center mt={2}>
+                    <Button
+                        variant='ghost'
+                        onClick={toggleExpand}
+                        alignItems='center'
+                        data-test-id='blogger-user-notes-button'
+                    >
+                        {isExpanded ? 'Свернуть' : 'Показать больше'}
+                    </Button>
+                </Center>
             )}
         </Box>
     );

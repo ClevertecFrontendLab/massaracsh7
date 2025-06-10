@@ -24,12 +24,23 @@ export const BlogList = ({ blogs, variant = 'base' }: BlogListProps) => {
         }
     };
 
+    const gridProps =
+        variant === 'fullProfile'
+            ? {
+                  templateColumns: {
+                      base: '1fr',
+                      md: 'repeat(3, 1fr)',
+                  },
+              }
+            : {
+                  columns:
+                      variant === 'favorite'
+                          ? { base: 1, md: 2 }
+                          : { base: 1, sm: 1, md: 2, lg: 2, xl: 3 },
+              };
+
     return (
-        <SimpleGrid
-            columns={{ base: 1, md: 3 }}
-            spacing={{ base: 3, md: 3, lg: 4, xl: 4 }}
-            data-test-id={getTestId()}
-        >
+        <SimpleGrid {...gridProps} columnGap={4} rowGap={6} data-test-id={getTestId()}>
             {blogs.map((blog, index) => (
                 <BlogCard key={index} blogger={blog} variant={variant} />
             ))}

@@ -67,10 +67,11 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
         variant === 'fullProfile' ? 'blogger-user-other-blogs-button' : 'main-page-blogs-button';
 
     const dataUpdate = data?.others.slice(0, 3);
+    const bgColor = variant === 'fullProfile' ? 'transparent' : 'customLime.300';
     return (
         <Box
             as='section'
-            bg='customLime.300'
+            bg={bgColor}
             px={{ base: 3, md: 3, lg: 6, xl: 6 }}
             pt='20px'
             pb='24px'
@@ -81,25 +82,9 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
             <HStack justify='space-between' mb={{ base: 3, md: 2, lg: 4.5, xl: 6 }}>
                 <Heading variant='sectionBlogTitle'>{headingTitle}</Heading>
 
-                <Hide below='md'>
+                {variant === 'fullProfile' ? (
                     <Button
-                        variant='limeLightSolid'
-                        size='large'
-                        rightIcon={<ArrowBlackRight w='14px' />}
-                        onClick={handleNavigate}
-                        data-test-id={dataTitle}
-                    >
-                        Всe авторы
-                    </Button>
-                </Hide>
-            </HStack>
-
-            {dataUpdate && <BlogList blogs={dataUpdate} variant={variant} />}
-
-            <Show below='md'>
-                <Center mt={{ sm: 3 }}>
-                    <Button
-                        variant='limeLightSolid'
+                        variant='ghost'
                         size='large'
                         rightIcon={<ArrowBlackRight w='14px' />}
                         onClick={handleNavigate}
@@ -107,8 +92,38 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
                     >
                         Все авторы
                     </Button>
-                </Center>
-            </Show>
+                ) : (
+                    <Hide below='md'>
+                        <Button
+                            variant='limeLightSolid'
+                            size='large'
+                            rightIcon={<ArrowBlackRight w='14px' />}
+                            onClick={handleNavigate}
+                            data-test-id={dataTitle}
+                        >
+                            Всe авторы
+                        </Button>
+                    </Hide>
+                )}
+            </HStack>
+
+            {dataUpdate && <BlogList blogs={dataUpdate} variant={variant} />}
+
+            {variant !== 'fullProfile' && (
+                <Show below='md'>
+                    <Center mt={{ sm: 3 }}>
+                        <Button
+                            variant='limeLightSolid'
+                            size='large'
+                            rightIcon={<ArrowBlackRight w='14px' />}
+                            onClick={handleNavigate}
+                            data-test-id={dataTitle}
+                        >
+                            Все авторы
+                        </Button>
+                    </Center>
+                </Show>
+            )}
         </Box>
     );
 };

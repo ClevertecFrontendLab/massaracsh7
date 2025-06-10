@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router';
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { BlogList } from '~/components/BlogList/BlogList';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
+import { SliderList } from '~/components/SliderList/SliderList';
+import { BASE_LIMIT_SLIDER } from '~/constants/constants';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
+import { useGetRecipesQuery } from '~/query/services/recipes';
 import { setAppAlert, setAppLoader } from '~/store/app-slice';
 
 export const BlogsPage = () => {
@@ -28,6 +31,12 @@ export const BlogsPage = () => {
         },
     );
 
+    const { data: sliderRecipes } = useGetRecipesQuery({
+        sortBy: 'createdAt',
+        sortOrder: 'desc',
+        limit: BASE_LIMIT_SLIDER,
+    });
+
     useEffect(() => {
         if (isError) {
             dispatch(
@@ -41,13 +50,11 @@ export const BlogsPage = () => {
             dispatch(setAppLoader(false));
             navigate('/');
         }
-    }, [isError, navigate]);
+    }, [isError, navigate, dispatch]);
 
     if (isLoading) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
     }
-
-    console.log(data);
 
     const favorites = data?.favorites ?? [];
     const others = data?.others ?? [];
@@ -57,29 +64,38 @@ export const BlogsPage = () => {
                 Кулинарные блоги
             </Heading>
 
-            {favorites && (
+            {favorites.length > 0 && (
                 <Box
-                    pb={8}
-                    mb={6}
-                    borderRadius='8px'
+                    p={6}
+                    pb={5}
+                    mb={10}
+                    borderRadius='16px'
                     mx='auto'
-                    px={{ base: '16px', lg: '30px', xl: '190px' }}
                     bg='customLime.300'
                     data-test-id='blogs-favorites-box'
                 >
-                    <Heading variant='sectionBlogTitle'>Избранные блоги</Heading>
+                    <Heading variant='sectionBlogTitle' mb={4}>
+                        Избранные блоги
+                    </Heading>
                     <BlogList blogs={favorites} variant='favorite' />
                 </Box>
             )}
 
-            <Box data-test-id='blogs-others-box'>
+            <Box
+                data-test-id='blogs-others-box'
+                bg='grayBg'
+                p={6}
+                pb={5}
+                mb={10}
+                borderRadius='16px'
+                mx='auto'
+            >
                 <BlogList blogs={others} variant='full' />
 
-                <Center mb={{ sm: '8', md: '8', lg: '9', xl: '9' }}>
+                <Center mt={6}>
                     <Button
-                        variant='limeSolid'
-                        size='large'
-                        mb={8}
+                        variant='ghost'
+                        size='middle'
                         mx='auto'
                         onClick={() => setIsExpanded((prev) => !prev)}
                         rightIcon={!isExpanded ? <ArrowBlackRight w='14px' /> : undefined}
@@ -94,6 +110,7 @@ export const BlogsPage = () => {
                     </Button>
                 </Center>
             </Box>
+            <Box>{sliderRecipes?.data && <SliderList recipes={sliderRecipes?.data} />}</Box>
         </Box>
     );
 };

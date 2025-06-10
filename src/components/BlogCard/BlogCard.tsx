@@ -1,8 +1,19 @@
-import { Avatar, Button, Card, CardBody, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+    Avatar,
+    Badge,
+    Button,
+    Card,
+    CardBody,
+    HStack,
+    Stack,
+    Text,
+    VStack,
+} from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
+import { PersonPlus } from '~/assets/icons/icons';
 import { API_RESULTS } from '~/constants/api-results';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { setAppAlert } from '~/store/app-slice';
@@ -61,16 +72,23 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
 
     const imageUrl = undefined;
 
-    // if (isLoading) {
-    //     return <CardLoader />;
-    // }
-
     return (
-        <Card variant='basic' data-test-id='blogs-card'>
+        <Card
+            variant='basic'
+            data-test-id='blogs-card'
+            h={
+                ['full', 'fullProfile', 'favorite'].includes(variant)
+                    ? { base: '208px', lg: '224px', xl: '244px' }
+                    : 'auto'
+            }
+        >
             {isLoading && <CardLoader />}
             <CardBody
-                p={{ base: '4', md: '4', lg: '4', xl: '6' }}
-                pr={{ base: '4', md: '4', lg: '4', xl: '5' }}
+                display='flex'
+                flexDirection='column'
+                justifyContent='space-between'
+                p={4}
+                pt={variant === 'favorite' ? '24px' : '16px'}
             >
                 <HStack
                     spacing={{ base: 2, md: 2, lg: 3, xl: 3 }}
@@ -119,20 +137,19 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     </Text>
                 )}
 
-                {(variant === 'full' || variant === 'fullProfile') && (
-                    <HStack mt={4}>
-                        <HStack mt={3} spacing={4}>
+                {variant === 'full' && (
+                    <HStack mt='auto' pt={4} alignItems='center'>
+                        <HStack spacing={4}>
                             <Button
                                 data-test-id='blog-toggle-subscribe'
-                                size='sm'
-                                variant='limeSolid'
+                                variant='darkWhiteSmall'
                                 onClick={handleToggleSubscription}
+                                leftIcon={<PersonPlus />}
                             >
                                 Подписаться
                             </Button>
                             <Button
-                                size='sm'
-                                variant='ghost'
+                                variant='limeOutlineSmall'
                                 onClick={handleMoveToNotes}
                                 data-test-id='blogs-card-notes-button'
                             >
@@ -145,6 +162,48 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                             size='limeSmall'
                         />
                     </HStack>
+                )}
+
+                {variant === 'fullProfile' && (
+                    <Stack
+                        mt='auto'
+                        pt={4}
+                        alignItems={{
+                            sm: 'flex-end',
+                            md: 'flex-end',
+                            lg: 'flex-end',
+                            xl: 'center',
+                        }}
+                        flexDirection={{
+                            sm: 'column-reverse',
+                            md: 'column-reverse',
+                            lg: 'column-reverse',
+                            xl: 'row',
+                        }}
+                    >
+                        <HStack spacing={4}>
+                            <Button
+                                data-test-id='blog-toggle-subscribe'
+                                variant='darkWhiteSmall'
+                                onClick={handleToggleSubscription}
+                                leftIcon={<PersonPlus />}
+                            >
+                                Подписаться
+                            </Button>
+                            <Button
+                                variant='limeOutlineSmall'
+                                onClick={handleMoveToNotes}
+                                data-test-id='blogs-card-notes-button'
+                            >
+                                Читать
+                            </Button>
+                        </HStack>
+                        <LikesInfo
+                            subscribers={subscribersCount}
+                            bookmarks={bookmarksCount}
+                            size='limeSmall'
+                        />
+                    </Stack>
                 )}
 
                 {variant === 'favorite' && (
@@ -161,7 +220,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                                 </Button>
                                 <Button
                                     size='sm'
-                                    variant='ghost'
+                                    variant='limeOutlineSmall'
                                     onClick={handleMoveToNotes}
                                     data-test-id='blogs-card-notes-button'
                                 >
@@ -175,13 +234,14 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                             />
                         </HStack>
                         {newRecipesCount > 0 && (
-                            <Text
-                                textStyle='miniText'
-                                mb={1}
-                                data-test-id='blogs-card-new-recipes-badge'
-                            >
-                                {getRecipeCountLabel(newRecipesCount)}
-                            </Text>
+                            <Badge variant='gray06' position='absolute' top='2' right='3'>
+                                <Text
+                                    textTransform='lowercase'
+                                    data-test-id='blogs-card-new-recipes-badge'
+                                >
+                                    {getRecipeCountLabel(newRecipesCount)}
+                                </Text>
+                            </Badge>
                         )}
                     </>
                 )}

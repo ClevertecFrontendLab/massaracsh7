@@ -3,9 +3,9 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import { BloggerCard } from '~/components/Blogger/BloggerCard';
 import { CustomLoader } from '~/components/CustomLoader/CustomLoader';
 import { LikesInfo } from '~/components/LikesInfo/LikesInfo';
+import { AuthorCard } from '~/components/RecipeParts/AuthorCard';
 import { CategoryBadges } from '~/components/RecipeParts/CategoryBadges';
 import { IngredientsList } from '~/components/RecipeParts/IngredientsList';
 import { NutritionInfo } from '~/components/RecipeParts/NutritionInfo';
@@ -193,7 +193,7 @@ export const RecipePage: React.FC = () => {
 
                     {recipe && <RecipeStepsInfo steps={recipe.steps!} />}
 
-                    {blogger && <BloggerCard blogger={blogger} variantCard='recipe' />}
+                    {blogger && <AuthorCard author={blogger} />}
                 </VStack>
             </Box>
 

@@ -68,7 +68,7 @@ export const BloggerProfilePage = () => {
 
     return (
         <div>
-            {blogger && <BloggerCard blogger={blogger} variantCard='blog' />}
+            {blogger && <BloggerCard blogger={blogger} />}
             {data && (
                 <>
                     <RecipeList recipes={isExpanded ? data.recipes : data.recipes.slice(0, 8)} />
