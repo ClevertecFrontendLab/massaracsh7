@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 
 import { PersonPlus, PersonPlusWhite } from '~/assets/icons/icons';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
-import { setAppAlert } from '~/store/app-slice';
 import { BloggerByIdResponse } from '~/types/bloggerTypes';
+import { handleBlogPageError } from '~/utils/handleBlogPageError';
 
 import { LikesInfo } from '../LikesInfo/LikesInfo';
 
@@ -26,16 +26,7 @@ export const AuthorCard = ({ author }: AuthorCardProps) => {
         try {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
-            if (typeof err === 'object' && err !== null && 'status' in err) {
-                dispatch(
-                    setAppAlert({
-                        type: 'error',
-                        title: 'Ошибка сервера',
-                        message: 'Попробуйте немного позже.',
-                        sourse: 'global',
-                    }),
-                );
-            }
+            handleBlogPageError({ err, dispatch });
         }
     };
 

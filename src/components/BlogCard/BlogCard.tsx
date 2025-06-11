@@ -14,12 +14,11 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import { PersonPlus } from '~/assets/icons/icons';
-import { API_RESULTS } from '~/constants/api-results';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
-import { setAppAlert } from '~/store/app-slice';
 import { Blogger } from '~/types/bloggerTypes';
 import { getRecipeCountLabel } from '~/utils/getRecipeCountLabel';
+import { handleBlogPageError } from '~/utils/handleBlogPageError';
 
 import { CardLoader } from '../FullLoader/CardLoader';
 import { LikesInfo } from '../LikesInfo/LikesInfo';
@@ -50,16 +49,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
         try {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
-            if (typeof err === 'object' && err !== null && 'status' in err) {
-                dispatch(
-                    setAppAlert({
-                        type: 'error',
-                        title: API_RESULTS.ERROR_SERVER_TITLE,
-                        sourse: 'global',
-                        message: API_RESULTS.ERROR_SERVER_MESSAGE,
-                    }),
-                );
-            }
+            handleBlogPageError({ err, dispatch });
         }
     };
 

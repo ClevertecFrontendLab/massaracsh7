@@ -3,6 +3,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import { ROUTES_PATH } from '~/app/routes';
 import { BloggerCard } from '~/components/Blogger/BloggerCard';
 import { BloggerNotesSection } from '~/components/Blogger/BloggerNotesSection';
 import { BlogSection } from '~/components/BlogSection/BlogSection';
@@ -11,8 +12,10 @@ import { RecipeList } from '~/components/RecipeList/RecipeList';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import { useGetRecipesByUserIdQuery } from '~/query/services/recipes';
-import { setAppAlert, setAppLoader } from '~/store/app-slice';
+import { setAppLoader } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
+import { handleBlogPageError } from '~/utils/handleBlogPageError';
+import { is404Error } from '~/utils/isServerError';
 
 export const BloggerProfilePage = () => {
     const { bloggerId } = useParams();
@@ -44,20 +47,11 @@ export const BloggerProfilePage = () => {
     };
 
     useEffect(() => {
-        const is404 = (err: unknown) =>
-            err && typeof err === 'object' && 'status' in err && err.status === 404;
-
-        if (is404(bloggerError) || is404(recipesError)) {
-            navigate('/not-found');
+        const err = bloggerError || recipesError;
+        if (is404Error(bloggerError) || is404Error(recipesError)) {
+            navigate(ROUTES_PATH.NOT_FOUND);
         } else if (isBloggerError || isRecipesError) {
-            dispatch(
-                setAppAlert({
-                    type: 'error',
-                    title: 'Ошибка сервера',
-                    message: 'Попробуйте немного позже.',
-                    sourse: 'global',
-                }),
-            );
+            handleBlogPageError({ err, dispatch });
             dispatch(setAppLoader(false));
             navigate('/');
         }

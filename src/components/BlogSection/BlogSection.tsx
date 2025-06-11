@@ -7,7 +7,8 @@ import { ROUTES_PATH } from '~/app/routes';
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
-import { setAppAlert, setAppLoader } from '~/store/app-slice';
+import { setAppLoader } from '~/store/app-slice';
+import { handleBlogPageError } from '~/utils/handleBlogPageError';
 
 import { BlogList } from '../BlogList/BlogList';
 
@@ -22,7 +23,11 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
 
     const shouldFetch = Boolean(userId);
 
-    const { data, isError } = useGetBloggersQuery(
+    const {
+        data,
+        isError,
+        error: err,
+    } = useGetBloggersQuery(
         {
             currentUserId: userId!,
             limit: '',
@@ -38,30 +43,15 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
 
     useEffect(() => {
         if (isError && variant === 'fullProfile') {
-            dispatch(
-                setAppAlert({
-                    type: 'error',
-                    title: 'Ошибка сервера',
-                    message: 'Попробуйте немного позже.',
-                    sourse: 'global',
-                }),
-            );
-            dispatch(setAppLoader(false));
+            handleBlogPageError({ err, dispatch });
             navigate('/');
         }
         if (isError) {
-            dispatch(
-                setAppAlert({
-                    type: 'error',
-                    title: 'Ошибка сервера',
-                    message: 'Попробуйте немного позже.',
-                    sourse: 'global',
-                }),
-            );
+            handleBlogPageError({ err, dispatch });
             dispatch(setAppLoader(false));
             navigate('/');
         }
-    }, [isError, navigate, variant, dispatch]);
+    }, [isError, navigate, variant, dispatch, err]);
 
     const headingTitle = variant === 'fullProfile' ? 'Другие блоги' : 'Кулинарные блоги';
     const dataTitle =

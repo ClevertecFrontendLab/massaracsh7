@@ -11,7 +11,8 @@ import { BASE_LIMIT_SLIDER } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 import { useGetRecipesQuery } from '~/query/services/recipes';
-import { setAppAlert, setAppLoader } from '~/store/app-slice';
+import { setAppLoader } from '~/store/app-slice';
+import { handleBlogPageError } from '~/utils/handleBlogPageError';
 
 export const BlogsPage = () => {
     const userId = localStorage.getItem('userId');
@@ -22,7 +23,12 @@ export const BlogsPage = () => {
     const defaultLimit = useBreakpointValue({ base: 8, xl: 9 }) ?? 8;
     const [isExpanded, setIsExpanded] = useState(false);
     const limitResult = isExpanded ? 'all' : String(defaultLimit);
-    const { data, isLoading, isError } = useGetBloggersQuery(
+    const {
+        data,
+        isLoading,
+        isError,
+        error: err,
+    } = useGetBloggersQuery(
         {
             currentUserId: userId!,
             limit: limitResult,
@@ -40,18 +46,11 @@ export const BlogsPage = () => {
 
     useEffect(() => {
         if (isError) {
-            dispatch(
-                setAppAlert({
-                    type: 'error',
-                    title: 'Ошибка сервера',
-                    message: 'Попробуйте немного позже.',
-                    sourse: 'global',
-                }),
-            );
+            handleBlogPageError({ err, dispatch });
             dispatch(setAppLoader(false));
             navigate('/');
         }
-    }, [isError, navigate, dispatch]);
+    }, [isError, navigate, dispatch, err]);
 
     if (isLoading) {
         return <CustomLoader size='large' dataTestId='app-loader' />;
