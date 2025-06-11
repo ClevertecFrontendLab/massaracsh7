@@ -26,7 +26,7 @@ import {
 import { setAppAlert, setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import type { Category } from '~/types/apiTypes';
-import { handleRecipePageError } from '~/utils/handleRecipePageError';
+import { handlePageError } from '~/utils/handlePageError';
 
 export const RecipePage: React.FC = () => {
     const { category, subcategory, id } = useParams<{
@@ -84,10 +84,11 @@ export const RecipePage: React.FC = () => {
                 }),
             );
         } catch (err) {
-            handleRecipePageError({
+            handlePageError({
                 err,
                 dispatch,
                 message: 'Не удалось удалить рецепт',
+                page: 'recipe',
             });
         }
     };
@@ -97,7 +98,7 @@ export const RecipePage: React.FC = () => {
         try {
             await toggleBookmark(id).unwrap();
         } catch (err) {
-            handleRecipePageError({ err, dispatch });
+            handlePageError({ err, dispatch, page: 'recipe' });
         }
     };
 
@@ -106,7 +107,7 @@ export const RecipePage: React.FC = () => {
         try {
             await toggleLike(id).unwrap();
         } catch (err) {
-            handleRecipePageError({ err, dispatch });
+            handlePageError({ err, dispatch, page: 'recipe' });
         }
     };
 

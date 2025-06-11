@@ -12,7 +12,7 @@ import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 import { useGetRecipesQuery } from '~/query/services/recipes';
 import { setAppLoader } from '~/store/app-slice';
-import { handleBlogPageError } from '~/utils/handleBlogPageError';
+import { handlePageError } from '~/utils/handlePageError';
 
 export const BlogsPage = () => {
     const userId = localStorage.getItem('userId');
@@ -46,7 +46,7 @@ export const BlogsPage = () => {
 
     useEffect(() => {
         if (isError) {
-            handleBlogPageError({ err, dispatch });
+            handlePageError({ err, dispatch });
             dispatch(setAppLoader(false));
             navigate('/');
         }

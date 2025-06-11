@@ -17,7 +17,7 @@ import { PersonPlus, PersonPlusWhite } from '~/assets/icons/icons';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { BloggerByIdResponse } from '~/types/bloggerTypes';
-import { handleBlogPageError } from '~/utils/handleBlogPageError';
+import { handlePageError } from '~/utils/handlePageError';
 
 import { CardLoader } from '../FullLoader/CardLoader';
 import { LikesInfo } from '../LikesInfo/LikesInfo';
@@ -50,7 +50,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
             setIsSubscribed((prev) => !prev);
-            handleBlogPageError({ err, dispatch });
+            handlePageError({ err, dispatch });
         }
     };
 
@@ -97,48 +97,54 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                         <Text textStyle='miniText' data-test-id={TEST_IDS.BLOGGER_USER_INFO_LOGIN}>
                             @{login}
                         </Text>
+
+                        <HStack
+                            mt={0}
+                            w={{ sm: '100%', md: 'auto' }}
+                            flex={1}
+                            spacing={4}
+                            align='flex-end'
+                        >
+                            <HStack spacing={4}>
+                                {isSubscribed ? (
+                                    <Tooltip
+                                        label='Нажмите, если хотите отписаться'
+                                        aria-label='Tooltip для отписки'
+                                        data-test-id={TEST_IDS.BLOG_TOOLTIP}
+                                        hasArrow
+                                        placement='bottom'
+                                    >
+                                        <Button
+                                            size='sm'
+                                            variant='outlineWhiteSmall'
+                                            onClick={handleToggleSubscription}
+                                            data-test-id={TEST_IDS.BLOG_TOGGLE_UNSUBSCRIBE}
+                                            leftIcon={<PersonPlusWhite />}
+                                        >
+                                            Вы подписаны
+                                        </Button>
+                                    </Tooltip>
+                                ) : (
+                                    <Button
+                                        size='sm'
+                                        variant='darkWhiteSmall'
+                                        onClick={handleToggleSubscription}
+                                        data-test-id={TEST_IDS.BLOG_TOGGLE_SUBSCRIBE}
+                                        leftIcon={<PersonPlus />}
+                                    >
+                                        Подписаться
+                                    </Button>
+                                )}
+                            </HStack>
+
+                            <LikesInfo
+                                subscribers={totalSubscribers}
+                                bookmarks={totalBookmarks}
+                                size='limeSmall'
+                            />
+                        </HStack>
                     </VStack>
                 </Stack>
-
-                <HStack mt={0} w={{ sm: '100%', md: 'auto' }} flex={1} spacing={4} align='flex-end'>
-                    <HStack spacing={4}>
-                        {isSubscribed ? (
-                            <Tooltip
-                                label='Нажмите, если хотите отписаться'
-                                aria-label='Tooltip для отписки'
-                                data-test-id={TEST_IDS.BLOG_TOOLTIP}
-                                hasArrow
-                                placement='bottom'
-                            >
-                                <Button
-                                    size='sm'
-                                    variant='outlineWhiteSmall'
-                                    onClick={handleToggleSubscription}
-                                    data-test-id={TEST_IDS.BLOG_TOGGLE_UNSUBSCRIBE}
-                                    leftIcon={<PersonPlusWhite />}
-                                >
-                                    Вы подписаны
-                                </Button>
-                            </Tooltip>
-                        ) : (
-                            <Button
-                                size='sm'
-                                variant='darkWhiteSmall'
-                                onClick={handleToggleSubscription}
-                                data-test-id={TEST_IDS.BLOG_TOGGLE_SUBSCRIBE}
-                                leftIcon={<PersonPlus />}
-                            >
-                                Подписаться
-                            </Button>
-                        )}
-                    </HStack>
-
-                    <LikesInfo
-                        subscribers={totalSubscribers}
-                        bookmarks={totalBookmarks}
-                        size='limeSmall'
-                    />
-                </HStack>
             </CardBody>
         </Card>
     );

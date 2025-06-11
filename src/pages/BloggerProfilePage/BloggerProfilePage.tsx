@@ -14,7 +14,7 @@ import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import { useGetRecipesByUserIdQuery } from '~/query/services/recipes';
 import { setAppLoader } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
-import { handleBlogPageError } from '~/utils/handleBlogPageError';
+import { handlePageError } from '~/utils/handlePageError';
 import { is404Error } from '~/utils/isServerError';
 
 export const BloggerProfilePage = () => {
@@ -51,7 +51,7 @@ export const BloggerProfilePage = () => {
         if (is404Error(bloggerError) || is404Error(recipesError)) {
             navigate(ROUTES_PATH.NOT_FOUND);
         } else if (isBloggerError || isRecipesError) {
-            handleBlogPageError({ err, dispatch });
+            handlePageError({ err, dispatch });
             dispatch(setAppLoader(false));
             navigate('/');
         }
@@ -73,6 +73,7 @@ export const BloggerProfilePage = () => {
                             onClick={handleExpand}
                             variant='limeSolid'
                             mt={4}
+                            mb={{ base: 8, lg: 10 }}
                             mx='auto'
                             display='block'
                         >
@@ -80,7 +81,7 @@ export const BloggerProfilePage = () => {
                         </Button>
                     )}
                 </>
-            )}{' '}
+            )}
             {data && data?.notes && <BloggerNotesSection notes={data?.notes} />}
             <BlogSection variant='fullProfile' />
         </div>

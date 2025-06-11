@@ -103,7 +103,7 @@ export const RecipeSteps: React.FC<RecipeStepsProps> = ({
                                 Шаг {index + 1}
                             </Badge>
 
-                            {index !== 0 && (
+                            {index && (
                                 <IconButton
                                     aria-label='Удалить шаг'
                                     icon={<DeleteIcon />}

@@ -8,7 +8,7 @@ import { ArrowBlackRight } from '~/assets/icons/icons';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 import { setAppLoader } from '~/store/app-slice';
-import { handleBlogPageError } from '~/utils/handleBlogPageError';
+import { handlePageError } from '~/utils/handlePageError';
 
 import { BlogList } from '../BlogList/BlogList';
 
@@ -43,11 +43,11 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
 
     useEffect(() => {
         if (isError && variant === 'fullProfile') {
-            handleBlogPageError({ err, dispatch });
+            handlePageError({ err, dispatch });
             navigate('/');
         }
         if (isError) {
-            handleBlogPageError({ err, dispatch });
+            handlePageError({ err, dispatch });
             dispatch(setAppLoader(false));
             navigate('/');
         }

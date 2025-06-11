@@ -5,9 +5,9 @@ import { BASE_IMG_URL } from '~/constants/constants';
 import { TEST_IDS } from '~/constants/test-ids';
 
 type ImageBlockProps = {
+    onClick: () => void;
     image?: string | null;
     error?: boolean;
-    onClick: () => void;
 };
 
 export const ImageBlock: React.FC<ImageBlockProps> = ({ image, error, onClick }) => (

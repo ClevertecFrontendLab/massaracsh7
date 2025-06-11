@@ -18,7 +18,7 @@ import { TEST_IDS } from '~/constants/test-ids';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { Blogger } from '~/types/bloggerTypes';
 import { getRecipeCountLabel } from '~/utils/getRecipeCountLabel';
-import { handleBlogPageError } from '~/utils/handleBlogPageError';
+import { handlePageError } from '~/utils/handlePageError';
 
 import { CardLoader } from '../FullLoader/CardLoader';
 import { LikesInfo } from '../LikesInfo/LikesInfo';
@@ -49,7 +49,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
         try {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
-            handleBlogPageError({ err, dispatch });
+            handlePageError({ err, dispatch });
         }
     };
 

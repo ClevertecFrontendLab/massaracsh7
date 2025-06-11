@@ -9,7 +9,6 @@ import { LeftPen } from '~/assets/icons/icons';
 import { TEST_IDS } from '~/constants/test-ids';
 
 interface RecipeActionsProps {
-    time?: number;
     isAuthor: boolean;
     handleDelete: () => void;
     handleLike: () => void;
@@ -18,6 +17,7 @@ interface RecipeActionsProps {
     category: string;
     subcategory: string;
     id: string;
+    time?: number;
 }
 
 const RecipeActions: React.FC<RecipeActionsProps> = ({

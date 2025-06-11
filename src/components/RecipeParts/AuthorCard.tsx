@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { PersonPlus, PersonPlusWhite } from '~/assets/icons/icons';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { BloggerByIdResponse } from '~/types/bloggerTypes';
-import { handleBlogPageError } from '~/utils/handleBlogPageError';
+import { handlePageError } from '~/utils/handlePageError';
 
 import { LikesInfo } from '../LikesInfo/LikesInfo';
 
@@ -26,7 +26,7 @@ export const AuthorCard = ({ author }: AuthorCardProps) => {
         try {
             await toggleSubscription({ fromUserId: currentUserId, toUserId: _id }).unwrap();
         } catch (err) {
-            handleBlogPageError({ err, dispatch });
+            handlePageError({ err, dispatch });
         }
     };
 
