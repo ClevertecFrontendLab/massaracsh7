@@ -60,8 +60,9 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
             position='relative'
             p={0}
             pt={{ sm: 4, md: 0 }}
+            mb={{ sm: 4, md: 4, lg: 6, xl: 6 }}
             bg='white'
-            w={{ sm: '100%', md: '604px' }}
+            w={{ sm: '100%', md: '408px', lg: '604px', xl: '604px' }}
             borderRadius='xl'
             border='cardTransparent'
             mx='auto'
@@ -75,7 +76,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                 <Stack
                     spacing={6}
                     direction={{ base: 'column', md: 'row' }}
-                    alignItems={{ base: 'center', md: 'stretch' }}
+                    alignItems={{ base: 'center', md: 'start' }}
                 >
                     <Avatar
                         src={imageUrl}
@@ -87,7 +88,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                         flex={1}
                         alignItems={{ base: 'center', md: 'start' }}
                         justifyContent='space-between'
-                        spacing='0'
+                        spacing={3}
                         py='6px'
                         w={{ sm: '100%', md: '408px', lg: '608px', xl: '608px' }}
                     >
@@ -104,6 +105,7 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                             flex={1}
                             spacing={4}
                             align='flex-end'
+                            justify='space-between'
                         >
                             <HStack spacing={4}>
                                 {isSubscribed ? (
