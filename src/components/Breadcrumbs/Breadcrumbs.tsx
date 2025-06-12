@@ -18,7 +18,6 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
 
     const isBlog = 'bloggerId' in parsed;
     const bloggerId = isBlog ? parsed.bloggerId : null;
-    console.log(parsed);
     const categorySlug = !isBlog ? parsed.categorySlug : null;
     const subcategorySlug = !isBlog ? parsed.subcategorySlug : null;
     const dishSlug = !isBlog ? parsed.dishSlug : null;

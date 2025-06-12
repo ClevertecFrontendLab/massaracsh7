@@ -2,7 +2,6 @@ import { Box } from '@chakra-ui/react';
 
 import { TEST_IDS } from '~/constants/test-ids';
 
-// import { TEST_IDS } from '~/constants/test-ids';
 import { CustomLoader } from '../CustomLoader/CustomLoader';
 
 export const CardLoader = () => (

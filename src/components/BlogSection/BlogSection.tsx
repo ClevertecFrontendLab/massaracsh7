@@ -94,7 +94,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
                             onClick={handleNavigate}
                             data-test-id={dataTitle}
                         >
-                            Всe авторы
+                            Все авторы
                         </Button>
                     </Hide>
                 )}
