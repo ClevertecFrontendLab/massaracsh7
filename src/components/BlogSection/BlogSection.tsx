@@ -7,7 +7,6 @@ import { ROUTES_PATH } from '~/app/routes';
 import { ArrowBlackRight } from '~/assets/icons/icons';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
-import { setAppLoader } from '~/store/app-slice';
 import { handlePageError } from '~/utils/handlePageError';
 
 import { BlogList } from '../BlogList/BlogList';
@@ -48,10 +47,10 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
         }
         if (isError) {
             handlePageError({ err, dispatch });
-            dispatch(setAppLoader(false));
-            navigate('/');
         }
     }, [isError, navigate, variant, dispatch, err]);
+
+    if (isError && variant === 'base') return null;
 
     const headingTitle = variant === 'fullProfile' ? 'Другие блоги' : 'Кулинарные блоги';
     const dataTitle =
@@ -70,7 +69,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
             pb='24px'
             borderRadius='xlarge'
             mb={{ base: 8, md: 8, lg: 10, xl: 10 }}
-            data-test-id={TEST_IDS.MAIN_PAGE_BLOGS_BOX}
+            data-test-id={variant === 'base' ? TEST_IDS.MAIN_PAGE_BLOGS_BOX : ''}
         >
             <HStack justify='space-between' mb={{ base: 3, md: 2, lg: 4.5, xl: 6 }}>
                 <Heading variant='sectionBlogTitle'>{headingTitle}</Heading>
@@ -83,7 +82,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
                         onClick={handleNavigate}
                         data-test-id={dataTitle}
                     >
-                        Все авторы
+                        Всe авторы
                     </Button>
                 ) : (
                     <Hide below='md'>
