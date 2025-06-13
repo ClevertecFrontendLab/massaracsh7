@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import { PersonPlus } from '~/assets/icons/icons';
+import { BLOG_VARIANTS, BlogVariant, isLargeCardVariant } from '~/constants/blogVariants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useToggleSubscriptionMutation } from '~/query/services/bloggers';
 import { Blogger } from '~/types/bloggerTypes';
@@ -25,10 +26,10 @@ import { LikesInfo } from '../LikesInfo/LikesInfo';
 
 type BlogCardProps = {
     blogger: Blogger;
-    variant?: 'base' | 'full' | 'fullProfile' | 'favorite';
+    variant?: BlogVariant;
 };
 
-export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
+export const BlogCard = ({ blogger, variant = BLOG_VARIANTS.BASE }: BlogCardProps) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {
@@ -61,17 +62,11 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
         navigate(`${ROUTES_PATH.BLOGS}/${_id}`);
     };
 
-    const imageUrl = undefined;
-
     return (
         <Card
             variant='basic'
             data-test-id={TEST_IDS.BLOGS_CARD}
-            h={
-                ['full', 'fullProfile', 'favorite'].includes(variant)
-                    ? { base: '208px', lg: '224px', xl: '244px' }
-                    : 'auto'
-            }
+            h={isLargeCardVariant(variant) ? { base: '208px', lg: '224px', xl: '244px' } : 'auto'}
         >
             {isLoading && <CardLoader />}
             <CardBody
@@ -86,7 +81,6 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     mb={{ sm: 4, md: 4, lg: 4, xl: 7 }}
                 >
                     <Avatar
-                        src={imageUrl}
                         name={`${firstName} ${lastName}`}
                         w={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
                         h={{ base: '32px', md: '32px', lg: '48px', xl: '48px' }}
@@ -128,7 +122,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     </Text>
                 )}
 
-                {variant === 'full' && (
+                {variant === BLOG_VARIANTS.FULL && (
                     <HStack mt='auto' pt={4} alignItems='center'>
                         <HStack spacing={4}>
                             <Button
@@ -155,7 +149,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     </HStack>
                 )}
 
-                {variant === 'fullProfile' && (
+                {variant === BLOG_VARIANTS.FULL_PROFILE && (
                     <Stack
                         mt='auto'
                         pt={4}
@@ -197,7 +191,7 @@ export const BlogCard = ({ blogger, variant = 'base' }: BlogCardProps) => {
                     </Stack>
                 )}
 
-                {variant === 'favorite' && (
+                {variant === BLOG_VARIANTS.FAVORITE && (
                     <>
                         <HStack mt={4}>
                             <HStack mt={3} spacing={4}>

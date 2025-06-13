@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { ROUTES_PATH } from '~/app/routes';
 import { ArrowBlackRight } from '~/assets/icons/icons';
+import { BLOG_VARIANTS, BlogVariant } from '~/constants/blogVariants';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggersQuery } from '~/query/services/bloggers';
 import { handlePageError } from '~/utils/handlePageError';
@@ -12,10 +13,10 @@ import { handlePageError } from '~/utils/handlePageError';
 import { BlogList } from '../BlogList/BlogList';
 
 type BlogSectionProps = {
-    variant?: 'base' | 'full' | 'fullProfile' | 'favorite';
+    variant?: BlogVariant;
 };
 
-export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
+export const BlogSection = ({ variant = BLOG_VARIANTS.BASE }: BlogSectionProps) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const userId = localStorage.getItem('userId');
@@ -41,7 +42,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
     };
 
     useEffect(() => {
-        if (isError && variant === 'fullProfile') {
+        if (isError && variant === BLOG_VARIANTS.FULL_PROFILE) {
             handlePageError({ err, dispatch });
             navigate('/');
         }
@@ -50,16 +51,17 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
         }
     }, [isError, navigate, variant, dispatch, err]);
 
-    if (isError && variant === 'base') return null;
+    if (isError && variant === BLOG_VARIANTS.BASE) return null;
 
-    const headingTitle = variant === 'fullProfile' ? 'Другие блоги' : 'Кулинарные блоги';
+    const headingTitle =
+        variant === BLOG_VARIANTS.FULL_PROFILE ? 'Другие блоги' : 'Кулинарные блоги';
     const dataTitle =
-        variant === 'fullProfile'
+        variant === BLOG_VARIANTS.FULL_PROFILE
             ? TEST_IDS.BLOGGER_USER_OTHER_BLOGS_BUTTON
             : TEST_IDS.MAIN_PAGE_BLOGS_BUTTON;
 
     const dataUpdate = data?.others.slice(0, 3);
-    const bgColor = variant === 'fullProfile' ? 'transparent' : 'customLime.300';
+    const bgColor = variant === BLOG_VARIANTS.FULL_PROFILE ? 'transparent' : 'customLime.300';
     return (
         <Box
             as='section'
@@ -69,12 +71,12 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
             pb='24px'
             borderRadius='xlarge'
             mb={{ base: 8, md: 8, lg: 10, xl: 10 }}
-            data-test-id={variant === 'base' ? TEST_IDS.MAIN_PAGE_BLOGS_BOX : ''}
+            data-test-id={variant === BLOG_VARIANTS.BASE ? TEST_IDS.MAIN_PAGE_BLOGS_BOX : ''}
         >
             <HStack justify='space-between' mb={{ base: 3, md: 2, lg: 4.5, xl: 6 }}>
                 <Heading variant='sectionBlogTitle'>{headingTitle}</Heading>
 
-                {variant === 'fullProfile' ? (
+                {variant === BLOG_VARIANTS.FULL_PROFILE ? (
                     <Button
                         variant='ghost'
                         size='large'
@@ -101,7 +103,7 @@ export const BlogSection = ({ variant = 'base' }: BlogSectionProps) => {
 
             {dataUpdate && <BlogList blogs={dataUpdate} variant={variant} />}
 
-            {variant !== 'fullProfile' && (
+            {variant !== BLOG_VARIANTS.FULL_PROFILE && (
                 <Show below='md'>
                     <Center mt={{ sm: 3 }}>
                         <Button

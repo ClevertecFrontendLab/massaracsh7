@@ -33,7 +33,6 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
 
     const { bloggerInfo, isFavorite, totalBookmarks, totalSubscribers } = blogger;
     const { _id, login, firstName, lastName } = bloggerInfo;
-    const imageUrl = undefined;
 
     const [isSubscribed, setIsSubscribed] = useState(isFavorite);
 
@@ -79,7 +78,6 @@ export const BloggerCard = ({ blogger }: BloggerCardProps) => {
                     alignItems={{ base: 'center', md: 'start' }}
                 >
                     <Avatar
-                        src={imageUrl}
                         name={`${firstName} ${lastName}`}
                         w={{ base: '96px', lg: '128px' }}
                         h={{ base: '96px', lg: '128px' }}

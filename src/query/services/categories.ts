@@ -3,6 +3,7 @@ import { CategoryItem } from '~/types/apiTypes';
 import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
 import { EndpointNames } from '../constants/endpoint-names';
+import { HttpMethods } from '../constants/httpMethods';
 import { Tags } from '../constants/tags';
 import { catalogApiSlice } from '../create-api';
 
@@ -15,7 +16,7 @@ export const categoriesApiSlice = catalogApiSlice
             getCategories: builder.query<CategoryItem[], void>({
                 query: () => ({
                     url: ApiEndpoints.CATEGORIES,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     apiGroupName: ApiGroupNames.CATEGORIES,
                     name: EndpointNames.GET_CATEGORIES,
                 }),
@@ -24,7 +25,7 @@ export const categoriesApiSlice = catalogApiSlice
             getCategoryById: builder.query<CategoryItem, string>({
                 query: (id) => ({
                     url: `${ApiEndpoints.CATEGORIES}/${id}`,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     apiGroupName: ApiGroupNames.CATEGORIES,
                     name: EndpointNames.GET_CATEGORY_BY_ID,
                 }),

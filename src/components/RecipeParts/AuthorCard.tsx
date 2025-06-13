@@ -19,7 +19,6 @@ export const AuthorCard = ({ author }: AuthorCardProps) => {
 
     const { bloggerInfo, isFavorite, totalSubscribers } = author;
     const { _id, login, firstName, lastName } = bloggerInfo;
-    const imageUrl = undefined;
 
     const handleToggleSubscription = async () => {
         if (!currentUserId) return;
@@ -40,7 +39,6 @@ export const AuthorCard = ({ author }: AuthorCardProps) => {
         >
             <HStack spacing={{ sm: '1', md: '4', lg: '4', xl: '4' }} alignItems='stretch'>
                 <Avatar
-                    src={imageUrl}
                     name={`${firstName} ${lastName}`}
                     w={{ base: '32px', lg: '48px' }}
                     h={{ base: '32px', lg: '48px' }}

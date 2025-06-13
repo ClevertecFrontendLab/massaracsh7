@@ -3,6 +3,7 @@ import { BloggerByIdResponse, BloggersResponse } from '~/types/bloggerTypes';
 import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
 import { EndpointNames } from '../constants/endpoint-names';
+import { HttpMethods } from '../constants/httpMethods';
 import { Tags } from '../constants/tags';
 import { catalogApiSlice } from '../create-api';
 
@@ -16,7 +17,7 @@ export const bloggersApiSlice = catalogApiSlice
                 {
                     query: ({ currentUserId, limit }) => ({
                         url: ApiEndpoints.BLOGGERS,
-                        method: 'GET',
+                        method: HttpMethods.GET,
                         params: {
                             currentUserId,
                             limit,
@@ -34,7 +35,7 @@ export const bloggersApiSlice = catalogApiSlice
             >({
                 query: ({ bloggerId, currentUserId }) => ({
                     url: `${ApiEndpoints.BLOGGERS}/${bloggerId}`,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     params: {
                         currentUserId,
                     },
@@ -46,7 +47,7 @@ export const bloggersApiSlice = catalogApiSlice
             toggleSubscription: builder.mutation<void, { fromUserId: string; toUserId: string }>({
                 query: ({ fromUserId, toUserId }) => ({
                     url: ApiEndpoints.TOGGLE_SUBSCRIPTION,
-                    method: 'PATCH',
+                    method: HttpMethods.PATCH,
                     body: { fromUserId, toUserId },
                     apiGroupName: EndpointNames.TOGGLE_SUBSCRIPTION,
                     name: EndpointNames.TOGGLE_SUBSCRIPTION,

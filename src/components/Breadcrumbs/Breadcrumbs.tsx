@@ -3,6 +3,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Link as RouterLink, useLocation } from 'react-router';
 
+import { BREADCRUMBS_PATHS, BREADCRUMBS_STYLES } from '~/constants/breadcrumbs';
 import { TEST_IDS } from '~/constants/test-ids';
 import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import { useGetRecipeByIdQuery } from '~/query/services/recipes';
@@ -34,6 +35,11 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
             : { bloggerId: bloggerId, currentUserId: currentUserId },
     );
 
+    const BREADCRUMBS_COMMON = {
+        as: RouterLink,
+        onClick: () => onClose?.(),
+    };
+
     return (
         <Breadcrumb
             separator={<ChevronRightIcon color='gray.800' />}
@@ -44,10 +50,13 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
         >
             <BreadcrumbItem isCurrentPage={!categorySlug && !isBlog}>
                 <BreadcrumbLink
-                    as={RouterLink}
-                    to='/'
-                    textStyle={categorySlug || isBlog ? 'navInactive' : 'navActive'}
-                    onClick={() => onClose?.()}
+                    {...BREADCRUMBS_COMMON}
+                    to={BREADCRUMBS_PATHS.ROOT}
+                    textStyle={
+                        categorySlug || isBlog
+                            ? BREADCRUMBS_STYLES.INACTIVE
+                            : BREADCRUMBS_STYLES.ACTIVE
+                    }
                 >
                     Главная
                 </BreadcrumbLink>
@@ -56,10 +65,11 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
             {isBlog && (
                 <BreadcrumbItem isCurrentPage={!blogger}>
                     <BreadcrumbLink
-                        as={RouterLink}
-                        to='/blogs'
-                        textStyle={bloggerId ? 'navInactive' : 'navActive'}
-                        onClick={() => onClose?.()}
+                        {...BREADCRUMBS_COMMON}
+                        to={BREADCRUMBS_PATHS.BLOGS}
+                        textStyle={
+                            bloggerId ? BREADCRUMBS_STYLES.INACTIVE : BREADCRUMBS_STYLES.ACTIVE
+                        }
                         data-test-id={TEST_IDS.BLOGGER_USER_BREADCRUMB_NAME}
                     >
                         Блоги
@@ -70,10 +80,9 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
             {isBlog && bloggerId && blogger && (
                 <BreadcrumbItem isCurrentPage>
                     <BreadcrumbLink
-                        as={RouterLink}
-                        to={`/blogs/${bloggerId}`}
-                        textStyle='navActive'
-                        onClick={() => onClose?.()}
+                        {...BREADCRUMBS_COMMON}
+                        to={BREADCRUMBS_PATHS.BLOGGER(bloggerId!)}
+                        textStyle={BREADCRUMBS_STYLES.ACTIVE}
                         data-test-id={TEST_IDS.BLOGGER_USER_BREADCRUMB_SECTION}
                     >
                         {blogger.bloggerInfo.firstName} {blogger.bloggerInfo.lastName} (@
@@ -85,10 +94,14 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
             {!isBlog && catTitle && (
                 <BreadcrumbItem isCurrentPage={!subcategory}>
                     <BreadcrumbLink
-                        as={RouterLink}
-                        to={`/${categorySlug}/${category?.subCategories?.[0]?.category ?? ''}`}
-                        textStyle={subcategory ? 'navInactive' : 'navActive'}
-                        onClick={() => onClose?.()}
+                        {...BREADCRUMBS_COMMON}
+                        to={BREADCRUMBS_PATHS.CATEGORY_FIRST_SUBCATEGORY(
+                            categorySlug!,
+                            category?.subCategories?.[0]?.category ?? '',
+                        )}
+                        textStyle={
+                            subcategory ? BREADCRUMBS_STYLES.INACTIVE : BREADCRUMBS_STYLES.ACTIVE
+                        }
                     >
                         {catTitle}
                     </BreadcrumbLink>
@@ -98,10 +111,11 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
             {!isBlog && subcategory && (
                 <BreadcrumbItem isCurrentPage={!dishSlug}>
                     <BreadcrumbLink
-                        as={RouterLink}
-                        to={`/${categorySlug}/${subcategorySlug}`}
-                        textStyle={dishSlug ? 'navInactive' : 'navActive'}
-                        onClick={() => onClose?.()}
+                        {...BREADCRUMBS_COMMON}
+                        to={BREADCRUMBS_PATHS.CATEGORY(categorySlug!, subcategorySlug!)}
+                        textStyle={
+                            dishSlug ? BREADCRUMBS_STYLES.INACTIVE : BREADCRUMBS_STYLES.ACTIVE
+                        }
                     >
                         {subcategory.title}
                     </BreadcrumbLink>
@@ -110,7 +124,9 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
 
             {!isBlog && dishSlug && recipe && (
                 <BreadcrumbItem isCurrentPage>
-                    <BreadcrumbLink textStyle='navActive'>{recipe.title}</BreadcrumbLink>
+                    <BreadcrumbLink textStyle={BREADCRUMBS_STYLES.ACTIVE}>
+                        {recipe.title}
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
             )}
         </Breadcrumb>

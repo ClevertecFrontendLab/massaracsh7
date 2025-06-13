@@ -15,6 +15,7 @@ import {
 
 import { ApiEndpoints } from '../constants/api';
 import { EndpointNames } from '../constants/endpoint-names';
+import { HttpMethods } from '../constants/httpMethods';
 import { Tags } from '../constants/tags';
 import { catalogApiSlice } from '../create-api';
 
@@ -44,7 +45,7 @@ export const authApiSlice = catalogApiSlice
             signup: builder.mutation<SignUpResponse, SignUpRequest>({
                 query: (body) => ({
                     url: ApiEndpoints.SIGN_UP,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     body,
                     name: EndpointNames.SIGN_UP,
                 }),
@@ -53,7 +54,7 @@ export const authApiSlice = catalogApiSlice
             login: builder.mutation<LoginResponse, LoginRequest>({
                 query: (body) => ({
                     url: ApiEndpoints.LOGIN,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     body,
                     name: EndpointNames.LOGIN,
                 }),
@@ -86,7 +87,7 @@ export const authApiSlice = catalogApiSlice
             forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordRequest>({
                 query: (body) => ({
                     url: ApiEndpoints.FORGOT_PASSWORD,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     body,
                     name: EndpointNames.FORGOT_PASSWORD,
                 }),
@@ -94,7 +95,7 @@ export const authApiSlice = catalogApiSlice
             verifyOtp: builder.mutation<VerifyOtpResponse, VerifyOtpRequest>({
                 query: (body) => ({
                     url: ApiEndpoints.VERIFY_OTP,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     body,
                     name: EndpointNames.VERIFY_OTP,
                 }),
@@ -102,7 +103,7 @@ export const authApiSlice = catalogApiSlice
             resetPassword: builder.mutation<ResetPasswordResponse, ResetPasswordRequest>({
                 query: (body) => ({
                     url: ApiEndpoints.RESET_PASSWORD,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     body,
                     name: EndpointNames.RESET_PASSWORD,
                 }),

@@ -14,6 +14,7 @@ import {
 import { ApiEndpoints } from '../constants/api';
 import { ApiGroupNames } from '../constants/api-group-names';
 import { EndpointNames } from '../constants/endpoint-names';
+import { HttpMethods } from '../constants/httpMethods';
 import { Tags } from '../constants/tags';
 import { catalogApiSlice } from '../create-api';
 
@@ -26,7 +27,7 @@ export const recipesApiSlice = catalogApiSlice
             getRecipes: builder.query<RecipesResponse, RecipesParams>({
                 query: (params) => ({
                     url: ApiEndpoints.RECIPES,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     params,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.GET_RECIPES,
@@ -45,7 +46,7 @@ export const recipesApiSlice = catalogApiSlice
                 query({ queryArg, pageParam }) {
                     return {
                         url: ApiEndpoints.RECIPES,
-                        method: 'GET',
+                        method: HttpMethods.GET,
                         params: {
                             ...queryArg,
                             page: pageParam,
@@ -61,7 +62,7 @@ export const recipesApiSlice = catalogApiSlice
             getRecipesByCategory: builder.query<RecipesResponse, RecipesByCategoryParams>({
                 query: ({ id, ...params }) => ({
                     url: `${ApiEndpoints.RECIPES_BY_CATEGORY}/${id}`,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     params,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.GET_RECIPES_BY_CATEGORY,
@@ -72,7 +73,7 @@ export const recipesApiSlice = catalogApiSlice
             getRecipeById: builder.query<Recipe, string>({
                 query: (id) => ({
                     url: `${ApiEndpoints.RECIPES}/${id}`,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.GET_RECIPE_BY_ID,
                 }),
@@ -81,7 +82,7 @@ export const recipesApiSlice = catalogApiSlice
             createRecipe: builder.mutation<Recipe, CreateRecipeDto>({
                 query: (body) => ({
                     url: ApiEndpoints.RECIPES,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     body,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.CREATE_RECIPE,
@@ -91,7 +92,7 @@ export const recipesApiSlice = catalogApiSlice
             createRecipeDraft: builder.mutation<Recipe, RecipeDraftDto>({
                 query: (body) => ({
                     url: `${ApiEndpoints.RECIPES}/draft`,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     body,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.CREATE_RECIPE_DRAFT,
@@ -101,7 +102,7 @@ export const recipesApiSlice = catalogApiSlice
             editRecipe: builder.mutation<Recipe, { id: string; data: UpdateRecipeDto }>({
                 query: ({ id, data }) => ({
                     url: `${ApiEndpoints.RECIPES}/${id}`,
-                    method: 'PATCH',
+                    method: HttpMethods.PATCH,
                     body: data,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.EDIT_RECIPE,
@@ -112,7 +113,7 @@ export const recipesApiSlice = catalogApiSlice
             getMeasureUnits: builder.query<MeasureUnit[], void>({
                 query: () => ({
                     url: ApiEndpoints.MEASURE_UNITS,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.GET_MEASURE_UNITS,
                 }),
@@ -124,7 +125,7 @@ export const recipesApiSlice = catalogApiSlice
                     formData.append('file', file);
                     return {
                         url: '/file/upload',
-                        method: 'POST',
+                        method: HttpMethods.POST,
                         body: formData,
                         apiGroupName: ApiGroupNames.RECIPES,
                         name: EndpointNames.UPLOAD_FILE,
@@ -134,7 +135,7 @@ export const recipesApiSlice = catalogApiSlice
             deleteRecipe: builder.mutation<{ message: string }, string>({
                 query: (id) => ({
                     url: `${ApiEndpoints.RECIPES}/${id}`,
-                    method: 'DELETE',
+                    method: HttpMethods.DELETE,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.DELETE_RECIPE,
                 }),
@@ -145,7 +146,7 @@ export const recipesApiSlice = catalogApiSlice
             toggleLikeRecipe: builder.mutation<{ message: string; likes: number }, string>({
                 query: (recipeId) => ({
                     url: `${ApiEndpoints.RECIPES}/${recipeId}/like`,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.TOGGLE_LIKE_RECIPE,
                 }),
@@ -156,7 +157,7 @@ export const recipesApiSlice = catalogApiSlice
             toggleBookmarkRecipe: builder.mutation<{ message: string; bookmarks: number }, string>({
                 query: (recipeId) => ({
                     url: `${ApiEndpoints.RECIPES}/${recipeId}/bookmark`,
-                    method: 'POST',
+                    method: HttpMethods.POST,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.TOGGLE_BOOKMARK_RECIPE,
                 }),
@@ -166,7 +167,7 @@ export const recipesApiSlice = catalogApiSlice
             getRecipesByUserId: builder.query<RecipesByUser, string>({
                 query: (userId) => ({
                     url: `${ApiEndpoints.RECIPES_BY_USER}/${userId}`,
-                    method: 'GET',
+                    method: HttpMethods.GET,
                     apiGroupName: ApiGroupNames.RECIPES,
                     name: EndpointNames.GET_RECIPES_BY_USER_ID,
                 }),
