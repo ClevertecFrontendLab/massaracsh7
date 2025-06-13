@@ -47,19 +47,18 @@ export const SearchableSelect = ({
 
     const isMobile = useBreakpointValue({ base: true, sm: true, md: true, lg: false, xl: false });
 
-    const visibleTags =
-        isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES
-            ? selectedValues.slice(0, 1)
-            : dataId === TEST_IDS.RECIPE_CATEGORIES
-              ? selectedValues.slice(0, 2)
-              : selectedValues;
+    let visibleTags = selectedValues;
+    let hiddenCount = 0;
 
-    const hiddenCount =
-        isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES
-            ? selectedValues.length - 1
-            : dataId === TEST_IDS.RECIPE_CATEGORIES
-              ? selectedValues.length - 2
-              : 0;
+    if (dataId === TEST_IDS.RECIPE_CATEGORIES) {
+        if (isMobile) {
+            visibleTags = selectedValues.slice(0, 1);
+            hiddenCount = selectedValues.length - 1;
+        } else {
+            visibleTags = selectedValues.slice(0, 2);
+            hiddenCount = selectedValues.length - 2;
+        }
+    }
     const noWrap = isMobile && dataId === TEST_IDS.RECIPE_CATEGORIES;
 
     return (

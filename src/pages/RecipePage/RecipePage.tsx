@@ -14,8 +14,8 @@ import { RecipeImage } from '~/components/RecipeParts/RecipeImage';
 import { RecipeStepsInfo } from '~/components/RecipeParts/RecipeSteps';
 import { SliderList } from '~/components/SliderList/SliderList';
 import { BASE_IMG_URL, BASE_LIMIT_SLIDER, ERROR_APP_MESSAGE } from '~/constants/constants';
-import { authors } from '~/data/authors';
 import { useGetCategory } from '~/hooks/useGetCategory';
+import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import {
     useDeleteRecipeMutation,
     useGetRecipeByIdQuery,
@@ -26,8 +26,7 @@ import {
 import { setAppAlert, setAppError } from '~/store/app-slice';
 import { useAppDispatch } from '~/store/hooks';
 import type { Category } from '~/types/apiTypes';
-import { AuthorData } from '~/types/typesAuthor';
-import { handleRecipePageError } from '~/utils/handleRecipePageError';
+import { handlePageError } from '~/utils/handlePageError';
 
 export const RecipePage: React.FC = () => {
     const { category, subcategory, id } = useParams<{
@@ -41,7 +40,13 @@ export const RecipePage: React.FC = () => {
     const { data: recipe, isLoading, isError } = useGetRecipeByIdQuery(id ?? skipToken);
     const categoryIds = recipe?.categoriesIds ?? [];
     const rootCategories = useGetCategory(categoryIds) as Category[];
-    const author = authors[0] as AuthorData;
+
+    const currentUserId = localStorage.getItem('userId');
+    const { data: blogger } = useGetBloggerByIdQuery(
+        !recipe?.authorId || !currentUserId
+            ? skipToken
+            : { bloggerId: recipe.authorId, currentUserId: currentUserId },
+    );
 
     const [deleteRecipe] = useDeleteRecipeMutation();
     const [toggleBookmark] = useToggleBookmarkRecipeMutation();
@@ -79,10 +84,11 @@ export const RecipePage: React.FC = () => {
                 }),
             );
         } catch (err) {
-            handleRecipePageError({
+            handlePageError({
                 err,
                 dispatch,
                 message: 'Не удалось удалить рецепт',
+                page: 'recipe',
             });
         }
     };
@@ -92,7 +98,7 @@ export const RecipePage: React.FC = () => {
         try {
             await toggleBookmark(id).unwrap();
         } catch (err) {
-            handleRecipePageError({ err, dispatch });
+            handlePageError({ err, dispatch, page: 'recipe' });
         }
     };
 
@@ -101,7 +107,7 @@ export const RecipePage: React.FC = () => {
         try {
             await toggleLike(id).unwrap();
         } catch (err) {
-            handleRecipePageError({ err, dispatch });
+            handlePageError({ err, dispatch, page: 'recipe' });
         }
     };
 
@@ -188,7 +194,7 @@ export const RecipePage: React.FC = () => {
 
                     {recipe && <RecipeStepsInfo steps={recipe.steps!} />}
 
-                    <AuthorCard author={author} />
+                    {blogger && <AuthorCard author={blogger} />}
                 </VStack>
             </Box>
 

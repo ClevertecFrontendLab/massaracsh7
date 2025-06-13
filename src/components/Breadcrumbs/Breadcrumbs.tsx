@@ -4,6 +4,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { Link as RouterLink, useLocation } from 'react-router';
 
 import { TEST_IDS } from '~/constants/test-ids';
+import { useGetBloggerByIdQuery } from '~/query/services/bloggers';
 import { useGetRecipeByIdQuery } from '~/query/services/recipes';
 import { selectCategoryBySlug, selectSubCategoryBySlug } from '~/store/category-slice';
 import { useAppSelector } from '~/store/hooks';
@@ -12,13 +13,26 @@ import { parsePathname } from '~/utils/parsePathname';
 
 export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
     const location = useLocation();
-    const { categorySlug, subcategorySlug, dishSlug } = parsePathname(location.pathname);
+    const parsed = parsePathname(location.pathname);
+    const currentUserId = localStorage.getItem('userId');
+
+    const isBlog = 'bloggerId' in parsed;
+    const bloggerId = isBlog ? parsed.bloggerId : null;
+    const categorySlug = !isBlog ? parsed.categorySlug : null;
+    const subcategorySlug = !isBlog ? parsed.subcategorySlug : null;
+    const dishSlug = !isBlog ? parsed.dishSlug : null;
 
     const category = useAppSelector(selectCategoryBySlug(categorySlug ?? ''));
     const subcategory = useAppSelector(selectSubCategoryBySlug(subcategorySlug ?? ''));
 
     const catTitle = categorySlug && getTitleBySlug(categorySlug, category?.title ?? 'Категория');
+
     const { data: recipe } = useGetRecipeByIdQuery(dishSlug ?? skipToken);
+    const { data: blogger } = useGetBloggerByIdQuery(
+        !bloggerId || !currentUserId
+            ? skipToken
+            : { bloggerId: bloggerId, currentUserId: currentUserId },
+    );
 
     return (
         <Breadcrumb
@@ -28,18 +42,47 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
             listProps={{ style: { flexWrap: 'wrap' } }}
             data-test-id={TEST_IDS.BREADCRUMBS}
         >
-            <BreadcrumbItem isCurrentPage={!catTitle}>
+            <BreadcrumbItem isCurrentPage={!categorySlug && !isBlog}>
                 <BreadcrumbLink
                     as={RouterLink}
                     to='/'
-                    textStyle={catTitle ? 'navInactive' : 'navActive'}
+                    textStyle={categorySlug || isBlog ? 'navInactive' : 'navActive'}
                     onClick={() => onClose?.()}
                 >
                     Главная
                 </BreadcrumbLink>
             </BreadcrumbItem>
 
-            {catTitle && (
+            {isBlog && (
+                <BreadcrumbItem isCurrentPage={!blogger}>
+                    <BreadcrumbLink
+                        as={RouterLink}
+                        to='/blogs'
+                        textStyle={bloggerId ? 'navInactive' : 'navActive'}
+                        onClick={() => onClose?.()}
+                        data-test-id={TEST_IDS.BLOGGER_USER_BREADCRUMB_NAME}
+                    >
+                        Блоги
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+            )}
+
+            {isBlog && bloggerId && blogger && (
+                <BreadcrumbItem isCurrentPage>
+                    <BreadcrumbLink
+                        as={RouterLink}
+                        to={`/blogs/${bloggerId}`}
+                        textStyle='navActive'
+                        onClick={() => onClose?.()}
+                        data-test-id={TEST_IDS.BLOGGER_USER_BREADCRUMB_SECTION}
+                    >
+                        {blogger.bloggerInfo.firstName} {blogger.bloggerInfo.lastName} (@
+                        {blogger.bloggerInfo.login})
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+            )}
+
+            {!isBlog && catTitle && (
                 <BreadcrumbItem isCurrentPage={!subcategory}>
                     <BreadcrumbLink
                         as={RouterLink}
@@ -52,7 +95,7 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
                 </BreadcrumbItem>
             )}
 
-            {subcategory && (
+            {!isBlog && subcategory && (
                 <BreadcrumbItem isCurrentPage={!dishSlug}>
                     <BreadcrumbLink
                         as={RouterLink}
@@ -65,7 +108,7 @@ export const Breadcrumbs = ({ onClose }: { onClose?: () => void }) => {
                 </BreadcrumbItem>
             )}
 
-            {dishSlug && recipe && (
+            {!isBlog && dishSlug && recipe && (
                 <BreadcrumbItem isCurrentPage>
                     <BreadcrumbLink textStyle='navActive'>{recipe.title}</BreadcrumbLink>
                 </BreadcrumbItem>

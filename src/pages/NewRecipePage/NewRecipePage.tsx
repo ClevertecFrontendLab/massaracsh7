@@ -42,7 +42,7 @@ import { selectAllSubCategories } from '~/store/category-slice';
 import { useAppDispatch, useAppSelector } from '~/store/hooks';
 import { CreateRecipeDto, RecipeDraftDto, UpdateRecipeDto } from '~/types/apiTypes';
 import { createMaps } from '~/utils/createMaps';
-import { handleRecipeCreateError } from '~/utils/handleRecipeCreateError';
+import { handlePageError } from '~/utils/handlePageError';
 
 import { ExitConfirmModal } from '../../components/RecipeForm/ExitConfirmModal';
 import { ImageUploadModal } from '../../components/RecipeForm/ImageUploadModal';
@@ -166,7 +166,7 @@ export const NewRecipePage = () => {
                 );
             }
         } catch (err) {
-            handleRecipeCreateError({ err, dispatch });
+            handlePageError({ err, dispatch, page: 'createRecipe' });
         }
     };
 
@@ -198,7 +198,7 @@ export const NewRecipePage = () => {
                 }),
             );
         } catch (err) {
-            handleRecipeCreateError({ err, dispatch, isDraft: true });
+            handlePageError({ err, dispatch, isDraft: true, page: 'createRecipe' });
             if (fromModal) {
                 closeExit();
             }

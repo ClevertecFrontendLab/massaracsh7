@@ -1,3 +1,5 @@
+import { BloggerNote } from './bloggerTypes';
+
 export type BaseSubCategory = {
     title: string;
     category: string;
@@ -135,4 +137,9 @@ export type UploadResponse = {
     name: string;
     url: string;
     id: string;
+};
+
+export type RecipesByUser = {
+    recipes: Recipe[];
+    notes: BloggerNote[];
 };

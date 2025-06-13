@@ -1,6 +1,8 @@
 import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router';
 
 import { Layout } from '~/layout/Layout';
+import { BloggerProfilePage } from '~/pages/BloggerProfilePage/BloggerProfilePage';
+import { BlogsPage } from '~/pages/BlogsPage/BlogsPage';
 import { CategoryPage } from '~/pages/CategoryPage/CategoryPage';
 import { JuicyPage } from '~/pages/JuicyPage/JuicyPage';
 import { LoginPage } from '~/pages/LoginPage/LoginPage';
@@ -32,6 +34,8 @@ export const router = createBrowserRouter(
                 <Route path={ROUTES_PATH.JUICY} element={<JuicyPage />} />
                 <Route path={ROUTES_PATH.NEW_RECIPE} element={<NewRecipePage />} />
                 <Route path={ROUTES_PATH.EDIT_RECIPE} element={<NewRecipePage />} />
+                <Route path={ROUTES_PATH.BLOGS} element={<BlogsPage />} />
+                <Route path={ROUTES_PATH.BLOGGER_PROFILE} element={<BloggerProfilePage />} />
             </Route>
 
             <Route path={ROUTES_PATH.LOG_IN} element={<LoginPage />} />

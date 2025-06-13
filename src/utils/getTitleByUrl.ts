@@ -5,6 +5,7 @@ export const getTitleByUrl = (url: string | null) => {
     const newUrls = [
         { title: 'Самое сочное', url: '/juicy' },
         { title: 'Новый рецепт', url: '/new-recipe' },
+        { title: 'Блоги', url: '/blogs' },
     ];
     const breads = [...categoriesBread, ...newUrls];
     const bread = breads.find((b) => b.url === `/${url}`);
@@ -14,5 +15,6 @@ export const getTitleByUrl = (url: string | null) => {
 export const getTitleBySlug = (slug: string, title: string) => {
     if (slug === 'the-juiciest') return 'Самое сочное';
     if (slug === 'new-recipe') return 'Новый рецепт';
+    if (slug === 'blogs') return 'Блоги';
     return title;
 };
