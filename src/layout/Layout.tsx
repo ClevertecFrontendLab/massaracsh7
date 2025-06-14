@@ -24,12 +24,14 @@ export const Layout = () => {
                 pt='80px'
                 pb={{ base: '84px', sm: '96px', md: '104px', lg: '0', xl: '0' }}
                 maxW='1920px'
+                w='100%'
                 mx='auto'
                 display='flex'
+                position='relative'
             >
                 <Hide below='mid'>
                     <Box
-                        position='fixed'
+                        position='absolute'
                         top='80px'
                         left={0}
                         width='256px'
@@ -58,7 +60,7 @@ export const Layout = () => {
                 <Hide below='mid'>
                     {!shouldHideSidebar && (
                         <Box
-                            position='fixed'
+                            position='absolute'
                             top='80px'
                             right={0}
                             width='208px'
